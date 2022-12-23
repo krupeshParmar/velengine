@@ -1,0 +1,3 @@
+[submodule "VelEngine/vendor/spdlog"]
+	path = VelEngine/vendor/spdlog
+	url = https://github.com/gabime/spdlog.git
