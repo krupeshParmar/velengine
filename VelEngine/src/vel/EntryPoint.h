@@ -12,8 +12,11 @@ int main(int argc, char** argv)
 	VEL_CORE_WARN("Initialized Log!");
 	int a = 1;
 	VEL_INFO("Hello! Var={0}", a);
+	VEL_ERROR("Hello! Var={0}", a);
+	VEL_CRITICAL("Hello! Var={0}", a);
+	VEL_TRACE("Hello! Var={0}", a);
 	printf("Starting Vel App");
-	auto app = vel::CreateApplication();
+	vel::Application* app = vel::CreateApplication();
 	app->Run();
 	delete app;
 }

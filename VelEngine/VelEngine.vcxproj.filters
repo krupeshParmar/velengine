@@ -4,6 +4,9 @@
     <Filter Include="vel">
       <UniqueIdentifier>{4CB6880B-B8BF-887C-413B-9F7CAD43947C}</UniqueIdentifier>
     </Filter>
+    <Filter Include="vel\Events">
+      <UniqueIdentifier>{B0D4E07E-9C8C-22CC-0594-FB27F16ABDBC}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Vel.h" />
@@ -15,6 +18,18 @@
     </ClInclude>
     <ClInclude Include="src\vel\EntryPoint.h">
       <Filter>vel</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Events\ApplicationEvent.h">
+      <Filter>vel\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Events\Event.h">
+      <Filter>vel\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Events\KeyEvent.h">
+      <Filter>vel\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Events\MouseEvent.h">
+      <Filter>vel\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\vel\Log.h">
       <Filter>vel</Filter>

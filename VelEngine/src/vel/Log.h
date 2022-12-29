@@ -1,6 +1,7 @@
 #pragma once
 #include "Core.h"
 #include "spdlog/spdlog.h"
+#include "spdlog/fmt/ostr.h"
 #include <memory>
 
 namespace vel {
@@ -24,11 +25,11 @@ namespace vel {
 #define VEL_CORE_INFO(...)  ::vel::Log::GetCoreLogger()->info(__VA_ARGS__)
 #define VEL_CORE_WARN(...)  ::vel::Log::GetCoreLogger()->warn(__VA_ARGS__)
 #define VEL_CORE_ERROR(...) ::vel::Log::GetCoreLogger()->error(__VA_ARGS__)
-#define VEL_CORE_FATAL(...) ::vel::Log::GetCoreLogger()->fatal(__VA_ARGS__)
+#define VEL_CORE_CRITICAL(...) ::vel::Log::GetCoreLogger()->critical(__VA_ARGS__)
 
 // Cliet Log macros
 #define VEL_TRACE(...)      ::vel::Log::GetCoreLogger()->trace(__VA_ARGS__)
 #define VEL_INFO(...)       ::vel::Log::GetCoreLogger()->info(__VA_ARGS__)
 #define VEL_WARN(...)       ::vel::Log::GetCoreLogger()->warn(__VA_ARGS__)
 #define VEL_ERROR(...)      ::vel::Log::GetCoreLogger()->error(__VA_ARGS__)
-#define VEL_FATAL(...)      ::vel::Log::GetCoreLogger()->fatal(__VA_ARGS__)
+#define VEL_CRITICAL(...)      ::vel::Log::GetCoreLogger()->critical(__VA_ARGS__)
