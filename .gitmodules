@@ -1,3 +1,6 @@
 [submodule "VelEngine/vendor/spdlog"]
 	path = VelEngine/vendor/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "VelEngine/vendor/glfw"]
+	path = VelEngine/vendor/glfw
+	url = https://github.com/TheCherno/glfw.git
