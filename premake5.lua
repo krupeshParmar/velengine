@@ -10,6 +10,12 @@ workspace "VelEngine"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+-- Include directories relative to root folder
+IncludeDir = {}
+IncludeDir["GLFW"] = "VelEngine/vendor/GLFW/include"
+
+include "VelEngine/vendor/GLFW"
+
 project "VelEngine"
 	location "VelEngine"
 	kind "SharedLib"
@@ -17,6 +23,9 @@ project "VelEngine"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	pchheader "velpch.h"
+	pchsource "VelEngine/src/velpch.cpp"
 
 	files
 	{
@@ -29,7 +38,14 @@ project "VelEngine"
 	includedirs
 	{
 		"%{prj.name}/src",
-		"%{prj.name}/vendor/spdlog/include"
+		"%{prj.name}/vendor/spdlog/include",
+		"%{IncludeDir.GLFW}"
+	}
+
+	links
+	{
+		"GLFW",
+		"opengl32.lib"
 	}
 
 	filter "system:windows"

@@ -1,4 +1,5 @@
 #include <Vel.h>
+#include <velpch.h>
 
 class VelApp : public vel::Application
 {

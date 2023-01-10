@@ -34,6 +34,9 @@
     <ClInclude Include="src\vel\Log.h">
       <Filter>vel</Filter>
     </ClInclude>
+    <ClInclude Include="src\velpch.h" />
+    <ClInclude Include="src\vel\Window.h" />
+    <ClInclude Include="src\vel\Platform\Windows\WindowsWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\vel\Application.cpp">
@@ -42,5 +45,7 @@
     <ClCompile Include="src\vel\Log.cpp">
       <Filter>vel</Filter>
     </ClCompile>
+    <ClCompile Include="src\velpch.cpp" />
+    <ClCompile Include="src\vel\Platform\Windows\WindowsWindow.cpp" />
   </ItemGroup>
 </Project>

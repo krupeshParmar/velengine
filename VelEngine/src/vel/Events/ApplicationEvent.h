@@ -2,8 +2,6 @@
 
 #include "Event.h"
 
-#include <sstream>
-
 namespace vel
 {
 	class VEL_API WindowResizeEvent : public Event
