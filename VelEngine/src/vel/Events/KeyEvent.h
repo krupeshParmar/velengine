@@ -36,9 +36,10 @@ namespace vel
 		int m_RepeatCount;
 	};
 
-	class VEL_API KeyReleaseEvent : public KeyEvent
+	class VEL_API KeyReleasedEvent : public KeyEvent
 	{
-		KeyReleaseEvent(int keycode)
+	public:
+		KeyReleasedEvent(int keycode)
 			: KeyEvent(keycode) {}
 
 		std::string ToString() const override

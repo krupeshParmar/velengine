@@ -13,8 +13,10 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 -- Include directories relative to root folder
 IncludeDir = {}
 IncludeDir["GLFW"] = "VelEngine/vendor/GLFW/include"
+IncludeDir["Glad"] = "VelEngine/vendor/Glad/include"
 
 include "VelEngine/vendor/GLFW"
+include "VelEngine/vendor/Glad"
 
 project "VelEngine"
 	location "VelEngine"
@@ -39,12 +41,14 @@ project "VelEngine"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Glad}"
 	}
 
 	links
 	{
 		"GLFW",
+		"Glad",
 		"opengl32.lib"
 	}
 
@@ -56,7 +60,8 @@ project "VelEngine"
 		defines
 		{
 			"VEL_PLATFORM_WINDOWS",
-			"VEL_BUILD_DLL"
+			"VEL_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"
 		}
 
 		postbuildcommands
@@ -66,14 +71,17 @@ project "VelEngine"
 
 	filter "configurations:Debug"
 		defines "HZ_DEBUG"
+		buildoptions "/MDd"
 		symbols "ON"
 
 	filter "configurations:Release"
 		defines "HZ_RELEASE"
+		buildoptions "/MD"
 		optimize "ON"
 
 	filter "configurations:Dist"
 		defines "HZ_DIST"
+		buildoptions "/MD"
 		optimize "ON"
 
 project "Sandbox"
@@ -116,12 +124,15 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "VEL_DEBUG"
+		buildoptions "/MDd"
 		symbols "ON"
 
 	filter "configurations:Release"
 		defines "VEL_RELEASE"
+		buildoptions "/MD"
 		optimize "ON"
 
 	filter "configurations:Dist"
 		defines "VEL_DIST"
+		buildoptions "/MD"
 		optimize "ON"
