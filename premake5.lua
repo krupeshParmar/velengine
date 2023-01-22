@@ -1,5 +1,6 @@
 workspace "VelEngine"
 	architecture "x64"
+	startproject "Sandbox"
 
 	configurations
 	{
@@ -14,14 +15,18 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "VelEngine/vendor/GLFW/include"
 IncludeDir["Glad"] = "VelEngine/vendor/Glad/include"
+IncludeDir["ImGui"] = "VelEngine/vendor/imgui"
+IncludeDir["GLM"] = "VelEngine/vendor/glm"
 
 include "VelEngine/vendor/GLFW"
 include "VelEngine/vendor/Glad"
+include "VelEngine/vendor/imgui"
 
 project "VelEngine"
 	location "VelEngine"
 	kind "SharedLib"
 	language "C++"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -35,6 +40,8 @@ project "VelEngine"
 		"%{prj.name}/src/**.c",
 		"%{prj.name}/src/**.hpp",
 		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/glm/glm/**.inl",
+		"%{prj.name}/vendor/glm/glm/**.hpp",
 	}
 
 	includedirs
@@ -42,19 +49,21 @@ project "VelEngine"
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.Glad}"
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.GLM}"
 	}
 
 	links
 	{
 		"GLFW",
 		"Glad",
+		"ImGui",
 		"opengl32.lib"
 	}
 
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines
@@ -66,27 +75,28 @@ project "VelEngine"
 
 		postbuildcommands
 		{
-			("{COPY} %{cfg.buildtarget.relpath} ../bin/" ..outputdir.. "/Sandbox")
+			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" ..outputdir.. "/Sandbox/\"")
 		}
 
 	filter "configurations:Debug"
-		defines "HZ_DEBUG"
-		buildoptions "/MDd"
+		defines "VEL_DEBUG"
+		runtime "Debug"
 		symbols "ON"
 
 	filter "configurations:Release"
-		defines "HZ_RELEASE"
-		buildoptions "/MD"
+		defines "VEL_RELEASE"
+		runtime "Release"
 		optimize "ON"
 
 	filter "configurations:Dist"
-		defines "HZ_DIST"
-		buildoptions "/MD"
+		defines "VEL_DIST"
+		runtime "Release"
 		optimize "ON"
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
+	staticruntime "off"
 
 	language "C++"
 
@@ -104,7 +114,8 @@ project "Sandbox"
 	includedirs
 	{
 		"VelEngine/vendor/spdlog/include",
-		"VelEngine/src"
+		"VelEngine/src",
+		"VelEngine/vendor/glm"
 	}
 
 	links
@@ -114,7 +125,6 @@ project "Sandbox"
 
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines
@@ -124,15 +134,15 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "VEL_DEBUG"
-		buildoptions "/MDd"
+		runtime "Debug"
 		symbols "ON"
 
 	filter "configurations:Release"
 		defines "VEL_RELEASE"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "ON"
 
 	filter "configurations:Dist"
 		defines "VEL_DIST"
-		buildoptions "/MD"
+		runtime "Release"
 		optimize "ON"
