@@ -20,7 +20,7 @@
 
 #ifdef VEL_ENABLE_ASSERTS
 	#define VEL_ASSERT(x, ... ) { if(!x) { VEL_ERROR("Assertion failed: {0}", __VA_ARGS__); __debugbreak();} }
-	#define VEL_CORE_ASSERT(x, ... ) { if(!x) { VEL_ERROR("Assertion failed: {0}", __VA_ARGS__); __debugbreak();} }
+	#define VEL_CORE_ASSERT(x, ... ) { if(!x) { VEL_CORE_ERROR("Assertion failed: {0}", __VA_ARGS__); __debugbreak();} }
 #else
 #define VEL_ASSERT(x, ... )
 #define VEL_CORE_ASSERT(x, ... )

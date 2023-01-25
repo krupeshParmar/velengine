@@ -154,7 +154,8 @@ namespace vel
 
 	void WindowsWindow::OnUpdate()
 	{
-		glfwPollEvents();
+		glfwPollEvents(); 
+		m_Context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)
