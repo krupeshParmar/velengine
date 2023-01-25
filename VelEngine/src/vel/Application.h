@@ -6,6 +6,8 @@
 #include "Window.h"
 #include <vel/Events/ApplicationEvent.h>
 #include <vel/ImGui/ImGuiLayer.h>
+#include <vel/Renderer/Shader.h>
+
 namespace vel {
 	class VEL_API Application
 	{
@@ -29,6 +31,7 @@ namespace vel {
 		LayerStack m_LayerStack;
 		static Application* s_Instance;
 		unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
+		std::unique_ptr<Shader> m_Shader;
 	};
 
 	// Define in app
