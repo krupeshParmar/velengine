@@ -24,9 +24,10 @@ include "VelEngine/vendor/imgui"
 
 project "VelEngine"
 	location "VelEngine"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
-	staticruntime "off"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -42,6 +43,11 @@ project "VelEngine"
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.inl",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
+	}
+
+	defines
+	{
+		"_CRT_SECURE_NO_WARNINGS"
 	}
 
 	includedirs
@@ -63,7 +69,6 @@ project "VelEngine"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
 		systemversion "latest"
 
 		defines
@@ -73,32 +78,27 @@ project "VelEngine"
 			"GLFW_INCLUDE_NONE"
 		}
 
-		postbuildcommands
-		{
-			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" ..outputdir.. "/Sandbox/\"")
-		}
-
 	filter "configurations:Debug"
 		defines "VEL_DEBUG"
 		runtime "Debug"
-		symbols "ON"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "VEL_RELEASE"
 		runtime "Release"
-		optimize "ON"
+		optimize "on"
 
 	filter "configurations:Dist"
 		defines "VEL_DIST"
 		runtime "Release"
-		optimize "ON"
+		optimize "on"
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
-	staticruntime "off"
-
+	staticruntime "on"
 	language "C++"
+	cppdialect "C++17"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -114,6 +114,7 @@ project "Sandbox"
 	includedirs
 	{
 		"VelEngine/vendor/spdlog/include",
+		"VelEngine/vendor/",
 		"VelEngine/src",
 		"VelEngine/vendor/glm"
 	}
@@ -124,7 +125,6 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
 		systemversion "latest"
 
 		defines
@@ -135,14 +135,14 @@ project "Sandbox"
 	filter "configurations:Debug"
 		defines "VEL_DEBUG"
 		runtime "Debug"
-		symbols "ON"
+		symbols "on"
 
 	filter "configurations:Release"
 		defines "VEL_RELEASE"
 		runtime "Release"
-		optimize "ON"
+		optimize "on"
 
 	filter "configurations:Dist"
 		defines "VEL_DIST"
 		runtime "Release"
-		optimize "ON"
+		optimize "on"

@@ -16,9 +16,6 @@
     <Filter Include="src\vel\Platform">
       <UniqueIdentifier>{976EA7E9-8367-C63B-AC99-ABC098F1A547}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\vel\Platform\OpenGL">
-      <UniqueIdentifier>{EBE7702E-571F-B9C5-6029-1DE9CCDFDFBE}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\vel\Platform\Windows">
       <UniqueIdentifier>{D1BFA954-BDE4-F8D4-E62F-DE64D2B3F7F2}</UniqueIdentifier>
     </Filter>
@@ -89,9 +86,6 @@
     </ClInclude>
     <ClInclude Include="src\vel\MouseButtonCodes.h">
       <Filter>src\vel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\vel\Platform\OpenGL\ImGuiOpenGLRenderer.h">
-      <Filter>src\vel\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\vel\Platform\Windows\WindowsInput.h">
       <Filter>src\vel\Platform\Windows</Filter>
@@ -1353,10 +1347,15 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="src\vel\Renderer\GraphicsContext.h" />
+    <ClInclude Include="src\vel\Platform\OpenGL\OpenGLContext.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\vel\Application.cpp">
       <Filter>src\vel</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vel\ImGui\ImGuiBuild.cpp">
+      <Filter>src\vel\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\vel\ImGui\ImGuiLayer.cpp">
       <Filter>src\vel\ImGui</Filter>
@@ -1370,9 +1369,6 @@
     <ClCompile Include="src\vel\Log.cpp">
       <Filter>src\vel</Filter>
     </ClCompile>
-    <ClCompile Include="src\vel\Platform\OpenGL\ImGuiOpenGLRenderer.cpp">
-      <Filter>src\vel\Platform\OpenGL</Filter>
-    </ClCompile>
     <ClCompile Include="src\vel\Platform\Windows\WindowsInput.cpp">
       <Filter>src\vel\Platform\Windows</Filter>
     </ClCompile>
@@ -1382,5 +1378,6 @@
     <ClCompile Include="src\velpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\vel\Platform\OpenGL\OpenGLContext.cpp" />
   </ItemGroup>
 </Project>

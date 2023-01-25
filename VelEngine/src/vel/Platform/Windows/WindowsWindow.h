@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vel/Window.h"
+#include "vel/Renderer/GraphicsContext.h"
 #include <GLFW/glfw3.h>
 
 namespace vel
@@ -27,6 +28,7 @@ namespace vel
 
 	private:
 		GLFWwindow* m_Window;
+		GraphicsContext* m_Context;
 
 		struct WindowData
 		{
