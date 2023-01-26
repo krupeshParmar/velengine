@@ -143,6 +143,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\vel\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\vel\Platform\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Vel.h" />
     <ClInclude Include="src\vel\Application.h" />
@@ -161,7 +162,9 @@
     <ClInclude Include="src\vel\MouseButtonCodes.h" />
     <ClInclude Include="src\vel\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\vel\Platform\Windows\WindowsWindow.h" />
+    <ClInclude Include="src\vel\Renderer\Buffer.h" />
     <ClInclude Include="src\vel\Renderer\GraphicsContext.h" />
+    <ClInclude Include="src\vel\Renderer\Renderer.h" />
     <ClInclude Include="src\vel\Renderer\Shader.h" />
     <ClInclude Include="src\vel\Window.h" />
     <ClInclude Include="src\velpch.h" />
@@ -583,6 +586,7 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\vel\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\vel\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\vel\Application.cpp" />
     <ClCompile Include="src\vel\ImGui\ImGuiBuild.cpp" />
@@ -595,6 +599,8 @@
     <ClCompile Include="src\velpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\vel\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\vel\Renderer\Renderer.cpp" />
     <ClCompile Include="src\vel\Renderer\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>

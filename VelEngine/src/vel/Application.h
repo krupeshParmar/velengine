@@ -7,6 +7,7 @@
 #include <vel/Events/ApplicationEvent.h>
 #include <vel/ImGui/ImGuiLayer.h>
 #include <vel/Renderer/Shader.h>
+#include <vel/Renderer/Buffer.h>
 
 namespace vel {
 	class VEL_API Application
@@ -30,8 +31,10 @@ namespace vel {
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 		static Application* s_Instance;
-		unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
+		unsigned int m_VertexArray;
 		std::unique_ptr<Shader> m_Shader;
+		std::unique_ptr<VertexBuffer> m_VertexBuffer;
+		std::unique_ptr<IndexBuffer> m_IndexBuffer;
 	};
 
 	// Define in app
