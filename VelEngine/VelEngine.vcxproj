@@ -160,12 +160,14 @@
     <ClInclude Include="src\vel\LayerStack.h" />
     <ClInclude Include="src\vel\Log.h" />
     <ClInclude Include="src\vel\MouseButtonCodes.h" />
+    <ClInclude Include="src\vel\Platform\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\vel\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\vel\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\vel\Renderer\Buffer.h" />
     <ClInclude Include="src\vel\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\vel\Renderer\Renderer.h" />
     <ClInclude Include="src\vel\Renderer\Shader.h" />
+    <ClInclude Include="src\vel\Renderer\VertexArray.h" />
     <ClInclude Include="src\vel\Window.h" />
     <ClInclude Include="src\velpch.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
@@ -594,6 +596,7 @@
     <ClCompile Include="src\vel\Layer.cpp" />
     <ClCompile Include="src\vel\LayerStack.cpp" />
     <ClCompile Include="src\vel\Log.cpp" />
+    <ClCompile Include="src\vel\Platform\OpenGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\vel\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\vel\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\velpch.cpp">
@@ -602,6 +605,7 @@
     <ClCompile Include="src\vel\Renderer\Buffer.cpp" />
     <ClCompile Include="src\vel\Renderer\Renderer.cpp" />
     <ClCompile Include="src\vel\Renderer\Shader.cpp" />
+    <ClCompile Include="src\vel\Renderer\VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">

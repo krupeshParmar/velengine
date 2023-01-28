@@ -10,16 +10,15 @@ namespace vel
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::None:
-			VEL_CORE_ASSERT(false, "Renderer API None is not supported");
-			return nullptr;
-		case RendererAPI::OpenGL:
+			case RendererAPI::None:
+				VEL_CORE_ASSERT(false, "Renderer API None is not supported");
+				return nullptr;
+			case RendererAPI::OpenGL:
 
-			return new OpenGLVertexBuffer(vertices, size);
-		default:
-			VEL_CORE_ASSERT(false, "Unknown Renderer API");
-			return nullptr;
+				return new OpenGLVertexBuffer(vertices, size);
 		}
+		VEL_CORE_ASSERT(false, "Unknown Renderer API");
+		return nullptr;
 	}
 
 	IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t size)

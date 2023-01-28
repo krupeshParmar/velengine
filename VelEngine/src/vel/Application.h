@@ -8,6 +8,7 @@
 #include <vel/ImGui/ImGuiLayer.h>
 #include <vel/Renderer/Shader.h>
 #include <vel/Renderer/Buffer.h>
+#include <vel/Renderer/VertexArray.h>
 
 namespace vel {
 	class VEL_API Application
@@ -26,15 +27,19 @@ namespace vel {
 		inline static Application& Get() { return *s_Instance; }
 	private:
 		bool OnWindowClosed(WindowCloseEvent& e);
+
 		ImGuiLayer* m_ImGuiLayer;
 		std::unique_ptr<Window> m_Window;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
+
+		std::shared_ptr<Shader> m_Shader;
+		std::shared_ptr<VertexArray> m_VertexArray;
+
+		std::shared_ptr<Shader> m_Shader2;
+		std::shared_ptr<VertexArray> m_SquareVertexArray;
+	private:
 		static Application* s_Instance;
-		unsigned int m_VertexArray;
-		std::unique_ptr<Shader> m_Shader;
-		std::unique_ptr<VertexBuffer> m_VertexBuffer;
-		std::unique_ptr<IndexBuffer> m_IndexBuffer;
 	};
 
 	// Define in app
