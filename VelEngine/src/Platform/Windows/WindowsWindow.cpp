@@ -5,7 +5,7 @@
 
 #include <vel/Events/KeyEvent.h>
 #include <vel/Events/MouseEvent.h>
-#include "vel/Platform/OpenGL/OpenGLContext.h"
+#include "Platform/OpenGL/OpenGLContext.h"
 
 namespace vel
 {

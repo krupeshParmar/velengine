@@ -2,7 +2,7 @@
 
 #include "VertexArray.h"
 #include "Renderer.h"
-#include "vel/Platform/OpenGL/OpenGLVertexArray.h"
+#include "Platform/OpenGL/OpenGLVertexArray.h"
 
 namespace vel
 {
@@ -10,11 +10,11 @@ namespace vel
 	{
 		switch (Renderer::GetAPI())
 		{
-			case RendererAPI::None:
+			case RendererAPI::API::None:
 				VEL_CORE_ASSERT(false, "Renderer API None is not supported");
 				return nullptr;
 
-			case RendererAPI::OpenGL: return new OpenGLVertexArray();
+			case RendererAPI::API::OpenGL: return new OpenGLVertexArray();
 		}
 		VEL_CORE_ASSERT(false, "Unknown Renderer API");
 		return nullptr;

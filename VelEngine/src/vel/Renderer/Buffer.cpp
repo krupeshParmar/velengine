@@ -2,7 +2,7 @@
 #include "Buffer.h"
 
 #include "Renderer.h"
-#include "vel/Platform/OpenGL/OpenGLBuffer.h"
+#include "Platform/OpenGL/OpenGLBuffer.h"
 
 namespace vel
 {
@@ -10,10 +10,10 @@ namespace vel
 	{
 		switch (Renderer::GetAPI())
 		{
-			case RendererAPI::None:
+		case RendererAPI::API::None:
 				VEL_CORE_ASSERT(false, "Renderer API None is not supported");
 				return nullptr;
-			case RendererAPI::OpenGL:
+			case RendererAPI::API::OpenGL:
 
 				return new OpenGLVertexBuffer(vertices, size);
 		}
@@ -25,10 +25,10 @@ namespace vel
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::None:
+		case RendererAPI::API::None:
 			VEL_CORE_ASSERT(false, "Renderer API None is not supported");
 			return nullptr;
-		case RendererAPI::OpenGL:
+		case RendererAPI::API::OpenGL:
 
 			return new OpenGLIndexBuffer(indices, size);
 		default:

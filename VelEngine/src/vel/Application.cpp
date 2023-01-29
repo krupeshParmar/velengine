@@ -3,8 +3,8 @@
 #include "Application.h"
 #include <vel/Log.h>
 #include <vel/Events/MouseEvent.h>
-#include <glad/glad.h>
 #include "Input.h"
+#include "vel/Renderer/Renderer.h"
 
 namespace vel {
 
@@ -172,15 +172,19 @@ namespace vel {
 	{
 		while (m_Running)
 		{
-			glClearColor(0.1f, 0.1f, 0.1f, 1);
-			glClear(GL_COLOR_BUFFER_BIT);
+
+			RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1));
+			RenderCommand::Clear();
+
+			Renderer::BeginScene();
+
 			m_Shader2->Bind();
-			m_SquareVertexArray->Bind();
-			glDrawElements(GL_TRIANGLES, m_SquareVertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
-			
+			Renderer::Submit(m_SquareVertexArray);
+
 			m_Shader->Bind();
-			m_VertexArray->Bind();
-			glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			Renderer::Submit(m_VertexArray);
+
+			Renderer::EndScene();
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
