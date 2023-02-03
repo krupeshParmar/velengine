@@ -11,6 +11,7 @@ namespace vel {
 	Application* Application::s_Instance = nullptr;
 
 	Application::Application()
+		:editorCamera(45.f, 1200, 600, 0.1f, 1000.f)
 	{
 		VEL_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
@@ -55,17 +56,19 @@ namespace vel {
 			layout(location = 0) in vec3 a_Position;
 			layout(location = 1) in vec4 a_Color;
 
+			uniform mat4 u_ViewProjection;
+
 			out vec3 v_Position;
 			out vec4 v_Color;
 			
 			void main()
 			{
 				v_Position = a_Position;
-				gl_Position = vec4(a_Position, 1.0);
 				v_Color = a_Color;
+				gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
 			}
-
 		)";
+
 		std::string fragmentSrc = R"(
 			#version 330 core
 			layout(location = 0) out vec4 color;
@@ -113,11 +116,12 @@ namespace vel {
 			layout(location = 0) in vec3 a_Position;
 
 			out vec3 v_Position;
+			uniform mat4 u_ViewProjection;
 			
 			void main()
 			{
 				v_Position = a_Position;
-				gl_Position = vec4(a_Position, 1.0);
+				gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
 			}
 
 		)";
@@ -179,12 +183,16 @@ namespace vel {
 			Renderer::BeginScene();
 
 			m_Shader2->Bind();
+			m_Shader2->UploadUniformMat4("u_ViewProjection", editorCamera.GetViewProjection());
 			Renderer::Submit(m_SquareVertexArray);
 
 			m_Shader->Bind();
+			m_Shader->UploadUniformMat4("u_ViewProjection", editorCamera.GetViewProjection());
 			Renderer::Submit(m_VertexArray);
 
 			Renderer::EndScene();
+			
+			editorCamera.OnUpdate();
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();

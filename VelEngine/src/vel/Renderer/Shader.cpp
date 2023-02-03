@@ -3,6 +3,7 @@
 #include "Shader.h"
 #include <glad/glad.h>
 #include <vel/Log.h>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace vel
 {
@@ -132,6 +133,13 @@ namespace vel
 	void Shader::UnBind() const
 	{
 		glUseProgram(0);
+	}
+
+	void Shader::UploadUniformMat4(const std::string& uniformName, const glm::mat4& matrix)
+	{
+		//glUseProgram(m_RendererID);
+		GLint location = glGetUniformLocation(m_RendererID, uniformName.c_str());
+		glUniformMatrix4fv(location,1, false, glm::value_ptr(matrix));
 	}
 
 }

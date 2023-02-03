@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 
+
 #ifdef VEL_PLATFORM_WINDOWS
 
 extern vel::Application* vel::CreateApplication();

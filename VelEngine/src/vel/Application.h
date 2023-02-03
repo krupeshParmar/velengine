@@ -9,6 +9,7 @@
 #include <vel/Renderer/Shader.h>
 #include <vel/Renderer/Buffer.h>
 #include <vel/Renderer/VertexArray.h>
+#include "Editor/EditorCamera.h"
 
 namespace vel {
 	class VEL_API Application
@@ -38,6 +39,7 @@ namespace vel {
 
 		std::shared_ptr<Shader> m_Shader2;
 		std::shared_ptr<VertexArray> m_SquareVertexArray;
+		EditorCamera editorCamera;
 	private:
 		static Application* s_Instance;
 	};

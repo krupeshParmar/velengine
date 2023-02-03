@@ -13,7 +13,7 @@ public:
 
 	void OnUpdate() override
 	{
-		if(vel::Input::IsKeyPressed(VEL_KEY_TAB))
+		if(vel::Input::IsKeyPressed(KeyCode::Tab))
 			VEL_INFO("Tab key is pressed");
 	}
 

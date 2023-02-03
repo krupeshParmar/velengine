@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Event.h"
+#include "vel/KeyCodes.h"
 
 namespace vel
 {
@@ -54,26 +55,26 @@ namespace vel
 	class VEL_API MouseButtonEvent : public Event
 	{
 	public:
-		inline int GetMouseButton() const { return m_Button; }
+		inline MouseButton GetMouseButton() const { return m_Button; }
 
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 
 	protected:
-		MouseButtonEvent(int button)
+		MouseButtonEvent(MouseButton button)
 			: m_Button(button) {}
-		int m_Button;
+		MouseButton m_Button;
 	};
 
 	class VEL_API MouseButtonPressedEvent : public MouseButtonEvent
 	{
 	public:
-		MouseButtonPressedEvent(int button)
+		MouseButtonPressedEvent(MouseButton button)
 			:MouseButtonEvent(button) {}
 
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "MouseButtonPressedEvent: " << m_Button;
+			ss << "MouseButtonPressedEvent: " << (uint16_t)m_Button;
 			return ss.str();
 		}
 
@@ -83,13 +84,13 @@ namespace vel
 	class VEL_API MouseButtonReleasedEvent : public MouseButtonEvent
 	{
 	public:
-		MouseButtonReleasedEvent(int button)
+		MouseButtonReleasedEvent(MouseButton button)
 			:MouseButtonEvent(button) {}
 
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "MouseButtonReleasedEvent: " << m_Button;
+			ss << "MouseButtonReleasedEvent: " << (uint16_t)m_Button;
 			return ss.str();
 		}
 

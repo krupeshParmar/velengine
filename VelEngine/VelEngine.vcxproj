@@ -146,9 +146,13 @@
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h" />
+    <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
+    <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\Vel.h" />
     <ClInclude Include="src\vel\Application.h" />
     <ClInclude Include="src\vel\Core.h" />
+    <ClInclude Include="src\vel\Editor\EditorCamera.h" />
     <ClInclude Include="src\vel\EntryPoint.h" />
     <ClInclude Include="src\vel\Events\ApplicationEvent.h" />
     <ClInclude Include="src\vel\Events\Event.h" />
@@ -161,10 +165,8 @@
     <ClInclude Include="src\vel\LayerStack.h" />
     <ClInclude Include="src\vel\Log.h" />
     <ClInclude Include="src\vel\MouseButtonCodes.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h" />
-    <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
-    <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\vel\Renderer\Buffer.h" />
+    <ClInclude Include="src\vel\Renderer\Camera.h" />
     <ClInclude Include="src\vel\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\vel\Renderer\RenderCommand.h" />
     <ClInclude Include="src\vel\Renderer\Renderer.h" />
@@ -594,24 +596,26 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\vel\Application.cpp" />
+    <ClCompile Include="src\vel\Editor\EditorCamera.cpp" />
     <ClCompile Include="src\vel\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\vel\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\vel\Layer.cpp" />
     <ClCompile Include="src\vel\LayerStack.cpp" />
     <ClCompile Include="src\vel\Log.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp" />
-    <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
-    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
-    <ClCompile Include="src\velpch.cpp">
-      <PrecompiledHeader>Create</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="src\vel\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\vel\Renderer\Camera.cpp" />
     <ClCompile Include="src\vel\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\vel\Renderer\Renderer.cpp" />
     <ClCompile Include="src\vel\Renderer\RendererAPI.cpp" />
     <ClCompile Include="src\vel\Renderer\Shader.cpp" />
     <ClCompile Include="src\vel\Renderer\VertexArray.cpp" />
+    <ClCompile Include="src\velpch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">
