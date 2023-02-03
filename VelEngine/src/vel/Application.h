@@ -6,10 +6,6 @@
 #include "Window.h"
 #include <vel/Events/ApplicationEvent.h>
 #include <vel/ImGui/ImGuiLayer.h>
-#include <vel/Renderer/Shader.h>
-#include <vel/Renderer/Buffer.h>
-#include <vel/Renderer/VertexArray.h>
-#include "Editor/EditorCamera.h"
 
 namespace vel {
 	class VEL_API Application
@@ -34,12 +30,7 @@ namespace vel {
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 
-		std::shared_ptr<Shader> m_Shader;
-		std::shared_ptr<VertexArray> m_VertexArray;
-
-		std::shared_ptr<Shader> m_Shader2;
-		std::shared_ptr<VertexArray> m_SquareVertexArray;
-		EditorCamera editorCamera;
+		
 	private:
 		static Application* s_Instance;
 	};

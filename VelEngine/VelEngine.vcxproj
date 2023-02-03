@@ -164,7 +164,6 @@
     <ClInclude Include="src\vel\Layer.h" />
     <ClInclude Include="src\vel\LayerStack.h" />
     <ClInclude Include="src\vel\Log.h" />
-    <ClInclude Include="src\vel\MouseButtonCodes.h" />
     <ClInclude Include="src\vel\Renderer\Buffer.h" />
     <ClInclude Include="src\vel\Renderer\Camera.h" />
     <ClInclude Include="src\vel\Renderer\GraphicsContext.h" />

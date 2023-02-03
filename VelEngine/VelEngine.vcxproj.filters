@@ -111,9 +111,6 @@
     <ClInclude Include="src\vel\Log.h">
       <Filter>src\vel</Filter>
     </ClInclude>
-    <ClInclude Include="src\vel\MouseButtonCodes.h">
-      <Filter>src\vel</Filter>
-    </ClInclude>
     <ClInclude Include="src\vel\Renderer\Buffer.h">
       <Filter>src\vel\Renderer</Filter>
     </ClInclude>
