@@ -1391,6 +1391,7 @@
     </ClInclude>
     <ClInclude Include="src\vel\Editor\EditorCamera.h" />
     <ClInclude Include="src\vel\Core\Timestep.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
@@ -1454,5 +1455,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\vel\Editor\EditorCamera.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
   </ItemGroup>
 </Project>

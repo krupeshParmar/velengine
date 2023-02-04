@@ -39,7 +39,7 @@ namespace vel
 		const glm::vec3& GetPosition() const { return m_Position; }
 
 		void Focus(const glm::vec3& focusPoint);
-		void OnUpdate(Timestep ts = Timestep());
+		void OnUpdate(Timestep ts);
 		void OnEvent(Event& e);
 
 		glm::quat GetOrientation() const;

@@ -19,7 +19,7 @@ namespace vel
 
 	void EditorCamera::Init()
 	{
-		constexpr glm::vec3 position = {-2, 0,4 };
+		constexpr glm::vec3 position = {-5, 5,5 };
 		m_Distance = glm::distance(position, m_FocalPoint);
 
 		m_Yaw = 3.0f * glm::pi<float>() / 4.0f;

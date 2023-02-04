@@ -1,10 +1,12 @@
 #include <Vel.h>
+#include <glm/ext/matrix_transform.hpp>
+#include <imgui/imgui.h>
 
 class ExampleLayer : public vel::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("Example"), editorCamera(45.f, 1280, 720, 0.1f, 1000.f), m_CameraPositon(0.f)
+		: Layer("Example"), editorCamera(45.f, 1280, 720, 0.1f, 1000.f)
 	{
 		// Vertex array
 		m_VertexArray.reset(vel::VertexArray::Create());
@@ -42,6 +44,7 @@ public:
 			layout(location = 1) in vec4 a_Color;
 
 			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
 
 			out vec3 v_Position;
 			out vec4 v_Color;
@@ -50,7 +53,7 @@ public:
 			{
 				v_Position = a_Position;
 				v_Color = a_Color;
-				gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
 			}
 		)";
 
@@ -67,7 +70,7 @@ public:
 		)";
 
 		// shader
-		m_Shader.reset(new vel::Shader(vertexSrc, fragmentSrc));
+		m_Shader.reset(vel::Shader::Create(vertexSrc, fragmentSrc));
 
 
 		m_SquareVertexArray.reset(vel::VertexArray::Create());
@@ -102,6 +105,7 @@ public:
 
 			out vec3 v_Position;
 			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
 			
 			void main()
 			{
@@ -122,7 +126,7 @@ public:
 		)";
 
 		// shader
-		m_Shader2.reset(new vel::Shader(vertexSrc2, fragmentSrc2));
+		m_Shader2.reset(vel::Shader::Create(vertexSrc2, fragmentSrc2));
 	}
 
 	void OnUpdate(vel::Timestep ts) override
@@ -131,19 +135,13 @@ public:
 		vel::RenderCommand::SetClearColor(glm::vec4(0.9f, 0.1f, 0.9f, 1));
 		vel::RenderCommand::Clear();
 
-		vel::Renderer::BeginScene();
 
-		m_Shader2->Bind();
-		m_Shader2->UploadUniformMat4("u_ViewProjection", editorCamera.GetViewProjection());
-		vel::Renderer::Submit(m_SquareVertexArray);
+		vel::Renderer::BeginScene(editorCamera);
 
-		m_Shader->Bind();
-		m_Shader->UploadUniformMat4("u_ViewProjection", editorCamera.GetViewProjection());
-		vel::Renderer::Submit(m_VertexArray);
+		vel::Renderer::Submit(m_Shader2, m_SquareVertexArray);
+		vel::Renderer::Submit(m_Shader, m_VertexArray);
 
 		vel::Renderer::EndScene();
-
-		editorCamera.OnUpdate();
 	}
 
 	void OnImGuiRender() override
@@ -160,7 +158,7 @@ public:
 
 	bool OnMouseScrolledEvent(vel::MouseScrolledEvent& event)
 	{
-		//editorCamera.OnEvent(event);
+		editorCamera.OnEvent(event);
 		return false;
 	}
 
@@ -171,7 +169,7 @@ private:
 	std::shared_ptr<vel::Shader> m_Shader2;
 	std::shared_ptr<vel::VertexArray> m_SquareVertexArray;
 	vel::EditorCamera editorCamera;
-	glm::vec3 m_CameraPositon;
+
 };
 
 class VelApp : public vel::Application
