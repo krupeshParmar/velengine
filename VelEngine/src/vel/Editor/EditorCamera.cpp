@@ -19,7 +19,7 @@ namespace vel
 
 	void EditorCamera::Init()
 	{
-		constexpr glm::vec3 position = { -5, 0, 0 };
+		constexpr glm::vec3 position = {-2, 0,4 };
 		m_Distance = glm::distance(position, m_FocalPoint);
 
 		m_Yaw = 3.0f * glm::pi<float>() / 4.0f;
@@ -66,7 +66,7 @@ namespace vel
 
 			const float speed = GetCameraSpeed();
 
-			/*if (Input::IsKeyPressed(KeyCode::Q))
+			if (Input::IsKeyPressed(KeyCode::Q))
 				m_PositionDelta -= ts.GetMilliseconds() * speed * glm::vec3{ 0.f, yawSign, 0.f };
 			if (Input::IsKeyPressed(KeyCode::E))
 				m_PositionDelta += ts.GetMilliseconds() * speed * glm::vec3{ 0.f, yawSign, 0.f };
@@ -77,7 +77,7 @@ namespace vel
 			if (Input::IsKeyPressed(KeyCode::A))
 				m_PositionDelta -= ts.GetMilliseconds() * speed * m_RightDirection;
 			if (Input::IsKeyPressed(KeyCode::D))
-				m_PositionDelta += ts.GetMilliseconds() * speed * m_RightDirection;*/
+				m_PositionDelta += ts.GetMilliseconds() * speed * m_RightDirection;
 
 			constexpr float maxRate{ 0.12f };
 			m_YawDelta += glm::clamp(yawSign * delta.x * RotationSpeed(), -maxRate, maxRate);

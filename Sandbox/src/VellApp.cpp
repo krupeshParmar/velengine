@@ -4,7 +4,7 @@ class ExampleLayer : public vel::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("Example"), editorCamera(45.f, 800, 600, 0.1f, 1000.f), m_CameraPositon(0.f)
+		: Layer("Example"), editorCamera(45.f, 1280, 720, 0.1f, 1000.f), m_CameraPositon(0.f)
 	{
 		// Vertex array
 		m_VertexArray.reset(vel::VertexArray::Create());
@@ -125,8 +125,9 @@ public:
 		m_Shader2.reset(new vel::Shader(vertexSrc2, fragmentSrc2));
 	}
 
-	void OnUpdate() override
+	void OnUpdate(vel::Timestep ts) override
 	{
+		editorCamera.OnUpdate(ts);
 		vel::RenderCommand::SetClearColor(glm::vec4(0.9f, 0.1f, 0.9f, 1));
 		vel::RenderCommand::Clear();
 

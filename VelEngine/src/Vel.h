@@ -8,6 +8,8 @@
 
 #include "vel/ImGui/ImGuiLayer.h"
 
+#include "vel/Core/Timestep.h"
+
 // --------Input--------
 #include "vel/Input.h"
 #include "vel/KeyCodes.h"

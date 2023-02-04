@@ -1390,6 +1390,7 @@
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
     <ClInclude Include="src\vel\Editor\EditorCamera.h" />
+    <ClInclude Include="src\vel\Core\Timestep.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">

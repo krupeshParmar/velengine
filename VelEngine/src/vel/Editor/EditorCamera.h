@@ -2,11 +2,7 @@
 #include "vel/Renderer/Camera.h"
 #include "vel/Events/KeyEvent.h"
 #include "vel/Events/MouseEvent.h"
-
-struct Timestep {
-
-	float GetMilliseconds() { return 1.f; }
-};
+#include "vel/Core/Timestep.h"
 
 namespace vel
 {

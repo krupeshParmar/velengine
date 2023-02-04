@@ -152,6 +152,7 @@
     <ClInclude Include="src\Vel.h" />
     <ClInclude Include="src\vel\Application.h" />
     <ClInclude Include="src\vel\Core.h" />
+    <ClInclude Include="src\vel\Core\Timestep.h" />
     <ClInclude Include="src\vel\Editor\EditorCamera.h" />
     <ClInclude Include="src\vel\EntryPoint.h" />
     <ClInclude Include="src\vel\Events\ApplicationEvent.h" />
