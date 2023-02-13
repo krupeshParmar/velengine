@@ -10,3 +10,6 @@
 [submodule "velengine/vendor/glm"]
 	path = velengine/vendor/glm
 	url = https://github.com/g-truc/glm.git
+[submodule "VelEngine/vendor/pugixml"]
+	path = VelEngine/vendor/pugixml
+	url = https://github.com/krupeshParmar/pugixml.git
