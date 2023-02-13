@@ -6,6 +6,20 @@
 
 namespace vel
 {
+	Shader* Shader::Create(const std::string& shaderFilePath)
+	{
+		switch (Renderer::GetAPI())
+		{
+		case RendererAPI::API::None:
+			VEL_CORE_ASSERT(false, "Renderer API None is not supported");
+			return nullptr;
+
+		case RendererAPI::API::OpenGL: return new OpenGLShader(shaderFilePath);
+		}
+		VEL_CORE_ASSERT(false, "Unknown Renderer API");
+		return nullptr;
+	}
+
 	Shader* Shader::Create(const std::string& vertexSrc, const std::string& fragmentSrc)
 	{
 		switch (Renderer::GetAPI())
@@ -19,5 +33,4 @@ namespace vel
 		VEL_CORE_ASSERT(false, "Unknown Renderer API");
 		return nullptr;
 	}
-
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="temp">
+      <UniqueIdentifier>{9B679E7C-879E-9F0D-308B-85101CA11B0F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="temp\GameObject">
+      <UniqueIdentifier>{3B4B16A0-A7D6-8364-B0E7-06591CF2DF64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="temp\Lighting">
+      <UniqueIdentifier>{80B90D52-EC79-8988-B5B4-D2052134CE64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="temp\MeshObject">
+      <UniqueIdentifier>{8E29C1FA-FAB4-2EBF-03C6-B1B36FD08ABF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="temp\Physics">
+      <UniqueIdentifier>{0DD61D3D-F938-ADE1-A2BE-E5978E007964}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="temp\Physics\BoundingBox">
+      <UniqueIdentifier>{FBCB6239-E7F0-B1B9-103C-9749FCBFB0D7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="temp\SceneEditor">
+      <UniqueIdentifier>{BFCC2BEF-ABC5-4A41-D4F7-2FC6C04F2A4D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="temp\System">
+      <UniqueIdentifier>{4F5EBCD3-BB13-35C9-4408-2FA0B0BC2BCD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="temp\System\Components">
+      <UniqueIdentifier>{0454CC5A-F04D-F5AC-D9BA-8BBDC5535B19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="temp\global">
+      <UniqueIdentifier>{BBCD7501-2783-EEF6-B077-E8CD1C2CE5FA}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\VellApp.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\Texture.glsl" />
+  </ItemGroup>
+</Project>

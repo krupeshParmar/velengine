@@ -6,7 +6,7 @@
 
 namespace vel
 {
-	VertexArray* VertexArray::Create()
+	Ref<VertexArray> VertexArray::Create()
 	{
 		switch (Renderer::GetAPI())
 		{
@@ -14,7 +14,7 @@ namespace vel
 				VEL_CORE_ASSERT(false, "Renderer API None is not supported");
 				return nullptr;
 
-			case RendererAPI::API::OpenGL: return new OpenGLVertexArray();
+			case RendererAPI::API::OpenGL: return std::make_shared<OpenGLVertexArray>();
 		}
 		VEL_CORE_ASSERT(false, "Unknown Renderer API");
 		return nullptr;

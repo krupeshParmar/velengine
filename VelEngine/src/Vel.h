@@ -10,6 +10,9 @@
 
 #include "vel/Core/Timestep.h"
 
+// Temporary
+#include "Platform/OpenGL/OpenGLShader.h"
+
 // --------Input--------
 #include "vel/Input.h"
 #include "vel/KeyCodes.h"
@@ -21,6 +24,7 @@
 
 #include "vel/Renderer/Buffer.h"
 #include "vel/Renderer/Shader.h"
+#include "vel/Renderer/Texture.h"
 #include "vel/Renderer/VertexArray.h"
 
 #include "vel/Editor/EditorCamera.h"

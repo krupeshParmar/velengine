@@ -42,21 +42,24 @@ namespace vel
 
     void OpenGLVertexArray::Unbind() const
     {
-        glBindVertexArray(0);
+        glBindVertexArray(0); 
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
-    void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
+    void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer, unsigned int shaderID)
     {
         VEL_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex buffer has no layout!!");
 
-        glBindVertexArray(m_RendererID);
-        vertexBuffer->Bind();
+        glBindVertexArray(m_RendererID); 
 
+        vertexBuffer->Bind();
 
         uint32_t index = 0;
         const auto& layout = vertexBuffer->GetLayout();
         for (const auto& element : layout)
         {
+            //glBindAttribLocation(shaderID, index, element.Name.c_str());
             glEnableVertexAttribArray(index);
             glVertexAttribPointer(
                 index,
@@ -68,10 +71,11 @@ namespace vel
             );
             index++;
         }
+
         m_VertexBuffers.push_back(vertexBuffer);
     }
 
-    void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
+    void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
     {
         glBindVertexArray(m_RendererID);
         indexBuffer->Bind();

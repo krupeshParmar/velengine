@@ -16,6 +16,9 @@
     <Filter Include="src\vel">
       <UniqueIdentifier>{E34230A9-4F22-AF44-583A-3A1BC49815A6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\vel\Core">
+      <UniqueIdentifier>{1BADA5F0-0710-3595-B095-6D4B9CD70018}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\vel\Editor">
       <UniqueIdentifier>{B902A4B4-A5D0-97BA-8E64-08E17AD1731F}</UniqueIdentifier>
     </Filter>
@@ -49,6 +52,9 @@
     <Filter Include="vendor\glm\glm\gtx">
       <UniqueIdentifier>{B3A6A76B-9F8A-68C1-08EB-6214F4ED5243}</UniqueIdentifier>
     </Filter>
+    <Filter Include="vendor\stb_image">
+      <UniqueIdentifier>{0DA0BA59-F998-D9AB-22CB-BE300E23B9B7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
@@ -58,6 +64,12 @@
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h">
@@ -77,6 +89,12 @@
     </ClInclude>
     <ClInclude Include="src\vel\Core.h">
       <Filter>src\vel</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Core\Timestep.h">
+      <Filter>src\vel\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Editor\EditorCamera.h">
+      <Filter>src\vel\Editor</Filter>
     </ClInclude>
     <ClInclude Include="src\vel\EntryPoint.h">
       <Filter>src\vel</Filter>
@@ -130,6 +148,9 @@
       <Filter>src\vel\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\vel\Renderer\Shader.h">
+      <Filter>src\vel\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Renderer\Texture.h">
       <Filter>src\vel\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\vel\Renderer\VertexArray.h">
@@ -1389,9 +1410,9 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\vel\Editor\EditorCamera.h" />
-    <ClInclude Include="src\vel\Core\Timestep.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h" />
+    <ClInclude Include="vendor\stb_image\stb_image.h">
+      <Filter>vendor\stb_image</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
@@ -1401,6 +1422,12 @@
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp">
@@ -1414,6 +1441,9 @@
     </ClCompile>
     <ClCompile Include="src\vel\Application.cpp">
       <Filter>src\vel</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vel\Editor\EditorCamera.cpp">
+      <Filter>src\vel\Editor</Filter>
     </ClCompile>
     <ClCompile Include="src\vel\ImGui\ImGuiBuild.cpp">
       <Filter>src\vel\ImGui</Filter>
@@ -1448,13 +1478,17 @@
     <ClCompile Include="src\vel\Renderer\Shader.cpp">
       <Filter>src\vel\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\vel\Renderer\Texture.cpp">
+      <Filter>src\vel\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\vel\Renderer\VertexArray.cpp">
       <Filter>src\vel\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\velpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\vel\Editor\EditorCamera.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
+    <ClCompile Include="vendor\stb_image\stb_image.cpp">
+      <Filter>vendor\stb_image</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

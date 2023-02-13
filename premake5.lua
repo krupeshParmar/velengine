@@ -17,10 +17,13 @@ IncludeDir["GLFW"] = "VelEngine/vendor/GLFW/include"
 IncludeDir["Glad"] = "VelEngine/vendor/Glad/include"
 IncludeDir["ImGui"] = "VelEngine/vendor/imgui"
 IncludeDir["GLM"] = "VelEngine/vendor/glm"
+IncludeDir["stb_image"] = "VelEngine/vendor/stb_image"
+IncludeDir["PugiXML"] = "VelEngine/vendor/pugixml/src"
 
 include "VelEngine/vendor/GLFW"
 include "VelEngine/vendor/Glad"
 include "VelEngine/vendor/imgui"
+include "VelEngine/vendor/pugixml"
 
 project "VelEngine"
 	location "VelEngine"
@@ -41,6 +44,8 @@ project "VelEngine"
 		"%{prj.name}/src/**.c",
 		"%{prj.name}/src/**.hpp",
 		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/stb_image/*.h",
+		"%{prj.name}/vendor/stb_image/*.cpp",
 		"%{prj.name}/vendor/glm/glm/**.inl",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 	}
@@ -57,7 +62,9 @@ project "VelEngine"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
-		"%{IncludeDir.GLM}"
+		"%{IncludeDir.GLM}",
+		"%{IncludeDir.stb_image}",
+		"%{IncludeDir.PugiXML}"
 	}
 
 	links
@@ -65,6 +72,7 @@ project "VelEngine"
 		"GLFW",
 		"Glad",
 		"ImGui",
+		"PugiXML",
 		"opengl32.lib"
 	}
 
@@ -116,7 +124,8 @@ project "Sandbox"
 		"VelEngine/vendor/spdlog/include",
 		"VelEngine/vendor/",
 		"VelEngine/src",
-		"VelEngine/vendor/glm"
+		"VelEngine/vendor/glm",
+		"VelEngine/vendor/pugixml/src"
 	}
 
 	links
