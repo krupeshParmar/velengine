@@ -112,7 +112,7 @@ public:
 			)";
 
 		// shader
-		m_Shader2.reset(vel::Shader::Create(vertexSrc2, fragmentSrc2));
+		m_Shader2 = vel::Shader::Create("shader2",vertexSrc2, fragmentSrc2);
 	}
 
 	void OnUpdate(vel::Timestep ts) override
@@ -227,13 +227,13 @@ public:
 		)";
 
 		// shader
-		m_TextureShader.reset(vel::Shader::Create("assets/shaders/Texture.glsl"));
-		//m_Shader2.reset(vel::Shader::Create(vertexSrc2, fragmentSrc2));
+		m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
+		m_Shader2 = vel::Shader::Create("shader2",vertexSrc2, fragmentSrc2);
 		m_Texture = vel::Texture2D::Create("assets/textures/CheckerBoard.png");
 		m_SecondTexture = vel::Texture2D::Create("assets/textures/jolyne2.png");
 
-		std::dynamic_pointer_cast<vel::OpenGLShader>(m_TextureShader)->Bind();
-		std::dynamic_pointer_cast<vel::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
+		std::dynamic_pointer_cast<vel::OpenGLShader>(m_ShaderLibrary.Get("Texture"))->Bind();
+		std::dynamic_pointer_cast<vel::OpenGLShader>(m_ShaderLibrary.Get("Texture"))->UploadUniformInt("u_Texture", 0);
 	}
 
 	void OnUpdate(vel::Timestep ts) override
@@ -252,10 +252,10 @@ public:
 		vel::Renderer::BeginScene(editorCamera);
 
 		m_Texture->Bind(0);
-		vel::Renderer::Submit(m_TextureShader, m_SquareVertexArray, glm::scale(glm::mat4(1.f), glm::vec3(5.5f)));
+		vel::Renderer::Submit(m_ShaderLibrary.Get("Texture"), m_SquareVertexArray, glm::scale(glm::mat4(1.f), glm::vec3(5.5f)));
 
 		m_SecondTexture->Bind(0);
-		vel::Renderer::Submit(m_TextureShader, m_SquareVertexArray, glm::scale(glm::mat4(1.f), glm::vec3(5.5f)));
+		vel::Renderer::Submit(m_ShaderLibrary.Get("Texture"), m_SquareVertexArray, glm::scale(glm::mat4(1.f), glm::vec3(5.5f)));
 
 		vel::Renderer::EndScene();
 	}
@@ -271,8 +271,8 @@ public:
 	}
 
 	private:
+		vel::ShaderLibrary m_ShaderLibrary;
 		vel::Ref<vel::Shader> m_Shader2;
-		vel::Ref<vel::Shader> m_TextureShader;
 		vel::Ref<vel::Texture2D> m_Texture;
 		vel::Ref<vel::Texture2D> m_SecondTexture;
 		vel::Ref<vel::VertexArray> m_SquareVertexArray;

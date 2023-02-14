@@ -22,9 +22,21 @@ namespace vel
 		std::string source = ReadFile(shaderFilePath);
 		auto shaderSources = PreProcess(source);
 		Compile(shaderSources);
+		
+		// assets/shaders/Texture.glsl (get last slashed name, ignore the extension)
+		auto lastSlash = shaderFilePath.find_last_of("/\\");
+		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+		auto lastDot = shaderFilePath.rfind(".");
+
+		auto count =
+			lastDot == std::string::npos 
+			? shaderFilePath.size() - lastSlash 
+			: lastDot - lastSlash;
+		m_Name = shaderFilePath.substr(lastSlash, count);
 	}
 
-	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc)
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
+		:m_Name(name)
 	{
 		std::unordered_map<GLenum, std::string> shaderSources;
 		shaderSources[GL_VERTEX_SHADER] = vertexSrc;
@@ -41,7 +53,7 @@ namespace vel
 	std::string OpenGLShader::ReadFile(const std::string& filePath)
 	{
 		std::string result;
-		std::ifstream in(filePath, std::ios::in, std::ios::binary);
+		std::ifstream in(filePath, std::ios::in | std::ios::binary);
 		if (in)
 		{
 			in.seekg(0, std::ios::end);
@@ -65,7 +77,7 @@ namespace vel
 		while (pos != std::string::npos)
 		{
 			size_t eol = source.find_first_of("\r\n", pos);
-			//VEL_CORE_ASSERT(eol != std::string::npos, "Syntax error");
+			VEL_CORE_ASSERT(eol != std::string::npos, "Syntax error");
 			size_t begin = pos + typeTokenLength + 1;
 			std::string type = source.substr(begin, eol - begin);
 			VEL_CORE_ASSERT(ShaderTypeFromString(type), "Invalid shader type specified");
@@ -82,7 +94,9 @@ namespace vel
 	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
 	{
 		GLuint program = glCreateProgram();
-		std::vector<GLuint> glShaderIDs ( shaderSources.size());
+		VEL_CORE_ASSERT(shaderSources.size() <= 2, "More shader than expected");
+		std::array<GLuint, 2> glShaderIDs;
+		int glShaderIdIndex = 0;
 		for (auto& key : shaderSources)
 		{
 			GLenum shaderType = key.first;
@@ -114,7 +128,7 @@ namespace vel
 				break;
 			}
 			glAttachShader(program, shader);
-			glShaderIDs.push_back(shader);
+			glShaderIDs[glShaderIdIndex++] = shader;
 
 		}
 		m_RendererID = program;
