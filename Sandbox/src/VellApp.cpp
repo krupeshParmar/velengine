@@ -239,11 +239,6 @@ public:
 	void OnUpdate(vel::Timestep ts) override
 	{
 		editorCamera.OnUpdate(ts);
-		int width = vel::Application::Get().GetWindow().GetWidth();
-		int height = vel::Application::Get().GetWindow().GetHeight();
-
-		vel::RenderCommand::SetViewport(0, 0, width, height);
-
 
 		vel::RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1));
 		vel::RenderCommand::Clear();
@@ -268,6 +263,14 @@ public:
 	void OnEvent(vel::Event& event) override
 	{
 		editorCamera.OnEvent(event);
+		vel::EventDispatcher dispatcher(event);
+		dispatcher.Dispatch<vel::WindowResizeEvent>(VEL_BIND_EVENT_FN(ExampleLayer2::OnWindowResize));
+	}
+
+	bool OnWindowResize(vel::WindowResizeEvent& event)
+	{
+		editorCamera.SetViewportSize(event.GetWidth(), event.GetHeight());
+		return true;
 	}
 
 	private:
