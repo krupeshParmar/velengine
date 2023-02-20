@@ -13,6 +13,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PugiXML", "VelEngine\vendor
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VelEngine", "VelEngine\VelEngine.vcxproj", "{42E2696C-AE4C-1EE3-F78A-CF886334FC37}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VelPhysics", "Libraries\VelPhysics\VelPhysics.vcxproj", "{CFF2B23B-BBAA-F488-24B2-CDE410898F79}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iPhysics", "Libraries\iPhysics\iPhysics.vcxproj", "{71884D6C-5D55-A877-866E-961F729ADD05}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -56,6 +60,18 @@ Global
 		{42E2696C-AE4C-1EE3-F78A-CF886334FC37}.Dist|x64.Build.0 = Dist|x64
 		{42E2696C-AE4C-1EE3-F78A-CF886334FC37}.Release|x64.ActiveCfg = Release|x64
 		{42E2696C-AE4C-1EE3-F78A-CF886334FC37}.Release|x64.Build.0 = Release|x64
+		{CFF2B23B-BBAA-F488-24B2-CDE410898F79}.Debug|x64.ActiveCfg = Debug|x64
+		{CFF2B23B-BBAA-F488-24B2-CDE410898F79}.Debug|x64.Build.0 = Debug|x64
+		{CFF2B23B-BBAA-F488-24B2-CDE410898F79}.Dist|x64.ActiveCfg = Dist|x64
+		{CFF2B23B-BBAA-F488-24B2-CDE410898F79}.Dist|x64.Build.0 = Dist|x64
+		{CFF2B23B-BBAA-F488-24B2-CDE410898F79}.Release|x64.ActiveCfg = Release|x64
+		{CFF2B23B-BBAA-F488-24B2-CDE410898F79}.Release|x64.Build.0 = Release|x64
+		{71884D6C-5D55-A877-866E-961F729ADD05}.Debug|x64.ActiveCfg = Debug|x64
+		{71884D6C-5D55-A877-866E-961F729ADD05}.Debug|x64.Build.0 = Debug|x64
+		{71884D6C-5D55-A877-866E-961F729ADD05}.Dist|x64.ActiveCfg = Dist|x64
+		{71884D6C-5D55-A877-866E-961F729ADD05}.Dist|x64.Build.0 = Dist|x64
+		{71884D6C-5D55-A877-866E-961F729ADD05}.Release|x64.ActiveCfg = Release|x64
+		{71884D6C-5D55-A877-866E-961F729ADD05}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

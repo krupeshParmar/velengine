@@ -12,7 +12,7 @@ namespace vel
 		static void Init();
 
 		static void BeginScene();
-		static void BeginScene(EditorCamera& camera);
+		static void BeginScene(glm::mat4& viewProjectionMatrix);
 		static void EndScene();
 
 		static void OnWindowResize(uint32_t width, uint32_t height);

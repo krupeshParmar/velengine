@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>VEL_PLATFORM_WINDOWS;VEL_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\VelEngine\vendor\spdlog\include;..\VelEngine\vendor;..\VelEngine\src;..\VelEngine\vendor\glm;..\VelEngine\vendor\pugixml\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\VelEngine\vendor\spdlog\include;..\VelEngine\vendor;..\VelEngine\src;..\VelEngine\vendor\glm;..\VelEngine\vendor\pugixml\src;..\Libraries\iPhysics\src;..\Libraries\VelPhysics\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -96,7 +96,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>VEL_PLATFORM_WINDOWS;VEL_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\VelEngine\vendor\spdlog\include;..\VelEngine\vendor;..\VelEngine\src;..\VelEngine\vendor\glm;..\VelEngine\vendor\pugixml\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\VelEngine\vendor\spdlog\include;..\VelEngine\vendor;..\VelEngine\src;..\VelEngine\vendor\glm;..\VelEngine\vendor\pugixml\src;..\Libraries\iPhysics\src;..\Libraries\VelPhysics\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -117,7 +117,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>VEL_PLATFORM_WINDOWS;VEL_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\VelEngine\vendor\spdlog\include;..\VelEngine\vendor;..\VelEngine\src;..\VelEngine\vendor\glm;..\VelEngine\vendor\pugixml\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\VelEngine\vendor\spdlog\include;..\VelEngine\vendor;..\VelEngine\src;..\VelEngine\vendor\glm;..\VelEngine\vendor\pugixml\src;..\Libraries\iPhysics\src;..\Libraries\VelPhysics\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -134,15 +134,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\temp\PhysicsProject1.h" />
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="src\VellApp.cpp" />
+    <ClCompile Include="src\temp\PhysicsProject1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VelEngine\VelEngine.vcxproj">
       <Project>{42E2696C-AE4C-1EE3-F78A-CF886334FC37}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="assets\shaders\Texture.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

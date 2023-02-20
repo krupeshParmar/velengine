@@ -1,6 +1,9 @@
 #define MAIN_SHOULD_BE_HERE
 #include <Vel.h>
 #include <glm/gtx/transform.hpp>
+#include <iPhysicsFactory.h>
+#include <PhysicsFactory.h>
+#include "temp/PhysicsProject1.h"
 
 class ExampleLayer : public vel::Layer
 {
@@ -41,7 +44,7 @@ public:
 		pvertices[3].y = 0.75f;
 		pvertices[3].z = 0.f;
 		vel::Ref<vel::VertexBuffer> squareVB;
-		squareVB.reset(vel::VertexBuffer::Create(pvertices, sizeof(vel::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones) * 4));
+		squareVB = (vel::VertexBuffer::Create(pvertices, sizeof(vel::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones) * 4));
 
 		squareVB->SetLayout({
 			{ vel::ShaderDataType::Float4, "vColor"},
@@ -53,7 +56,7 @@ public:
 			{ vel::ShaderDataType::Float4, "vBoneID"},
 			{ vel::ShaderDataType::Float4, "vBoneWeight"}
 			});
-		m_SquareVertexArray->AddVertexBuffer(squareVB,1);
+		m_SquareVertexArray->AddVertexBuffer(squareVB);
 
 		uint32_t sq_indices[6] = {
 			0, 1, 2, 2, 3, 0
@@ -61,7 +64,8 @@ public:
 
 		// index buffer
 		vel::Ref<vel::IndexBuffer> squareIB;
-		squareIB.reset(vel::IndexBuffer::Create(sq_indices, sizeof(sq_indices) / sizeof(uint32_t)));
+		int count = sizeof(sq_indices) / sizeof(uint32_t);
+		squareIB = (vel::IndexBuffer::Create(sq_indices, count));
 		m_SquareVertexArray->SetIndexBuffer(squareIB);
 
 		/*
@@ -128,7 +132,7 @@ public:
 		vel::RenderCommand::Clear();
 
 
-		vel::Renderer::BeginScene(editorCamera);
+		vel::Renderer::BeginScene(editorCamera.GetViewProjection());
 
 		vel::Renderer::Submit(m_Shader2, m_SquareVertexArray);
 
@@ -155,6 +159,7 @@ public:
 	}
 
 	private:
+		physics::iPhysicsFactory* physicsFactory;
 		vel::Ref<vel::Shader> m_Shader2;
 		vel::Ref<vel::VertexArray> m_SquareVertexArray;
 		vel::EditorCamera editorCamera;
@@ -183,13 +188,13 @@ public:
 		};*/
 
 		vel::Ref<vel::VertexBuffer> squareVB;
-		squareVB.reset(vel::VertexBuffer::Create(sqVertices, sizeof(sqVertices)));
+		squareVB = (vel::VertexBuffer::Create(sqVertices, sizeof(sqVertices)));
 
 		squareVB->SetLayout({
 				{ vel::ShaderDataType::Float2, "a_TextureCoords"},
 				{ vel::ShaderDataType::Float4, "a_Position"}
 			});
-		m_SquareVertexArray->AddVertexBuffer(squareVB,0);
+		m_SquareVertexArray->AddVertexBuffer(squareVB);
 
 		uint32_t sq_indices[6] = {
 			0, 1, 2, 2, 3, 0
@@ -197,7 +202,7 @@ public:
 
 		// index buffer
 		vel::Ref<vel::IndexBuffer> squareIB;
-		squareIB.reset(vel::IndexBuffer::Create(sq_indices, sizeof(sq_indices) / sizeof(uint32_t)));
+		squareIB = (vel::IndexBuffer::Create(sq_indices, sizeof(sq_indices) / sizeof(uint32_t)));
 		m_SquareVertexArray->SetIndexBuffer(squareIB);
 		std::string vertexSrc2 = R"(
 			#version 330 core
@@ -244,7 +249,7 @@ public:
 		vel::RenderCommand::Clear();
 
 
-		vel::Renderer::BeginScene(editorCamera);
+		vel::Renderer::BeginScene(editorCamera.GetViewProjection());
 
 		m_Texture->Bind(0);
 		vel::Renderer::Submit(m_ShaderLibrary.Get("Texture"), m_SquareVertexArray, glm::scale(glm::mat4(1.f), glm::vec3(5.5f)));
@@ -263,14 +268,11 @@ public:
 	void OnEvent(vel::Event& event) override
 	{
 		editorCamera.OnEvent(event);
-		vel::EventDispatcher dispatcher(event);
-		dispatcher.Dispatch<vel::WindowResizeEvent>(VEL_BIND_EVENT_FN(ExampleLayer2::OnWindowResize));
-	}
-
-	bool OnWindowResize(vel::WindowResizeEvent& event)
-	{
-		editorCamera.SetViewportSize(event.GetWidth(), event.GetHeight());
-		return true;
+		if (event.GetEventType() == vel::EventType::WindowResize)
+		{
+			auto& we = (vel::WindowResizeEvent&)event;
+			editorCamera.SetViewportSize(we.GetWidth(), we.GetHeight());
+		}
 	}
 
 	private:
@@ -288,7 +290,8 @@ public:
 	VelApp()
 	{
 		//PushLayer(new ExampleLayer());
-		PushLayer(new ExampleLayer2());
+		//PushLayer(new ExampleLayer2());
+		PushLayer(new PhysicsScene());
 	}
 
 	~VelApp()

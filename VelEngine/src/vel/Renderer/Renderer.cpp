@@ -15,9 +15,9 @@ namespace vel
 	{
 	}
 
-	void Renderer::BeginScene(EditorCamera& camera)
+	void Renderer::BeginScene(glm::mat4& viewProjectionMatrix)
 	{
-		m_SceneData->ViewProjectionMatrix = camera.GetViewProjection();
+		m_SceneData->ViewProjectionMatrix = viewProjectionMatrix;
 	}
 
 	void Renderer::EndScene()
@@ -43,6 +43,7 @@ namespace vel
 		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_Transform", transform);
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);
+		vertexArray->Unbind();
 
 	}
 

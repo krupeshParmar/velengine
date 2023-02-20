@@ -19,11 +19,15 @@ IncludeDir["ImGui"] = "VelEngine/vendor/imgui"
 IncludeDir["GLM"] = "VelEngine/vendor/glm"
 IncludeDir["stb_image"] = "VelEngine/vendor/stb_image"
 IncludeDir["PugiXML"] = "VelEngine/vendor/pugixml/src"
+IncludeDir["iPhysics"] = "Libraries/iPhysics/src"
+IncludeDir["VelPhysics"] = "Libraries/VelPhysics/src"
 
 include "VelEngine/vendor/GLFW"
 include "VelEngine/vendor/Glad"
 include "VelEngine/vendor/imgui"
 include "VelEngine/vendor/pugixml"
+include "Libraries/iPhysics"
+include "Libraries/VelPhysics"
 
 project "VelEngine"
 	location "VelEngine"
@@ -64,7 +68,9 @@ project "VelEngine"
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.GLM}",
 		"%{IncludeDir.stb_image}",
-		"%{IncludeDir.PugiXML}"
+		"%{IncludeDir.PugiXML}",
+		"%{IncludeDir.iPhysics}",
+		"%{IncludeDir.VelPhysics}"
 	}
 
 	links
@@ -72,6 +78,8 @@ project "VelEngine"
 		"GLFW",
 		"Glad",
 		"ImGui",
+		"iPhysics",
+		"VelPhysics",
 		"PugiXML",
 		"opengl32.lib"
 	}
@@ -125,7 +133,9 @@ project "Sandbox"
 		"VelEngine/vendor/",
 		"VelEngine/src",
 		"VelEngine/vendor/glm",
-		"VelEngine/vendor/pugixml/src"
+		"VelEngine/vendor/pugixml/src",
+		"Libraries/iPhysics/src",
+		"Libraries/VelPhysics/src",
 	}
 
 	links

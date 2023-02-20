@@ -47,7 +47,7 @@ namespace vel
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
-    void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer, unsigned int shaderID)
+    void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
     {
         VEL_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex buffer has no layout!!");
 
@@ -59,7 +59,6 @@ namespace vel
         const auto& layout = vertexBuffer->GetLayout();
         for (const auto& element : layout)
         {
-            //glBindAttribLocation(shaderID, index, element.Name.c_str());
             glEnableVertexAttribArray(index);
             glVertexAttribPointer(
                 index,
