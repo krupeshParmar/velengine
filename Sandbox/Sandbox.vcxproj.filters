@@ -6,10 +6,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Example.h" />
     <ClInclude Include="src\temp\PhysicsProject1.h">
       <Filter>temp</Filter>
     </ClInclude>
-    <ClInclude Include="src\Example.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\VellApp.cpp" />
