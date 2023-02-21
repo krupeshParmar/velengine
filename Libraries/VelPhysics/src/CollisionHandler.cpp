@@ -177,12 +177,12 @@ namespace physics
 		bool CollisionHandler::CollideSpherePlane(float dt, RigidBody* sphere, SphereShape* sphereShape,
 			RigidBody* plane, PlaneShape* planeShape)
 		{
-			// TestMovingSpherePlane
 			if (!TestMovingSpherePlane(sphere->m_PreviousPosition, sphere->m_Position, sphereShape->GetRadius(),
 				planeShape->GetNormal(), planeShape->GetDotProduct()))
 			{
 				return false;
 			}
+
 			glm::vec3 closestPoint = ClosestPtPointPlane(sphere->m_Position, planeShape->GetNormal(), planeShape->GetDotProduct());
 			glm::vec3 overlapVector = closestPoint - sphere->m_Position;
 			float overlapLength = glm::length(overlapVector);
@@ -211,11 +211,9 @@ namespace physics
 				glm::vec3 impactComponent = glm::proj(sphere->m_LinearVelocity, planeShape->GetNormal());
 				glm::vec3 impactTangent = sphere->m_LinearVelocity - impactComponent;
 
-
 				glm::vec3 relativePoint = glm::normalize(closestPoint - sphere->m_Position) * sphereShape->GetRadius();
 				float surfaceVelocity = sphereShape->GetRadius() * glm::length(sphere->m_AngularVelocity);
 				glm::vec3 rotationDirection = glm::normalize(glm::cross(relativePoint - sphere->m_Position, sphere->m_AngularVelocity));
-
 
 
 				// Detect if we are bouncing off the plane, or "moving" along it.
@@ -236,17 +234,9 @@ namespace physics
 					sphere->ApplyForce(force);
 				}
 
-				sphere->UpdateAcceleration();
 
-				// Move the sphere into the new direction
 				sphere->VerletStep1(partialDt);
 
-				//if (glm::length(impactTangent) > 0.001f)
-				//{
-				//	sphere->m_Velocity += impactTangent * 0.1f;
-				//}
-
-				// Here we ensure we are on the right side of the plane
 				closestPoint = ClosestPtPointPlane(sphere->m_Position, planeShape->GetNormal(), planeShape->GetDotProduct());
 				overlapVector = closestPoint - sphere->m_Position;
 				overlapLength = glm::length(overlapVector);
@@ -268,11 +258,14 @@ namespace physics
 					sphere->m_LinearVelocity *= sphere->m_Restitution;
 				}
 
+				
+
 			}
 			else
 			{
 				return false;
 			}
+
 
 			return true;
 		}
@@ -339,8 +332,8 @@ namespace physics
 
 		bool CollisionHandler::CollideRigidRigid(float dt, RigidBody* rigidA, RigidBody* rigidB)
 		{
-			iShape* shapeB = rigidA->GetShape();
-			iShape* shapeA = rigidB->GetShape();
+			iShape* shapeA = rigidA->GetShape();
+			iShape* shapeB = rigidB->GetShape();
 
 			bool collision = false;
 
@@ -352,7 +345,7 @@ namespace physics
 				}
 				else if (shapeB->GetShapeType() == ShapeType::Plane)
 				{
-					collision = CollideSpherePlane(dt, rigidB, SphereShape::Cast(shapeA), rigidA, PlaneShape::Cast(shapeB));
+					collision = CollideSpherePlane(dt, rigidA, SphereShape::Cast(shapeA), rigidB, PlaneShape::Cast(shapeB));
 				}
 				else if (shapeB->GetShapeType() == ShapeType::Box)
 				{
@@ -367,7 +360,7 @@ namespace physics
 			{
 				if (shapeB->GetShapeType() == ShapeType::Sphere)
 				{
-					collision = CollideSpherePlane(dt, rigidA, SphereShape::Cast(shapeB), rigidB, PlaneShape::Cast(shapeA));
+					collision = CollideSpherePlane(dt, rigidB, SphereShape::Cast(shapeB), rigidA, PlaneShape::Cast(shapeA));
 				}
 				else if (shapeB->GetShapeType() == ShapeType::Plane)
 				{

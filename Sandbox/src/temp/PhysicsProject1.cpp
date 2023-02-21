@@ -10,21 +10,27 @@ PhysicsScene::PhysicsScene()
 	m_ShaderLibrary.Load("assets/shaders/simpleshader1.glsl"); 
 	std::dynamic_pointer_cast<vel::OpenGLShader>(m_ShaderLibrary.Get("simpleshader1"))->Bind();
 	std::dynamic_pointer_cast<vel::OpenGLShader>(m_ShaderLibrary.Get("simpleshader1"))->UploadUniformInt("u_Texture", 0);
+	
 	m_PhysicsFactory = new physics::vel::PhysicsFactory();
 	m_PhysicsWorld = m_PhysicsFactory->CreateWorld();
 	float yValue = 15.f;
-	LoadCoordinates();
+	//LoadCoordinates();
 	CreateWalls();
 	CreateGround();
-	CreateBall(glm::vec3(0.f, yValue, 0.f), 5, 1.5f, "football");
-	CreateBall(glm::vec3(0.f, yValue, -15.f), 10, 2.f, "cyan");
-	CreateBall(glm::vec3(-15.f, yValue, 0.f), 15, 3.5f, "cyan");
-	CreateBall(glm::vec3(15.f, yValue, -5.f), 20, 2.f, "cyan");
-	CreateBall(glm::vec3(15.f, yValue, -15.f), 3, 1.f, "yellow");
+
+	ball1 = CreateBall(glm::vec3(0.f, yValue, 0.f), 5, 1.5f, "football");
+
+	ball2 = CreateBall(glm::vec3(0.f, yValue, -15.f), 10, 2.f, "ball1");
+
+	ball3 = CreateBall(glm::vec3(-15.f, yValue, 0.f), 15, 3.5f, "cyan");
+
+	ball4 = CreateBall(glm::vec3(15.f, yValue, -5.f), 20, 2.f, "cyan");
+
+	ball5 = CreateBall(glm::vec3(15.f, yValue, -15.f), 3, 1.f, "ball1");
 	
 	vel::RenderCommand::Init();
 	vel::RenderCommand::SetDepthMask(true);
-	float gravity = 0.0981f;
+	float gravity = 0.981f;
 	m_PhysicsWorld->SetGravity(glm::vec3(0.f, -gravity , 0.f));
 	vel::RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1));
 }
@@ -32,84 +38,51 @@ PhysicsScene::PhysicsScene()
 void PhysicsScene::OnUpdate(vel::Timestep ts)
 {
 	m_EditorCamera.OnUpdate(ts);
+
 	if(m_PhysicsWorld)
-		m_PhysicsWorld->TimeStep(ts);
+		m_PhysicsWorld->TimeStep(ts.GetSeconds());
 
 	vel::RenderCommand::Clear();
 	vel::RenderCommand::SetCullFace();
 	float ratio = (float) vel::Application::Get().GetWindow().GetWidth() / vel::Application::Get().GetWindow().GetHeight();
-	glm::mat4 matView = glm::lookAt(CameraPosition, glm::vec3(0.f), glm::vec3(0.f, 1.f, 0.f));
+	
+	glm::mat4 matView = glm::lookAt(
+							CameraPosition, 
+							glm::vec3(0.f), 
+							glm::vec3(0.f, 1.f, 0.f)
+						);
 	
 	
 	glm::mat4 matProjection = glm::perspective(
 		FOV,
 		ratio,
-		0.1f,
-		10000.0f);
+		10.f,
+		200.0f);
 
 	vel::Renderer::BeginScene(matProjection * matView);
 
 	for (GameObject* gameObject : m_GameObjects)
 	{
 		m_ShaderLibrary.Get("simpleshader1")->Bind();
+		DetectChangeInControllBall();
 		if (controlBall)
 		{
 			glm::vec3 rigidBodyPosition;
 			controlBall->GetPosition(rigidBodyPosition);
-			if (vel::Input::IsKeyPressed(KeyCode::Space))
-			{
-				controlBall->ApplyForce(glm::vec3(0.f, 1.f,0.f));
-			}
-			if (vel::Input::IsKeyPressed(KeyCode::Up))
-			{
-				if (FOV < 0.9f)
-				{
-					FOV += 0.001f;
-				}
-			}
-			if (vel::Input::IsKeyPressed(KeyCode::Down))
-			{
-				if (FOV > 0.2f)
-				{
-					FOV -= 0.001f;
-				}
-			}
+			
+			HandleCamera();
 
-			if (vel::Input::IsKeyPressed(KeyCode::Left))
-			{
-				glm::vec3 forward = glm::vec3(0.f) - CameraPosition;
-				glm::mat4 rotationMat(1);
-				rotationMat = glm::rotate(rotationMat, -90.0f, glm::vec3(0.0, 1.0, 0.0));
-				glm::vec3 rotated = glm::vec3(rotationMat * glm::vec4(forward, 1.0));
-
-
-				glm::vec3 updateValue = rotated -  CameraPosition;
-
-				CameraPosition = updateValue;
-			}
-			if (vel::Input::IsKeyPressed(KeyCode::Right))
-			{
-				glm::vec3 forward = CameraPosition - glm::vec3(0.f);
-				glm::mat4 rotationMat(1);
-				rotationMat = glm::rotate(rotationMat, 90.0f, glm::vec3(0.0, 1.0, 0.0));
-				forward = glm::vec3(rotationMat * glm::vec4(forward, 1.0));
-
-				glm::vec3 updateValue = forward -  CameraPosition;
-
-				CameraPosition += updateValue;
-			}
-
+			float force = 0.3f;
+			glm::vec3 direction(0.f);
 			if (vel::Input::IsKeyPressed(KeyCode::W))
 			{
 				glm::vec3 forward = glm::normalize(rigidBodyPosition - CameraPosition);
 				float x = forward.x * 2.f;
 				float z = forward.z * 2.f;
-				controlBall->ApplyForce(
-					glm::vec3(
-						x,
-						0.f,
-						z
-					)
+				direction = glm::vec3(
+					x,
+					0.f,
+					z
 				);
 			}
 			if (vel::Input::IsKeyPressed(KeyCode::S))
@@ -117,13 +90,11 @@ void PhysicsScene::OnUpdate(vel::Timestep ts)
 				glm::vec3 forward = glm::normalize(rigidBodyPosition - CameraPosition);
 				float x = forward.x * 2.f;
 				float z = forward.z * 2.f;
-				controlBall->ApplyForce(
-					glm::vec3(
-						-x,
-						0.f,
-						-z
-					)
-				);
+				direction = glm::vec3(
+								-x,
+								0.f,
+								-z
+							);
 			}
 			if (vel::Input::IsKeyPressed(KeyCode::A))
 			{
@@ -135,12 +106,10 @@ void PhysicsScene::OnUpdate(vel::Timestep ts)
 
 				float x = right.x * 2.f;
 				float z = right.z * 2.f;
-				controlBall->ApplyForce(
-					glm::vec3(
-						-x,
-						0.f,
-						-z
-					)
+
+				direction = glm::vec3(x,
+					0.f,
+					z
 				);
 			}
 			if (vel::Input::IsKeyPressed(KeyCode::D))
@@ -148,19 +117,23 @@ void PhysicsScene::OnUpdate(vel::Timestep ts)
 				glm::vec3 forward = glm::normalize(rigidBodyPosition - CameraPosition);
 
 				glm::mat4 rotationMat(1);
-				rotationMat = glm::rotate(rotationMat, 90.0f, glm::vec3(0.0, 1.0, 0.0));
+				rotationMat = glm::rotate(rotationMat, -90.0f, glm::vec3(0.0, 1.0, 0.0));
 				glm::vec3 right = glm::vec3(rotationMat * glm::vec4(forward, 1.0));
 
 				float x = right.x * 2.f;
 				float z = right.z * 2.f;
-				controlBall->ApplyForce(
-					glm::vec3(
-						x,
-						0.f,
-						z
-					)
+
+				direction = glm::vec3(
+					x,
+					0.f,
+					z
 				);
 			}
+
+			controlBall->ApplyForce(
+				direction
+			);
+
 			/*
 			if (vel::Input::IsKeyPressed(KeyCode::Left))
 			{
@@ -195,20 +168,17 @@ void PhysicsScene::OnUpdate(vel::Timestep ts)
 
 		if (gameObject->name == "wall")
 		{
-			vel::RenderCommand::SetDepthMask(true);
-			//continue;
 			std::dynamic_pointer_cast<vel::OpenGLShader>
 				(m_ShaderLibrary.Get("simpleshader1"))->UploadUniformFloat("isAWall", 1.f);
 		}
 		else
 		{
-			//vel::RenderCommand::SetDepthMask(false);
 			std::dynamic_pointer_cast<vel::OpenGLShader>
 				(m_ShaderLibrary.Get("simpleshader1"))->UploadUniformFloat("isAWall", 0.f);
 		}
 		gameObject->m_Texture->Bind(0);
 
-		vel::RenderCommand::EnableDepth();
+		//vel::RenderCommand::EnableDepth();
 		vel::RenderCommand::SetCullFace();
 		vel::Renderer::Submit(m_ShaderLibrary.Get("simpleshader1"), gameObject->m_VertexArray, matModel);
 	}
@@ -230,7 +200,7 @@ void PhysicsScene::OnEvent(vel::Event& event)
 	}
 }
 
-void PhysicsScene::CreateBall(glm::vec3 position, float size,float radius, std::string color)
+physics::iRigidBody* PhysicsScene::CreateBall(glm::vec3 position, float size,float radius, std::string color)
 {
 	GameObject* gameObejct = new GameObject();
 	gameObejct->transform.position = position;
@@ -254,6 +224,7 @@ void PhysicsScene::CreateBall(glm::vec3 position, float size,float radius, std::
 	//gameObejct->rigidBody->SetRenderPosition(&gameObejct->transform.position);
 	m_PhysicsWorld->AddBody(gameObejct->rigidBody);
 	controlBall = gameObejct->rigidBody;
+	return gameObejct->rigidBody;
 }
 
 // Christer Ericson - Real-time collision detection
@@ -275,12 +246,12 @@ void PhysicsScene::CreateGround()
 	LoadPlyFiles("assets/models/quad.ply", gameObejct);
 	gameObejct->m_Texture = vel::Texture2D::Create("assets/textures/ground.png");
 	physics::RigidBodyDesc desc;
-	//physics::iShape* planeShape = new physics::PlaneShape(1.0f, glm::vec3(0.f, 1.f, 0.f));
-	physics::iShape* planeShape = ComputePlane(
+	physics::iShape* planeShape = new physics::PlaneShape(0.0f, glm::vec3(0.f, 1.f, 0.f));
+	/*physics::iShape* planeShape = ComputePlane(
 									glm::vec3(-40.f, 0.f, -40.f),
 									glm::vec3(40.f, 0.f, -40.f),
-									glm::vec3(40.f, 0.f, 40.f)
-								);
+									glm::vec3(0.f, 0.f, 0.f)
+								);*/
 	desc.isStatic = true;
 	desc.mass = 0;
 	desc.position = glm::vec3(0.f, 0.f, 0.f);
@@ -443,6 +414,59 @@ void PhysicsScene::LoadCoordinates()
 	m_GameObjects.push_back(zgameObejct);
 
 	zgameObejct->m_Texture = vel::Texture2D::Create("assets/textures/green.png");
+}
+
+void PhysicsScene::DetectChangeInControllBall()
+{
+	if (vel::Input::IsKeyPressed(KeyCode::D1))
+		controlBall = ball1;
+	if (vel::Input::IsKeyPressed(KeyCode::D2))
+		controlBall = ball2;
+	if (vel::Input::IsKeyPressed(KeyCode::D3))
+		controlBall = ball3;
+	if (vel::Input::IsKeyPressed(KeyCode::D4))
+		controlBall = ball4;
+	if (vel::Input::IsKeyPressed(KeyCode::D5))
+		controlBall = ball5;
+}
+
+void PhysicsScene::HandleCamera()
+{
+	if (vel::Input::IsKeyPressed(KeyCode::Space))
+	{
+		controlBall->ApplyForce(glm::vec3(0.f, 1.f, 0.f));
+	}
+	if (vel::Input::IsKeyPressed(KeyCode::Up))
+	{
+		if (FOV < 0.9f)
+		{
+			FOV += 0.001f;
+		}
+	}
+	if (vel::Input::IsKeyPressed(KeyCode::Down))
+	{
+		if (FOV > 0.2f)
+		{
+			FOV -= 0.001f;
+		}
+	}
+
+	if (vel::Input::IsKeyPressed(KeyCode::Left))
+	{
+		glm::mat4 rotationMat(1);
+		rotationMat = glm::rotate(rotationMat, -0.001f, glm::vec3(0.0, 1.0, 0.0));
+		glm::vec3 rotated = glm::vec3(rotationMat * glm::vec4(CameraPosition, 1.0));
+
+		CameraPosition = rotated;
+	}
+	if (vel::Input::IsKeyPressed(KeyCode::Right))
+	{
+		glm::mat4 rotationMat(1);
+		rotationMat = glm::rotate(rotationMat, 0.001f, glm::vec3(0.0, 1.0, 0.0));
+		glm::vec3 rotated = glm::vec3(rotationMat * glm::vec4(CameraPosition, 1.0));
+
+		CameraPosition = rotated;
+	}
 }
 
 bool PhysicsScene::LoadPlyFiles(std::string fileName, GameObject* gameObject)

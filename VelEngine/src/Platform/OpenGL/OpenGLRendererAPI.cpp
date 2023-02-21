@@ -9,9 +9,9 @@ namespace vel
 	}
 	void OpenGLRendererAPI::Init()
 	{
-		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_DEPTH_TEST);
 	}
 	void OpenGLRendererAPI::SetClearColor(const glm::vec4& color)
 	{
@@ -71,7 +71,7 @@ namespace vel
 	void OpenGLRendererAPI::EnableDepth()
 	{
 		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_NOTEQUAL);
+		glDepthFunc(GL_LESS);
 	}
 
 	void OpenGLRendererAPI::SetDepthMask(bool enable)

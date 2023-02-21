@@ -31,13 +31,20 @@ public:
 	void OnEvent(vel::Event& event) override;
 
 private:
-	void CreateBall(glm::vec3 position, float size, float radius, std::string color);
+	physics::iRigidBody* CreateBall(glm::vec3 position, float size, float radius, std::string color);
 	void CreateGround();
 	void CreateWalls();
 	void LoadCoordinates();
+	void DetectChangeInControllBall();
+	void HandleCamera();
 	bool LoadPlyFiles(std::string filename, GameObject* gameObject);
 
 private:
+	physics::iRigidBody* ball1;
+	physics::iRigidBody* ball2;
+	physics::iRigidBody* ball3;
+	physics::iRigidBody* ball4;
+	physics::iRigidBody* ball5;
 	int m_SelectedBall = 0;
 	std::vector<GameObject*> m_GameObjects;
 	physics::iPhysicsFactory* m_PhysicsFactory;
@@ -49,24 +56,5 @@ private:
 
 	glm::vec3 CameraPosition = glm::vec3(0.f, 30.f, 120.f);
 	float FOV = 0.6f;
-
-	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, 1.0f);
-	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-	glm::vec3 WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
-	glm::vec3 cameraRight = glm::vec3(0.0f, 0.0f, 0.0f);
-
-	int SCR_WIDTH = 1200;
-	int SCR_HEIGHT = 800;
-
-	float YAW = 90.0f;
-	float PITCH = 0.0f;
-	float SENSITIVITY = 0.1f;
-	float xpos;
-	float ypos;
-
-	float deltaTime = 0.f;
-	float lastFrame = 0.f;
-	float lastX = SCR_WIDTH / 2.0f;
-	float lastY = SCR_HEIGHT / 2.0f;
 
 };
