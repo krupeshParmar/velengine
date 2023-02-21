@@ -3,36 +3,89 @@
 #include <RigidBodyDesc.h>
 #include <PlaneShape.h>
 #include <SphereShape.h>
+#include <imgui/imgui.h>
 
 PhysicsScene::PhysicsScene()
 	:m_EditorCamera(45.f, 1280, 720, 0.1f, 1000.f)
 {
+	userInputs = "\nLeft - Right: To rotate camera around the center";
+	userInputs += "\n\nUp - Down: To zoom in and out";
+	userInputs += "\n\nWASD: To control the selected ball relative to the camera";
+	userInputs += "\n\n1 to 5: To select balls from one to five";
+
 	m_ShaderLibrary.Load("assets/shaders/simpleshader1.glsl"); 
 	std::dynamic_pointer_cast<vel::OpenGLShader>(m_ShaderLibrary.Get("simpleshader1"))->Bind();
 	std::dynamic_pointer_cast<vel::OpenGLShader>(m_ShaderLibrary.Get("simpleshader1"))->UploadUniformInt("u_Texture", 0);
 	
 	m_PhysicsFactory = new physics::vel::PhysicsFactory();
 	m_PhysicsWorld = m_PhysicsFactory->CreateWorld();
-	float yValue = 15.f;
-	//LoadCoordinates();
+	float yValue = 25.f;
 	CreateWalls();
 	CreateGround();
 
-	ball1 = CreateBall(glm::vec3(0.f, yValue, 0.f), 5, 1.5f, "football");
+	ballPrefab = new GameObject();
+	ballPrefab->name = "ballprefab";
+	LoadPlyFiles("assets/models/ball2.ply", ballPrefab);
 
-	ball2 = CreateBall(glm::vec3(0.f, yValue, -15.f), 10, 2.f, "ball1");
+	quadPrefab = new GameObject();
+	LoadPlyFiles("assets/models/quad.ply", quadPrefab);
 
-	ball3 = CreateBall(glm::vec3(-15.f, yValue, 0.f), 15, 3.5f, "cyan");
+	ball1info = "\nBall 1 ( 1.11, 2.5 ): A football";
+	ball1 = CreateBall(glm::vec3(0.f, yValue, 0.f), 1.11f, 2.5f, "football");
 
-	ball4 = CreateBall(glm::vec3(15.f, yValue, -5.f), 20, 2.f, "cyan");
+	ball2info = "\nBall 2 ( 0.8, 5.5 ): A beach ball, big but really light";
+	ball2 = CreateBall(glm::vec3(30.f, yValue, -30.f), 0.80f, 5.5f, "beach");
 
-	ball5 = CreateBall(glm::vec3(15.f, yValue, -15.f), 3, 1.f, "ball1");
+	ball3info = "\nBall 3 ( 8.0, 1.85 ): A bowling ball, small but heavy";
+	ball3 = CreateBall(glm::vec3(-20.f, yValue, 20.f), 8.0f, 1.85f, "bowling");
+
+	ball4info = "\nBall 4 ( 25.0, 5.0 ): A boulder, really big and heavy";
+	ball4 = CreateBall(glm::vec3(25.f, yValue, -15.f), 25.f, 5.f, "boulder");
+
+	ball5info = "\nBall 5 ( 2.4, 3.5 ): A basketball, big but not so heavy";
+	ball5 = CreateBall(glm::vec3(15.f, yValue, -35.f), 2.40, 3.5f, "basketball");
 	
+	controlBall = ball1;
 	vel::RenderCommand::Init();
 	vel::RenderCommand::SetDepthMask(true);
 	float gravity = 0.981f;
 	m_PhysicsWorld->SetGravity(glm::vec3(0.f, -gravity , 0.f));
 	vel::RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1));
+}
+
+void PhysicsScene::OnImGuiRender()
+{
+	float old_size = ImGui::GetFont()->Scale;
+	ImGui::GetFont()->Scale *= 1.4;
+	ImGui::PushFont(ImGui::GetFont());
+	ImGui::Begin("Info");
+	ImGui::BeginChild(
+		"Info",
+		ImVec2(
+			vel::Application::Get().GetWindow().GetWidth() / 4,
+			vel::Application::Get().GetWindow().GetHeight() / 2
+		),
+		true
+		);
+	ImGui::TextColored(ImVec4(0.8f, 0.2f, 0.8f, 1.f), "To select a ball, press number 1 to 5");
+	ImGui::TextColored(ImVec4(0.2f, 0.8f, 0.8f, 1.f), "Currently selected = ");
+
+	ImGui::TextColored(ImVec4(0.8f, 0.8f, 0.8f, 1.f), "Balls (Mass, Radius)");
+	
+
+	ImGui::Text(CurrentlySelectedBall().c_str());
+
+	ImGui::Separator();
+	ImGui::TextColored(ImVec4(0.2f, 0.8f, 0.8f, 1.f), "User Inputs:");
+
+	ImGui::Text(userInputs.c_str());
+	ImGui::Separator();
+	ImGui::TextColored(ImVec4(0.8f, 0.8f, 0.2f, 1.f), "Restart if you don't see any balls.");
+
+	ImGui::EndChild();
+	ImGui::End();
+	ImGui::GetFont()->Scale = old_size;
+	ImGui::PopFont();
 }
 
 void PhysicsScene::OnUpdate(vel::Timestep ts)
@@ -168,26 +221,28 @@ void PhysicsScene::OnUpdate(vel::Timestep ts)
 
 		if (gameObject->name == "wall")
 		{
+			//vel::RenderCommand::SetDepthMask(true);
 			std::dynamic_pointer_cast<vel::OpenGLShader>
 				(m_ShaderLibrary.Get("simpleshader1"))->UploadUniformFloat("isAWall", 1.f);
 		}
 		else
 		{
+			//vel::RenderCommand::SetDepthMask(false);
 			std::dynamic_pointer_cast<vel::OpenGLShader>
 				(m_ShaderLibrary.Get("simpleshader1"))->UploadUniformFloat("isAWall", 0.f);
 		}
 		gameObject->m_Texture->Bind(0);
 
-		//vel::RenderCommand::EnableDepth();
+		vel::RenderCommand::EnableDepth();
 		vel::RenderCommand::SetCullFace();
-		vel::Renderer::Submit(m_ShaderLibrary.Get("simpleshader1"), gameObject->m_VertexArray, matModel);
+		if(gameObject->name == "ball")
+			vel::Renderer::Submit(m_ShaderLibrary.Get("simpleshader1"), ballPrefab->m_VertexArray, matModel);
+		else if(gameObject->name == "ground" || gameObject->name == "wall")
+			vel::Renderer::Submit(m_ShaderLibrary.Get("simpleshader1"), quadPrefab->m_VertexArray, matModel);
+		else vel::Renderer::Submit(m_ShaderLibrary.Get("simpleshader1"), gameObject->m_VertexArray, matModel);
 	}
 	vel::Renderer::EndScene();
 
-}
-
-void PhysicsScene::OnImGuiRender()
-{
 }
 
 void PhysicsScene::OnEvent(vel::Event& event)
@@ -203,10 +258,10 @@ void PhysicsScene::OnEvent(vel::Event& event)
 physics::iRigidBody* PhysicsScene::CreateBall(glm::vec3 position, float size,float radius, std::string color)
 {
 	GameObject* gameObejct = new GameObject();
+	gameObejct->name = "ball";
 	gameObejct->transform.position = position;
 	gameObejct->transform.rotation = glm::quat(glm::vec3(0.f));
 	gameObejct->transform.scale = glm::vec3(radius);
-	LoadPlyFiles("assets/models/ISO_Shphere_flat_4div_xyz_n_rgba_uv.ply", gameObejct);
 
 	gameObejct->m_Texture = vel::Texture2D::Create("assets/textures/" + color +".png");
 
@@ -221,7 +276,6 @@ physics::iRigidBody* PhysicsScene::CreateBall(glm::vec3 position, float size,flo
 	gameObejct->rigidBody = m_PhysicsFactory->CreateRigidBody(desc, ballShape);
 
 	m_GameObjects.push_back(gameObejct);
-	//gameObejct->rigidBody->SetRenderPosition(&gameObejct->transform.position);
 	m_PhysicsWorld->AddBody(gameObejct->rigidBody);
 	controlBall = gameObejct->rigidBody;
 	return gameObejct->rigidBody;
@@ -247,6 +301,8 @@ void PhysicsScene::CreateGround()
 	gameObejct->m_Texture = vel::Texture2D::Create("assets/textures/ground.png");
 	physics::RigidBodyDesc desc;
 	physics::iShape* planeShape = new physics::PlaneShape(0.0f, glm::vec3(0.f, 1.f, 0.f));
+
+	// Spheres were falling through because of the computed plane
 	/*physics::iShape* planeShape = ComputePlane(
 									glm::vec3(-40.f, 0.f, -40.f),
 									glm::vec3(40.f, 0.f, -40.f),
@@ -268,20 +324,19 @@ void PhysicsScene::CreateWalls()
 	{
 		GameObject* gameObejct = new GameObject();
 		gameObejct->name = "wall";
-		gameObejct->transform.position = glm::vec3(0.f, 20.f, 0.f);
+		gameObejct->transform.position = glm::vec3(0.f, 40.f, 0.f);
 		gameObejct->transform.rotation = glm::angleAxis(glm::radians(90.f), glm::vec3(1, 0, 0));
 		gameObejct->transform.scale = glm::vec3(40.f, 40.f, 1.f);
-		LoadPlyFiles("assets/models/quad.ply", gameObejct);
 		gameObejct->m_Texture = vel::Texture2D::Create("assets/textures/ground.png");
 		physics::RigidBodyDesc desc;
 		physics::iShape* planeShape = ComputePlane(
-			glm::vec3(-40.f, 20.f, -40.f),
-			glm::vec3(40.f, 20.f, -40.f),
-			glm::vec3(40.f, 20.f, 40.f)
+			glm::vec3(-40.f, 40.f, -40.f),
+			glm::vec3(40.f, 40.f, -40.f),
+			glm::vec3(40.f, 40.f, 40.f)
 		);
 		desc.isStatic = true;
 		desc.mass = 0;
-		desc.position = glm::vec3(0.f, 20.f, 0.f);
+		desc.position = glm::vec3(0.f, 40.f, 0.f);
 		desc.linearVelocity = glm::vec3(0.f);
 		gameObejct->rigidBody = m_PhysicsFactory->CreateRigidBody(desc, planeShape);
 		m_GameObjects.push_back(gameObejct);
@@ -295,7 +350,6 @@ void PhysicsScene::CreateWalls()
 		gameObejct->transform.position = glm::vec3(0.f, 0.f, 40.f);
 		gameObejct->transform.rotation = glm::angleAxis(glm::radians(180.f), glm::vec3(1, 0, 0));
 		gameObejct->transform.scale = glm::vec3(40.f, 40.f, 1.f);
-		LoadPlyFiles("assets/models/quad.ply", gameObejct);
 		gameObejct->m_Texture = vel::Texture2D::Create("assets/textures/green.png");
 		physics::RigidBodyDesc desc;
 		physics::iShape* planeShape = ComputePlane(
@@ -319,7 +373,6 @@ void PhysicsScene::CreateWalls()
 		gameObejct->transform.position = glm::vec3(0.f, 0.f, -40.f);
 		gameObejct->transform.rotation = glm::angleAxis(glm::radians(0.f), glm::vec3(1, 0, 0));
 		gameObejct->transform.scale = glm::vec3(40.f, 40.f, 1.f);
-		LoadPlyFiles("assets/models/quad.ply", gameObejct);
 		gameObejct->m_Texture = vel::Texture2D::Create("assets/textures/green.png");
 		physics::RigidBodyDesc desc;
 		physics::iShape* planeShape = ComputePlane(
@@ -343,7 +396,6 @@ void PhysicsScene::CreateWalls()
 		gameObejct->transform.position = glm::vec3(40.f, 0.f, 0.f);
 		gameObejct->transform.rotation = glm::angleAxis(glm::radians(-90.f), glm::vec3(0, 1, 0));
 		gameObejct->transform.scale = glm::vec3(40.f, 40.f, 1.f);
-		LoadPlyFiles("assets/models/quad.ply", gameObejct);
 		gameObejct->m_Texture = vel::Texture2D::Create("assets/textures/red.png");
 		physics::RigidBodyDesc desc;
 		physics::iShape* planeShape = ComputePlane(
@@ -367,7 +419,6 @@ void PhysicsScene::CreateWalls()
 		gameObejct->transform.position = glm::vec3(-40.f, 0.f, 0.f);
 		gameObejct->transform.rotation = glm::angleAxis(glm::radians(90.f), glm::vec3(0, 1, 0));
 		gameObejct->transform.scale = glm::vec3(40.f, 40.f, 1.f);
-		LoadPlyFiles("assets/models/quad.ply", gameObejct);
 		gameObejct->m_Texture = vel::Texture2D::Create("assets/textures/red.png");
 		physics::RigidBodyDesc desc;
 		physics::iShape* planeShape = ComputePlane(
@@ -386,36 +437,6 @@ void PhysicsScene::CreateWalls()
 	}
 }
 
-void PhysicsScene::LoadCoordinates()
-{
-	GameObject* xgameObejct = new GameObject();
-	xgameObejct->transform.position = glm::vec3(0.f, 30.f, 0.f);
-	xgameObejct->transform.rotation = glm::quat(glm::vec3(0.f));
-	xgameObejct->transform.scale = glm::vec3(10.f);
-	LoadPlyFiles("assets/models/engine/x.ply", xgameObejct);
-	m_GameObjects.push_back(xgameObejct);
-
-	xgameObejct->m_Texture = vel::Texture2D::Create("assets/textures/red.png");
-
-	GameObject* ygameObejct = new GameObject();
-	ygameObejct->transform.position = glm::vec3(0.f, 30.f, 0.f);
-	ygameObejct->transform.rotation = glm::quat(glm::vec3(0.f));
-	ygameObejct->transform.scale = glm::vec3(10.f);
-	LoadPlyFiles("assets/models/engine/y.ply", ygameObejct);
-	m_GameObjects.push_back(ygameObejct);
-
-	ygameObejct->m_Texture = vel::Texture2D::Create("assets/textures/blue.png");
-
-	GameObject* zgameObejct = new GameObject();
-	zgameObejct->transform.position = glm::vec3(0.f, 30.f, 0.f);
-	zgameObejct->transform.rotation = glm::quat(glm::vec3(0.f));
-	zgameObejct->transform.scale = glm::vec3(10.f);
-	LoadPlyFiles("assets/models/engine/z.ply", zgameObejct);
-	m_GameObjects.push_back(zgameObejct);
-
-	zgameObejct->m_Texture = vel::Texture2D::Create("assets/textures/green.png");
-}
-
 void PhysicsScene::DetectChangeInControllBall()
 {
 	if (vel::Input::IsKeyPressed(KeyCode::D1))
@@ -432,18 +453,14 @@ void PhysicsScene::DetectChangeInControllBall()
 
 void PhysicsScene::HandleCamera()
 {
-	if (vel::Input::IsKeyPressed(KeyCode::Space))
-	{
-		controlBall->ApplyForce(glm::vec3(0.f, 1.f, 0.f));
-	}
-	if (vel::Input::IsKeyPressed(KeyCode::Up))
+	if (vel::Input::IsKeyPressed(KeyCode::Down))
 	{
 		if (FOV < 0.9f)
 		{
 			FOV += 0.001f;
 		}
 	}
-	if (vel::Input::IsKeyPressed(KeyCode::Down))
+	if (vel::Input::IsKeyPressed(KeyCode::Up))
 	{
 		if (FOV > 0.2f)
 		{
@@ -655,6 +672,30 @@ bool PhysicsScene::LoadPlyFiles(std::string fileName, GameObject* gameObject)
 	delete[] pTheModelArray;
 	delete[] pTheModelTriangleArray;
 	return true;
+}
+
+std::string PhysicsScene::CurrentlySelectedBall()
+{
+	if (controlBall == ball1)
+	{
+		return ball1info;
+	}
+	if (controlBall == ball2)
+	{
+		return ball2info;
+	}
+	if (controlBall == ball3)
+	{
+		return ball3info;
+	}
+	if (controlBall == ball4)
+	{
+		return ball4info;
+	}
+	if (controlBall == ball5)
+	{
+		return ball5info;
+	}
 }
 
 Transform::Transform()

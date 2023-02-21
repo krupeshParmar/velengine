@@ -134,6 +134,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Example.h" />
     <ClInclude Include="src\temp\PhysicsProject1.h" />
   </ItemGroup>
   <ItemGroup>

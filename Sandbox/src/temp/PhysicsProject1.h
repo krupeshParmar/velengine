@@ -34,12 +34,22 @@ private:
 	physics::iRigidBody* CreateBall(glm::vec3 position, float size, float radius, std::string color);
 	void CreateGround();
 	void CreateWalls();
-	void LoadCoordinates();
 	void DetectChangeInControllBall();
 	void HandleCamera();
 	bool LoadPlyFiles(std::string filename, GameObject* gameObject);
+	std::string CurrentlySelectedBall();
 
 private:
+	std::string ball1info;
+	std::string ball2info;
+	std::string ball3info;
+	std::string ball4info;
+	std::string ball5info;
+
+	GameObject* ballPrefab;
+	GameObject* quadPrefab;
+	std::string userInputs;
+
 	physics::iRigidBody* ball1;
 	physics::iRigidBody* ball2;
 	physics::iRigidBody* ball3;
