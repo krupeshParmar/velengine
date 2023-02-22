@@ -1,8 +1,8 @@
 #pragma once
 #include "Core.h"
 
-#include "Events/Event.h"
-#include "vel/LayerStack.h"
+#include "../Events/Event.h"
+#include "vel/Core/LayerStack.h"
 #include "Window.h"
 #include <vel/Events/ApplicationEvent.h>
 #include <vel/ImGui/ImGuiLayer.h>

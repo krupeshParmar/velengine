@@ -1,6 +1,6 @@
 #include "velpch.h"
 #include "WindowsWindow.h"
-#include <vel/Log.h>
+#include <vel/Core/Log.h>
 #include <vel/Events/ApplicationEvent.h>
 
 #include <vel/Events/KeyEvent.h>

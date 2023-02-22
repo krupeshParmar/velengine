@@ -1,7 +1,7 @@
 #include "velpch.h"
 #include "Core.h"
 #include "Application.h"
-#include <vel/Log.h>
+#include <vel/Core/Log.h>
 #include <vel/Events/MouseEvent.h>
 #include "Input.h"
 #include "vel/Renderer/Renderer.h"

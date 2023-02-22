@@ -1,5 +1,5 @@
 #pragma once
-#include <vel/Input.h>
+#include <vel/Core/Input.h>
 
 namespace vel
 {

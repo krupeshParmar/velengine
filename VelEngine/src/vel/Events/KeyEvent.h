@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Event.h"
-#include "vel/KeyCodes.h"
+#include "vel/Core/KeyCodes.h"
 
 namespace vel
 {

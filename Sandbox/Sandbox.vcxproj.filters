@@ -10,11 +10,13 @@
     <ClInclude Include="src\temp\PhysicsProject1.h">
       <Filter>temp</Filter>
     </ClInclude>
+    <ClInclude Include="src\EditorLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\VellApp.cpp" />
     <ClCompile Include="src\temp\PhysicsProject1.cpp">
       <Filter>temp</Filter>
     </ClCompile>
+    <ClCompile Include="src\EditorLayer.cpp" />
   </ItemGroup>
 </Project>

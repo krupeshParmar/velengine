@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vel/Core.h"
+#include "vel/Core/Core.h"
 #include "vel/Events/Event.h"
 #include "vel/Core/Timestep.h"
 

@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <unordered_map>
+#include <glm/glm.hpp>
 
 namespace vel
 {
@@ -11,6 +12,17 @@ namespace vel
 
 		virtual void Bind() const = 0;
 		virtual void UnBind() const = 0;
+
+		virtual void SetInt(const std::string& uniformName, int value) = 0;
+		virtual void SetBool(const std::string& uniformName, bool value) = 0;
+					 
+		virtual void SetFloat(const std::string& uniformName, float value) = 0;
+		virtual void SetFloat2(const std::string& uniformName, const glm::vec2& values) = 0;
+		virtual void SetFloat3(const std::string& uniformName, const glm::vec3& values) = 0;
+		virtual void SetFloat4(const std::string& uniformName, const glm::vec4& values) = 0;
+
+		virtual void SetMat3(const std::string& uniformName, const glm::mat3& matrix) = 0;
+		virtual void SetMat4(const std::string& uniformName, const glm::mat4& value) = 0;
 
 		virtual const std::string& GetName() const = 0;
 

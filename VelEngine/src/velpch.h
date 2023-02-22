@@ -13,7 +13,7 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
-#include <vel/Log.h>
+#include <vel/Core/Log.h>
 
 
 #ifdef VEL_PLATFORM_WINDOWS

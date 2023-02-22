@@ -1,7 +1,7 @@
 #include <velpch.h>
 #include "WindowsInput.h"
 #include <GLFW/glfw3.h>
-#include <vel/Application.h>
+#include <vel/Core/Application.h>
 
 namespace vel
 {

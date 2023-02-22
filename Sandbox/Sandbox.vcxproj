@@ -134,10 +134,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\EditorLayer.h" />
     <ClInclude Include="src\Example.h" />
     <ClInclude Include="src\temp\PhysicsProject1.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\VellApp.cpp" />
     <ClCompile Include="src\temp\PhysicsProject1.cpp" />
   </ItemGroup>

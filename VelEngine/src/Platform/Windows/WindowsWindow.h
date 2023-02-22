@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vel/Window.h"
+#include "vel/Core/Window.h"
 #include "vel/Renderer/GraphicsContext.h"
 #include <GLFW/glfw3.h>
 

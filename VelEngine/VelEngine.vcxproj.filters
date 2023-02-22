@@ -84,20 +84,38 @@
     <ClInclude Include="src\Vel.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\vel\Application.h">
-      <Filter>src\vel</Filter>
+    <ClInclude Include="src\vel\Core\Application.h">
+      <Filter>src\vel\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\vel\Core.h">
-      <Filter>src\vel</Filter>
+    <ClInclude Include="src\vel\Core\Core.h">
+      <Filter>src\vel\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Core\EntryPoint.h">
+      <Filter>src\vel\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Core\Input.h">
+      <Filter>src\vel\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Core\KeyCodes.h">
+      <Filter>src\vel\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Core\Layer.h">
+      <Filter>src\vel\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Core\LayerStack.h">
+      <Filter>src\vel\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Core\Log.h">
+      <Filter>src\vel\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\vel\Core\Timestep.h">
       <Filter>src\vel\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\vel\Core\Window.h">
+      <Filter>src\vel\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\vel\Editor\EditorCamera.h">
       <Filter>src\vel\Editor</Filter>
-    </ClInclude>
-    <ClInclude Include="src\vel\EntryPoint.h">
-      <Filter>src\vel</Filter>
     </ClInclude>
     <ClInclude Include="src\vel\Events\ApplicationEvent.h">
       <Filter>src\vel\Events</Filter>
@@ -113,21 +131,6 @@
     </ClInclude>
     <ClInclude Include="src\vel\ImGui\ImGuiLayer.h">
       <Filter>src\vel\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\vel\Input.h">
-      <Filter>src\vel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\vel\KeyCodes.h">
-      <Filter>src\vel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\vel\Layer.h">
-      <Filter>src\vel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\vel\LayerStack.h">
-      <Filter>src\vel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\vel\Log.h">
-      <Filter>src\vel</Filter>
     </ClInclude>
     <ClInclude Include="src\vel\Renderer\Buffer.h">
       <Filter>src\vel\Renderer</Filter>
@@ -155,9 +158,6 @@
     </ClInclude>
     <ClInclude Include="src\vel\Renderer\VertexArray.h">
       <Filter>src\vel\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\vel\Window.h">
-      <Filter>src\vel</Filter>
     </ClInclude>
     <ClInclude Include="src\velpch.h">
       <Filter>src</Filter>
@@ -1439,8 +1439,17 @@
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
       <Filter>src\Platform\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\vel\Application.cpp">
-      <Filter>src\vel</Filter>
+    <ClCompile Include="src\vel\Core\Application.cpp">
+      <Filter>src\vel\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vel\Core\Layer.cpp">
+      <Filter>src\vel\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vel\Core\LayerStack.cpp">
+      <Filter>src\vel\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vel\Core\Log.cpp">
+      <Filter>src\vel\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\vel\Editor\EditorCamera.cpp">
       <Filter>src\vel\Editor</Filter>
@@ -1450,15 +1459,6 @@
     </ClCompile>
     <ClCompile Include="src\vel\ImGui\ImGuiLayer.cpp">
       <Filter>src\vel\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\vel\Layer.cpp">
-      <Filter>src\vel</Filter>
-    </ClCompile>
-    <ClCompile Include="src\vel\LayerStack.cpp">
-      <Filter>src\vel</Filter>
-    </ClCompile>
-    <ClCompile Include="src\vel\Log.cpp">
-      <Filter>src\vel</Filter>
     </ClCompile>
     <ClCompile Include="src\vel\Renderer\Buffer.cpp">
       <Filter>src\vel\Renderer</Filter>

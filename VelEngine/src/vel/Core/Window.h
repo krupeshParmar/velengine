@@ -2,7 +2,7 @@
 
 #include "velpch.h"
 
-#include "vel/Core.h"
+#include "vel/Core/Core.h"
 #include "vel/Events/Event.h"
 
 namespace vel

@@ -2,7 +2,7 @@
 #include "OpenGLContext.h"
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
-#include <vel/Log.h>
+#include <vel/Core/Log.h>
 
 namespace vel
 {

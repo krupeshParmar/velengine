@@ -4,7 +4,7 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
-#include "vel/Input.h"
+#include "vel/Core/Input.h"
 
 namespace vel
 {
@@ -19,7 +19,7 @@ namespace vel
 
 	void EditorCamera::Init()
 	{
-		constexpr glm::vec3 position = {50, -50, -5 };
+		constexpr glm::vec3 position = {5, 5, 5 };
 		m_Distance = glm::distance(position, m_FocalPoint);
 
 		m_Yaw = 3.0f * glm::pi<float>() / 4.0f;

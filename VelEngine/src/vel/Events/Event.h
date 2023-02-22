@@ -1,6 +1,6 @@
 #pragma once
 #include "velpch.h"
-#include <vel/Core.h>
+#include <vel/Core/Core.h>
 
 namespace vel
 {

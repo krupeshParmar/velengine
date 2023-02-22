@@ -2,7 +2,7 @@
 
 #include "OpenGLShader.h"
 #include <glad/glad.h>
-#include <vel/Log.h>
+#include <vel/Core/Log.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <fstream>
 
@@ -172,10 +172,56 @@ namespace vel
 		glUseProgram(0);
 	}
 
+	void OpenGLShader::SetInt(const std::string& uniformName, int value)
+	{
+		UploadUniformInt(uniformName, value);
+	}
+
+	void OpenGLShader::SetBool(const std::string& uniformName, bool value)
+	{
+		UploadUniformBool(uniformName, value);
+	}
+
+	void OpenGLShader::SetFloat(const std::string& uniformName, float value)
+	{
+		UploadUniformFloat(uniformName, value);
+	}
+
+	void OpenGLShader::SetFloat2(const std::string& uniformName, const glm::vec2& values)
+	{
+		UploadUniformFloat2(uniformName, values);
+	}
+
+	void OpenGLShader::SetFloat3(const std::string& uniformName, const glm::vec3& values)
+	{
+		UploadUniformFloat3(uniformName, values);
+	}
+
+	void OpenGLShader::SetFloat4(const std::string& uniformName, const glm::vec4& values)
+	{
+		UploadUniformFloat4(uniformName, values);
+	}
+
+	void OpenGLShader::SetMat3(const std::string& uniformName, const glm::mat3& matrix)
+	{
+		UploadUniformMat3(uniformName, matrix);
+	}
+
+	void OpenGLShader::SetMat4(const std::string& uniformName, const glm::mat4& value)
+	{
+		UploadUniformMat4(uniformName, value);
+	}
+
 	void OpenGLShader::UploadUniformInt(const std::string& uniformName, int value)
 	{
 		GLint location = glGetUniformLocation(m_RendererID, uniformName.c_str());
 		glUniform1i(location, value);
+	}
+
+	void OpenGLShader::UploadUniformBool(const std::string& uniformName, bool value)
+	{
+		GLint location = glGetUniformLocation(m_RendererID, uniformName.c_str());
+		glUniform1i(location, (GLfloat) value);
 	}
 
 	void OpenGLShader::UploadUniformFloat(const std::string& uniformName, float value)

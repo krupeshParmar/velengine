@@ -2,9 +2,9 @@
 
 // For applications only
 
-#include "vel/Application.h"
-#include "vel/Layer.h"
-#include "vel/Log.h"
+#include "vel/Core/Application.h"
+#include "vel/Core/Layer.h"
+#include "vel/Core/Log.h"
 
 #include "vel/ImGui/ImGuiLayer.h"
 
@@ -14,8 +14,8 @@
 #include "Platform/OpenGL/OpenGLShader.h"
 
 // --------Input--------
-#include "vel/Input.h"
-#include "vel/KeyCodes.h"
+#include "vel/Core/Input.h"
+#include "vel/Core/KeyCodes.h"
 // -----------------------------
 
 // --------Physics--------Libraries
@@ -33,8 +33,4 @@
 #include "vel/Renderer/VertexArray.h"
 
 #include "vel/Editor/EditorCamera.h"
-// -----------------------------
-
-// --------Entry Point ---------
-#include "vel/EntryPoint.h"
 // -----------------------------
