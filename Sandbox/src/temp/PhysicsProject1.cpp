@@ -8,53 +8,59 @@
 PhysicsScene::PhysicsScene()
 	:m_EditorCamera(45.f, 1280, 720, 0.1f, 1000.f)
 {
-	userInputs = "\nLeft - Right: To rotate camera around the center";
-	userInputs += "\n\nUp - Down: To zoom in and out";
-	userInputs += "\n\nWASD: To control the selected ball relative to the camera";
-	userInputs += "\n\n1 to 5: To select balls from one to five";
+	VEL_PROFILE_FUNCTION();
 
-	m_ShaderLibrary.Load("assets/shaders/simpleshader1.glsl"); 
-	std::dynamic_pointer_cast<vel::OpenGLShader>(m_ShaderLibrary.Get("simpleshader1"))->Bind();
-	std::dynamic_pointer_cast<vel::OpenGLShader>(m_ShaderLibrary.Get("simpleshader1"))->UploadUniformInt("u_Texture", 0);
-	
-	m_PhysicsFactory = new physics::vel::PhysicsFactory();
-	m_PhysicsWorld = m_PhysicsFactory->CreateWorld();
-	float yValue = 25.f;
-	CreateWalls();
-	CreateGround();
+	{
+		VEL_PROFILE_SCOPE("Physics Constructor");
+		userInputs = "\nLeft - Right: To rotate camera around the center";
+		userInputs += "\n\nUp - Down: To zoom in and out";
+		userInputs += "\n\nWASD: To control the selected ball relative to the camera";
+		userInputs += "\n\n1 to 5: To select balls from one to five";
 
-	ballPrefab = new GameObject();
-	ballPrefab->name = "ballprefab";
-	LoadPlyFiles("assets/models/ball2.ply", ballPrefab);
+		m_ShaderLibrary.Load("assets/shaders/simpleshader1.glsl");
+		std::dynamic_pointer_cast<vel::OpenGLShader>(m_ShaderLibrary.Get("simpleshader1"))->Bind();
+		std::dynamic_pointer_cast<vel::OpenGLShader>(m_ShaderLibrary.Get("simpleshader1"))->UploadUniformInt("u_Texture", 0);
 
-	quadPrefab = new GameObject();
-	LoadPlyFiles("assets/models/quad.ply", quadPrefab);
+		m_PhysicsFactory = new physics::vel::PhysicsFactory();
+		m_PhysicsWorld = m_PhysicsFactory->CreateWorld();
+		float yValue = 25.f;
+		CreateWalls();
+		CreateGround();
 
-	ball1info = "\nBall 1 ( 1.11, 2.5 ): A football";
-	ball1 = CreateBall(glm::vec3(0.f, yValue, 0.f), 1.11f, 2.5f, "football");
+		ballPrefab = new GameObject();
+		ballPrefab->name = "ballprefab";
+		LoadPlyFiles("assets/models/ball2.ply", ballPrefab);
 
-	ball2info = "\nBall 2 ( 0.8, 5.5 ): A beach ball, big but really light";
-	ball2 = CreateBall(glm::vec3(30.f, yValue, -30.f), 0.80f, 5.5f, "beach");
+		quadPrefab = new GameObject();
+		LoadPlyFiles("assets/models/quad.ply", quadPrefab);
 
-	ball3info = "\nBall 3 ( 8.0, 1.85 ): A bowling ball, small but heavy";
-	ball3 = CreateBall(glm::vec3(-20.f, yValue, 20.f), 8.0f, 1.85f, "bowling");
+		ball1info = "\nBall 1 ( 1.11, 2.5 ): A football";
+		ball1 = CreateBall(glm::vec3(0.f, yValue, 0.f), 1.11f, 2.5f, "football");
 
-	ball4info = "\nBall 4 ( 25.0, 5.0 ): A boulder, really big and heavy";
-	ball4 = CreateBall(glm::vec3(25.f, yValue, -15.f), 25.f, 5.f, "boulder");
+		ball2info = "\nBall 2 ( 0.8, 5.5 ): A beach ball, big but really light";
+		ball2 = CreateBall(glm::vec3(30.f, yValue, -30.f), 0.80f, 5.5f, "beach");
 
-	ball5info = "\nBall 5 ( 2.4, 3.5 ): A basketball, big but not so heavy";
-	ball5 = CreateBall(glm::vec3(15.f, yValue, -35.f), 2.40, 3.5f, "basketball");
-	
-	controlBall = ball1;
-	vel::RenderCommand::Init();
-	vel::RenderCommand::SetDepthMask(true);
-	float gravity = 0.981f;
-	m_PhysicsWorld->SetGravity(glm::vec3(0.f, -gravity , 0.f));
-	vel::RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1));
+		ball3info = "\nBall 3 ( 8.0, 1.85 ): A bowling ball, small but heavy";
+		ball3 = CreateBall(glm::vec3(-20.f, yValue, 20.f), 8.0f, 1.85f, "bowling");
+
+		ball4info = "\nBall 4 ( 25.0, 5.0 ): A boulder, really big and heavy";
+		ball4 = CreateBall(glm::vec3(25.f, yValue, -15.f), 25.f, 5.f, "boulder");
+
+		ball5info = "\nBall 5 ( 2.4, 3.5 ): A basketball, big but not so heavy";
+		ball5 = CreateBall(glm::vec3(15.f, yValue, -35.f), 2.40, 3.5f, "basketball");
+
+		controlBall = ball1;
+		vel::RenderCommand::Init();
+		vel::RenderCommand::SetDepthMask(true);
+		float gravity = 0.981f;
+		m_PhysicsWorld->SetGravity(glm::vec3(0.f, -gravity, 0.f));
+		vel::RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1));
+	}
 }
 
 void PhysicsScene::OnImGuiRender()
 {
+	VEL_PROFILE_FUNCTION();
 	float old_size = ImGui::GetFont()->Scale;
 	ImGui::GetFont()->Scale *= 1.4;
 	ImGui::PushFont(ImGui::GetFont());
@@ -90,158 +96,163 @@ void PhysicsScene::OnImGuiRender()
 
 void PhysicsScene::OnUpdate(vel::Timestep ts)
 {
+	VEL_PROFILE_FUNCTION();
 	m_EditorCamera.OnUpdate(ts);
 
-	if(m_PhysicsWorld)
-		m_PhysicsWorld->TimeStep(ts.GetSeconds());
-
-	vel::RenderCommand::Clear();
-	vel::RenderCommand::SetCullFace();
-	float ratio = (float) vel::Application::Get().GetWindow().GetWidth() / vel::Application::Get().GetWindow().GetHeight();
-	
-	glm::mat4 matView = glm::lookAt(
-							CameraPosition, 
-							glm::vec3(0.f), 
-							glm::vec3(0.f, 1.f, 0.f)
-						);
-	
-	
-	glm::mat4 matProjection = glm::perspective(
-		FOV,
-		ratio,
-		10.f,
-		200.0f);
-
-	vel::Renderer::BeginScene(matProjection * matView);
-
-	for (GameObject* gameObject : m_GameObjects)
 	{
-		m_ShaderLibrary.Get("simpleshader1")->Bind();
-		DetectChangeInControllBall();
-		if (controlBall)
-		{
-			glm::vec3 rigidBodyPosition;
-			controlBall->GetPosition(rigidBodyPosition);
-			
-			HandleCamera();
-
-			float force = 0.3f;
-			glm::vec3 direction(0.f);
-			if (vel::Input::IsKeyPressed(KeyCode::W))
-			{
-				glm::vec3 forward = glm::normalize(rigidBodyPosition - CameraPosition);
-				float x = forward.x * 2.f;
-				float z = forward.z * 2.f;
-				direction = glm::vec3(
-					x,
-					0.f,
-					z
-				);
-			}
-			if (vel::Input::IsKeyPressed(KeyCode::S))
-			{
-				glm::vec3 forward = glm::normalize(rigidBodyPosition - CameraPosition);
-				float x = forward.x * 2.f;
-				float z = forward.z * 2.f;
-				direction = glm::vec3(
-								-x,
-								0.f,
-								-z
-							);
-			}
-			if (vel::Input::IsKeyPressed(KeyCode::A))
-			{
-				glm::vec3 forward = glm::normalize(rigidBodyPosition - CameraPosition);
-
-				glm::mat4 rotationMat(1);
-				rotationMat = glm::rotate(rotationMat, 90.0f, glm::vec3(0.0, 1.0, 0.0));
-				glm::vec3 right = glm::vec3(rotationMat * glm::vec4(forward, 1.0));
-
-				float x = right.x * 2.f;
-				float z = right.z * 2.f;
-
-				direction = glm::vec3(x,
-					0.f,
-					z
-				);
-			}
-			if (vel::Input::IsKeyPressed(KeyCode::D))
-			{
-				glm::vec3 forward = glm::normalize(rigidBodyPosition - CameraPosition);
-
-				glm::mat4 rotationMat(1);
-				rotationMat = glm::rotate(rotationMat, -90.0f, glm::vec3(0.0, 1.0, 0.0));
-				glm::vec3 right = glm::vec3(rotationMat * glm::vec4(forward, 1.0));
-
-				float x = right.x * 2.f;
-				float z = right.z * 2.f;
-
-				direction = glm::vec3(
-					x,
-					0.f,
-					z
-				);
-			}
-
-			controlBall->ApplyForce(
-				direction
-			);
-
-			/*
-			if (vel::Input::IsKeyPressed(KeyCode::Left))
-			{
-				controlBall->ApplyForce(glm::vec3(-5.f, 0.f, 0.f) * m_EditorCamera.GetForwardDirection());
-			}
-			if (vel::Input::IsKeyPressed(KeyCode::Right))
-			{
-				controlBall->ApplyForce(glm::vec3(5.f, 0.f, 0.f));
-			}
-			if (vel::Input::IsKeyPressed(KeyCode::Up))
-			{
-				controlBall->ApplyForce(glm::vec3(0.f, 0.f, -5.f));
-			}
-			if (vel::Input::IsKeyPressed(KeyCode::Down))
-			{
-				controlBall->ApplyForce(glm::vec3(0.f, 0.f, 5.f));
-			}*/
-		}
-		glm::mat4x4 matModel = glm::mat4x4(1.0f);
-		if(gameObject->rigidBody)
-			gameObject->rigidBody->GetPosition(gameObject->transform.position); 
-
-		glm::mat4 matTranslation = glm::translate(glm::mat4(1.0f),
-			gameObject->transform.position);
-		glm::mat4 matQRotation = glm::mat4(gameObject->transform.rotation);
-		glm::mat4 matScale = glm::scale(glm::mat4(1.0f),
-			gameObject->transform.scale);
-
-		matModel = matModel * matTranslation;
-		matModel = matModel * matQRotation;
-		matModel = matModel * matScale;
-
-		if (gameObject->name == "wall")
-		{
-			//vel::RenderCommand::SetDepthMask(true);
-			std::dynamic_pointer_cast<vel::OpenGLShader>
-				(m_ShaderLibrary.Get("simpleshader1"))->UploadUniformFloat("isAWall", 1.f);
-		}
-		else
-		{
-			//vel::RenderCommand::SetDepthMask(false);
-			std::dynamic_pointer_cast<vel::OpenGLShader>
-				(m_ShaderLibrary.Get("simpleshader1"))->UploadUniformFloat("isAWall", 0.f);
-		}
-		gameObject->m_Texture->Bind(0);
-
-		vel::RenderCommand::EnableDepth();
-		vel::RenderCommand::SetCullFace();
-		if(gameObject->name == "ball")
-			vel::Renderer::Submit(m_ShaderLibrary.Get("simpleshader1"), ballPrefab->m_VertexArray, matModel);
-		else if(gameObject->name == "ground" || gameObject->name == "wall")
-			vel::Renderer::Submit(m_ShaderLibrary.Get("simpleshader1"), quadPrefab->m_VertexArray, matModel);
-		else vel::Renderer::Submit(m_ShaderLibrary.Get("simpleshader1"), gameObject->m_VertexArray, matModel);
+		VEL_PROFILE_SCOPE("Physics World Update");
+		if (m_PhysicsWorld)
+			m_PhysicsWorld->TimeStep(ts.GetSeconds());
 	}
-	vel::Renderer::EndScene();
+
+	{
+		VEL_PROFILE_SCOPE("Render Draw");
+		vel::RenderCommand::Clear();
+		vel::RenderCommand::SetCullFace();
+		float ratio = (float)vel::Application::Get().GetWindow().GetWidth() / vel::Application::Get().GetWindow().GetHeight();
+
+		glm::mat4 matView = glm::lookAt(
+			CameraPosition,
+			glm::vec3(0.f),
+			glm::vec3(0.f, 1.f, 0.f)
+		);
+
+
+		glm::mat4 matProjection = glm::perspective(
+			FOV,
+			ratio,
+			10.f,
+			200.0f);
+
+		vel::Renderer::BeginScene(matProjection * matView);
+
+		for (GameObject* gameObject : m_GameObjects)
+		{
+			m_ShaderLibrary.Get("simpleshader1")->Bind();
+			DetectChangeInControllBall();
+			if (controlBall)
+			{
+				glm::vec3 rigidBodyPosition;
+				controlBall->GetPosition(rigidBodyPosition);
+
+				HandleCamera();
+
+				float force = 0.3f;
+				glm::vec3 direction(0.f);
+				if (vel::Input::IsKeyPressed(KeyCode::W))
+				{
+					glm::vec3 forward = glm::normalize(rigidBodyPosition - CameraPosition);
+					float x = forward.x * 2.f;
+					float z = forward.z * 2.f;
+					direction = glm::vec3(
+						x,
+						0.f,
+						z
+					);
+				}
+				if (vel::Input::IsKeyPressed(KeyCode::S))
+				{
+					glm::vec3 forward = glm::normalize(rigidBodyPosition - CameraPosition);
+					float x = forward.x * 2.f;
+					float z = forward.z * 2.f;
+					direction = glm::vec3(
+						-x,
+						0.f,
+						-z
+					);
+				}
+				if (vel::Input::IsKeyPressed(KeyCode::A))
+				{
+					glm::vec3 forward = glm::normalize(rigidBodyPosition - CameraPosition);
+
+					glm::mat4 rotationMat(1);
+					rotationMat = glm::rotate(rotationMat, 90.0f, glm::vec3(0.0, 1.0, 0.0));
+					glm::vec3 right = glm::vec3(rotationMat * glm::vec4(forward, 1.0));
+
+					float x = right.x * 2.f;
+					float z = right.z * 2.f;
+
+					direction = glm::vec3(x,
+						0.f,
+						z
+					);
+				}
+				if (vel::Input::IsKeyPressed(KeyCode::D))
+				{
+					glm::vec3 forward = glm::normalize(rigidBodyPosition - CameraPosition);
+
+					glm::mat4 rotationMat(1);
+					rotationMat = glm::rotate(rotationMat, -90.0f, glm::vec3(0.0, 1.0, 0.0));
+					glm::vec3 right = glm::vec3(rotationMat * glm::vec4(forward, 1.0));
+
+					float x = right.x * 2.f;
+					float z = right.z * 2.f;
+
+					direction = glm::vec3(
+						x,
+						0.f,
+						z
+					);
+				}
+
+				controlBall->ApplyForce(
+					direction
+				);
+
+				/*
+				if (vel::Input::IsKeyPressed(KeyCode::Left))
+				{
+					controlBall->ApplyForce(glm::vec3(-5.f, 0.f, 0.f) * m_EditorCamera.GetForwardDirection());
+				}
+				if (vel::Input::IsKeyPressed(KeyCode::Right))
+				{
+					controlBall->ApplyForce(glm::vec3(5.f, 0.f, 0.f));
+				}
+				if (vel::Input::IsKeyPressed(KeyCode::Up))
+				{
+					controlBall->ApplyForce(glm::vec3(0.f, 0.f, -5.f));
+				}
+				if (vel::Input::IsKeyPressed(KeyCode::Down))
+				{
+					controlBall->ApplyForce(glm::vec3(0.f, 0.f, 5.f));
+				}*/
+			}
+			glm::mat4x4 matModel = glm::mat4x4(1.0f);
+			if (gameObject->rigidBody)
+				gameObject->rigidBody->GetPosition(gameObject->transform.position);
+
+			glm::mat4 matTranslation = glm::translate(glm::mat4(1.0f),
+				gameObject->transform.position);
+			glm::mat4 matQRotation = glm::mat4(gameObject->transform.rotation);
+			glm::mat4 matScale = glm::scale(glm::mat4(1.0f),
+				gameObject->transform.scale);
+
+			matModel = matModel * matTranslation;
+			matModel = matModel * matQRotation;
+			matModel = matModel * matScale;
+
+			if (gameObject->name == "wall")
+			{
+				std::dynamic_pointer_cast<vel::OpenGLShader>
+					(m_ShaderLibrary.Get("simpleshader1"))->UploadUniformFloat("isAWall", 1.f);
+			}
+			else
+			{
+				std::dynamic_pointer_cast<vel::OpenGLShader>
+					(m_ShaderLibrary.Get("simpleshader1"))->UploadUniformFloat("isAWall", 0.f);
+			}
+			gameObject->m_Texture->Bind(0);
+
+			vel::RenderCommand::EnableDepth();
+			vel::RenderCommand::SetCullFace();
+			if (gameObject->name == "ball")
+				vel::Renderer::Submit(m_ShaderLibrary.Get("simpleshader1"), ballPrefab->m_VertexArray, matModel);
+			else if (gameObject->name == "ground" || gameObject->name == "wall")
+				vel::Renderer::Submit(m_ShaderLibrary.Get("simpleshader1"), quadPrefab->m_VertexArray, matModel);
+			else vel::Renderer::Submit(m_ShaderLibrary.Get("simpleshader1"), gameObject->m_VertexArray, matModel);
+		}
+		vel::Renderer::EndScene();
+	}
 
 }
 

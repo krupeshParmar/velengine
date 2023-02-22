@@ -13,6 +13,8 @@ namespace vel
 	}
 	void OpenGLContext::Init()
 	{
+		VEL_PROFILE_FUNCTION();
+
 		glfwMakeContextCurrent(m_WindowHandle);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		VEL_CORE_ASSERT(status, "Failed to initiaize glad!");
@@ -36,6 +38,8 @@ namespace vel
 	}
 	void OpenGLContext::SwapBuffers()
 	{
+		VEL_PROFILE_FUNCTION();
+
 		glfwSwapBuffers(m_WindowHandle);
 	}
 }

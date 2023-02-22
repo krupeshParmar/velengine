@@ -1,38 +1,7 @@
 #include "EditorLayer.h"
 
 #include <chrono>
-
-class Timer
-{
-public:
-	Timer(const char* name)
-		:m_Name(name), m_Stopped(false)
-	{
-		m_StartTimepoint = std::chrono::high_resolution_clock::now();
-	}
-	~Timer()
-	{
-		if (!m_Stopped)
-			Stop();
-	}
-	void Stop()
-	{
-		auto endTimePoint = std::chrono::high_resolution_clock::now();
-
-		long long start = std::chrono::time_point_cast<std::chrono::microseconds>(m_StartTimepoint).time_since_epoch().count();
-		long long end = std::chrono::time_point_cast<std::chrono::microseconds>(endTimePoint).time_since_epoch().count();
-
-		m_Stopped = true;
-		float duration = (end - start) * 0.001f;
-		std::cout << "Duration: " << duration << "ms" << std::endl;
-	}
-
-
-private:
-	const char* m_Name;
-	std::chrono::time_point<std::chrono::steady_clock> m_StartTimepoint;
-	bool m_Stopped;
-};
+#include <imgui/imgui.h>
 
 EditorLayer::EditorLayer()
 	: Layer("EditorLayer"), m_EditorCamera(45.f, 1280, 720, 0.1f, 1000.f)
@@ -84,26 +53,37 @@ void EditorLayer::OnDetach()
 
 void EditorLayer::OnUpdate(vel::Timestep ts)
 {
-	Timer timer("EditorLayer::OnUpdate");
-	m_EditorCamera.OnUpdate(ts);
+	VEL_PROFILE_FUNCTION();
+	{
+		VEL_PROFILE_SCOPE("EditorCamera::OnUpdate");
+		m_EditorCamera.OnUpdate(ts);
+	}
 
-	vel::RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1));
-	vel::RenderCommand::Clear();
+	{
+		VEL_PROFILE_SCOPE("Renderer Prep");
+		vel::RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1));
+		vel::RenderCommand::Clear();
+	}
 
+	{
+		VEL_PROFILE_SCOPE("Renderer Draw");
+		vel::Renderer::BeginScene(m_EditorCamera.GetViewProjection());
 
-	vel::Renderer::BeginScene(m_EditorCamera.GetViewProjection());
+		m_Texture->Bind(0);
+		vel::Renderer::Submit(m_ShaderLibrary.Get("Texture"), m_SquareVertexArray, glm::scale(glm::mat4(1.f), glm::vec3(5.5f)));
 
-	m_Texture->Bind(0);
-	vel::Renderer::Submit(m_ShaderLibrary.Get("Texture"), m_SquareVertexArray, glm::scale(glm::mat4(1.f), glm::vec3(5.5f)));
-	
-	m_SecondTexture->Bind(0);
-	vel::Renderer::Submit(m_ShaderLibrary.Get("Texture"), m_SquareVertexArray, glm::scale(glm::mat4(1.f), glm::vec3(5.5f)));
+		m_SecondTexture->Bind(0);
+		vel::Renderer::Submit(m_ShaderLibrary.Get("Texture"), m_SquareVertexArray, glm::scale(glm::mat4(1.f), glm::vec3(5.5f)));
 
-	vel::Renderer::EndScene();
+		vel::Renderer::EndScene();
+	}
 }
 
 void EditorLayer::OnImGuiRender()
 {
+	VEL_PROFILE_FUNCTION();
+	ImGui::Begin("Profile");
+	ImGui::End();
 }
 
 void EditorLayer::OnEvent(vel::Event& event)

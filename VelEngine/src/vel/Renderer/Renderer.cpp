@@ -7,6 +7,7 @@ namespace vel
 
 	void Renderer::Init()
 	{
+		VEL_PROFILE_FUNCTION();
 		RenderCommand::Init();
 	}
 

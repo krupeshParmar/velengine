@@ -21,6 +21,4 @@ private:
 	vel::Ref<vel::VertexArray> m_SquareVertexArray;
 
 	vel::EditorCamera m_EditorCamera;
-
-
 };

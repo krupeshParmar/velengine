@@ -13,9 +13,10 @@ namespace vel {
 
 	Application::Application()
 	{
+		VEL_PROFILE_FUNCTION();
 		VEL_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
-		m_Window = std::unique_ptr<Window>(Window::Create());
+		m_Window = Window::Create();
 		m_Window->SetEventCallback(VEL_BIND_EVENT_FN(Application::OnEvent));
 
 		//Renderer::Init();
@@ -27,6 +28,8 @@ namespace vel {
 
 	Application::~Application()
 	{
+		VEL_PROFILE_FUNCTION();
+		//Renderer::Shutdown();
 	}
 
 	void Application::OnEvent(Event& e)
@@ -47,29 +50,37 @@ namespace vel {
 
 	void Application::PushLayer(Layer* layer)
 	{
+		VEL_PROFILE_FUNCTION();
 		m_LayerStack.PushLayer(layer);
 		layer->OnAttach();
 	}
 
 	void Application::PushOverlay(Layer* layer)
 	{
+		VEL_PROFILE_FUNCTION();
 		m_LayerStack.PushOverlay(layer);
 		layer->OnAttach();
 	}
 
 	void Application::Run()
 	{
+		VEL_PROFILE_FUNCTION();
 		RenderCommand::SetViewport(0, 0, m_Window->GetWidth(), m_Window->GetHeight());
 		while (m_Running)
 		{
+			VEL_PROFILE_SCOPE("Run Loop");
 			float time = (float) glfwGetTime();
 			Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
 			if (!m_Minimized)
 			{
-				for (Layer* layer : m_LayerStack)
-					layer->OnUpdate(timestep);
+				{
+					VEL_PROFILE_SCOPE("LayerStack OnUpdate");
+
+					for (Layer* layer : m_LayerStack)
+						layer->OnUpdate(timestep);
+				}
 			}
 
 			m_ImGuiLayer->Begin();
@@ -89,6 +100,7 @@ namespace vel {
 
 	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{
+		VEL_PROFILE_FUNCTION();
 		if (e.GetWidth() == 0 || e.GetHeight() == 0)
 		{
 			m_Minimized = true;

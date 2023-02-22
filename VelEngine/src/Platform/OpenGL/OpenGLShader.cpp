@@ -19,6 +19,7 @@ namespace vel
 
 	OpenGLShader::OpenGLShader(const std::string& shaderFilePath)
 	{
+		VEL_PROFILE_FUNCTION();
 		std::string source = ReadFile(shaderFilePath);
 		auto shaderSources = PreProcess(source);
 		Compile(shaderSources);
@@ -38,6 +39,7 @@ namespace vel
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 		:m_Name(name)
 	{
+		VEL_PROFILE_FUNCTION();
 		std::unordered_map<GLenum, std::string> shaderSources;
 		shaderSources[GL_VERTEX_SHADER] = vertexSrc;
 		shaderSources[GL_FRAGMENT_SHADER] = fragmentSrc;
@@ -46,12 +48,14 @@ namespace vel
 
 	OpenGLShader::~OpenGLShader()
 	{
+		VEL_PROFILE_FUNCTION();
 		glDeleteProgram(m_RendererID);
 	}
 
 
 	std::string OpenGLShader::ReadFile(const std::string& filePath)
 	{
+		VEL_PROFILE_FUNCTION();
 		std::string result;
 		std::ifstream in(filePath, std::ios::in | std::ios::binary);
 		if (in)
@@ -70,6 +74,7 @@ namespace vel
 
 	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
 	{
+		VEL_PROFILE_FUNCTION();
 		std::unordered_map<GLenum, std::string> shaderSources;
 		const char* typeToken = "#type";
 		size_t typeTokenLength = strlen(typeToken);
@@ -93,6 +98,7 @@ namespace vel
 
 	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
 	{
+		VEL_PROFILE_FUNCTION();
 		GLuint program = glCreateProgram();
 		VEL_CORE_ASSERT(shaderSources.size() <= 2, "More shader than expected");
 		std::array<GLuint, 2> glShaderIDs;
@@ -164,6 +170,7 @@ namespace vel
 
 	void OpenGLShader::Bind() const
 	{
+		VEL_PROFILE_FUNCTION();
 		glUseProgram(m_RendererID);
 	}
 
@@ -174,41 +181,49 @@ namespace vel
 
 	void OpenGLShader::SetInt(const std::string& uniformName, int value)
 	{
+		VEL_PROFILE_FUNCTION();
 		UploadUniformInt(uniformName, value);
 	}
 
 	void OpenGLShader::SetBool(const std::string& uniformName, bool value)
 	{
+		VEL_PROFILE_FUNCTION();
 		UploadUniformBool(uniformName, value);
 	}
 
 	void OpenGLShader::SetFloat(const std::string& uniformName, float value)
 	{
+		VEL_PROFILE_FUNCTION();
 		UploadUniformFloat(uniformName, value);
 	}
 
 	void OpenGLShader::SetFloat2(const std::string& uniformName, const glm::vec2& values)
 	{
+		VEL_PROFILE_FUNCTION();
 		UploadUniformFloat2(uniformName, values);
 	}
 
 	void OpenGLShader::SetFloat3(const std::string& uniformName, const glm::vec3& values)
 	{
+		VEL_PROFILE_FUNCTION();
 		UploadUniformFloat3(uniformName, values);
 	}
 
 	void OpenGLShader::SetFloat4(const std::string& uniformName, const glm::vec4& values)
 	{
+		VEL_PROFILE_FUNCTION();
 		UploadUniformFloat4(uniformName, values);
 	}
 
 	void OpenGLShader::SetMat3(const std::string& uniformName, const glm::mat3& matrix)
 	{
+		VEL_PROFILE_FUNCTION();
 		UploadUniformMat3(uniformName, matrix);
 	}
 
 	void OpenGLShader::SetMat4(const std::string& uniformName, const glm::mat4& value)
 	{
+		VEL_PROFILE_FUNCTION();
 		UploadUniformMat4(uniformName, value);
 	}
 

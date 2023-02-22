@@ -27,21 +27,25 @@ namespace vel
 
     OpenGLVertexArray::OpenGLVertexArray()
     {
+        VEL_PROFILE_FUNCTION();
         glCreateVertexArrays(1, &m_RendererID);
     }
 
-     OpenGLVertexArray::~OpenGLVertexArray()
+    OpenGLVertexArray::~OpenGLVertexArray()
     {
+         VEL_PROFILE_FUNCTION();
          glDeleteVertexArrays(1, &m_RendererID);
     }
 
     void OpenGLVertexArray::Bind() const
     {
+        VEL_PROFILE_FUNCTION();
         glBindVertexArray(m_RendererID);
     }
 
     void OpenGLVertexArray::Unbind() const
     {
+        VEL_PROFILE_FUNCTION();
         glBindVertexArray(0); 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -49,6 +53,7 @@ namespace vel
 
     void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
     {
+        VEL_PROFILE_FUNCTION();
         VEL_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex buffer has no layout!!");
 
         glBindVertexArray(m_RendererID); 
@@ -76,6 +81,7 @@ namespace vel
 
     void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
     {
+        VEL_PROFILE_FUNCTION();
         glBindVertexArray(m_RendererID);
         indexBuffer->Bind();
 

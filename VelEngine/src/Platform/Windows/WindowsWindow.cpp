@@ -16,9 +16,9 @@ namespace vel
 		VEL_CORE_ERROR("GLFW Error ({0}) : {1}", error, description);
 	}
 
-	Window* Window::Create(const WindowProps& props)
+	Scope<Window> Window::Create(const WindowProps& props)
 	{
-		return new WindowsWindow(props);
+		return CreateScope<WindowsWindow>(props);
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProps& props)
@@ -28,11 +28,13 @@ namespace vel
 
 	WindowsWindow::~WindowsWindow()
 	{
+		VEL_PROFILE_FUNCTION();
 		Shutdown();
 	}
 
 	void WindowsWindow::Init(const WindowProps& props)
 	{
+		VEL_PROFILE_FUNCTION();
 		m_Data.Title = props.Title;
 		m_Data.Height = props.Height;
 		m_Data.Width = props.Width;
@@ -148,17 +150,21 @@ namespace vel
 
 	void WindowsWindow::Shutdown()
 	{
+		VEL_PROFILE_FUNCTION();
 		glfwDestroyWindow(m_Window);
 	}
 
 	void WindowsWindow::OnUpdate()
 	{
+		VEL_PROFILE_FUNCTION();
 		glfwPollEvents(); 
 		m_Context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)
 	{
+		VEL_PROFILE_FUNCTION();
+
 		if (enabled)
 			glfwSwapInterval(1);
 		else glfwSwapInterval(0);

@@ -15,6 +15,8 @@
 #include <unordered_set>
 #include <vel/Core/Log.h>
 
+#include <vel/Debug/Instrumentor.h>
+
 
 #ifdef VEL_PLATFORM_WINDOWS
 	#include <Windows.h>
