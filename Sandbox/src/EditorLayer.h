@@ -12,11 +12,14 @@ public:
 	virtual void OnDetach() override;
 	virtual void OnUpdate(vel::Timestep ts) override;
 	virtual void OnImGuiRender() override;
+	void UI_Toolbar();
 	virtual void OnEvent(vel::Event& event) override;
 
 private:
 	vel::ShaderLibrary m_ShaderLibrary;
 	vel::Ref<vel::Texture2D> m_Texture;
+	vel::Ref<vel::FrameBuffer> m_FrameBuffer;
+	vel::Ref<vel::FrameBuffer> m_FullScreenFrameBuffer;
 	vel::Ref<vel::Texture2D> m_SecondTexture;
 	vel::Ref<vel::VertexArray> m_SquareVertexArray;
 

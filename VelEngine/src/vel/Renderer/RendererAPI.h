@@ -30,6 +30,8 @@ namespace vel
 
 		virtual void EnableDepth() = 0;
 
+		virtual void DisableDepth() = 0;
+
 		virtual void SetDepthMask(bool) = 0;
 
 		virtual void SetPolygonMode(bool) = 0;

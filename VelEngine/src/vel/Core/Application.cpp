@@ -19,7 +19,7 @@ namespace vel {
 		m_Window = Window::Create();
 		m_Window->SetEventCallback(VEL_BIND_EVENT_FN(Application::OnEvent));
 
-		//Renderer::Init();
+		Renderer::Init();
 
 		//m_Window->SetVSync(false);
 		m_ImGuiLayer = new ImGuiLayer();
@@ -60,6 +60,11 @@ namespace vel {
 		VEL_PROFILE_FUNCTION();
 		m_LayerStack.PushOverlay(layer);
 		layer->OnAttach();
+	}
+
+	void Application::Close()
+	{
+		m_Running = false;
 	}
 
 	void Application::Run()

@@ -29,6 +29,7 @@
 
 #include "vel/Renderer/Buffer.h"
 #include "vel/Renderer/Shader.h"
+#include "vel/Renderer/FrameBuffer.h"
 #include "vel/Renderer/Texture.h"
 #include "vel/Renderer/VertexArray.h"
 

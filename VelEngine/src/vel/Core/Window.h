@@ -14,8 +14,8 @@ namespace vel
 		unsigned int Height;
 		
 		WindowProps(const std::string& title = "Vel Engine",
-					unsigned int width = 1280,
-					unsigned int height = 720)
+					unsigned int width = 2560,
+					unsigned int height = 1440)
 			: Title(title), Width(width), Height(height)
 		{}
 	};

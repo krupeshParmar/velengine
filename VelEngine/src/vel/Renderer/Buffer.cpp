@@ -6,6 +6,21 @@
 
 namespace vel
 {
+	Ref<VertexBuffer> VertexBuffer::Create(uint32_t size)
+	{
+		switch (Renderer::GetAPI())
+		{
+		case RendererAPI::API::None:
+			VEL_CORE_ASSERT(false, "Renderer API None is not supported");
+			return nullptr;
+		case RendererAPI::API::OpenGL:
+
+			return CreateRef<OpenGLVertexBuffer>(size);
+		}
+		VEL_CORE_ASSERT(false, "Unknown Renderer API");
+		return nullptr;
+	}
+
 	Ref<VertexBuffer> VertexBuffer::Create(void* vertices, uint32_t size)
 	{
 		switch (Renderer::GetAPI())
@@ -15,7 +30,7 @@ namespace vel
 				return nullptr;
 			case RendererAPI::API::OpenGL:
 
-				return std::make_shared<OpenGLVertexBuffer>(vertices, size);
+				return CreateRef<OpenGLVertexBuffer>(vertices, size);
 		}
 		VEL_CORE_ASSERT(false, "Unknown Renderer API");
 		return nullptr;
@@ -30,7 +45,7 @@ namespace vel
 			return nullptr;
 		case RendererAPI::API::OpenGL:
 
-			return std::make_shared<OpenGLIndexBuffer>(indices, size);
+			return CreateRef<OpenGLIndexBuffer>(indices, size);
 		default:
 			VEL_CORE_ASSERT(false, "Unknown Renderer API");
 			return nullptr;

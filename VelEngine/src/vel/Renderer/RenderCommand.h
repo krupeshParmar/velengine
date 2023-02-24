@@ -38,6 +38,11 @@ namespace vel
 			s_RendererAPI->EnableDepth();
 		}
 
+		inline static void DisableDepth()
+		{
+			s_RendererAPI->DisableDepth();
+		}
+
 		inline static void SetDepthMask(bool enable)
 		{
 			s_RendererAPI->SetDepthMask(enable);

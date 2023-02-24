@@ -10,7 +10,7 @@ uniform mat4 u_Transform;
 
 void main()
 {
-	v_TextureCoords = a_TextureCoords;
+	v_TextureCoords = vec2(a_TextureCoords.x, a_TextureCoords.y);
 	gl_Position = u_ViewProjection * u_Transform * a_Position;
 }
 
@@ -19,9 +19,11 @@ void main()
 
 layout(location = 0) out vec4 color;
 in vec2 v_TextureCoords;
+
+uniform float u_TilingFactor;
 uniform sampler2D u_Texutre;
 
 void main()
 {
-	color = texture(u_Texutre, v_TextureCoords);
+	color = texture(u_Texutre, v_TextureCoords * u_TilingFactor);
 }

@@ -7,6 +7,16 @@ namespace vel
 	//----------------------------------------------//
 	//-------- Vertex Buffer ------------------------//
 	//----------------------------------------------//
+
+
+	OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size)
+	{
+		VEL_PROFILE_FUNCTION();
+		glCreateBuffers(1, &m_RendererID);
+		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
+	}
+
 	OpenGLVertexBuffer::OpenGLVertexBuffer(void* vertices, uint32_t size)
 	{
 		VEL_PROFILE_FUNCTION();

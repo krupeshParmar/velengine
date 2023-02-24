@@ -61,10 +61,13 @@ private:
 	physics::iPhysicsWorld* m_PhysicsWorld;
 	vel::ShaderLibrary m_ShaderLibrary;
 	vel::Ref<vel::Shader> m_TextureShader;
+	vel::Ref<vel::Texture2D> m_Texture;
 	vel::EditorCamera m_EditorCamera;
 	physics::iRigidBody* controlBall = nullptr;
 
 	glm::vec3 CameraPosition = glm::vec3(0.f, 30.f, 120.f);
 	float FOV = 0.6f;
+	vel::Ref<vel::VertexArray> m_SquareVertexArray;
+	vel::Ref<vel::FrameBuffer> fullScreenFrameBuffer;
 
 };

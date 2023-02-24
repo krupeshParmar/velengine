@@ -10,6 +10,7 @@ namespace vel
 	{
 	public:
 		static void Init();
+		static void ShutDown();
 
 		static void BeginScene();
 		static void BeginScene(glm::mat4& viewProjectionMatrix);
@@ -18,16 +19,11 @@ namespace vel
 		static void OnWindowResize(uint32_t width, uint32_t height);
 
 		static void Submit(const Ref<VertexArray>& vertexArray);
+		static void Submit(const Ref<VertexArray>& vertexArray, const glm::mat4& transform = glm::mat4(1.f));
 		static void Submit(const Ref<Shader>& shader,const std::shared_ptr<VertexArray>& vertexArray, const glm::mat4& transform = glm::mat4(1.f));
 		
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 
 	private:
-		struct SceneData
-		{
-			glm::mat4 ViewProjectionMatrix;
-		};
-
-		static SceneData* m_SceneData;
 	};
 }

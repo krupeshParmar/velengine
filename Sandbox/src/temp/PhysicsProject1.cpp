@@ -5,6 +5,7 @@
 #include <SphereShape.h>
 #include <imgui/imgui.h>
 
+static vel::Ref<vel::FrameBuffer> framebuffer;
 PhysicsScene::PhysicsScene()
 	:m_EditorCamera(45.f, 1280, 720, 0.1f, 1000.f)
 {
@@ -18,8 +19,13 @@ PhysicsScene::PhysicsScene()
 		userInputs += "\n\n1 to 5: To select balls from one to five";
 
 		m_ShaderLibrary.Load("assets/shaders/simpleshader1.glsl");
-		std::dynamic_pointer_cast<vel::OpenGLShader>(m_ShaderLibrary.Get("simpleshader1"))->Bind();
-		std::dynamic_pointer_cast<vel::OpenGLShader>(m_ShaderLibrary.Get("simpleshader1"))->UploadUniformInt("u_Texture", 0);
+		m_ShaderLibrary.Load("assets/shaders/FBOTexture.glsl");
+
+		m_ShaderLibrary.Get("simpleshader1")->Bind();
+		m_ShaderLibrary.Get("simpleshader1")->SetInt("u_Texture", 0);
+
+		m_ShaderLibrary.Get("FBOTexture")->Bind();
+		m_ShaderLibrary.Get("FBOTexture")->SetInt("u_Texture", 0);
 
 		m_PhysicsFactory = new physics::vel::PhysicsFactory();
 		m_PhysicsWorld = m_PhysicsFactory->CreateWorld();
@@ -55,9 +61,40 @@ PhysicsScene::PhysicsScene()
 		float gravity = 0.981f;
 		m_PhysicsWorld->SetGravity(glm::vec3(0.f, -gravity, 0.f));
 		vel::RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1));
+		{
+			vel::FrameBufferSpecification fbSpec;
+			fbSpec.Width = vel::Application::Get().GetWindow().GetWidth();
+			fbSpec.Height = vel::Application::Get().GetWindow().GetHeight();
+			framebuffer = vel::FrameBuffer::Create(fbSpec);
+			fullScreenFrameBuffer = vel::FrameBuffer::Create(fbSpec);
+			m_SquareVertexArray = vel::VertexArray::Create();
+			float sqVertices[6 * 4] = {
+				0.0f, 0.0f,	-0.75,	-0.75f,	0.0f,	1.f,
+				1.0f, 0.0f, 0.75f,	-0.75f,	0.0f,	1.f,
+				1.0f, 1.0f, 0.75f,	0.75f,	0.0f,	1.f,
+				0.0f, 1.0f, -0.75f,	0.75f,	0.0f,	1.f
+			};
+			m_SquareVertexArray = vel::VertexArray::Create();
+			vel::Ref<vel::VertexBuffer> squareVB;
+			squareVB = (vel::VertexBuffer::Create(sqVertices, sizeof(sqVertices)));
+
+			squareVB->SetLayout({
+					{ vel::ShaderDataType::Float2, "a_TextureCoords"},
+					{ vel::ShaderDataType::Float4, "a_Position"}
+				});
+			m_SquareVertexArray->AddVertexBuffer(squareVB);
+
+			uint32_t sq_indices[6] = {
+				0, 1, 2, 2, 3, 0
+			};
+
+			// index buffer
+			vel::Ref<vel::IndexBuffer> squareIB;
+			squareIB = (vel::IndexBuffer::Create(sq_indices, sizeof(sq_indices) / sizeof(uint32_t)));
+			m_SquareVertexArray->SetIndexBuffer(squareIB);
+		}
 	}
 }
-
 void PhysicsScene::OnImGuiRender()
 {
 	VEL_PROFILE_FUNCTION();
@@ -92,13 +129,18 @@ void PhysicsScene::OnImGuiRender()
 	ImGui::End();
 	ImGui::GetFont()->Scale = old_size;
 	ImGui::PopFont();
+	ImGui::Begin("ViewPort");
+	uint32_t textureID = fullScreenFrameBuffer->GetColorAttachmenRendererID();
+	ImGui::Image((void*)textureID, ImVec2{ 1280, 720 });
+	ImGui::End();
 }
 
 void PhysicsScene::OnUpdate(vel::Timestep ts)
 {
 	VEL_PROFILE_FUNCTION();
 	m_EditorCamera.OnUpdate(ts);
-
+	framebuffer->Bind();
+	vel::RenderCommand::EnableDepth();
 	{
 		VEL_PROFILE_SCOPE("Physics World Update");
 		if (m_PhysicsWorld)
@@ -243,7 +285,6 @@ void PhysicsScene::OnUpdate(vel::Timestep ts)
 			}
 			gameObject->m_Texture->Bind(0);
 
-			vel::RenderCommand::EnableDepth();
 			vel::RenderCommand::SetCullFace();
 			if (gameObject->name == "ball")
 				vel::Renderer::Submit(m_ShaderLibrary.Get("simpleshader1"), ballPrefab->m_VertexArray, matModel);
@@ -252,6 +293,16 @@ void PhysicsScene::OnUpdate(vel::Timestep ts)
 			else vel::Renderer::Submit(m_ShaderLibrary.Get("simpleshader1"), gameObject->m_VertexArray, matModel);
 		}
 		vel::Renderer::EndScene();
+		framebuffer->Unbind();
+		fullScreenFrameBuffer->Bind();
+		vel::RenderCommand::DisableDepth();
+		vel::RenderCommand::Clear();
+		framebuffer->BindColorTexture();
+		vel::Renderer::Submit(
+			m_ShaderLibrary.Get("FBOTexture"),
+			m_SquareVertexArray
+			);
+		fullScreenFrameBuffer->Unbind();
 	}
 
 }
@@ -262,6 +313,7 @@ void PhysicsScene::OnEvent(vel::Event& event)
 	if (event.GetEventType() == vel::EventType::WindowResize)
 	{
 		auto& we = (vel::WindowResizeEvent&)event;
+		vel::Renderer::OnWindowResize(we.GetWidth(), we.GetHeight());
 		m_EditorCamera.SetViewportSize(we.GetWidth(), we.GetHeight());
 	}
 }

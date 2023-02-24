@@ -77,6 +77,11 @@ namespace vel
 		glDepthFunc(GL_LESS);
 	}
 
+	void OpenGLRendererAPI::DisableDepth()
+	{
+		glDisable(GL_DEPTH_TEST);
+	}
+
 	void OpenGLRendererAPI::SetDepthMask(bool enable)
 	{
 		if(enable)

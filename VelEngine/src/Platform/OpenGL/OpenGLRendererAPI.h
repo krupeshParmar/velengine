@@ -19,6 +19,8 @@ namespace vel
 
 		virtual void EnableDepth() override;
 
+		virtual void DisableDepth()  override;
+
 		virtual void SetDepthMask(bool) override;
 
 		virtual void SetPolygonMode(bool) override;

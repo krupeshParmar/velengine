@@ -19,4 +19,7 @@
     </ClCompile>
     <ClCompile Include="src\EditorLayer.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\FBOTexture.glsl" />
+  </ItemGroup>
 </Project>
