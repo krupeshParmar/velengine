@@ -14,6 +14,7 @@ namespace vel
 		virtual void Unbind() override;
 
 		virtual void BindColorTexture() override;
+		virtual void Resize(uint32_t width, uint32_t height) override;
 
 		virtual uint32_t GetColorAttachmenRendererID() const override { return m_ColorAttachment; }
 		virtual uint32_t GetDepthAttachmenRendererID() const override { return m_DepthAttachment; }
@@ -25,10 +26,10 @@ namespace vel
 		virtual const FrameBufferSpecification& GetSpecification() const override;
 
 	private:
-		uint32_t m_RendererID;
-		uint32_t m_ColorAttachment;
-		uint32_t m_VertexWorldPosition;
-		uint32_t m_DepthAttachment;
+		uint32_t m_RendererID = 0;
+		uint32_t m_ColorAttachment = 0;
+		uint32_t m_VertexWorldPosition = 0;
+		uint32_t m_DepthAttachment = 0;
 		FrameBufferSpecification m_Specification;
 
 	};

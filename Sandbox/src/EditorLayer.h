@@ -18,7 +18,7 @@ public:
 private:
 	vel::ShaderLibrary m_ShaderLibrary;
 	vel::Ref<vel::Texture2D> m_Texture;
-	vel::Ref<vel::FrameBuffer> m_FrameBuffer;
+	vel::Ref<vel::FrameBuffer> m_RenderBuffer;
 	vel::Ref<vel::FrameBuffer> m_FullScreenFrameBuffer;
 	vel::Ref<vel::Texture2D> m_SecondTexture;
 	vel::Ref<vel::VertexArray> m_SquareVertexArray;

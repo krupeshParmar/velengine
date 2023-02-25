@@ -14,7 +14,7 @@ void EditorLayer::OnAttach()
 	vel::FrameBufferSpecification fbSpec;
 	fbSpec.Width = vel::Application::Get().GetWindow().GetWidth();
 	fbSpec.Height = vel::Application::Get().GetWindow().GetHeight();
-	m_FrameBuffer = vel::FrameBuffer::Create(fbSpec);
+	m_RenderBuffer = vel::FrameBuffer::Create(fbSpec);
 	m_FullScreenFrameBuffer = vel::FrameBuffer::Create(fbSpec);
 
 	m_ShaderLibrary.Load("assets/shaders/FBOTexture.glsl");
@@ -71,16 +71,15 @@ void EditorLayer::OnUpdate(vel::Timestep ts)
 
 	{
 		VEL_PROFILE_SCOPE("Renderer Prep");
-		m_FrameBuffer->Bind();
-		vel::RenderCommand::SetViewport(0, 0, m_FrameBuffer->GetSpecification().Width, m_FrameBuffer->GetSpecification().Height);
+		m_RenderBuffer->Bind();
+		vel::RenderCommand::SetViewport(0, 0, m_RenderBuffer->GetSpecification().Width, m_RenderBuffer->GetSpecification().Height);
 
-		m_EditorCamera.SetViewportSize(m_FrameBuffer->GetSpecification().Width, m_FrameBuffer->GetSpecification().Height);
+		m_EditorCamera.SetViewportSize(m_RenderBuffer->GetSpecification().Width, m_RenderBuffer->GetSpecification().Height);
 		vel::RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1));
 		vel::RenderCommand::Clear();
 	}
 
 	{
-
 		VEL_PROFILE_SCOPE("Renderer Draw");
 		vel::Renderer::BeginScene(m_EditorCamera.GetViewProjection());
 
@@ -93,11 +92,12 @@ void EditorLayer::OnUpdate(vel::Timestep ts)
 
 		vel::Renderer::EndScene();
 
-		m_FrameBuffer->Unbind();
+		m_RenderBuffer->Unbind();
+
 		m_FullScreenFrameBuffer->Bind();
-		//vel::RenderCommand::DisableDepth();
+		vel::RenderCommand::DisableDepth();
 		vel::RenderCommand::Clear();
-		m_FrameBuffer->BindColorTexture();
+		m_RenderBuffer->BindColorTexture();
 		vel::Renderer::Submit(
 			m_ShaderLibrary.Get("FBOTexture"),
 			m_SquareVertexArray

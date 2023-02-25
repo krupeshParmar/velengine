@@ -1,6 +1,6 @@
 workspace "VelEngine"
 	architecture "x64"
-	startproject "Sandbox"
+	startproject "Vel-Editor"
 
 	configurations
 	{
@@ -22,12 +22,17 @@ IncludeDir["PugiXML"] = "VelEngine/vendor/pugixml/src"
 IncludeDir["iPhysics"] = "Libraries/iPhysics/src"
 IncludeDir["VelPhysics"] = "Libraries/VelPhysics/src"
 
+group "Dependencies"
 include "VelEngine/vendor/GLFW"
 include "VelEngine/vendor/Glad"
 include "VelEngine/vendor/imgui"
 include "VelEngine/vendor/pugixml"
+group ""
+
+group "Physics"
 include "Libraries/iPhysics"
 include "Libraries/VelPhysics"
+group ""
 
 project "VelEngine"
 	location "VelEngine"
@@ -111,6 +116,64 @@ project "VelEngine"
 
 project "Sandbox"
 	location "Sandbox"
+	kind "ConsoleApp"
+	staticruntime "on"
+	language "C++"
+	cppdialect "C++17"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.c",
+		"%{prj.name}/src/**.hpp",
+		"%{prj.name}/src/**.cpp"
+	}
+
+	includedirs
+	{
+		"VelEngine/vendor/spdlog/include",
+		"VelEngine/vendor/",
+		"VelEngine/src",
+		"VelEngine/vendor/glm",
+		"VelEngine/vendor/pugixml/src",
+		"Libraries/iPhysics/src",
+		"Libraries/VelPhysics/src",
+	}
+
+	links
+	{
+		"VelEngine"
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+
+		defines
+		{
+			"VEL_PLATFORM_WINDOWS"
+		}
+
+	filter "configurations:Debug"
+		defines "VEL_DEBUG"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		defines "VEL_RELEASE"
+		runtime "Release"
+		optimize "on"
+
+	filter "configurations:Dist"
+		defines "VEL_DIST"
+		runtime "Release"
+		optimize "on"
+
+		
+project "Vel-Editor"
+	location "Vel-Editor"
 	kind "ConsoleApp"
 	staticruntime "on"
 	language "C++"

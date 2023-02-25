@@ -4,13 +4,6 @@
 
 namespace vel
 {
-	struct VertexData
-	{
-		glm::vec3 Position;
-		glm::vec4 Color;
-		glm::vec2 TexCoord;
-	};
-
 	struct RendererData
 	{
 		const uint32_t MaxQuads = 10000;
@@ -25,8 +18,8 @@ namespace vel
 
 		glm::mat4 ViewProjectionMatrix;
 		float TilingFactor = 1.f;
-		VertexData* vertexDataBufferBase = nullptr;
-		VertexData* vertexDataBufferptr = nullptr;
+		vel::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones* vertexDataBufferBase = nullptr;
+		vel::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones* vertexDataBufferptr = nullptr;
 	};
 
 	static RendererData s_Data;
@@ -35,7 +28,7 @@ namespace vel
 	{
 		VEL_PROFILE_FUNCTION();
 		s_Data.QuadVertexArray = VertexArray::Create();
-		Ref<VertexBuffer> squareVB = VertexBuffer::Create(s_Data.MaxVertices * sizeof(VertexData));
+		Ref<VertexBuffer> squareVB = VertexBuffer::Create(s_Data.MaxVertices * sizeof(vel::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones));
 		squareVB->SetLayout({
 			{ShaderDataType::Float3, "a_Position"},
 			{ShaderDataType::Float4, "a_Color"},
@@ -43,7 +36,7 @@ namespace vel
 			});
 		s_Data.QuadVertexArray->AddVertexBuffer(squareVB);
 
-		s_Data.vertexDataBufferBase = new VertexData[s_Data.MaxVertices];
+		s_Data.vertexDataBufferBase = new vel::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones[s_Data.MaxVertices];
 
 		uint32_t* quadIndices = new uint32_t[s_Data.MaxIndices];
 
@@ -97,6 +90,9 @@ namespace vel
 
 	void Renderer::Submit(const Ref<VertexArray>& vertexArray, const glm::mat4& transform)
 	{
+		VEL_PROFILE_FUNCTION();
+
+
 		s_Data.TextureShader->Bind();
 		s_Data.TextureShader->SetMat4("u_ViewProjection", s_Data.ViewProjectionMatrix);
 		s_Data.TextureShader->SetFloat("u_TilingFactor", s_Data.TilingFactor);
@@ -115,7 +111,6 @@ namespace vel
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);
 		vertexArray->Unbind();
-
 	}
 
 }

@@ -15,8 +15,8 @@ public:
 	{
 		//PushLayer(new ExampleLayer());
 		//PushLayer(new ExampleLayer2());
-		//PushLayer(new PhysicsScene());
-		PushLayer(new EditorLayer());
+		PushLayer(new PhysicsScene());
+		//PushLayer(new EditorLayer());
 	}
 
 	~VelApp()

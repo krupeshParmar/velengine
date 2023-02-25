@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vel/Core/Core.h"
+#include <glm/glm.hpp>
 
 namespace vel
 {
@@ -16,8 +17,11 @@ namespace vel
 	class FrameBuffer
 	{
 	public:
+		virtual ~FrameBuffer() = default;
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;
+
+		virtual void Resize(uint32_t width, uint32_t height) = 0;
 
 		virtual void BindColorTexture() = 0;
 
