@@ -29,5 +29,6 @@ namespace vel
 
 		EditorCamera m_EditorCamera;
 		bool m_ViewportFocused = false;
+		bool m_ViewportHovered = false;
 	};
 }
