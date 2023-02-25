@@ -69,7 +69,8 @@ namespace vel
 		VEL_PROFILE_FUNCTION();
 		{
 			VEL_PROFILE_SCOPE("EditorCamera::OnUpdate");
-			m_EditorCamera.OnUpdate(ts);
+			if(m_ViewportFocused)
+				m_EditorCamera.OnUpdate(ts);
 		}
 
 		{
@@ -203,6 +204,7 @@ namespace vel
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
 
 		ImGui::Begin("Viewport");
+		m_ViewportFocused = ImGui::IsWindowFocused();
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		if (m_ViewPortSize != *(glm::vec2*)&viewportPanelSize)
 		{
@@ -215,6 +217,9 @@ namespace vel
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewPortSize.x, m_ViewPortSize.y }, ImVec2{0,1}, ImVec2{1,0});
 		ImGui::End();
 		ImGui::PopStyleVar();
+
+		ImGui::Begin("Scene Hierachy");
+		ImGui::End();
 	}
 
 	void EditorLayer::UI_Toolbar()

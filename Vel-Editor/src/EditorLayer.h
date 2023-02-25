@@ -28,5 +28,6 @@ namespace vel
 		glm::vec2 m_ViewPortSize = { 0, 0 };
 
 		EditorCamera m_EditorCamera;
+		bool m_ViewportFocused = false;
 	};
 }
