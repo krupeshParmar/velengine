@@ -53,7 +53,7 @@ namespace vel
 		m_Texture = Texture2D::Create(1, 1);
 		uint32_t whiteTexture = 0xffffff87;
 		m_Texture->SetData(&whiteTexture, sizeof(uint32_t));
-		m_SecondTexture = Texture2D::Create("assets/textures/jolyne2.png");
+		m_SecondTexture = Texture2D::Create("assets/textures/1277885.png");
 		Renderer::Init();
 		/*m_ShaderLibrary.Get("Texture")->Bind();
 		m_ShaderLibrary.Get("Texture")->SetInt("u_Texture", 0);*/
@@ -217,12 +217,31 @@ namespace vel
 			m_EditorCamera.SetViewportSize(viewportPanelSize.x, viewportPanelSize.y);
 			m_ViewPortSize = { viewportPanelSize.x, viewportPanelSize.y };
 		}
+
 		uint32_t textureID = m_FullScreenFrameBuffer->GetColorAttachmenRendererID();
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewPortSize.x, m_ViewPortSize.y }, ImVec2{0,1}, ImVec2{1,0});
 		ImGui::End();
 		ImGui::PopStyleVar();
+		SceneHierarchy();
+	}
 
+	void EditorLayer::SceneHierarchy()
+	{
+		ImGui::ShowDemoWindow();
 		ImGui::Begin("Scene Hierachy");
+		std::vector<Entity*> entityList = m_SceneManager.GetEntityManager().GetAllEntities();
+		for(int i = 0; i < entityList.size(); i++)
+		{
+			char label[50];
+			strcpy(label, entityList[i]->name.c_str());
+			//std::string latter = "##" + std::to_string(entityList[i]->GetID());
+			//strcat(label, latter.c_str());
+
+			if (ImGui::Selectable(label, m_SelectedEntity == i))
+			{
+				m_SelectedEntity = i;
+			}
+		}
 		ImGui::End();
 	}
 

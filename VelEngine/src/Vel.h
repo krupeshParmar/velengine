@@ -35,3 +35,10 @@
 
 #include "vel/Editor/EditorCamera.h"
 // -----------------------------
+
+
+// --------Scene----------
+#include "vel/Scene/Entity.h"
+#include "vel/Scene/Component.h"
+#include "vel/Scene/EntityManager.h"
+// --------------------------

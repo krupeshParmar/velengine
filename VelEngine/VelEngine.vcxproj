@@ -173,6 +173,7 @@
     <ClInclude Include="src\vel\Renderer\Camera.h" />
     <ClInclude Include="src\vel\Renderer\FrameBuffer.h" />
     <ClInclude Include="src\vel\Renderer\GraphicsContext.h" />
+    <ClInclude Include="src\vel\Renderer\Material.h" />
     <ClInclude Include="src\vel\Renderer\RenderCommand.h" />
     <ClInclude Include="src\vel\Renderer\Renderer.h" />
     <ClInclude Include="src\vel\Renderer\RendererAPI.h" />
@@ -180,6 +181,9 @@
     <ClInclude Include="src\vel\Renderer\Texture.h" />
     <ClInclude Include="src\vel\Renderer\VertexArray.h" />
     <ClInclude Include="src\velpch.h" />
+    <ClInclude Include="src\vel\Scene\Component.h" />
+    <ClInclude Include="src\vel\Scene\Entity.h" />
+    <ClInclude Include="src\vel\Scene\EntityManager.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_fixes.hpp" />

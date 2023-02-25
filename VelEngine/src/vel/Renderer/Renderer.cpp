@@ -27,7 +27,7 @@ namespace vel
 	void Renderer::Init()
 	{
 		VEL_PROFILE_FUNCTION();
-		s_Data.QuadVertexArray = VertexArray::Create();
+		/*s_Data.QuadVertexArray = VertexArray::Create();
 		Ref<VertexBuffer> squareVB = VertexBuffer::Create(s_Data.MaxVertices * sizeof(vel::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones));
 		squareVB->SetLayout({
 			{ShaderDataType::Float3, "a_Position"},
@@ -46,7 +46,7 @@ namespace vel
 
 		s_Data.FinalTexture = Texture2D::Create(1, 1);
 		uint32_t textureData = 0xffffffff;
-		s_Data.FinalTexture->SetData(&textureData, sizeof(uint32_t));
+		s_Data.FinalTexture->SetData(&textureData, sizeof(uint32_t));*/
 
 		s_Data.TextureShader = Shader::Create("assets/shaders/Texture.glsl");
 		s_Data.TextureShader->Bind();
@@ -92,7 +92,7 @@ namespace vel
 	{
 		VEL_PROFILE_FUNCTION();
 
-
+		s_Data.TilingFactor += 0.001f;
 		s_Data.TextureShader->Bind();
 		s_Data.TextureShader->SetMat4("u_ViewProjection", s_Data.ViewProjectionMatrix);
 		s_Data.TextureShader->SetFloat("u_TilingFactor", s_Data.TilingFactor);
