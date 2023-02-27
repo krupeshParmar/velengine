@@ -21,6 +21,17 @@ IncludeDir["stb_image"] = "VelEngine/vendor/stb_image"
 IncludeDir["PugiXML"] = "VelEngine/vendor/pugixml/src"
 IncludeDir["iPhysics"] = "Libraries/iPhysics/src"
 IncludeDir["VelPhysics"] = "Libraries/VelPhysics/src"
+IncludeDir["Assimp"] = "%{wks.location}/VelEngine/vendor/assimp/include"
+
+
+Library = {}
+Library["Assimp_Debug"] = "%{wks.location}/VelEngine/vendor/assimp/bin/Debug/assimp-vc143-mtd.lib"
+Library["Assimp_Release"] = "%{wks.location}/VelEngine/vendor/assimp/bin/Release/assimp-vc143-mt.lib"
+
+
+Binaries = {}
+Binaries["Assimp_Debug"] = "%{wks.location}/VelEngine/vendor/assimp/bin/Debug/assimp-vc143-mtd.dll"
+Binaries["Assimp_Release"] = "%{wks.location}/VelEngine/vendor/assimp/bin/Release/assimp-vc143-mt.dll"
 
 group "Dependencies"
 include "VelEngine/vendor/GLFW"
@@ -68,6 +79,8 @@ project "VelEngine"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
+
+		"%{IncludeDir.Assimp}",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
@@ -219,12 +232,42 @@ project "Vel-Editor"
 		runtime "Debug"
 		symbols "on"
 
+		links
+		{
+			"%{Library.Assimp_Debug}"
+		}
+
+		postbuildcommands 
+		{
+			'{COPY} "%{Binaries.Assimp_Debug}" "%{cfg.targetdir}"'
+		}
+
 	filter "configurations:Release"
 		defines "VEL_RELEASE"
 		runtime "Release"
 		optimize "on"
+		
+		links
+		{
+			"%{Library.Assimp_Release}"
+		}
+
+		postbuildcommands 
+		{
+			'{COPY} "%{Binaries.Assimp_Release}" "%{cfg.targetdir}"'
+		}
 
 	filter "configurations:Dist"
 		defines "VEL_DIST"
 		runtime "Release"
 		optimize "on"
+		
+		links
+		{
+			"%{Library.Assimp_Release}"
+		}
+
+		postbuildcommands 
+		{
+			'{COPY} "%{Binaries.Assimp_Release}" "%{cfg.targetdir}"'
+		}

@@ -18,7 +18,7 @@ namespace vel {
         virtual uint32_t GetWidth() const override { return m_Width; }
         virtual uint32_t GetHeight() const override { return m_Height; }
 
-
+        virtual std::string GetPath() const override { return m_Path.substr(m_Path.find_last_of('/') + 1, m_Path.size()); }
         virtual void Bind(uint32_t slot = 0) const override;
 
     private:

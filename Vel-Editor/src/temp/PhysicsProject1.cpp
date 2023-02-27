@@ -652,7 +652,7 @@ bool PhysicsScene::LoadPlyFiles(std::string fileName, GameObject* gameObject)
 
 	theFile.close();
 
-	vel::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones* pVertices = new vel::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones[numberOfVertices];
+	vel::Vertices* pVertices = new vel::Vertices[numberOfVertices];
 	glm::vec3 minPoints = glm::vec3(FLT_MAX, FLT_MAX, FLT_MAX);
 	glm::vec3 maxPoints = glm::vec3(FLT_MIN, FLT_MIN, FLT_MIN);
 	for (unsigned int index = 0; index != numberOfVertices; index++)
@@ -714,7 +714,7 @@ bool PhysicsScene::LoadPlyFiles(std::string fileName, GameObject* gameObject)
 
 	gameObject->m_VertexArray = vel::VertexArray::Create();
 	vel::Ref<vel::VertexBuffer> vertexBuffer;
-	vertexBuffer = vel::VertexBuffer::Create(pVertices, sizeof(vel::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones) * numberOfVertices);
+	vertexBuffer = vel::VertexBuffer::Create(pVertices, sizeof(vel::Vertices) * numberOfVertices);
 	vertexBuffer->SetLayout({
 			{ vel::ShaderDataType::Float4, "vColour"},
 			{ vel::ShaderDataType::Float4, "vPosition"},

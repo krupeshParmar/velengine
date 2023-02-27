@@ -11,7 +11,7 @@ namespace vel
 		glm::vec3 Diffuse;
 		glm::vec3 Normal;
 		glm::vec3 Specular;
-		glm::vec3 ambient;
+		glm::vec3 Ambient;
 		float shininess;
 
 		Ref<Texture2D> DiffuseTexture;

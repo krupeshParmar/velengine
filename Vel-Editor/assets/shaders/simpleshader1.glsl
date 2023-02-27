@@ -11,14 +11,15 @@ layout(location = 7)in vec4 vBoneWeight;		// For skinned mesh (FBX)
 
 out vec2 v_TextureCoords; 
 out vec4 v_Color;
-uniform mat4 u_ViewProjection;
+uniform mat4 u_View;
+uniform mat4 u_Projection;
 uniform mat4 u_Transform;
 
 void main()
 {
     v_TextureCoords = vec2(vUVx2.x, -vUVx2.y);;
     v_Color = vColour;
-    gl_Position = u_ViewProjection * u_Transform * vec4(vPosition.xyz, 1.0);
+    gl_Position = u_Projection * u_View * u_Transform * vec4(vPosition.xyz, 1.0);
 }
 
 #type fragment

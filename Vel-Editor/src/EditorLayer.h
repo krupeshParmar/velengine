@@ -29,6 +29,10 @@ namespace vel
 		Ref<Texture2D> m_SecondTexture;
 		Ref<VertexArray> m_SquareVertexArray;
 
+		// Testing
+		Ref<VertexArray> m_TestVertexArray;
+		Ref<Model> mTestModel;
+
 		glm::vec2 m_ViewPortSize = { 0, 0 };
 
 		EditorCamera m_EditorCamera;

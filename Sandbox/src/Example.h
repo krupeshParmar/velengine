@@ -10,7 +10,7 @@ public:
 	{
 		// Vertex array
 		m_SquareVertexArray = vel::VertexArray::Create();
-		vel::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones* pvertices = new vel::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones[4];
+		vel::Vertices* pvertices = new vel::Vertices[4];
 		float sqVertices[3 * 4] = {
 			-0.75,  -0.75f, 0.0f,
 			 0.75f, -0.75f, 0.0f,
@@ -41,7 +41,7 @@ public:
 		pvertices[3].y = 0.75f;
 		pvertices[3].z = 0.f;
 		vel::Ref<vel::VertexBuffer> squareVB;
-		squareVB = (vel::VertexBuffer::Create(pvertices, sizeof(vel::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones) * 4));
+		squareVB = (vel::VertexBuffer::Create(pvertices, sizeof(vel::Vertices) * 4));
 
 		squareVB->SetLayout({
 			{ vel::ShaderDataType::Float4, "vColor"},

@@ -47,4 +47,28 @@ namespace vel
 		{
 		}
 	};
+
+	enum class LightTypes
+	{
+		Point,
+		Spot,
+		Direct
+	};
+
+	class LightComponent : public Component
+	{
+		virtual ~LightComponent() {}
+		LightTypes LightType;
+		glm::vec3 Diffuse;
+		glm::vec3 Specular;
+		glm::vec3 Ambient;
+
+		float Constant;
+		float Linear;
+		float Quadratic;
+
+		float InnerCutOff;
+		float OuterCutOff;
+
+	};
 }

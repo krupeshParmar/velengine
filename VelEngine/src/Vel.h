@@ -32,6 +32,7 @@
 #include "vel/Renderer/FrameBuffer.h"
 #include "vel/Renderer/Texture.h"
 #include "vel/Renderer/VertexArray.h"
+#include "vel/Renderer/Model.h"
 
 #include "vel/Editor/EditorCamera.h"
 // -----------------------------

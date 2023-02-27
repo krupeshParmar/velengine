@@ -6,7 +6,7 @@
 namespace vel
 {
 	EditorLayer::EditorLayer()
-		: Layer("EditorLayer"), m_EditorCamera(45.f, 1280, 720, 0.1f, 1000.f)
+		: Layer("EditorLayer"), m_EditorCamera(45.f, 1280, 720, 0.1f, 10000.f)
 	{
 
 	}
@@ -51,10 +51,45 @@ namespace vel
 		m_SquareVertexArray->SetIndexBuffer(squareIB);
 		//m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
 		m_Texture = Texture2D::Create(1, 1);
-		uint32_t whiteTexture = 0xffffff87;
+		uint32_t whiteTexture = 0x77777777;
 		m_Texture->SetData(&whiteTexture, sizeof(uint32_t));
-		m_SecondTexture = Texture2D::Create("assets/textures/1277885.png");
+		/*m_SecondTexture = Texture2D::Create("assets/textures/1277885.png");
+		std::string path = m_SecondTexture->GetPath();*/
+
+		std::string maria = "assets/models/maria/Maria.fbx";
+		std::string rfa = "assets/models/rfa/rfa_separate_cloth.fbx";
+		std::string nightshade = "assets/models/nightshade/Nightshade J Friedrich@Idle.fbx";
+		std::string medea = "assets/models/medea/medea_m_arrebola.fbx";
+		std::string props = "assets/models/camp/props.fbx";
+		std::string bench = "assets/models/bench/bench.fbx";
+		mTestModel = CreateRef<Model>(maria);
+		m_TestVertexArray = VertexArray::Create();
+		vel::Ref<vel::VertexBuffer> vertexBuffer;
+		vertexBuffer = vel::VertexBuffer::Create(
+			&mTestModel->GetMeshData().m_Vertices[0], 
+			sizeof(vel::Vertices) * mTestModel->GetMeshData().m_Vertices.size()
+		);
+		vertexBuffer->SetLayout({
+				{ vel::ShaderDataType::Float4, "vColour"},
+				{ vel::ShaderDataType::Float4, "vPosition"},
+				{ vel::ShaderDataType::Float4, "vNormal"},
+				{ vel::ShaderDataType::Float4, "vUVx2"},
+				{ vel::ShaderDataType::Float4, "vTangent"},
+				{ vel::ShaderDataType::Float4, "vBiNormal"},
+				{ vel::ShaderDataType::Float4, "vBoneID"},
+				{ vel::ShaderDataType::Float4, "vBoneWeight"}
+			});
+		m_TestVertexArray->AddVertexBuffer(vertexBuffer);
+		m_TestVertexArray->SetIndexBuffer(
+			IndexBuffer::Create(
+				&mTestModel->GetMeshData().m_Indices[0],
+				mTestModel->GetMeshData().m_Indices.size()
+				)
+		);
+		if(mTestModel->GetMeshData().m_Textures.size() > 0)
+			m_SecondTexture = mTestModel->GetMeshData().m_Textures[0];
 		Renderer::Init();
+		RenderCommand::SetCullFace();
 		/*m_ShaderLibrary.Get("Texture")->Bind();
 		m_ShaderLibrary.Get("Texture")->SetInt("u_Texture", 0);*/
 
@@ -78,18 +113,22 @@ namespace vel
 			m_RenderBuffer->Bind();
 			RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1));
 			RenderCommand::Clear();
+			RenderCommand::EnableDepth();
 		}
 
 		{
 			VEL_PROFILE_SCOPE("Renderer Draw");
-			Renderer::BeginScene(m_EditorCamera.GetViewProjection());
+			//Renderer::BeginScene(m_EditorCamera.GetViewProjection());
+			Renderer::BeginScene(m_EditorCamera.GetViewMatrix(), m_EditorCamera.GetUnReversedProjectionMatrix());
+
+			//Renderer::Submit(m_SquareVertexArray, glm::scale(glm::mat4(1.f), glm::vec3(5.5f)));
 
 			m_Texture->Bind(0);
 			Renderer::Submit(m_SquareVertexArray, glm::scale(glm::mat4(1.f), glm::vec3(5.5f)));
 
-			m_SecondTexture->Bind(0);
-			Renderer::Submit(m_SquareVertexArray, glm::scale(glm::mat4(1.f), glm::vec3(5.5f)));
-
+			if(m_SecondTexture)
+				m_SecondTexture->Bind(0);
+			Renderer::Submit(m_TestVertexArray, glm::translate(glm::mat4(1.0), glm::vec3(-10,2,10)) *  glm::scale(glm::mat4(1.f), glm::vec3(1.f)));
 
 			Renderer::EndScene();
 

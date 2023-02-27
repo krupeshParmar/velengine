@@ -34,6 +34,9 @@
     <Filter Include="src\vel\Renderer">
       <UniqueIdentifier>{E97584C4-D56E-A316-FEA0-889BEAF88222}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\vel\Scene">
+      <UniqueIdentifier>{400E7606-ACCE-F13C-7509-3BBAE1883619}</UniqueIdentifier>
+    </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
     </Filter>
@@ -150,6 +153,12 @@
     <ClInclude Include="src\vel\Renderer\GraphicsContext.h">
       <Filter>src\vel\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\vel\Renderer\Material.h">
+      <Filter>src\vel\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Renderer\Model.h">
+      <Filter>src\vel\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\vel\Renderer\RenderCommand.h">
       <Filter>src\vel\Renderer</Filter>
     </ClInclude>
@@ -167,6 +176,15 @@
     </ClInclude>
     <ClInclude Include="src\vel\Renderer\VertexArray.h">
       <Filter>src\vel\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Scene\Component.h">
+      <Filter>src\vel\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Scene\Entity.h">
+      <Filter>src\vel\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Scene\EntityManager.h">
+      <Filter>src\vel\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\velpch.h">
       <Filter>src</Filter>
@@ -1422,10 +1440,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\vel\Scene\Entity.h" />
-    <ClInclude Include="src\vel\Scene\Component.h" />
-    <ClInclude Include="src\vel\Renderer\Material.h" />
-    <ClInclude Include="src\vel\Scene\EntityManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
@@ -1483,6 +1497,9 @@
       <Filter>src\vel\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\vel\Renderer\FrameBuffer.cpp">
+      <Filter>src\vel\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vel\Renderer\Model.cpp">
       <Filter>src\vel\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\vel\Renderer\RenderCommand.cpp">

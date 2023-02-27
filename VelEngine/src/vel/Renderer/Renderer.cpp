@@ -17,9 +17,11 @@ namespace vel
 		uint32_t IndexCount = 0;
 
 		glm::mat4 ViewProjectionMatrix;
+		glm::mat4 ViewMatrix;
+		glm::mat4 ProjectionMatrix;
 		float TilingFactor = 1.f;
-		vel::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones* vertexDataBufferBase = nullptr;
-		vel::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones* vertexDataBufferptr = nullptr;
+		vel::Vertices* vertexDataBufferBase = nullptr;
+		vel::Vertices* vertexDataBufferptr = nullptr;
 	};
 
 	static RendererData s_Data;
@@ -48,7 +50,7 @@ namespace vel
 		uint32_t textureData = 0xffffffff;
 		s_Data.FinalTexture->SetData(&textureData, sizeof(uint32_t));*/
 
-		s_Data.TextureShader = Shader::Create("assets/shaders/Texture.glsl");
+		s_Data.TextureShader = Shader::Create("assets/shaders/simpleshader1.glsl");
 		s_Data.TextureShader->Bind();
 		s_Data.TextureShader->SetInt("u_Texture", 0);
 		s_Data.TextureShader->SetFloat("u_TilingFactor", s_Data.TilingFactor);
@@ -72,6 +74,13 @@ namespace vel
 		s_Data.vertexDataBufferptr = s_Data.vertexDataBufferBase;
 	}
 
+	void Renderer::BeginScene(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix)
+	{
+		s_Data.ProjectionMatrix = projectionMatrix;
+		s_Data.ViewMatrix = viewMatrix;
+		s_Data.vertexDataBufferptr = s_Data.vertexDataBufferBase;
+	}
+
 	void Renderer::EndScene()
 	{
 		
@@ -82,11 +91,11 @@ namespace vel
 		RenderCommand::SetViewport(0, 0, width, height);
 	}
 
-	void Renderer::Submit(const Ref<VertexArray>& vertexArray)
+	/*void Renderer::Submit(const Ref<VertexArray>& vertexArray)
 	{
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);
-	}
+	}*/
 
 	void Renderer::Submit(const Ref<VertexArray>& vertexArray, const glm::mat4& transform)
 	{
@@ -94,7 +103,8 @@ namespace vel
 
 		s_Data.TilingFactor += 0.001f;
 		s_Data.TextureShader->Bind();
-		s_Data.TextureShader->SetMat4("u_ViewProjection", s_Data.ViewProjectionMatrix);
+		s_Data.TextureShader->SetMat4("u_View", s_Data.ViewMatrix);
+		s_Data.TextureShader->SetMat4("u_Projection", s_Data.ProjectionMatrix);
 		s_Data.TextureShader->SetFloat("u_TilingFactor", s_Data.TilingFactor);
 		//s_Data.TextureShader->Bind();
 		s_Data.TextureShader->SetMat4("u_Transform", transform);
