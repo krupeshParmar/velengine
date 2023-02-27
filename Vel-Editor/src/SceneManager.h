@@ -11,10 +11,15 @@ namespace vel
 		SceneManager();
 		~SceneManager();
 
-		inline EntityManager const GetEntityManager() { return m_EntityManager; }
+		inline Ref<EntityManager> GetEntityManager() { return m_EntityManager; }
+
+		void Update(float dt);
 
 	private:
 		std::string m_ScenePath;
-		EntityManager m_EntityManager;
+		Ref<EntityManager> m_EntityManager;
+		LightManager m_LightManager;
+		ShaderLibrary m_ShaderLibrary;
+		Ref<Shader> m_Shader;
 	};
 }

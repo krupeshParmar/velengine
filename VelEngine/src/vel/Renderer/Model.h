@@ -4,6 +4,9 @@
 #include <vector>
 #include "Buffer.h"
 #include "Texture.h"
+#include "Shader.h"
+#include "VertexArray.h"
+#include <glm/glm.hpp>
 namespace Assimp
 {
 	class Importer;
@@ -23,6 +26,8 @@ namespace vel
 		std::vector<Vertices> m_Vertices;
 		std::vector<uint32_t> m_Indices;
 		std::vector<Ref<Texture2D>> m_Textures;
+
+		Ref<VertexArray> m_VertexArray;
 	};
 
 	class Model
@@ -30,12 +35,13 @@ namespace vel
 	public:
 		Model(std::string source);
 		MeshData GetMeshData();
+		void DrawMesh(Ref<Shader> shader, const glm::mat4& transform);
 
 	private:
 		void ProcessNode(aiNode* node, const aiScene* scene);
 		MeshData ProcessMesh(aiMesh* aimesh, const aiScene* scene);
 		std::vector<Ref<Texture2D>> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typesname);
-
+	
 
 	private:
 

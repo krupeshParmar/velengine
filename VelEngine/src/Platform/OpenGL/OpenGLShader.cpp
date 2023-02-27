@@ -257,10 +257,32 @@ namespace vel
 		glUniform3f(location, values.x, values.y, values.z);
 	}
 
+	GLenum glCheckError()
+	{
+		GLenum errorCode;
+		while ((errorCode = glGetError()) != GL_NO_ERROR)
+		{
+			std::string error;
+			switch (errorCode)
+			{
+			case GL_INVALID_ENUM:                  error = "INVALID_ENUM"; break;
+			case GL_INVALID_VALUE:                 error = "INVALID_VALUE"; break;
+			case GL_INVALID_OPERATION:             error = "INVALID_OPERATION"; break;
+			case GL_STACK_OVERFLOW:                error = "STACK_OVERFLOW"; break;
+			case GL_STACK_UNDERFLOW:               error = "STACK_UNDERFLOW"; break;
+			case GL_OUT_OF_MEMORY:                 error = "OUT_OF_MEMORY"; break;
+			case GL_INVALID_FRAMEBUFFER_OPERATION: error = "INVALID_FRAMEBUFFER_OPERATION"; break;
+			}
+			VEL_ERROR(error);
+		}
+		return errorCode;
+	}
+
 	void OpenGLShader::UploadUniformFloat4(const std::string& uniformName, const glm::vec4& values)
 	{
 		GLint location = glGetUniformLocation(m_RendererID, uniformName.c_str());
 		glUniform4f(location, values.x, values.y, values.z, values.w);
+		glCheckError();
 	}
 
 	void OpenGLShader::UploadUniformMat3(const std::string& uniformName, const glm::mat3& matrix)

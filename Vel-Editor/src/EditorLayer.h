@@ -15,13 +15,16 @@ namespace vel
 		virtual void OnDetach() override;
 		virtual void OnUpdate(Timestep ts) override;
 		virtual void OnImGuiRender() override;
-		
-		void SceneHierarchy();
-		void UI_Toolbar();
 		virtual void OnEvent(vel::Event& event) override;
 
 	private:
+		void SceneHierarchy();
+		void Inspector();
+		void UI_Toolbar();
+
+	private:
 		SceneManager m_SceneManager;
+
 		ShaderLibrary m_ShaderLibrary;
 		Ref<Texture2D> m_Texture;
 		Ref<FrameBuffer> m_RenderBuffer;
@@ -39,6 +42,6 @@ namespace vel
 		bool m_ViewportFocused = false;
 		bool m_ViewportHovered = false;
 
-		int m_SelectedEntity = 0;
+		int m_SelectedEntity = -1;
 	};
 }

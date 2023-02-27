@@ -50,10 +50,10 @@ namespace vel
 		uint32_t textureData = 0xffffffff;
 		s_Data.FinalTexture->SetData(&textureData, sizeof(uint32_t));*/
 
-		s_Data.TextureShader = Shader::Create("assets/shaders/simpleshader1.glsl");
+		/*s_Data.TextureShader = Shader::Create("assets/shaders/simpleshader1.glsl");
 		s_Data.TextureShader->Bind();
 		s_Data.TextureShader->SetInt("u_Texture", 0);
-		s_Data.TextureShader->SetFloat("u_TilingFactor", s_Data.TilingFactor);
+		s_Data.TextureShader->SetFloat("u_TilingFactor", s_Data.TilingFactor);*/
 
 
 		RenderCommand::Init();
@@ -116,8 +116,13 @@ namespace vel
 	void Renderer::Submit(const Ref<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, const glm::mat4& transform)
 	{
 		shader->Bind();
-		shader->SetMat4("u_ViewProjection", s_Data.ViewProjectionMatrix);
+		shader->Bind();
+		shader->SetMat4("u_View", s_Data.ViewMatrix);
+		shader->SetMat4("u_Projection", s_Data.ProjectionMatrix);
 		shader->SetMat4("u_Transform", transform);
+
+		shader->SetFloat("u_TilingFactor", s_Data.TilingFactor);
+
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);
 		vertexArray->Unbind();

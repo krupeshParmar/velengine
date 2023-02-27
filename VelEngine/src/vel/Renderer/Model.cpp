@@ -8,6 +8,7 @@
 
 #include <assimp/mesh.h>
 #include <assimp/postprocess.h>
+#include "Renderer.h"
 
 namespace vel
 {
@@ -125,8 +126,34 @@ namespace vel
         aiMaterial* material = scene->mMaterials[aimesh->mMaterialIndex];
         std::vector<Ref<Texture2D>> diffuseTextures = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
         newMeshData.m_Textures.insert(newMeshData.m_Textures.end(), diffuseTextures.begin(), diffuseTextures.end());
+       
+        newMeshData.m_VertexArray = VertexArray::Create();
+        vel::Ref<vel::VertexBuffer> vertexBuffer;
+        vertexBuffer = vel::VertexBuffer::Create(
+            &newMeshData.m_Vertices[0],
+            sizeof(vel::Vertices) * newMeshData.m_Vertices.size()
+        );
+        vertexBuffer->SetLayout({
+                { vel::ShaderDataType::Float4, "vColour"},
+                { vel::ShaderDataType::Float4, "vPosition"},
+                { vel::ShaderDataType::Float4, "vNormal"},
+                { vel::ShaderDataType::Float4, "vUVx2"},
+                { vel::ShaderDataType::Float4, "vTangent"},
+                { vel::ShaderDataType::Float4, "vBiNormal"},
+                { vel::ShaderDataType::Float4, "vBoneID"},
+                { vel::ShaderDataType::Float4, "vBoneWeight"}
+            });
+         newMeshData.m_VertexArray->AddVertexBuffer(vertexBuffer);
+         newMeshData.m_VertexArray->SetIndexBuffer(
+            IndexBuffer::Create(
+                &newMeshData.m_Indices[0],
+                newMeshData.m_Indices.size()
+            )
+        );
+        
         return newMeshData;
         
+        /*
         std::vector<Ref<Texture2D>> speculatTextures = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
         newMeshData.m_Textures.insert(newMeshData.m_Textures.end(), speculatTextures.begin(), speculatTextures.end());
 
@@ -139,6 +166,7 @@ namespace vel
         newMeshData.m_Textures.insert(newMeshData.m_Textures.end(), heightTextures.begin(), heightTextures.end());
 
         return newMeshData;
+        */
     }
 
     std::vector<Ref<Texture2D>>  Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typesname)
@@ -176,5 +204,16 @@ namespace vel
             }
         }
         return textures;
+    }
+    void Model::DrawMesh(Ref<Shader> shader, const glm::mat4& transform)
+    {
+        for (MeshData meshData : m_Meshes)
+        {
+            for (Ref<Texture2D> texture : meshData.m_Textures)
+            {
+                texture->Bind();
+            }
+            Renderer::Submit(shader, meshData.m_VertexArray, transform);
+        }
     }
 }

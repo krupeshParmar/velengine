@@ -4,13 +4,53 @@ namespace vel
 {
 	SceneManager::SceneManager()
 	{
-		m_EntityManager.CreateEntity("First GameObject");
-		m_EntityManager.CreateEntity("Second GameObject");
-		m_EntityManager.CreateEntity("Third GameObject");
-		m_EntityManager.CreateEntity("Fourth GameObject");
-		m_EntityManager.CreateEntity("Fifth GameObject");
+		std::string maria = "assets/models/maria/Maria.fbx";
+		std::string rfa = "assets/models/rfa/rfa_separate_cloth.fbx";
+		std::string nightshade = "assets/models/nightshade/Nightshade J Friedrich@Idle.fbx";
+		std::string medea = "assets/models/medea/medea_m_arrebola.fbx";
+		std::string props = "assets/models/camp/props.fbx";
+		std::string bench = "assets/models/bench/bench.fbx";
+
+		m_EntityManager = CreateRef<EntityManager>();
+		uint32_t id = m_EntityManager->CreateEntity("First GameObject");
+
+		m_EntityManager->AddComponent(id, new MeshComponent(maria));
+
+		uint32_t lightBulb = m_EntityManager->CreateEntity("Directional Light");
+		m_EntityManager->AddComponent(lightBulb, new LightComponent());
+		m_EntityManager->AddComponent(lightBulb, new MeshComponent(std::string("assets/models/debug_sphere.fbx")));
+
+
+
+		m_Shader = m_ShaderLibrary.Load("assets/shaders/simpleshader1.glsl");
+		m_Shader->Bind();
+		m_Shader->SetInt("u_Texture", 0);
+
 	}
 	SceneManager::~SceneManager()
 	{
+	}
+	void SceneManager::Update(float dt)
+	{
+		m_Shader->Bind();
+		m_LightManager.CopyLightInformationToShader(m_Shader);
+		for (Entity* entity : *m_EntityManager->GetAllEntities())
+		{
+			if (!entity->enabled)
+				continue;
+			TransformComponent* transform = m_EntityManager->GetComponentByType<TransformComponent>(entity->GetID());			
+			if (m_EntityManager->HasComponent<LightComponent>(entity->GetID()))
+			{
+				LightComponent* lightComp = m_EntityManager->GetComponentByType<LightComponent>(entity->GetID());
+				lightComp->Position = glm::vec4(transform->Translation, 1.0);
+				lightComp->Direction = glm::vec4(transform->GetRotation(), 1.0);
+			}
+			
+			if (m_EntityManager->HasComponent<MeshComponent>(entity->GetID()))
+			{
+				MeshComponent* meshComp = m_EntityManager->GetComponentByType<MeshComponent>(entity->GetID());
+				meshComp->ModelIns->DrawMesh(m_Shader, transform->GetTransform());
+			}
+		}
 	}
 }

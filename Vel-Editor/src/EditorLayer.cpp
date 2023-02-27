@@ -2,6 +2,8 @@
 
 #include <chrono>
 #include <imgui/imgui.h>
+#include <imgui/misc/cpp/imgui_stdlib.h>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace vel
 {
@@ -55,39 +57,6 @@ namespace vel
 		m_Texture->SetData(&whiteTexture, sizeof(uint32_t));
 		/*m_SecondTexture = Texture2D::Create("assets/textures/1277885.png");
 		std::string path = m_SecondTexture->GetPath();*/
-
-		std::string maria = "assets/models/maria/Maria.fbx";
-		std::string rfa = "assets/models/rfa/rfa_separate_cloth.fbx";
-		std::string nightshade = "assets/models/nightshade/Nightshade J Friedrich@Idle.fbx";
-		std::string medea = "assets/models/medea/medea_m_arrebola.fbx";
-		std::string props = "assets/models/camp/props.fbx";
-		std::string bench = "assets/models/bench/bench.fbx";
-		mTestModel = CreateRef<Model>(maria);
-		m_TestVertexArray = VertexArray::Create();
-		vel::Ref<vel::VertexBuffer> vertexBuffer;
-		vertexBuffer = vel::VertexBuffer::Create(
-			&mTestModel->GetMeshData().m_Vertices[0], 
-			sizeof(vel::Vertices) * mTestModel->GetMeshData().m_Vertices.size()
-		);
-		vertexBuffer->SetLayout({
-				{ vel::ShaderDataType::Float4, "vColour"},
-				{ vel::ShaderDataType::Float4, "vPosition"},
-				{ vel::ShaderDataType::Float4, "vNormal"},
-				{ vel::ShaderDataType::Float4, "vUVx2"},
-				{ vel::ShaderDataType::Float4, "vTangent"},
-				{ vel::ShaderDataType::Float4, "vBiNormal"},
-				{ vel::ShaderDataType::Float4, "vBoneID"},
-				{ vel::ShaderDataType::Float4, "vBoneWeight"}
-			});
-		m_TestVertexArray->AddVertexBuffer(vertexBuffer);
-		m_TestVertexArray->SetIndexBuffer(
-			IndexBuffer::Create(
-				&mTestModel->GetMeshData().m_Indices[0],
-				mTestModel->GetMeshData().m_Indices.size()
-				)
-		);
-		if(mTestModel->GetMeshData().m_Textures.size() > 0)
-			m_SecondTexture = mTestModel->GetMeshData().m_Textures[0];
 		Renderer::Init();
 		RenderCommand::SetCullFace();
 		/*m_ShaderLibrary.Get("Texture")->Bind();
@@ -122,13 +91,7 @@ namespace vel
 			Renderer::BeginScene(m_EditorCamera.GetViewMatrix(), m_EditorCamera.GetUnReversedProjectionMatrix());
 
 			//Renderer::Submit(m_SquareVertexArray, glm::scale(glm::mat4(1.f), glm::vec3(5.5f)));
-
-			m_Texture->Bind(0);
-			Renderer::Submit(m_SquareVertexArray, glm::scale(glm::mat4(1.f), glm::vec3(5.5f)));
-
-			if(m_SecondTexture)
-				m_SecondTexture->Bind(0);
-			Renderer::Submit(m_TestVertexArray, glm::translate(glm::mat4(1.0), glm::vec3(-10,2,10)) *  glm::scale(glm::mat4(1.f), glm::vec3(1.f)));
+			m_SceneManager.Update(ts);
 
 			Renderer::EndScene();
 
@@ -138,7 +101,7 @@ namespace vel
 			RenderCommand::DisableDepth();
 			RenderCommand::Clear();
 			m_RenderBuffer->BindColorTexture();
-			vel::Renderer::Submit(
+			Renderer::Submit(
 				m_ShaderLibrary.Get("FBOTexture"),
 				m_SquareVertexArray);
 
@@ -262,17 +225,18 @@ namespace vel
 		ImGui::End();
 		ImGui::PopStyleVar();
 		SceneHierarchy();
+		Inspector();
 	}
 
 	void EditorLayer::SceneHierarchy()
 	{
 		ImGui::ShowDemoWindow();
 		ImGui::Begin("Scene Hierachy");
-		std::vector<Entity*> entityList = m_SceneManager.GetEntityManager().GetAllEntities();
-		for(int i = 0; i < entityList.size(); i++)
+		Ref<std::vector<Entity*>> entityList = m_SceneManager.GetEntityManager()->GetAllEntities();
+		for(int i = 0; i < entityList->size(); i++)
 		{
 			char label[50];
-			strcpy(label, entityList[i]->name.c_str());
+			strcpy(label, entityList->at(i)->name.c_str());
 			//std::string latter = "##" + std::to_string(entityList[i]->GetID());
 			//strcat(label, latter.c_str());
 
@@ -280,6 +244,81 @@ namespace vel
 			{
 				m_SelectedEntity = i;
 			}
+		}
+		ImGui::End();
+	}
+
+	void EditorLayer::Inspector()
+	{
+		ImGui::Begin("Inspector");
+		if (m_SelectedEntity != -1)
+		{
+			Ref<std::vector<Entity*>> entityList = m_SceneManager.GetEntityManager()->GetAllEntities();
+			Entity* entity = entityList->at(m_SelectedEntity);
+			ImGui::BeginGroup();
+			/*--Position*/
+			std::string goName = entity->name;
+			ImGui::InputText("##Gameobject",
+				&goName);
+			if (ImGui::IsItemDeactivated())
+			{
+				if (!goName.empty())
+				{
+					entity->name = goName;
+				}
+			}
+			ImGui::SameLine();
+			ImGui::Checkbox("##enabled", &entity->enabled);
+			ImGui::SameLine();
+			ImGui::Button("Duplicate");
+			if (ImGui::IsItemClicked())
+			{
+				//this->DuplicateGameObject(entity, shaderID);
+			}
+
+			ImGui::Separator();
+
+			{
+				ImGui::BulletText("Transform");
+				{
+					ImGui::Text("Position");
+					ImGui::SameLine();
+					TransformComponent* transform = 
+						m_SceneManager.GetEntityManager()->
+						GetComponentByType<TransformComponent>(entity->GetID());
+
+					ImGui::InputFloat3("##pos", glm::value_ptr(transform->Translation));
+
+					ImGui::Text("Rotation");
+					ImGui::SameLine();
+
+					ImGui::InputFloat3("##rot", glm::value_ptr(transform->Rotation));
+
+					ImGui::Text("Scale");
+					ImGui::SameLine();
+
+					ImGui::InputFloat3("##sca", glm::value_ptr(transform->Scale));
+				}
+				ImGui::EndGroup();
+			}
+
+			ImGui::BeginGroup();
+			{
+				if (m_SceneManager.GetEntityManager()->HasComponent< LightComponent>(entity->GetID()))
+				{
+					LightComponent* light =
+						m_SceneManager.GetEntityManager()->
+						GetComponentByType<LightComponent>(entity->GetID());
+
+					ImGui::Separator();
+					ImGui::BulletText("Light##lightLight");
+					ImGui::ColorEdit4("Diffuse##lightDiffuse", glm::value_ptr(light->Diffuse));
+					ImGui::ColorEdit4("Specular##lightSpec", glm::value_ptr(light->Specular));
+					ImGui::InputFloat4("Attenuation##lightAtten", glm::value_ptr(light->Attenuation));
+					ImGui::InputFloat("Type##lightType", &light->LightParams[0]);
+				}
+			}
+			ImGui::EndGroup();
 		}
 		ImGui::End();
 	}

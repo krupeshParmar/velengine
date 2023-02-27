@@ -5,30 +5,45 @@
 #include <map>
 #include <vector>
 #include <algorithm>
+#include "LightManager.h"
 
 namespace vel
 {
 	class EntityManager
 	{
 	public:
-		std::vector<Entity*> GetAllEntities() const
+		EntityManager()
+		{
+			m_EntityList = CreateRef< std::vector<Entity*>>();
+			m_NextEntityID = 0;
+			LightManager();
+		}
+		Ref<std::vector<Entity*>> GetAllEntities()
 		{
 			return m_EntityList;
 		}
 
-		void CreateEntity(std::string name = "GameObject")
+		uint32_t CreateEntity(std::string name = "GameObject")
 		{
 			Entity* entity = new Entity();
 			entity->name = name;
+
 			entity->SetID(m_NextEntityID++);
 
-			m_EntityList.push_back(entity);
+			m_EntityList->push_back(entity);
 			std::vector<Component*>* components = new std::vector<Component*>();
 			m_EntityMap.emplace(entity->GetID(), components);
 			if (AddComponent(entity->GetID(), new TransformComponent()))
 			{
 				int breakMeHere = 0;
 			}
+			return entity->GetID();
+		}
+
+		void AddChild(Entity* parentEntity, Entity* childEntity)
+		{
+			parentEntity->AddChild(childEntity);
+			childEntity->SetParent(parentEntity);
 		}
 
 		template<class T>
@@ -76,6 +91,11 @@ namespace vel
 				{
 					return false;
 				}
+				LightComponent* component = dynamic_cast<LightComponent*>(newComponent);
+				if (component != nullptr)
+				{
+					LightManager::AddNewLightInfo(component);
+				}
 
 				componentList->push_back(newComponent);
 				return true;
@@ -107,7 +127,7 @@ namespace vel
 
 	private:
 		std::map<uint32_t, std::vector<Component*>* > m_EntityMap;
-		std::vector<Entity*> m_EntityList;
-		uint32_t m_NextEntityID = 0;
+		Ref<std::vector<Entity*>> m_EntityList;
+		uint32_t m_NextEntityID;
 	};
 }
