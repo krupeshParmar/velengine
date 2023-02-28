@@ -2,6 +2,7 @@
 #include "RenderCommand.h"
 #include "Shader.h"
 #include "vel/Editor/EditorCamera.h"
+#include "Texture.h"
 
 namespace vel
 {
@@ -22,6 +23,7 @@ namespace vel
 		//static void Submit(const Ref<VertexArray>& vertexArray);
 		static void Submit(const Ref<VertexArray>& vertexArray, const glm::mat4& transform = glm::mat4(1.f));
 		static void Submit(const Ref<Shader>& shader,const std::shared_ptr<VertexArray>& vertexArray, const glm::mat4& transform = glm::mat4(1.f));
+		static void Submit(const Ref<Shader>& shader,const std::shared_ptr<VertexArray>& vertexArray, std::vector<Ref<Texture2D>> textures, const glm::mat4& transform = glm::mat4(1.f));
 		
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 

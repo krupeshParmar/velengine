@@ -40,21 +40,18 @@ in VS_OUT
 } fs_in;
 
 
-uniform sampler2D u_Texture;
+uniform sampler2D u_TextureDiffuse;
+uniform sampler2D u_TextureNormal;
+uniform sampler2D u_TextureSpecular;
+uniform bool useTextureDiffuse;
+uniform bool useTextureNormal;
+uniform bool useTextureSpecular;
 uniform bool isAWall;
 uniform bool isInControl;
 uniform bool isGround;
 uniform vec4 eyeLocation; 
-uniform vec4 specularColour;
-
-struct Material {
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-    float shininess;
-};
-
-uniform Material material;
+uniform vec4 SPEC;
+uniform vec4 RGBA;
 
 struct Light
 {
@@ -81,8 +78,17 @@ vec4 calculateLightContrib(vec3 vertexMaterialColour, vec3 vertexNormal,
 void main()
 {
 	vec3 normalValue = fs_in.Normal.xyz;
+	if (useTextureNormal)
+		normalValue = texture(u_TextureNormal, fs_in.TexCoords).rgb;
 
-	vec3 textColour0 = texture(u_Texture, fs_in.TexCoords).rgb;
+	vec3 textColour0 = texture(u_TextureDiffuse, fs_in.TexCoords).rgb;
+	float transparency = texture(u_TextureDiffuse, fs_in.TexCoords).w;
+	if (!useTextureDiffuse)
+		textColour0 = RGBA.rgb;
+
+	vec4 specularColour = SPEC;
+	if (useTextureSpecular)
+		specularColour = texture(u_TextureSpecular, fs_in.TexCoords);
 
 	vec4 outColour = calculateLightContrib(textColour0.rgb, normalValue.xyz,
 		fs_in.FragPos.xyz, specularColour);
@@ -192,8 +198,6 @@ vec4 calculateLightContrib(vec3 vertexMaterialColour, vec3 vertexNormal,
 		// But is it a spot light
 		if (intLightType == SPOT_LIGHT_TYPE)		// = 1
 		{
-
-
 			// Yes, it's a spotlight
 			// Calcualate light vector (light to vertex, in world)
 			vec3 vertexToLight = vertexWorldPos.xyz - theLights[index].position.xyz;

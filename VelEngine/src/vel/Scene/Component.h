@@ -53,16 +53,19 @@ namespace vel
 		virtual ~MeshComponent() {}
 		std::string Mesh;
 		std::string Path;
+		bool UseFBXTextures;
+
 		std::string MaterialPath;
 		Ref<Material> MaterialIns;
 		Ref<Model> ModelIns;
 		uint32_t SubmeshIndex = 0;
 
 		MeshComponent() = default;
-		MeshComponent(std::string& path)
-			:Path(path)
+		MeshComponent(std::string& path, bool useFBXTextures)
+			:Path(path), UseFBXTextures(useFBXTextures)
 		{
-			ModelIns = CreateRef<Model>(Path);
+			MaterialIns = CreateRef<Material>();
+			ModelIns = CreateRef<Model>(Path, useFBXTextures);
 		}
 		MeshComponent(const MeshComponent& other)
 			: Mesh(other.Mesh), SubmeshIndex(other.SubmeshIndex), MaterialIns(other.MaterialIns)

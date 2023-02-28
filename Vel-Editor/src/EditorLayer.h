@@ -21,6 +21,8 @@ namespace vel
 		void SceneHierarchy();
 		void Inspector();
 		void UI_Toolbar();
+		void OpenProject();
+		void SaveScene();
 
 	private:
 		SceneManager m_SceneManager;
@@ -43,5 +45,7 @@ namespace vel
 		bool m_ViewportHovered = false;
 
 		int m_SelectedEntity = -1;
+		bool openProjectCalled = false;
+		bool saveProjectCalled = false;
 	};
 }

@@ -33,7 +33,11 @@ namespace vel
 			VEL_PROFILE_SCOPE("stbi_load - OpenGLTexture2D::OpenGLTexture2D(const std::string&)");
 			data = stbi_load(path.c_str(), &width, &height, &channels, 0);
 		}
-		VEL_CORE_ASSERT(data, "Failed to load image!");
+		if (!data)
+		{
+			m_Loaded = false;
+		}
+		//VEL_CORE_ASSERT(data, "Failed to load image!");
 		m_Width = width;
 		m_Height = height;
 
@@ -63,7 +67,7 @@ namespace vel
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, dataFormat, GL_UNSIGNED_BYTE, data);
-
+		m_Loaded = true;
 		stbi_image_free(data);
 	}
 

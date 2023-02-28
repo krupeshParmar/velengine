@@ -12,8 +12,10 @@
 
 namespace vel
 {
-    Model::Model(std::string source)
+    Model::Model(std::string source, bool useTextures)
+        :m_UseFBXTextures(useTextures)
 	{
+        m_Meshes = std::vector<MeshData>();
 		m_Importer = std::make_unique<Assimp::Importer>();
         const aiScene* scene = m_Importer->ReadFile(source, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
 
@@ -122,11 +124,13 @@ namespace vel
         }
 
 
-        // Process the materials
-        aiMaterial* material = scene->mMaterials[aimesh->mMaterialIndex];
-        std::vector<Ref<Texture2D>> diffuseTextures = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-        newMeshData.m_Textures.insert(newMeshData.m_Textures.end(), diffuseTextures.begin(), diffuseTextures.end());
-       
+        if (m_UseFBXTextures)
+        {
+            // Process the materials
+            aiMaterial* material = scene->mMaterials[aimesh->mMaterialIndex];
+            std::vector<Ref<Texture2D>> diffuseTextures = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+            newMeshData.m_Textures.insert(newMeshData.m_Textures.end(), diffuseTextures.begin(), diffuseTextures.end());
+        }
         newMeshData.m_VertexArray = VertexArray::Create();
         vel::Ref<vel::VertexBuffer> vertexBuffer;
         vertexBuffer = vel::VertexBuffer::Create(
@@ -207,13 +211,74 @@ namespace vel
     }
     void Model::DrawMesh(Ref<Shader> shader, const glm::mat4& transform)
     {
+        if (m_Meshes.empty())
+            return;
         for (MeshData meshData : m_Meshes)
         {
-            for (Ref<Texture2D> texture : meshData.m_Textures)
+           /* for (Ref<Texture2D> texture : meshData.m_Textures)
             {
                 texture->Bind();
-            }
+            }*/
+            if(meshData.m_Textures.size() > 0)
+                meshData.m_Textures[0]->Bind();
             Renderer::Submit(shader, meshData.m_VertexArray, transform);
+        }
+    }
+    void Model::DrawMesh(Ref<Shader> shader, const Ref<Material> material, const glm::mat4& transform)
+    {
+        if (m_Meshes.empty())
+            return;
+        for (MeshData meshData : m_Meshes)
+        {
+            if (meshData.m_VertexArray == nullptr)
+                continue;
+
+            std::vector<Ref<Texture2D>> textures;
+            shader->Bind();
+
+            if (m_UseFBXTextures)
+            {
+                shader->SetBool("useTextureNormal", false);
+                shader->SetBool("useTextureSpecular", false);
+                shader->SetFloat4("RGBA", material->Diffuse);
+                shader->SetFloat4("SPEC", material->Specular);
+                shader->SetBool("useTextureDiffuse", true);
+                Renderer::Submit(shader, meshData.m_VertexArray, meshData.m_Textures, transform);
+            }
+            else {
+                bool useDifMap = false;
+                bool useSpeMap = false;
+                bool useNorMap = false;
+
+                if (material->DiffuseTexture != nullptr && material->DiffuseTexture->IsLoaded())
+                {
+                    useDifMap = true;
+                }
+                shader->SetFloat4("RGBA", material->Diffuse);
+
+                if (material->SpecularTexture != nullptr && material->SpecularTexture->IsLoaded())
+                {
+                    useSpeMap = true;
+                }
+                shader->SetFloat4("SPEC", material->Specular);
+
+                if (material->NormalTexture != nullptr && material->NormalTexture->IsLoaded())
+                {
+                    useNorMap = true;
+                }
+                shader->SetBool("useTextureNormal", useNorMap);
+                shader->SetBool("useTextureSpecular", useSpeMap);
+                shader->SetBool("useTextureDiffuse", useDifMap);
+
+                if(useDifMap)
+                    textures.push_back(material->DiffuseTexture);
+                if(useNorMap)
+                    textures.push_back(material->NormalTexture);
+                if(useSpeMap)
+                    textures.push_back(material->SpecularTexture);
+
+                Renderer::Submit(shader, meshData.m_VertexArray, textures, transform);
+            }
         }
     }
 }

@@ -1441,6 +1441,7 @@
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="src\vel\Scene\LightManager.h" />
+    <ClInclude Include="src\vel\Scene\SaveSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
@@ -1528,5 +1529,6 @@
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\vel\Scene\LightManager.cpp" />
+    <ClCompile Include="src\vel\Scene\SaveSystem.cpp" />
   </ItemGroup>
 </Project>

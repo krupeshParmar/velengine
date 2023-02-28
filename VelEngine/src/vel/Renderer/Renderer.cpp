@@ -106,7 +106,7 @@ namespace vel
 		s_Data.TextureShader->SetMat4("u_View", s_Data.ViewMatrix);
 		s_Data.TextureShader->SetMat4("u_Projection", s_Data.ProjectionMatrix);
 		s_Data.TextureShader->SetFloat("u_TilingFactor", s_Data.TilingFactor);
-		//s_Data.TextureShader->Bind();
+
 		s_Data.TextureShader->SetMat4("u_Transform", transform);
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);
@@ -116,13 +116,30 @@ namespace vel
 	void Renderer::Submit(const Ref<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, const glm::mat4& transform)
 	{
 		shader->Bind();
-		shader->Bind();
 		shader->SetMat4("u_View", s_Data.ViewMatrix);
 		shader->SetMat4("u_Projection", s_Data.ProjectionMatrix);
 		shader->SetMat4("u_Transform", transform);
 
 		shader->SetFloat("u_TilingFactor", s_Data.TilingFactor);
 
+		vertexArray->Bind();
+		RenderCommand::DrawIndexed(vertexArray);
+		vertexArray->Unbind();
+	}
+	void Renderer::Submit(const Ref<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, std::vector<Ref<Texture2D>> textures, const glm::mat4& transform)
+	{
+		shader->Bind();
+
+		int i = 0;
+		for (Ref<Texture2D> texture : textures)
+		{
+			texture->Bind(i++);
+		}
+		shader->SetMat4("u_View", s_Data.ViewMatrix);
+		shader->SetMat4("u_Projection", s_Data.ProjectionMatrix);
+		shader->SetMat4("u_Transform", transform);
+
+		shader->SetFloat("u_TilingFactor", s_Data.TilingFactor);
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);
 		vertexArray->Unbind();

@@ -12,20 +12,25 @@ namespace vel
 		std::string bench = "assets/models/bench/bench.fbx";
 
 		m_EntityManager = CreateRef<EntityManager>();
-		uint32_t id = m_EntityManager->CreateEntity("First GameObject");
+		/*uint32_t id = m_EntityManager->CreateEntity("First GameObject");
 
-		m_EntityManager->AddComponent(id, new MeshComponent(maria));
+		MeshComponent* mesh1 = new MeshComponent(maria, false);
+
+		m_EntityManager->AddComponent(id, mesh1);
 
 		uint32_t lightBulb = m_EntityManager->CreateEntity("Directional Light");
 		m_EntityManager->AddComponent(lightBulb, new LightComponent());
-		m_EntityManager->AddComponent(lightBulb, new MeshComponent(std::string("assets/models/debug_sphere.fbx")));
-
+		m_EntityManager->AddComponent(lightBulb, new MeshComponent(std::string("assets/models/debug_sphere.fbx"), true));
+*/
 
 
 		m_Shader = m_ShaderLibrary.Load("assets/shaders/simpleshader1.glsl");
 		m_Shader->Bind();
-		m_Shader->SetInt("u_Texture", 0);
-
+		m_Shader->SetInt("u_TextureDiffuse", 0);
+		m_Shader->SetInt("u_TextureNormal", 1);
+		m_Shader->SetInt("u_TextureSpecular", 2);
+		ScenePath = "MariaTest";
+		LoadScene();
 	}
 	SceneManager::~SceneManager()
 	{
@@ -49,8 +54,24 @@ namespace vel
 			if (m_EntityManager->HasComponent<MeshComponent>(entity->GetID()))
 			{
 				MeshComponent* meshComp = m_EntityManager->GetComponentByType<MeshComponent>(entity->GetID());
-				meshComp->ModelIns->DrawMesh(m_Shader, transform->GetTransform());
+				meshComp->ModelIns->DrawMesh(m_Shader,meshComp->MaterialIns, transform->GetTransform());
 			}
+		}
+	}
+	void SceneManager::LoadScene()
+	{
+		const std::string path = "assets/scenes/" + ScenePath + ".xml";
+		if (!LoadSceneFile(path, m_EntityManager))
+		{
+			int breakme = 0;
+		}
+	}
+	void SceneManager::SaveScene()
+	{
+		const std::string path = "assets/scenes/" + ScenePath + ".xml";
+		if (!SaveSceneFile(path, m_EntityManager))
+		{
+			int breakme = 0;
 		}
 	}
 }

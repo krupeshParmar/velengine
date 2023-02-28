@@ -20,8 +20,10 @@ namespace vel {
 
         virtual std::string GetPath() const override { return m_Path.substr(m_Path.find_last_of('/') + 1, m_Path.size()); }
         virtual void Bind(uint32_t slot = 0) const override;
+        virtual bool IsLoaded() const override { return m_Loaded; }
 
     private:
+        bool m_Loaded = false;
         std::string m_Path;
         uint32_t m_Width, m_Height;
         uint32_t m_RendererID;

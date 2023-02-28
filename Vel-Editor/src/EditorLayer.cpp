@@ -168,16 +168,16 @@ namespace vel
 		{
 			if (ImGui::BeginMenu("File"))
 			{
-				ImGui::MenuItem("Open Project...", "Ctrl+O");
-				//OpenProject();
+				if (ImGui::MenuItem("Open Project...", "Ctrl+O"))
+					openProjectCalled = true;
 
 				ImGui::Separator();
 
 				ImGui::MenuItem("New Scene", "Ctrl+N");
 				//NewScene();
 
-				ImGui::MenuItem("Save Scene", "Ctrl+S");
-				//SaveScene();
+				if(ImGui::MenuItem("Save Scene", "Ctrl+S"))
+					saveProjectCalled = true;
 
 				ImGui::MenuItem("Save Scene As...", "Ctrl+Shift+S");
 				//SaveSceneAs();
@@ -202,6 +202,11 @@ namespace vel
 		}
 
 		ImGui::End();
+
+		if (openProjectCalled)
+			OpenProject();
+		if (saveProjectCalled)
+			SaveScene();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
 
@@ -319,12 +324,123 @@ namespace vel
 				}
 			}
 			ImGui::EndGroup();
+
+			ImGui::BeginGroup();
+			{
+				if (m_SceneManager.GetEntityManager()->HasComponent< MeshComponent>(entity->GetID()))
+				{
+					MeshComponent* mesh =
+						m_SceneManager.GetEntityManager()->
+						GetComponentByType<MeshComponent>(entity->GetID());
+
+					ImGui::Separator();
+					ImGui::BulletText("Mesh Renderer");
+					ImGui::InputText("Mesh Path", &mesh->Path);
+					ImGui::Checkbox("Use FBX Textures", &mesh->UseFBXTextures);
+					ImGui::SameLine();
+					if (ImGui::Button("Load Mesh"))
+					{
+						mesh->ModelIns = CreateRef<Model>(mesh->Path, mesh->UseFBXTextures);
+					}
+					ImGui::Separator();
+					ImGui::BulletText("Material");
+					ImGui::InputText("Name", &mesh->MaterialIns->Name);
+					ImGui::InputText("Path", &mesh->MaterialPath);
+					ImGui::ColorEdit4("Diffuse##difmaterial", glm::value_ptr(mesh->MaterialIns->Diffuse));
+					ImGui::ColorEdit4("Specular##specmaterial", glm::value_ptr(mesh->MaterialIns->Specular));
+					ImGui::InputFloat("Ambient##ambmaterial", &mesh->MaterialIns->Ambient);
+					ImGui::InputFloat("Shininess##ambmaterial", &mesh->MaterialIns->Shininess);
+
+					ImGui::InputText("Diffuse Texture##difTexmaterial", &mesh->MaterialIns->DiffuseTexturePath);
+					ImGui::SameLine();
+					if (ImGui::Button("Load"))
+					{
+						Ref<Texture2D> texture = Texture2D::Create(mesh->MaterialIns->DiffuseTexturePath);
+						if (texture->IsLoaded())
+						{
+							mesh->MaterialIns->DiffuseTexture = texture;
+						}
+					}
+
+					ImGui::InputText("Specular Texture##speTexmaterial", &mesh->MaterialIns->SpecularTexturePath);
+					ImGui::SameLine();
+					if (ImGui::Button("Load"))
+					{
+						Ref<Texture2D> texture = Texture2D::Create(mesh->MaterialIns->SpecularTexturePath);
+						if (texture->IsLoaded())
+						{
+							mesh->MaterialIns->SpecularTexture = texture;
+						}
+					}
+
+					ImGui::InputText("Normal Texture##normTexmaterial", &mesh->MaterialIns->NormalTexturePath);
+					ImGui::SameLine();
+					if (ImGui::Button("Load"))
+					{
+						Ref<Texture2D> texture = Texture2D::Create(mesh->MaterialIns->NormalTexturePath);
+						if (texture->IsLoaded())
+						{
+							mesh->MaterialIns->NormalTexture = texture;
+						}
+					}
+
+				}
+			}
+			ImGui::EndGroup();
 		}
 		ImGui::End();
 	}
 
 	void EditorLayer::UI_Toolbar()
 	{
+	}
+
+	void EditorLayer::OpenProject()
+	{
+		ImGui::OpenPopup("Open Project");
+
+		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+		if (ImGui::BeginPopupModal("Open Project", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			ImGui::InputText("Project Name", &m_SceneManager.ScenePath);
+			if (ImGui::Button("Load"))
+			{
+				m_SceneManager.LoadScene();
+				openProjectCalled = false;
+				ImGui::CloseCurrentPopup();
+			}
+			if (ImGui::Button("Cancel"))
+			{
+				openProjectCalled = false;
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
+		}
+	}
+
+	void EditorLayer::SaveScene()
+	{
+		ImGui::OpenPopup("Save Project");
+
+		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+		if (ImGui::BeginPopupModal("Save Project", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			ImGui::InputText("Project Name", &m_SceneManager.ScenePath);
+			if (ImGui::Button("Save"))
+			{
+				m_SceneManager.SaveScene();
+				saveProjectCalled = false;
+				ImGui::CloseCurrentPopup();
+			}
+			if (ImGui::Button("Cancel"))
+			{
+				saveProjectCalled = false;
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
+		}
 	}
 
 	void EditorLayer::OnEvent(Event& event)

@@ -7,6 +7,7 @@
 #include "Shader.h"
 #include "VertexArray.h"
 #include <glm/glm.hpp>
+#include "Material.h"
 namespace Assimp
 {
 	class Importer;
@@ -33,9 +34,10 @@ namespace vel
 	class Model
 	{
 	public:
-		Model(std::string source);
+		Model(std::string source, bool useTextures);
 		MeshData GetMeshData();
 		void DrawMesh(Ref<Shader> shader, const glm::mat4& transform);
+		void DrawMesh(Ref<Shader> shader,const Ref<Material> material, const glm::mat4& transform);
 
 	private:
 		void ProcessNode(aiNode* node, const aiScene* scene);
@@ -44,7 +46,7 @@ namespace vel
 	
 
 	private:
-
+		bool m_UseFBXTextures;
 		Ref<Assimp::Importer> m_Importer;
 		std::string m_Path;
 		std::vector<MeshData> m_Meshes;

@@ -23,6 +23,23 @@ namespace vel
 			return m_EntityList;
 		}
 
+		Entity* GetEntity(uint32_t id)
+		{
+			for (
+				std::vector<Entity*>::iterator it = m_EntityList->begin();
+				it != m_EntityList->end();
+				it++
+			)
+			{
+				Entity* entity = *it;
+				if (entity->GetID() == id)
+				{
+					return entity;
+				}
+			}
+			return nullptr;
+		}
+
 		uint32_t CreateEntity(std::string name = "GameObject")
 		{
 			Entity* entity = new Entity();
