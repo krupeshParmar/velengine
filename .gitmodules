@@ -13,3 +13,15 @@
 [submodule "VelEngine/vendor/pugixml"]
 	path = VelEngine/vendor/pugixml
 	url = https://github.com/krupeshParmar/pugixml.git
+[submodule "VelEngine/Vendor/GLFW"]
+	path = VelEngine/Vendor/GLFW
+	url = https://github.com/TheCherno/glfw.git
+[submodule "VelEngine/Vendor/pugixml"]
+	path = VelEngine/Vendor/pugixml
+	url = https://github.com/krupeshParmar/pugixml.git
+[submodule "VelEngine/Vendor/imgui"]
+	path = VelEngine/Vendor/imgui
+	url = https://github.com/TheCherno/imgui.git
+[submodule "VelEngine/Vendor/spdlog"]
+	path = VelEngine/Vendor/spdlog
+	url = https://github.com/gabime/spdlog.git

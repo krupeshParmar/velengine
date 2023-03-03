@@ -184,9 +184,9 @@
     <ClInclude Include="src\vel\Scene\Component.h" />
     <ClInclude Include="src\vel\Scene\Entity.h" />
     <ClInclude Include="src\vel\Scene\EntityManager.h" />
-    <ClInclude Include="src\velpch.h" />
     <ClInclude Include="src\vel\Scene\LightManager.h" />
     <ClInclude Include="src\vel\Scene\SaveSystem.h" />
+    <ClInclude Include="src\velpch.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_fixes.hpp" />
@@ -632,11 +632,11 @@
     <ClCompile Include="src\vel\Renderer\Shader.cpp" />
     <ClCompile Include="src\vel\Renderer\Texture.cpp" />
     <ClCompile Include="src\vel\Renderer\VertexArray.cpp" />
+    <ClCompile Include="src\vel\Scene\LightManager.cpp" />
+    <ClCompile Include="src\vel\Scene\SaveSystem.cpp" />
     <ClCompile Include="src\velpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\vel\Scene\LightManager.cpp" />
-    <ClCompile Include="src\vel\Scene\SaveSystem.cpp" />
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
