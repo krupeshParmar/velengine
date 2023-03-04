@@ -19,18 +19,20 @@ out VS_OUT
 uniform mat4 u_View;
 uniform mat4 u_Projection;
 uniform mat4 u_Transform;
+uniform mat4 u_InverseTransform;
 
 void main()
 {
     vs_out.TexCoords = vec2(vUVx2.x, -vUVx2.y);
-    vs_out.FragPos = vPosition.xyz;
-    vs_out.Normal = vNormal.xyz;
+    vs_out.FragPos = (u_Transform * vec4(vPosition.xyz, 1.0f)).xyz;
+    vs_out.Normal = normalize(u_InverseTransform * vec4(vNormal.xyz, 1.0f)).xyz;
     gl_Position = u_Projection * u_View * u_Transform * vec4(vPosition.xyz, 1.0);
 }
 
 #type fragment
 #version 330 core
 layout(location = 0) out vec4 f_color;
+layout(location = 1) out vec4 f_position;
 
 in VS_OUT
 {
@@ -182,7 +184,10 @@ vec4 calculateLightContrib(vec3 vertexMaterialColour, vec3 vertexNormal,
 		//			                   * theLights[index].specular.rgb;
 
 		// This one takes into account the object "colour" AND the light colour
-		lightSpecularContrib = pow(max(0.0f, dot(eyeVector, reflectVector)), objectSpecularPower)
+		vec3 halfwayDir = normalize(lightVector + eyeLocation.xyz);
+		float spec = pow(max(dot(norm, halfwayDir), 0.0), objectSpecularPower);
+
+		lightSpecularContrib = spec
 			* (vertexSpecular.rgb * theLights[index].specular.rgb);
 		// Attenuation
 		float attenuation = 1.0f /

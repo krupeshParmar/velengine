@@ -23,22 +23,48 @@ namespace vel
 		m_EntityManager->AddComponent(lightBulb, new MeshComponent(std::string("assets/models/debug_sphere.fbx"), true));
 */
 
+		/*
+		* {
+				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayRight2048.bmp",
+				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayLeft2048.bmp",
+				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayUp2048.bmp",
+				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayDown2048.bmp",
+				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayFront2048.bmp",
+				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayBack2048.bmp",
+			}
+		*/
+		skybox = new SkyBox(
+			{
+				"assets/textures/skyboxes/space/SpaceBox_right1_posX.jpg",
+				"assets/textures/skyboxes/space/SpaceBox_left2_negX.jpg",
+				"assets/textures/skyboxes/space/SpaceBox_top3_posY.jpg",
+				"assets/textures/skyboxes/space/SpaceBox_bottom4_negY.jpg",
+				"assets/textures/skyboxes/space/SpaceBox_front5_posZ.jpg",
+				"assets/textures/skyboxes/space/SpaceBox_back6_negZ.jpg",
+			},
+			"assets/models/box.fbx"
+		);
 
-		m_Shader = m_ShaderLibrary.Load("assets/shaders/simpleshader1.glsl");
+		m_Shader = m_ShaderLibrary.Load("assets/shaders/gBuffer.glsl");
 		m_Shader->Bind();
 		m_Shader->SetInt("u_TextureDiffuse", 0);
 		m_Shader->SetInt("u_TextureNormal", 1);
 		m_Shader->SetInt("u_TextureSpecular", 2);
+		m_Shader->SetInt("skyBox", 3);
+
+
+		m_SkyBoxShader = m_ShaderLibrary.Load("assets/shaders/SkyBox.glsl");
+		m_SkyBoxShader->Bind();
+		m_SkyBoxShader->SetInt("skybox", 0);
+
 		ScenePath = "MariaTest";
 		LoadScene();
 	}
 	SceneManager::~SceneManager()
 	{
 	}
-	void SceneManager::Update(float dt)
+	void SceneManager::Update(float dt, glm::vec4 eyeLocation)
 	{
-		m_Shader->Bind();
-		m_LightManager.CopyLightInformationToShader(m_Shader);
 		for (Entity* entity : *m_EntityManager->GetAllEntities())
 		{
 			if (!entity->enabled)
@@ -54,9 +80,19 @@ namespace vel
 			if (m_EntityManager->HasComponent<MeshComponent>(entity->GetID()))
 			{
 				MeshComponent* meshComp = m_EntityManager->GetComponentByType<MeshComponent>(entity->GetID());
-				meshComp->ModelIns->DrawMesh(m_Shader,meshComp->MaterialIns, transform->GetTransform());
+				if (meshComp->ModelIns)
+				{
+					m_Shader->Bind();
+					BindSkyBox(3);
+					m_Shader->SetFloat4("eyeLocation", eyeLocation);
+					meshComp->ModelIns->DrawMesh(m_Shader, meshComp->MaterialIns, transform->GetTransform());
+				}
 			}
 		}
+	}
+	void SceneManager::BindSkyBox(int i)
+	{
+		skybox->skyboxTexture->Bind(i);
 	}
 	void SceneManager::LoadScene()
 	{
@@ -73,5 +109,16 @@ namespace vel
 		{
 			int breakme = 0;
 		}
+	}
+
+	void SceneManager::DrawSkyBox(glm::mat4 viewProjection)
+	{
+		skybox->skyboxTexture->DrawSkyBox(viewProjection, m_SkyBoxShader, skybox->cubeModel->GetMeshData().m_VertexArray);
+	}
+	void SceneManager::BindLightData(Ref<Shader> shader, glm::vec4 eyepos)
+	{
+		LightManager::CopyLightInformationToShader(shader);
+		shader->SetFloat4("eyeLocation", eyepos);
+
 	}
 }

@@ -16,7 +16,6 @@ namespace vel
 
 	void LightManager::CopyLightInformationToShader(Ref<Shader> shader)
 	{
-		unsigned int lightCount = 0;
 		std::string posStr = "position";
 		std::string difStr = "diffuse";
 		std::string speStr = "specular";
@@ -28,7 +27,7 @@ namespace vel
 			itLight++)
 		{
 			LightComponent* light = *itLight;
-			std::string lightsVariableName = "theLights[" + std::to_string(lightCount) + "].";
+			std::string lightsVariableName = "theLights[" + std::to_string(light->ID) + "].";
 
 			shader->SetFloat4(lightsVariableName + posStr, light->Position);
 			shader->SetFloat4(lightsVariableName + difStr, light->Diffuse);
@@ -36,8 +35,6 @@ namespace vel
 			shader->SetFloat4(lightsVariableName + attStr, light->Attenuation);
 			shader->SetFloat4(lightsVariableName + dirStr, light->Direction);
 			shader->SetFloat4(lightsVariableName + pa1Str, light->LightParams);
-
-			lightCount++;
 		}
 	}
 	void LightManager::AddNewLightInfo(LightComponent* light)

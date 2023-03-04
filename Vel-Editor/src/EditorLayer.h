@@ -47,5 +47,6 @@ namespace vel
 		int m_SelectedEntity = -1;
 		bool openProjectCalled = false;
 		bool saveProjectCalled = false;
+		bool addComponentCalled = false;
 	};
 }

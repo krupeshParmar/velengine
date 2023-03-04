@@ -20,11 +20,11 @@ layout(location = 0) out vec4 color;
 in vec2 v_TextureCoords;
 
 uniform float u_TilingFactor;
-uniform sampler2D u_Texutre;
+uniform sampler2D gAlbedoSpec;
 
 void main()
 {
-	color = texture(u_Texutre, v_TextureCoords);
+	color = texture(gAlbedoSpec, v_TextureCoords);
 	/*float average = (0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b) / 3.0;
 	color = vec4(average, average, average, 1.0);*/
 }

@@ -4,10 +4,10 @@
 #include "vel/Renderer/Model.h"
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/gtx/quaternion.hpp>
+#include "vel/Renderer/Texture.h"
 
 namespace vel
 {
-
 	class Component
 	{
 	public:
@@ -60,7 +60,10 @@ namespace vel
 		Ref<Model> ModelIns;
 		uint32_t SubmeshIndex = 0;
 
-		MeshComponent() = default;
+		MeshComponent()
+		{
+			MaterialIns = CreateRef<Material>();
+		}		
 		MeshComponent(std::string& path, bool useFBXTextures)
 			:Path(path), UseFBXTextures(useFBXTextures)
 		{
@@ -139,6 +142,119 @@ namespace vel
 
 		float InnerCutOff;
 		float OuterCutOff;
+
+	};
+
+	struct Bloom
+	{
+		float Thresold;
+		float Intensity;
+
+	};
+
+	struct DepthOfField
+	{
+		enum DOFType
+		{
+			Off,
+			Gaussian,
+			Bokeh
+		};
+		DOFType Type;
+		float Start;
+		float End;
+		float Radius;
+		const float MAX = 1.5f;
+		const float MIN = 0.5f;
+
+		float FocusDistance = 10.0f;
+		float FocalLength = 50.0;
+		float Aperture = 5.6;
+	};
+
+	class Volume : public Component
+	{
+	public:
+		virtual ~Volume() {}
+
+		Bloom bloom;
+		DepthOfField depthOfField;
+	};
+
+	class SkyBox : public Component
+	{
+	public:
+		SkyBox() = default;
+		SkyBox(std::vector<std::string> texturePaths, std::string modelPath)
+		{
+			CreateSkyBox(texturePaths, modelPath);
+		}
+
+		virtual ~SkyBox() {
+			skyboxTexture->RemoveData();
+		}
+
+		void CreateSkyBox(std::vector<std::string> texturePaths, std::string modelPath)
+		{
+			skyboxTexture = TextureCubeMap::Create(texturePaths);
+
+			cubeModel = CreateRef<Model>(modelPath, false);
+			skyBox = VertexArray::Create();
+			Ref<VertexBuffer> vb = VertexBuffer::Create(&skyboxVertices[0], 108);
+			vb->SetLayout({
+
+				{ vel::ShaderDataType::Float4, "vPosition"},
+				});
+			skyBox->AddVertexBuffer(vb);
+		}
+
+		Ref<TextureCubeMap> skyboxTexture;
+		Ref<Model> cubeModel;
+		Ref<VertexArray> skyBox;
+		float skyboxVertices[108] = {
+			// positions          
+			-1.0f,  1.0f, -1.0f,
+			-1.0f, -1.0f, -1.0f,
+			 1.0f, -1.0f, -1.0f,
+			 1.0f, -1.0f, -1.0f,
+			 1.0f,  1.0f, -1.0f,
+			-1.0f,  1.0f, -1.0f,
+
+			-1.0f, -1.0f,  1.0f,
+			-1.0f, -1.0f, -1.0f,
+			-1.0f,  1.0f, -1.0f,
+			-1.0f,  1.0f, -1.0f,
+			-1.0f,  1.0f,  1.0f,
+			-1.0f, -1.0f,  1.0f,
+
+			 1.0f, -1.0f, -1.0f,
+			 1.0f, -1.0f,  1.0f,
+			 1.0f,  1.0f,  1.0f,
+			 1.0f,  1.0f,  1.0f,
+			 1.0f,  1.0f, -1.0f,
+			 1.0f, -1.0f, -1.0f,
+
+			-1.0f, -1.0f,  1.0f,
+			-1.0f,  1.0f,  1.0f,
+			 1.0f,  1.0f,  1.0f,
+			 1.0f,  1.0f,  1.0f,
+			 1.0f, -1.0f,  1.0f,
+			-1.0f, -1.0f,  1.0f,
+
+			-1.0f,  1.0f, -1.0f,
+			 1.0f,  1.0f, -1.0f,
+			 1.0f,  1.0f,  1.0f,
+			 1.0f,  1.0f,  1.0f,
+			-1.0f,  1.0f,  1.0f,
+			-1.0f,  1.0f, -1.0f,
+
+			-1.0f, -1.0f, -1.0f,
+			-1.0f, -1.0f,  1.0f,
+			 1.0f, -1.0f, -1.0f,
+			 1.0f, -1.0f, -1.0f,
+			-1.0f, -1.0f,  1.0f,
+			 1.0f, -1.0f,  1.0f
+		};
 
 	};
 }

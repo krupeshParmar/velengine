@@ -192,6 +192,9 @@
     <ClInclude Include="src\vel\Scene\SaveSystem.h">
       <Filter>src\vel\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\vel\Scene\SceneEnvironment.h">
+      <Filter>src\vel\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\velpch.h">
       <Filter>src</Filter>
     </ClInclude>

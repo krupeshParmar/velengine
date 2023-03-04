@@ -31,4 +31,17 @@ namespace vel
 		VEL_CORE_ASSERT(false, "Unknown Renderer API");
 		return nullptr;
 	}
+	Ref<TextureCubeMap> TextureCubeMap::Create(const std::vector<std::string> paths)
+	{
+		switch (Renderer::GetAPI())
+		{
+		case RendererAPI::API::None:
+			VEL_CORE_ASSERT(false, "Renderer API None is not supported");
+			return nullptr;
+
+		case RendererAPI::API::OpenGL: return CreateRef<OpenGLTextureCubeMap>(paths);
+		}
+		VEL_CORE_ASSERT(false, "Unknown Renderer API");
+		return nullptr;
+	}
 }

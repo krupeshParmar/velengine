@@ -526,7 +526,7 @@ namespace vel
 												std::stof(sepcularNode.child_value());
 										}
 									}
-									if (lightNodeName == "atten")
+									if (lightNodeName == "attenuation")
 									{
 										pugi::xml_object_range<pugi::xml_node_iterator>
 											attenNodeChildren = lightNode.children();
@@ -553,7 +553,7 @@ namespace vel
 												std::stof(attenNode.child_value());
 										}
 									}
-									if (lightNodeName == "param1")
+									if (lightNodeName == "lightparams")
 									{
 										pugi::xml_object_range<pugi::xml_node_iterator>
 											param1NodeChildren = lightNode.children();

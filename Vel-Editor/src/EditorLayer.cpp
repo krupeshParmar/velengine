@@ -22,9 +22,12 @@ namespace vel
 
 		m_FullScreenFrameBuffer = FrameBuffer::Create(fbSpec);
 
-		m_ShaderLibrary.Load("assets/shaders/FBOTexture.glsl");
-		m_ShaderLibrary.Get("FBOTexture")->Bind();
-		m_ShaderLibrary.Get("FBOTexture")->SetInt("u_Texture", 0);
+		m_ShaderLibrary.Load("assets/shaders/DeferredShader.glsl");
+		m_ShaderLibrary.Get("DeferredShader")->Bind();
+		m_ShaderLibrary.Get("DeferredShader")->SetInt("gAlbedoSpec", 0);
+		m_ShaderLibrary.Get("DeferredShader")->SetInt("gPosition", 1);
+		m_ShaderLibrary.Get("DeferredShader")->SetInt("gNormal", 2);
+		m_ShaderLibrary.Get("DeferredShader")->SetInt("gSpecular", 3);
 
 		m_SquareVertexArray = VertexArray::Create();
 		float sqVertices[6 * 4] = {
@@ -51,16 +54,9 @@ namespace vel
 		Ref<IndexBuffer> squareIB;
 		squareIB = (IndexBuffer::Create(sq_indices, sizeof(sq_indices) / sizeof(uint32_t)));
 		m_SquareVertexArray->SetIndexBuffer(squareIB);
-		//m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
-		m_Texture = Texture2D::Create(1, 1);
-		uint32_t whiteTexture = 0x77777777;
-		m_Texture->SetData(&whiteTexture, sizeof(uint32_t));
-		/*m_SecondTexture = Texture2D::Create("assets/textures/1277885.png");
-		std::string path = m_SecondTexture->GetPath();*/
+
 		Renderer::Init();
 		RenderCommand::SetCullFace();
-		/*m_ShaderLibrary.Get("Texture")->Bind();
-		m_ShaderLibrary.Get("Texture")->SetInt("u_Texture", 0);*/
 
 	}
 
@@ -80,33 +76,43 @@ namespace vel
 		{
 			VEL_PROFILE_SCOPE("Renderer Prep");
 			m_RenderBuffer->Bind();
-			RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1));
+			RenderCommand::SetClearColor(glm::vec4(0.8f, 0.2f, 0.8f, 1));
 			RenderCommand::Clear();
 			RenderCommand::EnableDepth();
 		}
 
 		{
 			VEL_PROFILE_SCOPE("Renderer Draw");
-			//Renderer::BeginScene(m_EditorCamera.GetViewProjection());
 			Renderer::BeginScene(m_EditorCamera.GetViewMatrix(), m_EditorCamera.GetUnReversedProjectionMatrix());
 
-			//Renderer::Submit(m_SquareVertexArray, glm::scale(glm::mat4(1.f), glm::vec3(5.5f)));
-			m_SceneManager.Update(ts);
+			m_SceneManager.Update(ts, glm::vec4(m_EditorCamera.GetPosition(), 1.0));
 
 			Renderer::EndScene();
 
 			m_RenderBuffer->Unbind();
 
+
 			m_FullScreenFrameBuffer->Bind();
-			RenderCommand::DisableDepth();
 			RenderCommand::Clear();
+
+			m_ShaderLibrary.Get("DeferredShader")->Bind();
 			m_RenderBuffer->BindColorTexture();
+			m_RenderBuffer->BindWorldPositionTexture();
+			m_RenderBuffer->BindNormalTexture();
+			m_RenderBuffer->BindSpecularTexture();
+			m_SceneManager.BindLightData(m_ShaderLibrary.Get("DeferredShader"), glm::vec4(m_EditorCamera.GetPosition(), 1.0));
+
 			Renderer::Submit(
-				m_ShaderLibrary.Get("FBOTexture"),
+				m_ShaderLibrary.Get("DeferredShader"),
 				m_SquareVertexArray);
 
-			m_FullScreenFrameBuffer->Unbind();
+			// To render the skybox properly
+			m_FullScreenFrameBuffer->CopyDepthData(m_RenderBuffer);
 
+			m_FullScreenFrameBuffer->Bind();
+			m_SceneManager.DrawSkyBox(m_EditorCamera.GetUnReversedProjectionMatrix() * m_EditorCamera.GetViewMatrix() * glm::scale(glm::mat4(1.0), glm::vec3(9000.f)));
+			
+			m_FullScreenFrameBuffer->Unbind();
 		}
 	}
 
@@ -176,11 +182,11 @@ namespace vel
 				ImGui::MenuItem("New Scene", "Ctrl+N");
 				//NewScene();
 
-				if(ImGui::MenuItem("Save Scene", "Ctrl+S"))
-					saveProjectCalled = true;
+				if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
+					m_SceneManager.SaveScene();
 
-				ImGui::MenuItem("Save Scene As...", "Ctrl+Shift+S");
-				//SaveSceneAs();
+				if(ImGui::MenuItem("Save Scene As...", "Ctrl+Shift+S"))
+					saveProjectCalled = true;
 
 				ImGui::Separator();
 
@@ -250,11 +256,18 @@ namespace vel
 				m_SelectedEntity = i;
 			}
 		}
+		if (ImGui::Button("Add Entity"))
+		{
+			int number = m_SceneManager.GetEntityManager()->GetAllEntities()->size();
+			m_SceneManager.GetEntityManager()->CreateEntity("New Entity" + std::to_string(number));
+		}
 		ImGui::End();
 	}
 
 	void EditorLayer::Inspector()
 	{
+		bool hasMesh = false;
+		bool hasLight = false;
 		ImGui::Begin("Inspector");
 		if (m_SelectedEntity != -1)
 		{
@@ -311,6 +324,7 @@ namespace vel
 			{
 				if (m_SceneManager.GetEntityManager()->HasComponent< LightComponent>(entity->GetID()))
 				{
+					hasLight = true;
 					LightComponent* light =
 						m_SceneManager.GetEntityManager()->
 						GetComponentByType<LightComponent>(entity->GetID());
@@ -321,6 +335,9 @@ namespace vel
 					ImGui::ColorEdit4("Specular##lightSpec", glm::value_ptr(light->Specular));
 					ImGui::InputFloat4("Attenuation##lightAtten", glm::value_ptr(light->Attenuation));
 					ImGui::InputFloat("Type##lightType", &light->LightParams[0]);
+					ImGui::InputFloat("inner Cutt Off##lightCuttoff", &light->LightParams[1]);
+					ImGui::InputFloat("Outter Cut Off##lightOutCuttoff", &light->LightParams[2]);
+					ImGui::InputFloat("On Off##lightOnoff", &light->LightParams[3]);
 				}
 			}
 			ImGui::EndGroup();
@@ -329,6 +346,7 @@ namespace vel
 			{
 				if (m_SceneManager.GetEntityManager()->HasComponent< MeshComponent>(entity->GetID()))
 				{
+					hasMesh = true;
 					MeshComponent* mesh =
 						m_SceneManager.GetEntityManager()->
 						GetComponentByType<MeshComponent>(entity->GetID());
@@ -349,44 +367,142 @@ namespace vel
 					ImGui::ColorEdit4("Diffuse##difmaterial", glm::value_ptr(mesh->MaterialIns->Diffuse));
 					ImGui::ColorEdit4("Specular##specmaterial", glm::value_ptr(mesh->MaterialIns->Specular));
 					ImGui::InputFloat("Ambient##ambmaterial", &mesh->MaterialIns->Ambient);
-					ImGui::InputFloat("Shininess##ambmaterial", &mesh->MaterialIns->Shininess);
+					ImGui::SliderFloat("Shininess##ambmaterial", &mesh->MaterialIns->Shininess, 0, 1.0f);
 
-					ImGui::InputText("Diffuse Texture##difTexmaterial", &mesh->MaterialIns->DiffuseTexturePath);
-					ImGui::SameLine();
-					if (ImGui::Button("Load"))
+					if (mesh->MaterialIns->DiffuseTexture && mesh->MaterialIns->DiffuseTexture->IsLoaded())
 					{
-						Ref<Texture2D> texture = Texture2D::Create(mesh->MaterialIns->DiffuseTexturePath);
-						if (texture->IsLoaded())
+						ImGui::Image((void*)mesh->MaterialIns->DiffuseTexture->GetRendererID(), ImVec2{ 128, 128 });
+						if (ImGui::Button("Unload##btndiffUNLoad"))
 						{
-							mesh->MaterialIns->DiffuseTexture = texture;
+							mesh->MaterialIns->DiffuseTexture->RemoveData();
 						}
 					}
-
-					ImGui::InputText("Specular Texture##speTexmaterial", &mesh->MaterialIns->SpecularTexturePath);
-					ImGui::SameLine();
-					if (ImGui::Button("Load"))
+					else
 					{
-						Ref<Texture2D> texture = Texture2D::Create(mesh->MaterialIns->SpecularTexturePath);
-						if (texture->IsLoaded())
+						ImGui::InputText("Diffuse Texture##difTexmaterial", &mesh->MaterialIns->DiffuseTexturePath);
+						ImGui::SameLine();
+						if (ImGui::Button("Load##btndiffLoad"))
 						{
-							mesh->MaterialIns->SpecularTexture = texture;
+							if (mesh->MaterialIns->DiffuseTexture)
+							{
+								mesh->MaterialIns->DiffuseTexture->CreateData(mesh->MaterialIns->DiffuseTexturePath);
+							}
+							else
+							{
+								Ref<Texture2D> texture = Texture2D::Create(mesh->MaterialIns->DiffuseTexturePath);
+								if (texture->IsLoaded())
+								{
+									mesh->MaterialIns->DiffuseTexture = texture;
+								}
+							}
 						}
 					}
-
-					ImGui::InputText("Normal Texture##normTexmaterial", &mesh->MaterialIns->NormalTexturePath);
-					ImGui::SameLine();
-					if (ImGui::Button("Load"))
+					
+					if (mesh->MaterialIns->SpecularTexture && mesh->MaterialIns->SpecularTexture->IsLoaded())
 					{
-						Ref<Texture2D> texture = Texture2D::Create(mesh->MaterialIns->NormalTexturePath);
-						if (texture->IsLoaded())
+						ImGui::Image((void*)mesh->MaterialIns->SpecularTexture->GetRendererID(), ImVec2{ 128, 128 });
+						if (ImGui::Button("Unload##btnspecUNLoad"))
 						{
-							mesh->MaterialIns->NormalTexture = texture;
+							mesh->MaterialIns->SpecularTexture->RemoveData();
 						}
 					}
-
+					else
+					{
+						ImGui::InputText("Specular Texture##specTexmaterial", &mesh->MaterialIns->SpecularTexturePath);
+						ImGui::SameLine();
+						if (ImGui::Button("Load##btnspecLoad"))
+						{
+							if (mesh->MaterialIns->SpecularTexture)
+							{
+								mesh->MaterialIns->SpecularTexture->CreateData(mesh->MaterialIns->SpecularTexturePath);
+							}
+							else
+							{
+								Ref<Texture2D> texture = Texture2D::Create(mesh->MaterialIns->SpecularTexturePath);
+								if (texture->IsLoaded())
+								{
+									mesh->MaterialIns->SpecularTexture = texture;
+								}
+							}
+						}
+					}
+					
+					if (mesh->MaterialIns->NormalTexture && mesh->MaterialIns->NormalTexture->IsLoaded())
+					{
+						ImGui::Image((void*)mesh->MaterialIns->NormalTexture->GetRendererID(), ImVec2{ 128, 128 });
+						if (ImGui::Button("Unload##btnnormUNLoad"))
+						{
+							mesh->MaterialIns->NormalTexture->RemoveData();
+						}
+					}
+					else
+					{
+						ImGui::InputText("Normal Texture##normTexmaterial", &mesh->MaterialIns->NormalTexturePath);
+						ImGui::SameLine();
+						if (ImGui::Button("Load##btnnormLoad"))
+						{
+							if (mesh->MaterialIns->NormalTexture)
+							{
+								mesh->MaterialIns->NormalTexture->CreateData(mesh->MaterialIns->NormalTexturePath);
+							}
+							else
+							{
+								Ref<Texture2D> texture = Texture2D::Create(mesh->MaterialIns->NormalTexturePath);
+								if (texture->IsLoaded())
+								{
+									mesh->MaterialIns->NormalTexture = texture;
+								}
+							}
+						}
+					}
 				}
 			}
 			ImGui::EndGroup();
+
+			{
+				if (ImGui::Button("Add Component"))
+				{
+					if (!hasLight || !hasMesh)
+					{
+						addComponentCalled = true;
+						ImGui::OpenPopup("Add Component");
+					}
+				}
+				if (addComponentCalled)
+				{
+					if (ImGui::BeginPopup("Add Component"))
+					{
+						if (ImGui::BeginMenu("Components"))
+						{
+							if (!hasLight)
+							{
+								if (ImGui::MenuItem("Light Component"))
+								{
+									addComponentCalled = false;
+									m_SceneManager.GetEntityManager()->AddComponent(entity->GetID(), new LightComponent());
+									ImGui::CloseCurrentPopup();
+								}
+							}
+							if (!hasMesh)
+							{
+								if (ImGui::MenuItem("Mesh Component"))
+								{
+									addComponentCalled = false;
+									m_SceneManager.GetEntityManager()->AddComponent(entity->GetID(), new MeshComponent());
+									ImGui::CloseCurrentPopup();
+								}
+							}
+							if (ImGui::MenuItem("Close"))
+							{
+								addComponentCalled = false;
+								ImGui::CloseCurrentPopup();
+							}
+							ImGui::EndMenu();
+						}
+						ImGui::EndPopup();
+					}
+				}
+			}
 		}
 		ImGui::End();
 	}

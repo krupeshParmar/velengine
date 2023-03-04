@@ -51,6 +51,7 @@ namespace vel
                 m_Meshes[i].m_Textures.begin(),
                 m_Meshes[i].m_Textures.end()
             );
+            wholeMeshData.m_VertexArray = m_Meshes[i].m_VertexArray;
         }
         return wholeMeshData;
     }
@@ -242,6 +243,7 @@ namespace vel
                 shader->SetBool("useTextureSpecular", false);
                 shader->SetFloat4("RGBA", material->Diffuse);
                 shader->SetFloat4("SPEC", material->Specular);
+                shader->SetFloat("SHIN", material->Shininess);
                 shader->SetBool("useTextureDiffuse", true);
                 Renderer::Submit(shader, meshData.m_VertexArray, meshData.m_Textures, transform);
             }
@@ -266,16 +268,14 @@ namespace vel
                 {
                     useNorMap = true;
                 }
+                shader->SetFloat("SHIN", material->Shininess);
                 shader->SetBool("useTextureNormal", useNorMap);
                 shader->SetBool("useTextureSpecular", useSpeMap);
                 shader->SetBool("useTextureDiffuse", useDifMap);
 
-                if(useDifMap)
-                    textures.push_back(material->DiffuseTexture);
-                if(useNorMap)
-                    textures.push_back(material->NormalTexture);
-                if(useSpeMap)
-                    textures.push_back(material->SpecularTexture);
+                textures.push_back(material->DiffuseTexture);
+                textures.push_back(material->NormalTexture);
+                textures.push_back(material->SpecularTexture);
 
                 Renderer::Submit(shader, meshData.m_VertexArray, textures, transform);
             }
