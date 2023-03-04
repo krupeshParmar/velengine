@@ -28,6 +28,8 @@ namespace vel
 		std::vector<uint32_t> m_Indices;
 		std::vector<Ref<Texture2D>> m_Textures;
 
+		bool m_Loaded = false;
+
 		Ref<VertexArray> m_VertexArray;
 	};
 
@@ -41,7 +43,7 @@ namespace vel
 
 	private:
 		void ProcessNode(aiNode* node, const aiScene* scene);
-		MeshData ProcessMesh(aiMesh* aimesh, const aiScene* scene);
+		//MeshData ProcessMesh(aiMesh* aimesh, const aiScene* scene);
 		std::vector<Ref<Texture2D>> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typesname);
 	
 

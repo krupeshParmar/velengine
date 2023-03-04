@@ -162,6 +162,8 @@ namespace vel
 	{
 		if (!m_Loaded)
 			return;
+		if (!vertexArray)
+			return;
 		glDepthMask(GL_FALSE);
 		glDepthFunc(GL_LEQUAL);
 		glCullFace(GL_FRONT);

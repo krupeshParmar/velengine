@@ -24,7 +24,7 @@ namespace vel
            VEL_CORE_ERROR("ERROR::ASSIMP:: {0}", m_Importer->GetErrorString());
             return;
         }
-        m_Path = source.substr(0, source.find_last_of('/'));
+        m_Path = source.substr(0, source.find_last_of('/')); 
 
         ProcessNode(scene->mRootNode, scene);
 	}
@@ -56,22 +56,24 @@ namespace vel
         return wholeMeshData;
     }
 
-    void Model::ProcessNode(aiNode* node, const aiScene* scene)
+    struct MeshLoadingInfo
     {
-        for (unsigned int i = 0; i < node->mNumMeshes; i++)
-        {
-            aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-            m_Meshes.push_back(ProcessMesh(mesh, scene));
-        }
-        // then do the same for each of its children
-        for (unsigned int i = 0; i < node->mNumChildren; i++)
-        {
-            ProcessNode(node->mChildren[i], scene);
-        }
-    }
+        aiMesh* aimesh;
+        const aiScene* scene;
+        bool m_UseFBXTextures;
+        std::vector<MeshData>* m_Meshes;
+    };
 
-    MeshData Model::ProcessMesh(aiMesh* aimesh, const aiScene* scene)
+    DWORD WINAPI ProcessMesh1(LPVOID pParameters)
+    //MeshData Model::ProcessMesh(aiMesh* aimesh, const aiScene* scene)
     {
+        MeshLoadingInfo* fileInfo = (MeshLoadingInfo*)pParameters;
+        aiMesh* aimesh = fileInfo->aimesh;
+        const aiScene* scene = fileInfo->scene;
+
+        bool m_UseFBXTextures = fileInfo->m_UseFBXTextures;
+        std::vector<MeshData>* m_Meshes = fileInfo->m_Meshes;
+
         MeshData newMeshData;
 
         // Get all the vertex data
@@ -125,39 +127,17 @@ namespace vel
         }
 
 
-        if (m_UseFBXTextures)
-        {
-            // Process the materials
-            aiMaterial* material = scene->mMaterials[aimesh->mMaterialIndex];
-            std::vector<Ref<Texture2D>> diffuseTextures = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-            newMeshData.m_Textures.insert(newMeshData.m_Textures.end(), diffuseTextures.begin(), diffuseTextures.end());
-        }
-        newMeshData.m_VertexArray = VertexArray::Create();
-        vel::Ref<vel::VertexBuffer> vertexBuffer;
-        vertexBuffer = vel::VertexBuffer::Create(
-            &newMeshData.m_Vertices[0],
-            sizeof(vel::Vertices) * newMeshData.m_Vertices.size()
-        );
-        vertexBuffer->SetLayout({
-                { vel::ShaderDataType::Float4, "vColour"},
-                { vel::ShaderDataType::Float4, "vPosition"},
-                { vel::ShaderDataType::Float4, "vNormal"},
-                { vel::ShaderDataType::Float4, "vUVx2"},
-                { vel::ShaderDataType::Float4, "vTangent"},
-                { vel::ShaderDataType::Float4, "vBiNormal"},
-                { vel::ShaderDataType::Float4, "vBoneID"},
-                { vel::ShaderDataType::Float4, "vBoneWeight"}
-            });
-         newMeshData.m_VertexArray->AddVertexBuffer(vertexBuffer);
-         newMeshData.m_VertexArray->SetIndexBuffer(
-            IndexBuffer::Create(
-                &newMeshData.m_Indices[0],
-                newMeshData.m_Indices.size()
-            )
-        );
+        //if (m_UseFBXTextures)
+        //{
+        //    // Process the materials
+        //    aiMaterial* material = scene->mMaterials[aimesh->mMaterialIndex];
+        //    std::vector<Ref<Texture2D>> diffuseTextures = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+        //    newMeshData.m_Textures.insert(newMeshData.m_Textures.end(), diffuseTextures.begin(), diffuseTextures.end());
+        //}
+        newMeshData.m_Loaded = true;
+        m_Meshes->push_back(newMeshData);
         
-        return newMeshData;
-        
+         return 0;
         /*
         std::vector<Ref<Texture2D>> speculatTextures = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
         newMeshData.m_Textures.insert(newMeshData.m_Textures.end(), speculatTextures.begin(), speculatTextures.end());
@@ -172,6 +152,39 @@ namespace vel
 
         return newMeshData;
         */
+    }
+
+    void Model::ProcessNode(aiNode* node, const aiScene* scene)
+    {
+        for (unsigned int i = 0; i < node->mNumMeshes; i++)
+        {
+            aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+
+            MeshLoadingInfo* fileInfo = new MeshLoadingInfo();
+            fileInfo->aimesh = mesh;
+            fileInfo->scene = scene;
+            fileInfo->m_Meshes = &m_Meshes;
+            fileInfo->m_UseFBXTextures = m_UseFBXTextures;
+
+            LPDWORD lpThreadId = 0;
+
+            HANDLE hSceneLoader =
+                CreateThread(
+                    NULL,
+                    0,
+                    ProcessMesh1,
+                    (void*)fileInfo,
+                    0,
+                    lpThreadId
+                );
+
+            //m_Meshes.push_back(ProcessMesh(mesh, scene));
+        }
+        // then do the same for each of its children
+        for (unsigned int i = 0; i < node->mNumChildren; i++)
+        {
+            ProcessNode(node->mChildren[i], scene);
+        }
     }
 
     std::vector<Ref<Texture2D>>  Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typesname)
@@ -232,7 +245,34 @@ namespace vel
         for (MeshData meshData : m_Meshes)
         {
             if (meshData.m_VertexArray == nullptr)
-                continue;
+            {
+                if (meshData.m_Loaded)
+                {
+                    meshData.m_VertexArray = VertexArray::Create();
+                    vel::Ref<vel::VertexBuffer> vertexBuffer;
+                    vertexBuffer = vel::VertexBuffer::Create(
+                        &meshData.m_Vertices[0],
+                        sizeof(vel::Vertices) * meshData.m_Vertices.size()
+                    );
+                    vertexBuffer->SetLayout({
+                            { vel::ShaderDataType::Float4, "vColour"},
+                            { vel::ShaderDataType::Float4, "vPosition"},
+                            { vel::ShaderDataType::Float4, "vNormal"},
+                            { vel::ShaderDataType::Float4, "vUVx2"},
+                            { vel::ShaderDataType::Float4, "vTangent"},
+                            { vel::ShaderDataType::Float4, "vBiNormal"},
+                            { vel::ShaderDataType::Float4, "vBoneID"},
+                            { vel::ShaderDataType::Float4, "vBoneWeight"}
+                        });
+                    meshData.m_VertexArray->AddVertexBuffer(vertexBuffer);
+                    Ref<IndexBuffer> ib = IndexBuffer::Create(
+                        &meshData.m_Indices[0],
+                        meshData.m_Indices.size()
+                    );
+                    meshData.m_VertexArray->SetIndexBuffer(ib);
+                }
+                else continue;
+            }
 
             std::vector<Ref<Texture2D>> textures;
             shader->Bind();

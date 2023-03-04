@@ -105,10 +105,7 @@ namespace vel
 	void SceneManager::LoadScene()
 	{
 		const std::string path = "assets/scenes/" + ScenePath + ".xml";
-		if (!LoadSceneFile(path, m_EntityManager))
-		{
-			int breakme = 0;
-		}
+		LoadSceneFile(path, m_EntityManager);
 	}
 	void SceneManager::SaveScene()
 	{
@@ -121,6 +118,10 @@ namespace vel
 
 	void SceneManager::DrawSkyBox(glm::mat4 viewProjection)
 	{
+		if (skybox->cubeModel)
+		{
+
+		}
 		skybox->skyboxTexture->DrawSkyBox(viewProjection, m_SkyBoxShader, skybox->cubeModel->GetMeshData().m_VertexArray);
 	}
 	void SceneManager::BindLightData(Ref<Shader> shader, glm::vec4 eyepos)

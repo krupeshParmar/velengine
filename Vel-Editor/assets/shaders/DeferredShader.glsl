@@ -82,8 +82,8 @@ void main()
 	color.rgb += (Diffuse * ambientLight);
 	f_position = vec4(FragPos, 1.0);
 
-	float average = (0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b) / 3.0;
-	color = vec4(average, average, average, 1.0);
+	/*float average = (0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b) / 3.0;
+	color = vec4(average, average, average, 1.0);*/
 }
 
 

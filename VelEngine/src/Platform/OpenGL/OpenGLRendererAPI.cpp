@@ -51,13 +51,13 @@ namespace vel
 	{
 		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 		
-		GLenum error = glCheckError_();
+		/*GLenum error = glCheckError_();
 
 		if (error != GL_NO_ERROR)
 		{
 
 			VEL_ASSERT(false,"OpenGL error!!");
-		}
+		}*/
 	}
 
 	void OpenGLRendererAPI::SetViewport(int x, int y, int width, int height)

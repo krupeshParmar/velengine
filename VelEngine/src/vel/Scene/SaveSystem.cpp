@@ -2,8 +2,18 @@
 #include "SaveSystem.h"
 #include "vel/Core/Log.h"
 
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+
 namespace vel
 {
+	struct SceneDataLoadInfo
+	{
+		std::string filename;
+		Ref<EntityManager> entityManager;
+	};
+
+
 	bool SaveSceneFile(std::string filename, Ref<EntityManager> entityManager)
 	{
 		pugi::xml_document doc;
@@ -323,8 +333,15 @@ namespace vel
 		return material;
 	}
 
+	/*DWORD WINAPI LoadSceneFileAsync(LPVOID pParameters)
+	{
+		SceneDataLoadInfo* pFileParams = (SceneDataLoadInfo*)pParameters;
+		
+	}*/
+
 	bool LoadSceneFile(std::string filename, Ref<EntityManager> entityManager)
 	{
+		
 		std::string materialPath = "";
 		Ref<Material> material;
 		pugi::xml_document sceneDoc;
@@ -631,7 +648,6 @@ namespace vel
 									{
 										meshObject->UseFBXTextures = meshNode.child_value() == "1";
 									}
-
 								}
 								if (!meshObject->Path.empty())
 								{
