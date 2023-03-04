@@ -91,11 +91,17 @@ namespace vel
 
 			m_RenderBuffer->Unbind();
 
-
+			//RenderCommand::EnableDepth();
+			//m_FullScreenFrameBuffer->CopyDepthData(m_RenderBuffer);
 			m_FullScreenFrameBuffer->Bind();
-			RenderCommand::Clear();
+			//m_FullScreenFrameBuffer->Bind();
+
 
 			m_ShaderLibrary.Get("DeferredShader")->Bind();
+			m_ShaderLibrary.Get("DeferredShader")->
+				SetFloat2("screen_width_height", { 
+				Application::Get().GetWindow().GetWidth(),Application::Get().GetWindow().GetHeight() 
+					});
 			m_RenderBuffer->BindColorTexture();
 			m_RenderBuffer->BindWorldPositionTexture();
 			m_RenderBuffer->BindNormalTexture();

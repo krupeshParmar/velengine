@@ -34,13 +34,21 @@ namespace vel
 			}
 		*/
 		skybox = new SkyBox(
-			{
+			/*{
 				"assets/textures/skyboxes/space/SpaceBox_right1_posX.jpg",
 				"assets/textures/skyboxes/space/SpaceBox_left2_negX.jpg",
 				"assets/textures/skyboxes/space/SpaceBox_top3_posY.jpg",
 				"assets/textures/skyboxes/space/SpaceBox_bottom4_negY.jpg",
 				"assets/textures/skyboxes/space/SpaceBox_front5_posZ.jpg",
 				"assets/textures/skyboxes/space/SpaceBox_back6_negZ.jpg",
+			},*/
+			{
+				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayRight2048.bmp",
+				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayLeft2048.bmp",
+				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayUp2048.bmp",
+				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayDown2048.bmp",
+				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayFront2048.bmp",
+				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayBack2048.bmp",
 			},
 			"assets/models/box.fbx"
 		);

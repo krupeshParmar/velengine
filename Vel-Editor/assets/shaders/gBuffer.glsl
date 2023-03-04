@@ -86,6 +86,8 @@ void main()
 	float ratio = 1.00 / 1.52;
 	vec3 I = normalize(fs_in.FragPos - eyeLocation.xyz);
 
-	vec3 R = refract(I, normalValue, ratio);
-	f_albedo.rgb += texture(skyBox, R).xyz * SHIN;
+	vec3 RR = refract(I, normalValue, ratio);
+	vec3 RL = reflect(I, normalValue);
+	f_albedo.rgb += texture(skyBox, RR).xyz * SHIN;
+	f_albedo.rgb += texture(skyBox, RL).xyz * SHIN;
 }

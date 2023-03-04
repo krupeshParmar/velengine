@@ -14,7 +14,7 @@
 		<a>0.750000</a>
 	</specular>
 	<ambient>1.000000</ambient>
-	<shininess>0.335000</shininess>
+	<shininess>0.000000</shininess>
 	<diffuse_texture>assets/models/maria/maria_diffuse.png</diffuse_texture>
 	<specular_texture>assets/models/maria/maria_specular.png</specular_texture>
 	<normal_texture></normal_texture>

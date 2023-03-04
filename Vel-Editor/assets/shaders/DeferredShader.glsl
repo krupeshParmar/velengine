@@ -1,5 +1,5 @@
 #type vertex
-#version 330 core
+#version 420 core
 
 layout(location = 0) in vec2 a_TextureCoords;
 layout(location = 1) in vec4 a_Position;
@@ -14,7 +14,7 @@ void main()
 }
 
 #type fragment
-#version 330 core
+#version 420 core
 
 layout(location = 0) out vec4 color;
 layout(location = 1) out vec4 f_position;
@@ -28,6 +28,7 @@ uniform sampler2D gPosition;
 uniform sampler2D gNormal;
 uniform sampler2D gSpecular;
 uniform vec4 eyeLocation;
+uniform vec2 screen_width_height;					// x = width, y = height
 
 struct Light
 {
@@ -51,6 +52,20 @@ uniform Light theLights[NUMBEROFLIGHTS];
 vec4 calculateLightContrib(vec3 vertexMaterialColour, vec3 vertexNormal,
 	vec3 vertexWorldPos, vec4 vertexSpecular);
 
+float near = 0.1f; 
+float far = 100.0f;
+
+float linearizeDepth(float depth)
+{
+	return (2.0 * near * far) / (far + near - (depth * 2.0 - 1.0) * (far - near));
+}
+
+float logisticDepth(float depth, float steepness = 0.05f, float offset = 5.0f)
+{
+	float zVal = linearizeDepth(depth);
+	return (1 / (1 + exp(-steepness * zVal - offset)));
+}
+
 void main()
 {
 	vec3 FragPos = texture(gPosition, v_TextureCoords).rgb;
@@ -66,6 +81,9 @@ void main()
 	float ambientLight = 0.08f;
 	color.rgb += (Diffuse * ambientLight);
 	f_position = vec4(FragPos, 1.0);
+
+	float average = (0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b) / 3.0;
+	color = vec4(average, average, average, 1.0);
 }
 
 
