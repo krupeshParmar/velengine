@@ -69,11 +69,11 @@ float logisticDepth(float depth, float steepness = 0.05f, float offset = 5.0f)
 void main()
 {
 	vec3 FragPos = texture(gPosition, v_TextureCoords).rgb;
-	vec3 Normal = texture(gNormal, v_TextureCoords).rgb;
+	vec4 Normal = texture(gNormal, v_TextureCoords);
 	vec3 Diffuse = texture(gAlbedo, v_TextureCoords).rgb;
 	vec4 Specular = texture(gSpecular, v_TextureCoords);
 
-	vec4 outColour = calculateLightContrib(Diffuse, Normal,
+	vec4 outColour = calculateLightContrib(Diffuse, Normal.xyz,
 		FragPos, Specular);
 
 	color = vec4(outColour.rgb, 1.0);
@@ -90,7 +90,7 @@ void main()
 vec4 calculateLightContrib(vec3 vertexMaterialColour, vec3 vertexNormal,
 	vec3 vertexWorldPos, vec4 vertexSpecular)
 {
-	vec3 norm = normalize(vertexNormal);
+	vec3 norm = normalize(vertexNormal.xyz);
 
 	vec4 finalObjectColour = vec4(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -134,7 +134,7 @@ vec4 calculateLightContrib(vec3 vertexMaterialColour, vec3 vertexNormal,
 			// vec3 lightDir = normalize(light.position - FragPos);
 			vec3 lightDir = -theLights[index].direction.xyz;
 			lightDir = normalize(lightDir);
-			float diff = max(dot(norm, -lightDir), 0.0);
+			float diff = max(dot(norm, lightDir), 0.0);
 			vec3 diffuse = theLights[index].diffuse.xyz * diff;
 
 			// specular
@@ -174,7 +174,7 @@ vec4 calculateLightContrib(vec3 vertexMaterialColour, vec3 vertexNormal,
 		vec3 eyeVector = normalize(eyeLocation.xyz - vertexWorldPos.xyz);
 
 		// To simplify, we are NOT using the light specular value, just the object’s.
-		float objectSpecularPower = vertexSpecular.r;
+		float objectSpecularPower = vertexSpecular.w;
 
 		//		lightSpecularContrib = pow( max(0.0f, dot( eyeVector, reflectVector) ), objectSpecularPower )
 		//			                   * vertexSpecular.rgb;	//* theLights[lightIndex].Specular.rgb

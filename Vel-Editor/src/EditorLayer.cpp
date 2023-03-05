@@ -339,7 +339,10 @@ namespace vel
 					ImGui::BulletText("Light##lightLight");
 					ImGui::ColorEdit4("Diffuse##lightDiffuse", glm::value_ptr(light->Diffuse));
 					ImGui::ColorEdit4("Specular##lightSpec", glm::value_ptr(light->Specular));
-					ImGui::InputFloat4("Attenuation##lightAtten", glm::value_ptr(light->Attenuation));
+					ImGui::Text("Attenuation#lightAtt");
+					ImGui::SliderFloat("Constant#lightAttconst", &light->Attenuation[0], 0.f, 1.0f);
+					ImGui::SliderFloat("Linear#lightAttline", &light->Attenuation[1], 0.f, 1.0f);
+					ImGui::SliderFloat("Quadratic#lightAttquad", &light->Attenuation[2], 0.f, 0.3f);
 					ImGui::InputFloat("Type##lightType", &light->LightParams[0]);
 					ImGui::InputFloat("inner Cutt Off##lightCuttoff", &light->LightParams[1]);
 					ImGui::InputFloat("Outter Cut Off##lightOutCuttoff", &light->LightParams[2]);

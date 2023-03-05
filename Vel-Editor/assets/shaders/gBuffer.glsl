@@ -11,7 +11,7 @@ layout(location = 7)in vec4 vBoneWeight;		// For skinned mesh (FBX)
 
 out VS_OUT
 {
-	vec3 FragPos;
+	vec4 FragPos;
 	vec4 Normal;
 	vec2 TexCoords;
 } vs_out;
@@ -24,8 +24,9 @@ uniform mat4 u_InverseTransform;
 void main()
 {
 	vs_out.TexCoords = vec2(vUVx2.x, -vUVx2.y);
-	vs_out.FragPos = (u_Transform * vec4(vPosition.xyz, 1.0f)).xyz;
-	vs_out.Normal = normalize(u_InverseTransform * vNormal);
+	vs_out.FragPos = u_Transform * vec4(vPosition.xyz, 1.0);
+	vs_out.Normal.xyz = normalize(u_InverseTransform * vec4(vNormal.xyz, 1.0f)).xyz;
+	vs_out.Normal.w = 1.0f;
 	gl_Position = u_Projection * u_View * u_Transform * vec4(vPosition.xyz, 1.0);
 }
 
@@ -38,7 +39,7 @@ layout(location = 3) out vec4 f_specular;
 
 in VS_OUT
 {
-	vec3 FragPos;
+	vec4 FragPos;
 	vec4 Normal;
 	vec2 TexCoords;
 } fs_in;
@@ -58,10 +59,10 @@ uniform vec4 eyeLocation;
 
 void main()
 {
-	vec3 normalValue = normalize(fs_in.Normal.xyz);
+	vec4 normalValue = normalize(fs_in.Normal);
 	if (useTextureNormal)
 	{
-		normalValue = texture(u_TextureNormal, fs_in.TexCoords).rgb;
+		normalValue = texture(u_TextureNormal, fs_in.TexCoords);
 		normalValue = normalize(normalValue * 2.0 - 1.0);
 	}
 
@@ -79,15 +80,15 @@ void main()
 
 	f_albedo.rgb = textColour0.rgb;
 	f_albedo.a = transparency;
-	f_position = vec4(fs_in.FragPos, 1.0);
-	f_normal = vec4(normalValue, 1.0);
+	f_position = fs_in.FragPos;
+	f_normal = vec4(normalValue.xyz, 1.0);
 	f_specular = specularColour;
 
 	float ratio = 1.00 / 1.52;
-	vec3 I = normalize(fs_in.FragPos - eyeLocation.xyz);
+	vec3 I = normalize(fs_in.FragPos.xyz - eyeLocation.xyz);
 
-	vec3 RR = refract(I, normalValue, ratio);
-	vec3 RL = reflect(I, normalValue);
+	vec3 RR = refract(I, normalValue.xyz, ratio);
+	vec3 RL = reflect(I, normalValue.xyz);
 	f_albedo.rgb += texture(skyBox, RR).xyz * SHIN;
 	f_albedo.rgb += texture(skyBox, RL).xyz * SHIN;
 }
