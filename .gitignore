@@ -2,7 +2,7 @@
 .vs/
 bin/
 bin-int/
-Vel-Editor/Vel-Profile-Runtime..json
+Vel-Editor/Vel-Profile-Runtime.json
 
 #files
 *.user
