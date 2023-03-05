@@ -1,9 +1,11 @@
 #include "SceneManager.h"
+CRITICAL_SECTION SceneManagerEntitesList_Lock;
 
 namespace vel
 {
 	SceneManager::SceneManager()
 	{
+		InitializeCriticalSection(&SceneManagerEntitesList_Lock);
 		std::string maria = "assets/models/maria/Maria.fbx";
 		std::string rfa = "assets/models/rfa/rfa_separate_cloth.fbx";
 		std::string nightshade = "assets/models/nightshade/Nightshade J Friedrich@Idle.fbx";
@@ -70,12 +72,17 @@ namespace vel
 	}
 	SceneManager::~SceneManager()
 	{
+		DeleteCriticalSection(&SceneManagerEntitesList_Lock);
 	}
 	void SceneManager::Update(float dt, glm::vec4 eyeLocation)
 	{
-		for (Entity* entity : *m_EntityManager->GetAllEntities())
+		std::vector<Ref<Entity>> entities = m_EntityManager->GetAllEntities();
+		for (std::vector<Ref<Entity>>::iterator entityit = entities.begin();
+			entityit != entities.end();
+			entityit++)
 		{
-			if (!entity->enabled)
+			Ref<Entity> entity = *entityit;
+			if (!entity || !entity->enabled)
 				continue;
 			TransformComponent* transform = m_EntityManager->GetComponentByType<TransformComponent>(entity->GetID());			
 			if (m_EntityManager->HasComponent<LightComponent>(entity->GetID()))
@@ -88,6 +95,34 @@ namespace vel
 			if (m_EntityManager->HasComponent<MeshComponent>(entity->GetID()))
 			{
 				MeshComponent* meshComp = m_EntityManager->GetComponentByType<MeshComponent>(entity->GetID());
+				if (meshComp->MaterialIns && !meshComp->MaterialIns->IsCompiled)
+				{
+					if (!meshComp->MaterialIns->DiffuseTexturePath.empty())
+					{
+						Ref<Texture2D> diffTex = Texture2D::Create(meshComp->MaterialIns->DiffuseTexturePath);
+						if (diffTex != nullptr)
+						{
+							meshComp->MaterialIns->DiffuseTexture = diffTex;
+						}
+					}
+					if (meshComp->MaterialIns && !meshComp->MaterialIns->NormalTexturePath.empty())
+					{
+						Ref<Texture2D> normTex = Texture2D::Create(meshComp->MaterialIns->NormalTexturePath);
+						if (normTex != nullptr)
+						{
+							meshComp->MaterialIns->NormalTexture = normTex;
+						}
+					}
+					if (meshComp->MaterialIns && !meshComp->MaterialIns->SpecularTexturePath.empty())
+					{
+						Ref<Texture2D> specTex = Texture2D::Create(meshComp->MaterialIns->SpecularTexturePath);
+						if (specTex != nullptr)
+						{
+							meshComp->MaterialIns->SpecularTexture = specTex;
+						}
+					}
+					meshComp->MaterialIns->IsCompiled = true;
+				}
 				if (meshComp->ModelIns)
 				{
 					m_Shader->Bind();
@@ -118,10 +153,6 @@ namespace vel
 
 	void SceneManager::DrawSkyBox(glm::mat4 viewProjection)
 	{
-		if (skybox->cubeModel)
-		{
-
-		}
 		skybox->skyboxTexture->DrawSkyBox(viewProjection, m_SkyBoxShader, skybox->cubeModel->GetMeshData().m_VertexArray);
 	}
 	void SceneManager::BindLightData(Ref<Shader> shader, glm::vec4 eyepos)

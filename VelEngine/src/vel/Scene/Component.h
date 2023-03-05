@@ -68,7 +68,7 @@ namespace vel
 			:Path(path), UseFBXTextures(useFBXTextures)
 		{
 			MaterialIns = CreateRef<Material>();
-			ModelIns = CreateRef<Model>(Path, useFBXTextures);
+			ModelIns = CreateRef<Model>(Path, useFBXTextures, false);
 		}
 		MeshComponent(const MeshComponent& other)
 			: Mesh(other.Mesh), SubmeshIndex(other.SubmeshIndex), MaterialIns(other.MaterialIns)
@@ -198,7 +198,7 @@ namespace vel
 		{
 			skyboxTexture = TextureCubeMap::Create(texturePaths);
 
-			cubeModel = CreateRef<Model>(modelPath, false);
+			cubeModel = CreateRef<Model>(modelPath, false, false);
 			skyBox = VertexArray::Create();
 			Ref<VertexBuffer> vb = VertexBuffer::Create(&skyboxVertices[0], 108);
 			vb->SetLayout({

@@ -12,56 +12,19 @@ namespace vel
 	class EntityManager
 	{
 	public:
-		EntityManager()
-		{
-			m_EntityList = CreateRef< std::vector<Entity*>>();
-			m_NextEntityID = 0;
-			LightManager();
-		}
-		Ref<std::vector<Entity*>> GetAllEntities()
-		{
-			return m_EntityList;
-		}
+		EntityManager();
+		~EntityManager();
 
-		Entity* GetEntity(uint32_t id)
-		{
-			for (
-				std::vector<Entity*>::iterator it = m_EntityList->begin();
-				it != m_EntityList->end();
-				it++
-			)
-			{
-				Entity* entity = *it;
-				if (entity->GetID() == id)
-				{
-					return entity;
-				}
-			}
-			return nullptr;
-		}
+		std::vector<Ref<Entity>> GetAllEntities();
 
-		uint32_t CreateEntity(std::string name = "GameObject")
-		{
-			Entity* entity = new Entity();
-			entity->name = name;
+		void InitCriticalSections();
+		void DeleteCriticalSections();
 
-			entity->SetID(m_NextEntityID++);
+		Ref<Entity> GetEntity(uint32_t id);
 
-			m_EntityList->push_back(entity);
-			std::vector<Component*>* components = new std::vector<Component*>();
-			m_EntityMap.emplace(entity->GetID(), components);
-			if (AddComponent(entity->GetID(), new TransformComponent()))
-			{
-				int breakMeHere = 0;
-			}
-			return entity->GetID();
-		}
+		uint32_t CreateEntity(std::string name = "GameObject");
 
-		void AddChild(Entity* parentEntity, Entity* childEntity)
-		{
-			parentEntity->AddChild(childEntity);
-			childEntity->SetParent(parentEntity);
-		}
+		void AddChild(Entity* parentEntity, Entity* childEntity);
 
 		template<class T>
 		bool HasComponent(uint32_t entityID)
@@ -144,7 +107,7 @@ namespace vel
 
 	private:
 		std::map<uint32_t, std::vector<Component*>* > m_EntityMap;
-		Ref<std::vector<Entity*>> m_EntityList;
+		Ref<std::vector<Ref<Entity>>> m_EntityList;
 		uint32_t m_NextEntityID;
 	};
 }

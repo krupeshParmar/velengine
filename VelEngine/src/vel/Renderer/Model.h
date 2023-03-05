@@ -36,21 +36,25 @@ namespace vel
 	class Model
 	{
 	public:
-		Model(std::string source, bool useTextures);
+		Model(std::string source, bool useTextures, bool loadAsync);
+		~Model();
 		MeshData GetMeshData();
 		void DrawMesh(Ref<Shader> shader, const glm::mat4& transform);
 		void DrawMesh(Ref<Shader> shader,const Ref<Material> material, const glm::mat4& transform);
 
 	private:
 		void ProcessNode(aiNode* node, const aiScene* scene);
-		//MeshData ProcessMesh(aiMesh* aimesh, const aiScene* scene);
+		MeshData ProcessMesh(aiMesh* aimesh, const aiScene* scene);
 		std::vector<Ref<Texture2D>> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typesname);
-	
+		
+		void m_InitCriticalSections(void);
+		void m_DeleteCriticalSections(void);
 
 	private:
 		bool m_UseFBXTextures;
+		bool m_LoadAsync = false;
 		Ref<Assimp::Importer> m_Importer;
-		std::string m_Path;
+		std::string m_Path, m_Name;
 		std::vector<MeshData> m_Meshes;
 		std::vector<Ref<Texture2D>> m_TexturesLoaded;
 	};

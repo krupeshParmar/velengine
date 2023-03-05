@@ -8,6 +8,7 @@ namespace vel
 	class Material
 	{
 	public:
+		bool IsCompiled = false;
 		std::string Name = "";
 		glm::vec4 Diffuse = glm::vec4(0.75);
 		glm::vec4 Specular = glm::vec4(0.75);

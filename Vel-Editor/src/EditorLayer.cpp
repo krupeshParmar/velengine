@@ -249,11 +249,11 @@ namespace vel
 	{
 		ImGui::ShowDemoWindow();
 		ImGui::Begin("Scene Hierachy");
-		Ref<std::vector<Entity*>> entityList = m_SceneManager.GetEntityManager()->GetAllEntities();
-		for(int i = 0; i < entityList->size(); i++)
+		std::vector<Ref<Entity>> entityList = m_SceneManager.GetEntityManager()->GetAllEntities();
+		for(int i = 0; i < entityList.size(); i++)
 		{
 			char label[50];
-			strcpy(label, entityList->at(i)->name.c_str());
+			strcpy(label, entityList.at(i)->name.c_str());
 			//std::string latter = "##" + std::to_string(entityList[i]->GetID());
 			//strcat(label, latter.c_str());
 
@@ -264,7 +264,7 @@ namespace vel
 		}
 		if (ImGui::Button("Add Entity"))
 		{
-			int number = m_SceneManager.GetEntityManager()->GetAllEntities()->size();
+			int number = m_SceneManager.GetEntityManager()->GetAllEntities().size();
 			m_SceneManager.GetEntityManager()->CreateEntity("New Entity" + std::to_string(number));
 		}
 		ImGui::End();
@@ -277,8 +277,8 @@ namespace vel
 		ImGui::Begin("Inspector");
 		if (m_SelectedEntity != -1)
 		{
-			Ref<std::vector<Entity*>> entityList = m_SceneManager.GetEntityManager()->GetAllEntities();
-			Entity* entity = entityList->at(m_SelectedEntity);
+			std::vector<Ref<Entity>> entityList = m_SceneManager.GetEntityManager()->GetAllEntities();
+			Ref<Entity> entity = entityList.at(m_SelectedEntity);
 			ImGui::BeginGroup();
 			/*--Position*/
 			std::string goName = entity->name;
@@ -364,7 +364,7 @@ namespace vel
 					ImGui::SameLine();
 					if (ImGui::Button("Load Mesh"))
 					{
-						mesh->ModelIns = CreateRef<Model>(mesh->Path, mesh->UseFBXTextures);
+						mesh->ModelIns = CreateRef<Model>(mesh->Path, mesh->UseFBXTextures, false);
 					}
 					ImGui::Separator();
 					ImGui::BulletText("Material");

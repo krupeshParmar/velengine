@@ -633,6 +633,7 @@
     <ClCompile Include="src\vel\Renderer\Shader.cpp" />
     <ClCompile Include="src\vel\Renderer\Texture.cpp" />
     <ClCompile Include="src\vel\Renderer\VertexArray.cpp" />
+    <ClCompile Include="src\vel\Scene\EntityManager.cpp" />
     <ClCompile Include="src\vel\Scene\LightManager.cpp" />
     <ClCompile Include="src\vel\Scene\SaveSystem.cpp" />
     <ClCompile Include="src\velpch.cpp">

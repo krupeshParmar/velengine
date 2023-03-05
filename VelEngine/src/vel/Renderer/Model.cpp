@@ -1,5 +1,8 @@
 #include "velpch.h"
 
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+
 #include "Model.h"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -10,11 +13,15 @@
 #include <assimp/postprocess.h>
 #include "Renderer.h"
 
+// controls acces to the vector of m_Meshes
+CRITICAL_SECTION ModelLoader_Lock;
+
 namespace vel
 {
-    Model::Model(std::string source, bool useTextures)
-        :m_UseFBXTextures(useTextures)
+    Model::Model(std::string source, bool useTextures, bool loadAsync)
+        :m_UseFBXTextures(useTextures), m_LoadAsync(loadAsync)
 	{
+        m_InitCriticalSections();
         m_Meshes = std::vector<MeshData>();
 		m_Importer = std::make_unique<Assimp::Importer>();
         const aiScene* scene = m_Importer->ReadFile(source, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
@@ -25,9 +32,15 @@ namespace vel
             return;
         }
         m_Path = source.substr(0, source.find_last_of('/')); 
+        m_Name = source.substr(source.find_last_of('/') + 1, source.size());
+
 
         ProcessNode(scene->mRootNode, scene);
+
+        VEL_CORE_TRACE("{0} Model loaded", m_Name);
 	}
+
+    Model::~Model() { m_DeleteCriticalSections(); }
 
     MeshData Model::GetMeshData()
     {
@@ -64,15 +77,24 @@ namespace vel
         std::vector<MeshData>* m_Meshes;
     };
 
-    DWORD WINAPI ProcessMesh1(LPVOID pParameters)
-    //MeshData Model::ProcessMesh(aiMesh* aimesh, const aiScene* scene)
+    void Model::m_InitCriticalSections(void)
     {
-        MeshLoadingInfo* fileInfo = (MeshLoadingInfo*)pParameters;
+        InitializeCriticalSection(&ModelLoader_Lock);
+    }
+    void Model::m_DeleteCriticalSections(void)
+    {
+        DeleteCriticalSection(&ModelLoader_Lock);
+    }
+
+    //DWORD WINAPI ProcessMesh1(LPVOID pParameters)
+    MeshData Model::ProcessMesh(aiMesh* aimesh, const aiScene* scene)
+    {
+        /*MeshLoadingInfo* fileInfo = (MeshLoadingInfo*)pParameters;
         aiMesh* aimesh = fileInfo->aimesh;
         const aiScene* scene = fileInfo->scene;
 
         bool m_UseFBXTextures = fileInfo->m_UseFBXTextures;
-        std::vector<MeshData>* m_Meshes = fileInfo->m_Meshes;
+        std::vector<MeshData>* m_Meshes = fileInfo->m_Meshes;*/
 
         MeshData newMeshData;
 
@@ -135,9 +157,39 @@ namespace vel
         //    newMeshData.m_Textures.insert(newMeshData.m_Textures.end(), diffuseTextures.begin(), diffuseTextures.end());
         //}
         newMeshData.m_Loaded = true;
+        /*EnterCriticalSection(&ModelLoader_Lock);
+
         m_Meshes->push_back(newMeshData);
-        
-         return 0;
+
+        LeaveCriticalSection(&ModelLoader_Lock);*/
+
+        if (!m_LoadAsync)
+        {
+            newMeshData.m_VertexArray = VertexArray::Create();
+            vel::Ref<vel::VertexBuffer> vertexBuffer;
+            vertexBuffer = vel::VertexBuffer::Create(
+                &newMeshData.m_Vertices[0],
+                sizeof(vel::Vertices) * newMeshData.m_Vertices.size()
+            );
+            vertexBuffer->SetLayout({
+                    { vel::ShaderDataType::Float4, "vColour"},
+                    { vel::ShaderDataType::Float4, "vPosition"},
+                    { vel::ShaderDataType::Float4, "vNormal"},
+                    { vel::ShaderDataType::Float4, "vUVx2"},
+                    { vel::ShaderDataType::Float4, "vTangent"},
+                    { vel::ShaderDataType::Float4, "vBiNormal"},
+                    { vel::ShaderDataType::Float4, "vBoneID"},
+                    { vel::ShaderDataType::Float4, "vBoneWeight"}
+                });
+            newMeshData.m_VertexArray->AddVertexBuffer(vertexBuffer);
+            Ref<IndexBuffer> ib = IndexBuffer::Create(
+                &newMeshData.m_Indices[0],
+                newMeshData.m_Indices.size()
+            );
+            newMeshData.m_VertexArray->SetIndexBuffer(ib);
+        }
+
+         return newMeshData;
         /*
         std::vector<Ref<Texture2D>> speculatTextures = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
         newMeshData.m_Textures.insert(newMeshData.m_Textures.end(), speculatTextures.begin(), speculatTextures.end());
@@ -160,7 +212,7 @@ namespace vel
         {
             aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 
-            MeshLoadingInfo* fileInfo = new MeshLoadingInfo();
+            /*MeshLoadingInfo* fileInfo = new MeshLoadingInfo();
             fileInfo->aimesh = mesh;
             fileInfo->scene = scene;
             fileInfo->m_Meshes = &m_Meshes;
@@ -176,9 +228,9 @@ namespace vel
                     (void*)fileInfo,
                     0,
                     lpThreadId
-                );
+                );*/
 
-            //m_Meshes.push_back(ProcessMesh(mesh, scene));
+            m_Meshes.push_back(ProcessMesh(mesh, scene));
         }
         // then do the same for each of its children
         for (unsigned int i = 0; i < node->mNumChildren; i++)

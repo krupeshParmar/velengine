@@ -20,11 +20,11 @@ namespace vel
 		pugi::xml_node saveNode = doc.append_child("scene");
 		pugi::xml_node sceneNameNode = saveNode.append_child("name");
 		sceneNameNode.append_child(pugi::node_pcdata).set_value(filename.c_str());
-		Ref<std::vector<Entity*>> entityList = entityManager->GetAllEntities();
+		std::vector<Ref<Entity>> entityList = entityManager->GetAllEntities();
 
-		for (int i = 0; i < entityList->size(); i++)
+		for (int i = 0; i < entityList.size(); i++)
 		{
-			Entity* entity = entityList->at(i);
+			Ref<Entity> entity = entityList.at(i);
 			pugi::xml_node gameobjectNode = saveNode.append_child("entity");
 			pugi::xml_node nameNode = gameobjectNode.append_child("name");
 			nameNode.append_child(pugi::node_pcdata).set_value(entity->name.c_str());
@@ -333,15 +333,12 @@ namespace vel
 		return material;
 	}
 
-	/*DWORD WINAPI LoadSceneFileAsync(LPVOID pParameters)
+
+	DWORD WINAPI LoadSceneFileAsync(LPVOID pParameters)
 	{
 		SceneDataLoadInfo* pFileParams = (SceneDataLoadInfo*)pParameters;
-		
-	}*/
-
-	bool LoadSceneFile(std::string filename, Ref<EntityManager> entityManager)
-	{
-		
+		std::string filename = pFileParams->filename;
+		Ref<EntityManager> entityManager = pFileParams->entityManager;
 		std::string materialPath = "";
 		Ref<Material> material;
 		pugi::xml_document sceneDoc;
@@ -370,7 +367,327 @@ namespace vel
 				pugi::xml_object_range<pugi::xml_node_iterator> gameObjectData = sceneNode.children();
 
 				uint32_t id = entityManager->CreateEntity();
-				Entity* entity = entityManager->GetEntity(id);
+
+				Ref<Entity> entity = entityManager->GetEntity(id);
+				for (pugi::xml_node_iterator gameobjectsDataIterator = gameObjectData.begin();
+					gameobjectsDataIterator != gameObjectData.end(); gameobjectsDataIterator++)
+				{
+					pugi::xml_node gameObjectNode = *gameobjectsDataIterator;
+					std::string nodeName = gameObjectNode.name();
+					if (nodeName == "name")
+					{
+						entity->name = gameObjectNode.child_value();
+					}
+					if (nodeName == "enabled")
+					{
+						std::string isEnabled = gameObjectNode.child_value();
+						if (isEnabled == "1")
+							entity->enabled = true;
+						else entity->enabled = false;
+					}
+					if (nodeName == "components")
+					{
+						pugi::xml_object_range<pugi::xml_node_iterator>
+							componentsNodesChildren = gameObjectNode.children();
+						for (pugi::xml_node_iterator componentsNodeIterator = componentsNodesChildren.begin();
+							componentsNodeIterator != componentsNodesChildren.end();
+							componentsNodeIterator++)
+						{
+							pugi::xml_node componentNode = *componentsNodeIterator;
+							std::string componentNodeName = componentNode.name();
+							if (componentNodeName == "transform")
+							{
+								TransformComponent* transform = entityManager->GetComponentByType<TransformComponent>(entity->GetID());
+								pugi::xml_object_range<pugi::xml_node_iterator>
+									transformNodeChildren = componentNode.children();
+								for (pugi::xml_node_iterator transformNodeIterator = transformNodeChildren.begin();
+									transformNodeIterator != transformNodeChildren.end();
+									transformNodeIterator++)
+								{
+									pugi::xml_node transformNode = *transformNodeIterator;
+									std::string transformNodeName = transformNode.name();
+									if (transformNodeName == "position")
+									{
+										pugi::xml_object_range<pugi::xml_node_iterator>
+											positionNodeChildren = transformNode.children();
+										for (pugi::xml_node_iterator positionNodeIterator = positionNodeChildren.begin();
+											positionNodeIterator != positionNodeChildren.end();
+											positionNodeIterator++)
+										{
+											pugi::xml_node positionNode = *positionNodeIterator;
+											std::string positionNodeName = positionNode.name();
+											if (positionNodeName == "x")
+												transform->Translation.x =
+												std::stof(positionNode.child_value());
+											if (positionNodeName == "y")
+												transform->Translation.y =
+												std::stof(positionNode.child_value());
+											if (positionNodeName == "z")
+												transform->Translation.z =
+												std::stof(positionNode.child_value());
+										}
+									}
+
+									if (transformNodeName == "rotation")
+									{
+										pugi::xml_object_range<pugi::xml_node_iterator>
+											rotationNodeChildren = transformNode.children();
+										for (pugi::xml_node_iterator rotationNodeIterator =
+											rotationNodeChildren.begin();
+											rotationNodeIterator != rotationNodeChildren.end();
+											rotationNodeIterator++)
+										{
+											pugi::xml_node rotationNode = *rotationNodeIterator;
+											std::string rotationNodeName = rotationNode.name();
+											if (rotationNodeName == "x")
+												transform->Rotation.x =
+												std::stof(rotationNode.child_value());
+											if (rotationNodeName == "y")
+												transform->Rotation.y =
+												std::stof(rotationNode.child_value());
+											if (rotationNodeName == "z")
+												transform->Rotation.z =
+												std::stof(rotationNode.child_value());
+										}
+									}
+									if (transformNodeName == "scale")
+									{
+										pugi::xml_object_range<pugi::xml_node_iterator>
+											scaleNodeChildren = transformNode.children();
+										for (pugi::xml_node_iterator scaleNodeIterator = scaleNodeChildren.begin();
+											scaleNodeIterator != scaleNodeChildren.end();
+											scaleNodeIterator++)
+										{
+											pugi::xml_node scaleNode = *scaleNodeIterator;
+											std::string scaleNodeName = scaleNode.name();
+											if (scaleNodeName == "x")
+												transform->Scale.x =
+												std::stof(scaleNode.child_value());
+											if (scaleNodeName == "y")
+												transform->Scale.y =
+												std::stof(scaleNode.child_value());
+											if (scaleNodeName == "z")
+												transform->Scale.z =
+												std::stof(scaleNode.child_value());
+										}
+									}
+								}
+							}
+
+							if (componentNodeName == "light")
+							{
+								LightComponent* light = new LightComponent();
+								entityManager->AddComponent(entity->GetID(), light);
+								pugi::xml_object_range<pugi::xml_node_iterator>
+									lightNodeChildren = componentNode.children();
+								//continue;
+								for (pugi::xml_node_iterator lightNodeIterator = lightNodeChildren.begin();
+									lightNodeIterator != lightNodeChildren.end();
+									lightNodeIterator++)
+								{
+									pugi::xml_node lightNode = *lightNodeIterator;
+									std::string lightNodeName = lightNode.name();
+									if (lightNodeName == "diffuse")
+									{
+										pugi::xml_object_range<pugi::xml_node_iterator>
+											diffuseNodeChildren = lightNode.children();
+										for (pugi::xml_node_iterator diffuseNodeIterator = diffuseNodeChildren.begin();
+											diffuseNodeIterator != diffuseNodeChildren.end();
+											diffuseNodeIterator++)
+										{
+											pugi::xml_node diffuseNode = *diffuseNodeIterator;
+											std::string diffuseNodeName = diffuseNode.name();
+											if (diffuseNodeName == "r")
+												light->Diffuse.x =
+												std::stof(diffuseNode.child_value());
+
+											if (diffuseNodeName == "g")
+												light->Diffuse.y =
+												std::stof(diffuseNode.child_value());
+
+											if (diffuseNodeName == "b")
+												light->Diffuse.z =
+												std::stof(diffuseNode.child_value());
+
+											if (diffuseNodeName == "w")
+												light->Diffuse.w =
+												std::stof(diffuseNode.child_value());
+										}
+									}
+									if (lightNodeName == "specular")
+									{
+										pugi::xml_object_range<pugi::xml_node_iterator>
+											sepcularNodeChildren = lightNode.children();
+										for (pugi::xml_node_iterator sepcularNodeIterator = sepcularNodeChildren.begin();
+											sepcularNodeIterator != sepcularNodeChildren.end();
+											sepcularNodeIterator++)
+										{
+											pugi::xml_node sepcularNode = *sepcularNodeIterator;
+											std::string sepcularNodeName = sepcularNode.name();
+											if (sepcularNodeName == "r")
+												light->Specular.x =
+												std::stof(sepcularNode.child_value());
+
+											if (sepcularNodeName == "g")
+												light->Specular.y =
+												std::stof(sepcularNode.child_value());
+
+											if (sepcularNodeName == "b")
+												light->Specular.z =
+												std::stof(sepcularNode.child_value());
+
+											if (sepcularNodeName == "w")
+												light->Specular.w =
+												std::stof(sepcularNode.child_value());
+										}
+									}
+									if (lightNodeName == "attenuation")
+									{
+										pugi::xml_object_range<pugi::xml_node_iterator>
+											attenNodeChildren = lightNode.children();
+										for (pugi::xml_node_iterator attenNodeIterator = attenNodeChildren.begin();
+											attenNodeIterator != attenNodeChildren.end();
+											attenNodeIterator++)
+										{
+											pugi::xml_node attenNode = *attenNodeIterator;
+											std::string attenNodeName = attenNode.name();
+											if (attenNodeName == "x")
+												light->Attenuation.x =
+												std::stof(attenNode.child_value());
+
+											if (attenNodeName == "y")
+												light->Attenuation.y =
+												std::stof(attenNode.child_value());
+
+											if (attenNodeName == "z")
+												light->Attenuation.z =
+												std::stof(attenNode.child_value());
+
+											if (attenNodeName == "w")
+												light->Attenuation.w =
+												std::stof(attenNode.child_value());
+										}
+									}
+									if (lightNodeName == "lightparams")
+									{
+										pugi::xml_object_range<pugi::xml_node_iterator>
+											param1NodeChildren = lightNode.children();
+										for (pugi::xml_node_iterator param1NodeIterator = param1NodeChildren.begin();
+											param1NodeIterator != param1NodeChildren.end();
+											param1NodeIterator++)
+										{
+											pugi::xml_node param1Node = *param1NodeIterator;
+											std::string param1NodeName = param1Node.name();
+											if (param1NodeName == "x")
+												light->LightParams.x =
+												std::stof(param1Node.child_value());
+
+											if (param1NodeName == "y")
+												light->LightParams.y =
+												std::stof(param1Node.child_value());
+
+											if (param1NodeName == "z")
+												light->LightParams.z =
+												std::stof(param1Node.child_value());
+
+											if (param1NodeName == "w")
+												light->LightParams.w =
+												std::stof(param1Node.child_value());
+										}
+									}
+								}
+							}
+
+							if (componentNodeName == "meshobject")
+							{
+								MeshComponent* meshObject = new MeshComponent();
+								for (pugi::xml_node_iterator meshNodeIterator = componentNode.children().begin();
+									meshNodeIterator != componentNode.children().end();
+									meshNodeIterator++)
+								{
+									pugi::xml_node meshNode = *meshNodeIterator;
+									std::string meshNodeName = meshNode.name();
+									if (meshNodeName == "path")
+									{
+										meshObject->Path = meshNode.child_value();
+									}
+									if (meshNodeName == "material_path")
+									{
+										meshObject->MaterialPath = meshNode.child_value();
+										if (meshObject->MaterialPath.empty())
+											meshObject->MaterialIns = CreateRef<Material>();
+										else meshObject->MaterialIns = LoadMaterial(meshObject->MaterialPath);
+										
+									}
+									if (meshNodeName == "use_fbx_textures")
+									{
+										meshObject->UseFBXTextures = meshNode.child_value() == "1";
+									}
+								}
+								if (!meshObject->Path.empty())
+								{
+									meshObject->ModelIns = CreateRef<Model>(meshObject->Path, meshObject->UseFBXTextures, true);
+								}
+								entityManager->AddComponent(entity->GetID(), meshObject);
+							}
+						}
+					}
+				}
+
+			}
+
+		}
+		return 0;
+	}
+
+	bool LoadSceneFile(std::string filename, Ref<EntityManager> entityManager)
+	{
+		SceneDataLoadInfo* fileInfo = new SceneDataLoadInfo();
+		fileInfo->filename = filename;
+		fileInfo->entityManager = entityManager;
+
+		LPDWORD lpThreadId = 0;
+
+		HANDLE hSceneLoader =
+			CreateThread(
+				NULL,
+				0,
+				LoadSceneFileAsync,
+				(void*)fileInfo,
+				0,
+				lpThreadId
+			);
+
+		/*
+		std::string materialPath = "";
+		Ref<Material> material;
+		pugi::xml_document sceneDoc;
+		if (!sceneDoc.load_file(filename.c_str()))
+		{
+			VEL_CORE_ERROR("Couldn't open " + filename);
+			return false;
+		}
+
+		pugi::xml_object_range<pugi::xml_node_iterator> sceneData = sceneDoc.child("scene").children();
+		if (sceneData.empty())
+		{
+			VEL_CORE_ERROR("Scene has no data!");
+			return false;
+		}
+
+		pugi::xml_node_iterator sceneNodeIterator = sceneData.begin();
+
+		for (; sceneNodeIterator != sceneData.end(); sceneNodeIterator++)
+		{
+			pugi::xml_node sceneNode = *sceneNodeIterator;
+			std::string sceneNodeName = sceneNode.name();
+
+			if (sceneNodeName == "entity")
+			{
+				pugi::xml_object_range<pugi::xml_node_iterator> gameObjectData = sceneNode.children();
+
+				uint32_t id = entityManager->CreateEntity();
+				Ref<Entity> entity = entityManager->GetEntity(id);
 				for (pugi::xml_node_iterator gameobjectsDataIterator = gameObjectData.begin();
 					gameobjectsDataIterator != gameObjectData.end(); gameobjectsDataIterator++)
 				{
@@ -662,6 +979,7 @@ namespace vel
 			}
 
 		}
+		*/
 		return true;
 	}
 }
