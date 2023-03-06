@@ -337,12 +337,14 @@ namespace vel
 
 					ImGui::Separator();
 					ImGui::BulletText("Light##lightLight");
+					ImGui::SameLine();
+					ImGui::Checkbox("##EnableLight", &light->Enabled);
 					ImGui::ColorEdit4("Diffuse##lightDiffuse", glm::value_ptr(light->Diffuse));
 					ImGui::ColorEdit4("Specular##lightSpec", glm::value_ptr(light->Specular));
-					ImGui::Text("Attenuation#lightAtt");
-					ImGui::SliderFloat("Constant#lightAttconst", &light->Attenuation[0], 0.f, 1.0f);
-					ImGui::SliderFloat("Linear#lightAttline", &light->Attenuation[1], 0.f, 1.0f);
-					ImGui::SliderFloat("Quadratic#lightAttquad", &light->Attenuation[2], 0.f, 0.3f);
+					ImGui::Text("Attenuation##lightAtt");
+					ImGui::SliderFloat("Constant##lightAttconst", &light->Attenuation[0], 0.f, 1.0f);
+					ImGui::SliderFloat("Linear##lightAttline", &light->Attenuation[1], 0.f, 1.0f);
+					ImGui::SliderFloat("Quadratic##lightAttquad", &light->Attenuation[2], 0.f, 0.3f);
 					ImGui::InputFloat("Type##lightType", &light->LightParams[0]);
 					ImGui::InputFloat("inner Cutt Off##lightCuttoff", &light->LightParams[1]);
 					ImGui::InputFloat("Outter Cut Off##lightOutCuttoff", &light->LightParams[2]);
@@ -362,6 +364,8 @@ namespace vel
 
 					ImGui::Separator();
 					ImGui::BulletText("Mesh Renderer");
+					ImGui::SameLine();
+					ImGui::Checkbox("##EnableRenderert", &mesh->Enabled);
 					ImGui::InputText("Mesh Path", &mesh->Path);
 					ImGui::Checkbox("Use FBX Textures", &mesh->UseFBXTextures);
 					ImGui::SameLine();
@@ -481,32 +485,28 @@ namespace vel
 				{
 					if (ImGui::BeginPopup("Add Component"))
 					{
-						if (ImGui::BeginMenu("Components"))
+						if (!hasLight)
 						{
-							if (!hasLight)
-							{
-								if (ImGui::MenuItem("Light Component"))
-								{
-									addComponentCalled = false;
-									m_SceneManager.GetEntityManager()->AddComponent(entity->GetID(), new LightComponent());
-									ImGui::CloseCurrentPopup();
-								}
-							}
-							if (!hasMesh)
-							{
-								if (ImGui::MenuItem("Mesh Component"))
-								{
-									addComponentCalled = false;
-									m_SceneManager.GetEntityManager()->AddComponent(entity->GetID(), new MeshComponent());
-									ImGui::CloseCurrentPopup();
-								}
-							}
-							if (ImGui::MenuItem("Close"))
+							if (ImGui::MenuItem("Light Component"))
 							{
 								addComponentCalled = false;
+								m_SceneManager.GetEntityManager()->AddComponent(entity->GetID(), new LightComponent());
 								ImGui::CloseCurrentPopup();
 							}
-							ImGui::EndMenu();
+						}
+						if (!hasMesh)
+						{
+							if (ImGui::MenuItem("Mesh Component"))
+							{
+								addComponentCalled = false;
+								m_SceneManager.GetEntityManager()->AddComponent(entity->GetID(), new MeshComponent());
+								ImGui::CloseCurrentPopup();
+							}
+						}
+						if (ImGui::MenuItem("Close"))
+						{
+							addComponentCalled = false;
+							ImGui::CloseCurrentPopup();
 						}
 						ImGui::EndPopup();
 					}

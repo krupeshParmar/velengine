@@ -90,7 +90,7 @@ void main()
 vec4 calculateLightContrib(vec3 vertexMaterialColour, vec3 vertexNormal,
 	vec3 vertexWorldPos, vec4 vertexSpecular)
 {
-	vec3 norm = normalize(vertexNormal.xyz);
+	vec3 norm = normalize(vertexNormal);
 
 	vec4 finalObjectColour = vec4(0.0f, 0.0f, 0.0f, 1.0f);
 

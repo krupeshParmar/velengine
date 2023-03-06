@@ -10,6 +10,7 @@ namespace vel
 	{
 	public:
 		LightManager();
+		static void Clear();
 
 		static const unsigned int NUMBER_OF_LIGHTS_IN_USE = 20;
 		static unsigned int LIGHT_INDEX;

@@ -36,22 +36,22 @@ namespace vel
 			}
 		*/
 		skybox = new SkyBox(
-			/*{
+			{
 				"assets/textures/skyboxes/space/SpaceBox_right1_posX.jpg",
 				"assets/textures/skyboxes/space/SpaceBox_left2_negX.jpg",
 				"assets/textures/skyboxes/space/SpaceBox_top3_posY.jpg",
 				"assets/textures/skyboxes/space/SpaceBox_bottom4_negY.jpg",
 				"assets/textures/skyboxes/space/SpaceBox_front5_posZ.jpg",
 				"assets/textures/skyboxes/space/SpaceBox_back6_negZ.jpg",
-			},*/
-			{
+			},
+			/*{
 				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayRight2048.bmp",
 				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayLeft2048.bmp",
 				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayUp2048.bmp",
 				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayDown2048.bmp",
 				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayFront2048.bmp",
 				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayBack2048.bmp",
-			},
+			},*/
 			"assets/models/box.fbx"
 		);
 
@@ -88,6 +88,8 @@ namespace vel
 			if (m_EntityManager->HasComponent<LightComponent>(entity->GetID()))
 			{
 				LightComponent* lightComp = m_EntityManager->GetComponentByType<LightComponent>(entity->GetID());
+				if (!lightComp->Enabled)
+					continue;
 				lightComp->Position = glm::vec4(transform->Translation, 1.0);
 				lightComp->Direction = glm::vec4(transform->GetRotation(), 1.0);
 			}
@@ -95,6 +97,8 @@ namespace vel
 			if (m_EntityManager->HasComponent<MeshComponent>(entity->GetID()))
 			{
 				MeshComponent* meshComp = m_EntityManager->GetComponentByType<MeshComponent>(entity->GetID());
+				if (!meshComp->Enabled)
+					continue;
 				if (meshComp->MaterialIns && !meshComp->MaterialIns->IsCompiled)
 				{
 					if (!meshComp->MaterialIns->DiffuseTexturePath.empty())

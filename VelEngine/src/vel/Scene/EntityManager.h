@@ -26,6 +26,13 @@ namespace vel
 
 		void AddChild(Entity* parentEntity, Entity* childEntity);
 
+		inline void Clear() {
+			m_EntityMap.clear();
+			m_EntityList->clear();
+			LightManager::Clear();
+			m_NextEntityID = 0;
+		}
+
 		template<class T>
 		bool HasComponent(uint32_t entityID)
 		{

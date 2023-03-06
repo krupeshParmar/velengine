@@ -54,6 +54,7 @@ namespace vel
 		std::string Mesh;
 		std::string Path;
 		bool UseFBXTextures;
+		bool Enabled = true;
 
 		std::string MaterialPath;
 		Ref<Material> MaterialIns;
@@ -106,6 +107,7 @@ namespace vel
 		glm::vec4 LightParams;	 // x = lightType, innerAngle, outerAngle, ON or OFF
 
 		uint32_t ID;
+		bool Enabled = true;
 
 
 		inline void SetConstantAttenuation(float newConstAtten)
@@ -170,6 +172,7 @@ namespace vel
 		float FocusDistance = 10.0f;
 		float FocalLength = 50.0;
 		float Aperture = 5.6;
+		bool Enabled = true;
 	};
 
 	class Volume : public Component
@@ -179,6 +182,7 @@ namespace vel
 
 		Bloom bloom;
 		DepthOfField depthOfField;
+		bool Enabled = true;
 	};
 
 	class SkyBox : public Component

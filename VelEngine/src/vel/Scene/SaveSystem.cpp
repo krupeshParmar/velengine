@@ -84,6 +84,14 @@ namespace vel
 			if (lightComponent)
 			{
 				pugi::xml_node lightNode = componentNode.append_child("light");
+
+				pugi::xml_node lightEnabledNode = lightNode.append_child("enabled");
+
+				if (lightComponent->Enabled)
+					lightEnabledNode.append_child(pugi::node_pcdata).set_value("1");
+				else
+					lightEnabledNode.append_child(pugi::node_pcdata).set_value("0");
+
 				pugi::xml_node diffuseNode = lightNode.append_child("diffuse");
 				{
 					pugi::xml_node rNode = diffuseNode.append_child("r");
@@ -148,6 +156,13 @@ namespace vel
 			if (meshComponent)
 			{
 				pugi::xml_node meshObjectNode = componentNode.append_child("meshobject");
+				pugi::xml_node meshObjectEnabledNode = meshObjectNode.append_child("enabled");
+
+				if (meshComponent->Enabled)
+					meshObjectEnabledNode.append_child(pugi::node_pcdata).set_value("1");
+				else
+					meshObjectEnabledNode.append_child(pugi::node_pcdata).set_value("0");
+
 				pugi::xml_node meshObjectPathNode = meshObjectNode.append_child("path");
 				meshObjectPathNode.append_child(pugi::node_pcdata).set_value(meshComponent->Path.c_str());
 
@@ -339,6 +354,7 @@ namespace vel
 		SceneDataLoadInfo* pFileParams = (SceneDataLoadInfo*)pParameters;
 		std::string filename = pFileParams->filename;
 		Ref<EntityManager> entityManager = pFileParams->entityManager;
+		entityManager->Clear();
 		std::string materialPath = "";
 		Ref<Material> material;
 		pugi::xml_document sceneDoc;
@@ -487,6 +503,13 @@ namespace vel
 								{
 									pugi::xml_node lightNode = *lightNodeIterator;
 									std::string lightNodeName = lightNode.name();
+									if (lightNodeName == "enabled")
+									{
+										std::string isEnabled = lightNode.child_value();
+										if (isEnabled == "1")
+											light->Enabled = true;
+										else light->Enabled = false;
+									}
 									if (lightNodeName == "diffuse")
 									{
 										pugi::xml_object_range<pugi::xml_node_iterator>
@@ -607,6 +630,13 @@ namespace vel
 								{
 									pugi::xml_node meshNode = *meshNodeIterator;
 									std::string meshNodeName = meshNode.name();
+									if (meshNodeName == "enabled")
+									{
+										std::string isEnabled = meshNode.child_value();
+										if (isEnabled == "1")
+											meshObject->Enabled = true;
+										else meshObject->Enabled = false;
+									}
 									if (meshNodeName == "path")
 									{
 										meshObject->Path = meshNode.child_value();

@@ -14,6 +14,12 @@ namespace vel
 
 	}
 
+	void LightManager::Clear()
+	{
+		s_Lights.clear();
+		LightManager::LIGHT_INDEX = 0;
+	}
+
 	void LightManager::CopyLightInformationToShader(Ref<Shader> shader)
 	{
 		std::string posStr = "position";
@@ -28,6 +34,11 @@ namespace vel
 		{
 			LightComponent* light = *itLight;
 			std::string lightsVariableName = "theLights[" + std::to_string(light->ID) + "].";
+			if (!light->Enabled)
+			{
+				shader->SetFloat4(lightsVariableName + pa1Str, glm::vec4(0.f));
+				continue;
+			}
 
 			shader->SetFloat4(lightsVariableName + posStr, light->Position);
 			shader->SetFloat4(lightsVariableName + difStr, light->Diffuse);
