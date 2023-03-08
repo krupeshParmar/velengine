@@ -2,6 +2,35 @@
 <scene>
 	<name>assets/scenes/MariaTest.xml</name>
 	<entity>
+		<name>BedroomQuad</name>
+		<enabled>1</enabled>
+		<components>
+			<transform>
+				<position>
+					<x>-10.000000</x>
+					<y>65.000000</y>
+					<z>138.000000</z>
+				</position>
+				<rotation>
+					<x>0.000000</x>
+					<y>180.000000</y>
+					<z>0.000000</z>
+				</rotation>
+				<scale>
+					<x>15.000000</x>
+					<y>15.000000</y>
+					<z>15.000000</z>
+				</scale>
+			</transform>
+			<meshobject>
+				<enabled>1</enabled>
+				<path>assets/models/plane.fbx</path>
+				<material_path></material_path>
+				<use_fbx_textures>0</use_fbx_textures>
+			</meshobject>
+		</components>
+	</entity>
+	<entity>
 		<name>Maria</name>
 		<enabled>1</enabled>
 		<components>
@@ -24,7 +53,7 @@
 			</transform>
 			<meshobject>
 				<enabled>1</enabled>
-				<path>assets/models/maria/Maria.fbx</path>
+				<path>assets/models/maria/maria.fbx</path>
 				<material_path>assets/models/maria/mat_maria.xml</material_path>
 				<use_fbx_textures>0</use_fbx_textures>
 			</meshobject>
@@ -53,6 +82,7 @@
 			</transform>
 			<light>
 				<enabled>1</enabled>
+				<intensity>7.438000</intensity>
 				<diffuse>
 					<r>1.000000</r>
 					<g>1.000000</g>
@@ -66,7 +96,7 @@
 					<w>1.000000</w>
 				</specular>
 				<attenuation>
-					<x>0.162000</x>
+					<x>0.067000</x>
 					<y>0.013000</y>
 					<z>0.000000</z>
 					<w>1.000000</w>
@@ -88,7 +118,7 @@
 	</entity>
 	<entity>
 		<name>Bench</name>
-		<enabled>1</enabled>
+		<enabled>0</enabled>
 		<components>
 			<transform>
 				<position>
@@ -131,15 +161,15 @@
 					<z>0.000000</z>
 				</rotation>
 				<scale>
-					<x>1000.000000</x>
-					<y>1000.000000</y>
+					<x>1.000000</x>
+					<y>1.000000</y>
 					<z>1.000000</z>
 				</scale>
 			</transform>
 			<meshobject>
 				<enabled>1</enabled>
-				<path>assets/models/plane.fbx</path>
-				<material_path>assets/materials/wood.xml</material_path>
+				<path>assets/models/big_plane.fbx</path>
+				<material_path>assets/materials/asphalt.xml</material_path>
 				<use_fbx_textures>0</use_fbx_textures>
 			</meshobject>
 		</components>
@@ -167,9 +197,10 @@
 			</transform>
 			<light>
 				<enabled>1</enabled>
+				<intensity>1.149000</intensity>
 				<diffuse>
-					<r>0.779412</r>
-					<g>0.902682</g>
+					<r>1.000000</r>
+					<g>1.000000</g>
 					<b>1.000000</b>
 					<w>1.000000</w>
 				</diffuse>
@@ -196,7 +227,7 @@
 	</entity>
 	<entity>
 		<name>medea</name>
-		<enabled>1</enabled>
+		<enabled>0</enabled>
 		<components>
 			<transform>
 				<position>
@@ -304,8 +335,181 @@
 			</transform>
 			<meshobject>
 				<enabled>1</enabled>
-				<path>assets/models/lowrise_building/AIT01W2W4.FBX</path>
+				<path>assets/models/lowrise_building/ait01w2w4.fbx</path>
 				<material_path>assets/models/lowrise_building/mat_lrbuilding.xml</material_path>
+				<use_fbx_textures>0</use_fbx_textures>
+			</meshobject>
+		</components>
+	</entity>
+	<entity>
+		<name>streetlamp</name>
+		<enabled>1</enabled>
+		<components>
+			<transform>
+				<position>
+					<x>-10.000000</x>
+					<y>0.000000</y>
+					<z>0.000000</z>
+				</position>
+				<rotation>
+					<x>0.000000</x>
+					<y>0.000000</y>
+					<z>0.000000</z>
+				</rotation>
+				<scale>
+					<x>0.200000</x>
+					<y>0.200000</y>
+					<z>0.200000</z>
+				</scale>
+			</transform>
+			<meshobject>
+				<enabled>1</enabled>
+				<path>assets/models/streetlight/lantern.fbx</path>
+				<material_path>assets/models/streetlight/mat_lantern.xml</material_path>
+				<use_fbx_textures>0</use_fbx_textures>
+			</meshobject>
+		</components>
+	</entity>
+	<entity>
+		<name>streetlamp_light</name>
+		<enabled>1</enabled>
+		<components>
+			<transform>
+				<position>
+					<x>-10.000000</x>
+					<y>69.000000</y>
+					<z>92.000000</z>
+				</position>
+				<rotation>
+					<x>0.000000</x>
+					<y>-15.000000</y>
+					<z>0.000000</z>
+				</rotation>
+				<scale>
+					<x>1.000000</x>
+					<y>2.000000</y>
+					<z>1.000000</z>
+				</scale>
+			</transform>
+			<light>
+				<enabled>1</enabled>
+				<intensity>56.198002</intensity>
+				<diffuse>
+					<r>0.990196</r>
+					<g>0.106786</g>
+					<b>0.106786</b>
+					<w>1.000000</w>
+				</diffuse>
+				<specular>
+					<r>0.852940</r>
+					<g>1.000000</g>
+					<b>0.000000</b>
+					<w>1.000000</w>
+				</specular>
+				<attenuation>
+					<x>0.020000</x>
+					<y>0.014000</y>
+					<z>0.000000</z>
+					<w>1.000000</w>
+				</attenuation>
+				<lightparams>
+					<x>1.000000</x>
+					<y>30.000000</y>
+					<z>60.000000</z>
+					<w>1.000000</w>
+				</lightparams>
+			</light>
+			<meshobject>
+				<enabled>1</enabled>
+				<path>assets/models/debug_sphere.fbx</path>
+				<material_path></material_path>
+				<use_fbx_textures>0</use_fbx_textures>
+			</meshobject>
+		</components>
+	</entity>
+	<entity>
+		<name>bed</name>
+		<enabled>0</enabled>
+		<components>
+			<transform>
+				<position>
+					<x>0.000000</x>
+					<y>0.000000</y>
+					<z>0.000000</z>
+				</position>
+				<rotation>
+					<x>-90.000000</x>
+					<y>-180.000000</y>
+					<z>0.000000</z>
+				</rotation>
+				<scale>
+					<x>40.000000</x>
+					<y>40.000000</y>
+					<z>40.000000</z>
+				</scale>
+			</transform>
+			<meshobject>
+				<enabled>1</enabled>
+				<path>assets/models/bed/bed83h.fbx</path>
+				<material_path>assets/models/bed/bed_mat.xml</material_path>
+				<use_fbx_textures>0</use_fbx_textures>
+			</meshobject>
+		</components>
+	</entity>
+	<entity>
+		<name>puddle</name>
+		<enabled>1</enabled>
+		<components>
+			<transform>
+				<position>
+					<x>0.000000</x>
+					<y>0.500000</y>
+					<z>0.000000</z>
+				</position>
+				<rotation>
+					<x>-90.000000</x>
+					<y>90.000000</y>
+					<z>0.000000</z>
+				</rotation>
+				<scale>
+					<x>200.000000</x>
+					<y>200.000000</y>
+					<z>1.000000</z>
+				</scale>
+			</transform>
+			<meshobject>
+				<enabled>1</enabled>
+				<path>assets/models/plane.fbx</path>
+				<material_path>assets/models/ground/mat_ground.xml</material_path>
+				<use_fbx_textures>0</use_fbx_textures>
+			</meshobject>
+		</components>
+	</entity>
+	<entity>
+		<name>NeonWires</name>
+		<enabled>1</enabled>
+		<components>
+			<transform>
+				<position>
+					<x>0.000000</x>
+					<y>100.000000</y>
+					<z>140.000000</z>
+				</position>
+				<rotation>
+					<x>-90.000000</x>
+					<y>90.000000</y>
+					<z>0.000000</z>
+				</rotation>
+				<scale>
+					<x>35.000000</x>
+					<y>10.000000</y>
+					<z>10.000000</z>
+				</scale>
+			</transform>
+			<meshobject>
+				<enabled>1</enabled>
+				<path>assets/models/neonwires.fbx</path>
+				<material_path>assets/materials/wire_mat.xml</material_path>
 				<use_fbx_textures>0</use_fbx_textures>
 			</meshobject>
 		</components>

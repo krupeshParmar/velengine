@@ -8,6 +8,7 @@
 #include "VertexArray.h"
 #include <glm/glm.hpp>
 #include "Material.h"
+#include "FrameBuffer.h"
 namespace Assimp
 {
 	class Importer;
@@ -41,10 +42,23 @@ namespace vel
 		MeshData GetMeshData();
 		void DrawMesh(Ref<Shader> shader, const glm::mat4& transform);
 		void DrawMesh(Ref<Shader> shader,const Ref<Material> material, const glm::mat4& transform);
+		
+
+
+		/// <summary>
+		/// MESSSSSSS
+		/// </summary>
+		/// <param name="buffer">Render buffer</param>
+		/// <param name="shader">tempshader</param>
+		/// <param name="material">quad material</param>
+		/// <param name="transform">transform</param>
+		void DrawMesh(Ref<FrameBuffer> buffer, Ref<FrameBuffer> mainbuffer, Ref<Shader> shader, const Ref<Material> material, const glm::mat4& transform);
+		inline std::vector<Ref<MeshData>> GetWholeMesh() const { return m_Meshes; }
+		std::string GetPath() const { return m_Path; }
 
 	private:
 		void ProcessNode(aiNode* node, const aiScene* scene);
-		MeshData ProcessMesh(aiMesh* aimesh, const aiScene* scene);
+		Ref<MeshData> ProcessMesh(aiMesh* aimesh, const aiScene* scene);
 		std::vector<Ref<Texture2D>> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typesname);
 		
 		void m_InitCriticalSections(void);
@@ -55,7 +69,7 @@ namespace vel
 		bool m_LoadAsync = false;
 		Ref<Assimp::Importer> m_Importer;
 		std::string m_Path, m_Name;
-		std::vector<MeshData> m_Meshes;
+		std::vector<Ref<MeshData>> m_Meshes;
 		std::vector<Ref<Texture2D>> m_TexturesLoaded;
 	};
 

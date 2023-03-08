@@ -185,6 +185,8 @@
     <ClInclude Include="src\vel\Scene\Entity.h" />
     <ClInclude Include="src\vel\Scene\EntityManager.h" />
     <ClInclude Include="src\vel\Scene\LightManager.h" />
+    <ClInclude Include="src\vel\Scene\MaterialSystem.h" />
+    <ClInclude Include="src\vel\Scene\MeshRenderer.h" />
     <ClInclude Include="src\vel\Scene\SaveSystem.h" />
     <ClInclude Include="src\vel\Scene\SceneEnvironment.h" />
     <ClInclude Include="src\velpch.h" />
@@ -635,6 +637,8 @@
     <ClCompile Include="src\vel\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\vel\Scene\EntityManager.cpp" />
     <ClCompile Include="src\vel\Scene\LightManager.cpp" />
+    <ClCompile Include="src\vel\Scene\MaterialSystem.cpp" />
+    <ClCompile Include="src\vel\Scene\MeshRenderer.cpp" />
     <ClCompile Include="src\vel\Scene\SaveSystem.cpp" />
     <ClCompile Include="src\velpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

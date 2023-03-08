@@ -44,4 +44,6 @@
 #include "vel/Scene/EntityManager.h"
 #include "vel/Scene/LightManager.h"
 #include "vel/Scene/SaveSystem.h"
+#include "vel/Scene/MeshRenderer.h"
+#include "vel/Scene/MaterialSystem.h"
 // --------------------------

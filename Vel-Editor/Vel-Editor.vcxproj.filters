@@ -21,4 +21,8 @@
       <Filter>temp</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\GaussianBlur.glsl" />
+    <None Include="assets\shaders\PostProcessing.glsl" />
+  </ItemGroup>
 </Project>

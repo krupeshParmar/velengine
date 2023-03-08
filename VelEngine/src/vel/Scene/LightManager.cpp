@@ -28,6 +28,7 @@ namespace vel
 		std::string attStr = "atten";
 		std::string dirStr = "direction";
 		std::string pa1Str = "param1";
+		std::string intStr = "intensity";
 		for (std::vector<LightComponent*>::iterator itLight = s_Lights.begin();
 			itLight != s_Lights.end();
 			itLight++)
@@ -46,6 +47,7 @@ namespace vel
 			shader->SetFloat4(lightsVariableName + attStr, light->Attenuation);
 			shader->SetFloat4(lightsVariableName + dirStr, light->Direction);
 			shader->SetFloat4(lightsVariableName + pa1Str, light->LightParams);
+			shader->SetFloat(lightsVariableName + intStr, light->Intensity);
 		}
 	}
 	void LightManager::AddNewLightInfo(LightComponent* light)

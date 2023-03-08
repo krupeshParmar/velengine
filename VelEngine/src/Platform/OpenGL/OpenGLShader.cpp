@@ -18,6 +18,7 @@ namespace vel
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& shaderFilePath)
+		:m_Path(shaderFilePath)
 	{
 		VEL_PROFILE_FUNCTION();
 		std::string source = ReadFile(shaderFilePath);
@@ -128,7 +129,7 @@ namespace vel
 				glDeleteShader(shader);
 
 
-				VEL_CORE_ERROR("{0}", infoLog.data());
+				VEL_CORE_ERROR("{0}: {1}", m_Path, infoLog.data());
 				VEL_CORE_ASSERT(false, "Shader compile failed!!");
 
 				break;

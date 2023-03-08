@@ -1,6 +1,7 @@
 #include "velpch.h"
 #include "Renderer.h"
 #include "Texture.h"
+#include <glad/glad.h>
 
 namespace vel
 {
@@ -137,12 +138,34 @@ namespace vel
 				texture->Bind(i);
 			i++;
 		}
+
 		shader->SetMat4("u_View", s_Data.ViewMatrix);
 		shader->SetMat4("u_Projection", s_Data.ProjectionMatrix);
 		shader->SetMat4("u_Transform", transform);
 		shader->SetMat4("u_InverseTransform", glm::inverse(glm::transpose(transform)));
 
 		shader->SetFloat("u_TilingFactor", s_Data.TilingFactor);
+		vertexArray->Bind();
+		RenderCommand::DrawIndexed(vertexArray);
+		vertexArray->Unbind();
+	}
+
+	void Renderer::Submit(const Ref<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, Ref<FrameBuffer> buffer, Ref<FrameBuffer> mainbuffer, const glm::mat4& transform)
+	{
+		//mainbuffer->Unbind();
+		//buffer->Bind();
+		shader->Bind();
+		buffer->BindColorTexture();
+		//buffer->Unbind();
+		//mainbuffer->Bind();
+		shader->Bind();
+		shader->SetMat4("u_View", s_Data.ViewMatrix);
+		shader->SetMat4("u_Projection", s_Data.ProjectionMatrix);
+		shader->SetMat4("u_Transform", transform);
+		shader->SetMat4("u_InverseTransform", glm::inverse(glm::transpose(transform)));
+
+		shader->SetFloat("u_TilingFactor", s_Data.TilingFactor);
+
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);
 		vertexArray->Unbind();

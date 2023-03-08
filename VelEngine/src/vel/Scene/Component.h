@@ -106,6 +106,8 @@ namespace vel
 		glm::vec4 Direction;
 		glm::vec4 LightParams;	 // x = lightType, innerAngle, outerAngle, ON or OFF
 
+		float Intensity = 1.0f;
+
 		uint32_t ID;
 		bool Enabled = true;
 

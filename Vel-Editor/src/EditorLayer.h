@@ -25,12 +25,24 @@ namespace vel
 		void SaveScene();
 
 	private:
-		SceneManager m_SceneManager;
+		Scope<SceneManager> m_SceneManager;
 
 		ShaderLibrary m_ShaderLibrary;
 		Ref<Texture2D> m_Texture;
 		Ref<FrameBuffer> m_RenderBuffer;
 		Ref<FrameBuffer> m_FullScreenFrameBuffer;
+		Ref<FrameBuffer> m_PostProcessFrameBuffer;
+
+		// Horizontal Blur
+		Ref<FrameBuffer> m_PingFrameBuffer;
+
+		// Vertical Blur
+		Ref<FrameBuffer> m_PongFrameBuffer;
+
+		// TEMP
+		Ref<FrameBuffer> m_BedroomFrameBuffer;
+
+
 		Ref<Texture2D> m_SecondTexture;
 		Ref<VertexArray> m_SquareVertexArray;
 

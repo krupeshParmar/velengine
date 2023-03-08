@@ -36,6 +36,7 @@ layout(location = 0) out vec4 f_albedo;
 layout(location = 1) out vec4 f_position;
 layout(location = 2) out vec4 f_normal;
 layout(location = 3) out vec4 f_specular;
+layout(location = 4) out vec4 f_bloom;
 
 in VS_OUT
 {
@@ -55,10 +56,13 @@ uniform vec4 SPEC;
 uniform vec4 RGBA;
 uniform samplerCube skyBox;
 uniform float SHIN;
+uniform float u_texsize;
 uniform vec4 eyeLocation;
+
 
 void main()
 {
+	bool useBloom = false;
 	vec4 normalValue = normalize(fs_in.Normal);
 	if (useTextureNormal)
 	{
@@ -66,12 +70,13 @@ void main()
 		normalValue = normalize(normalValue * 2.0 - 1.0);
 	}
 
-	vec3 textColour0 = texture(u_TextureDiffuse, fs_in.TexCoords).rgb;
+	vec3 textColour0 = texture(u_TextureDiffuse, fs_in.TexCoords * u_texsize).rgb;
 	float transparency = texture(u_TextureDiffuse, fs_in.TexCoords).w;
 	if (!useTextureDiffuse)
 	{
 		textColour0 = RGBA.rgb;
 		transparency = RGBA.a;
+		useBloom = true;
 	}
 
 	vec4 specularColour = SPEC;
@@ -91,4 +96,21 @@ void main()
 	vec3 RL = reflect(I, normalValue.xyz);
 	f_albedo.rgb += texture(skyBox, RR).xyz * SHIN;
 	f_albedo.rgb += texture(skyBox, RL).xyz * SHIN;
+	f_bloom = vec4(0.0, 0.0, 0.0, 0.0);
+
+	//if (useBloom)
+	{
+		if (f_albedo.r > 0.05f)
+			f_albedo.r *= 2.0f;
+
+		if (f_albedo.g > 0.05f)
+			f_albedo.g *= 2.0f;
+
+		if (f_albedo.b > 0.05f)
+			f_albedo.b *= 2.0f;
+
+		float brightness = dot(f_albedo.rgb, vec3(0.2126f, 0.7152f, 0.0722f));
+		if (brightness > 0.15f)
+			f_bloom = vec4(f_albedo.rgb, 1.0);
+	}
 }

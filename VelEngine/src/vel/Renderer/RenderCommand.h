@@ -52,6 +52,31 @@ namespace vel
 		{
 			s_RendererAPI->SetPolygonMode(isFilled);
 		}
+
+		inline static void SetStencilTest(bool enabled)
+		{
+			s_RendererAPI->SetStencilTest(enabled);
+		}
+
+		inline static void SetColorMask(bool mask)
+		{
+			s_RendererAPI->SetColorMask(mask);
+		}
+
+		inline static void SetStencilMask(int mask)
+		{
+			s_RendererAPI->SetStencilMask(mask);
+		}
+
+		inline static void SetStencilFunc()
+		{
+			s_RendererAPI->SetStencilFunc();
+		}
+
+		inline static void BindTextureUnit(uint32_t slot, uint32_t renderID)
+		{
+			s_RendererAPI->BindTextureUnit(slot, renderID);
+		}
 	private:
 		static RendererAPI* s_RendererAPI;
 	};

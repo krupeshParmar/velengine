@@ -7,6 +7,8 @@
 
 namespace vel
 {
+	/*unsigned int width = 2560,
+	unsigned int height = 1440*/
 	struct WindowProps
 	{
 		std::string Title;
@@ -14,8 +16,8 @@ namespace vel
 		unsigned int Height;
 		
 		WindowProps(const std::string& title = "Vel Engine",
-					unsigned int width = 2560,
-					unsigned int height = 1440)
+					unsigned int width = 1920,
+					unsigned int height = 1080)
 			: Title(title), Width(width), Height(height)
 		{}
 	};

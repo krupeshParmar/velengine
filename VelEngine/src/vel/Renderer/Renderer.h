@@ -1,6 +1,7 @@
 #pragma once
 #include "RenderCommand.h"
 #include "Shader.h"
+#include "FrameBuffer.h"
 #include "vel/Editor/EditorCamera.h"
 #include "Texture.h"
 
@@ -24,6 +25,7 @@ namespace vel
 		static void Submit(const Ref<VertexArray>& vertexArray, const glm::mat4& transform = glm::mat4(1.f));
 		static void Submit(const Ref<Shader>& shader,const std::shared_ptr<VertexArray>& vertexArray, const glm::mat4& transform = glm::mat4(1.f));
 		static void Submit(const Ref<Shader>& shader,const std::shared_ptr<VertexArray>& vertexArray, std::vector<Ref<Texture2D>> textures, const glm::mat4& transform = glm::mat4(1.f));
+		static void Submit(const Ref<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, Ref<FrameBuffer> buffer, Ref<FrameBuffer> mainbuffer, const glm::mat4& transform);
 		
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 

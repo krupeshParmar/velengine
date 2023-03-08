@@ -30,6 +30,12 @@ namespace vel
 	void OpenGLFrameBuffer::Unbind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glDisable(GL_FRAMEBUFFER_SRGB);
+	}
+
+	void OpenGLFrameBuffer::BindColorTexture(uint32_t slot)
+	{
+		glBindTextureUnit(slot, m_ColorAttachment);
 	}
 
 	void OpenGLFrameBuffer::BindColorTexture()
@@ -54,6 +60,17 @@ namespace vel
 	{
 		glActiveTexture(GL_TEXTURE3);
 		glBindTexture(GL_TEXTURE_2D, m_SpecularAttachment);
+	}
+
+	void OpenGLFrameBuffer::BindBloomTexture()
+	{
+		glActiveTexture(GL_TEXTURE4);
+		glBindTexture(GL_TEXTURE_2D, m_BloomAttachment);
+	}
+
+	void OpenGLFrameBuffer::EnableGammaCorrection()
+	{
+		glEnable(GL_FRAMEBUFFER_SRGB);
 	}
 
 	void OpenGLFrameBuffer::CopyDepthData(Ref<FrameBuffer> buffer)
@@ -81,9 +98,9 @@ namespace vel
 			glDeleteTextures(1, &m_VertexWorldPosition);
 			glDeleteTextures(1, &m_NormalAttachment);
 			glDeleteTextures(1, &m_SpecularAttachment);
+			glDeleteTextures(1, &m_BloomAttachment);
 			glDeleteTextures(1, &m_DepthAttachment);
 		}
-
 		glCreateFramebuffers(1, &m_RendererID);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
 
@@ -91,7 +108,7 @@ namespace vel
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_ColorAttachment);
 		glBindTexture(GL_TEXTURE_2D, m_ColorAttachment);
 		glTexStorage2D(GL_TEXTURE_2D,
-			1, GL_RGBA16F, 
+			1, GL_RGBA32F,
 			m_Specification.Width, 
 			m_Specification.Height);
 
@@ -109,7 +126,7 @@ namespace vel
 
 		//	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB8,			// 8 bits per colour
 		glTexStorage2D(GL_TEXTURE_2D, 
-			1, GL_RGBA16F,		// 24 bits per colour
+			1, GL_RGBA32F,		// 24 bits per colour
 			m_Specification.Width,				// g_FBO_SizeInPixes
 			m_Specification.Height);			// g_FBO_SizeInPixes
 
@@ -124,7 +141,7 @@ namespace vel
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_NormalAttachment);
 		glBindTexture(GL_TEXTURE_2D, m_NormalAttachment);
 		glTexStorage2D(GL_TEXTURE_2D,
-			1, GL_RGBA16F, 
+			1, GL_RGBA32F,
 			m_Specification.Width, 
 			m_Specification.Height);
 
@@ -139,7 +156,20 @@ namespace vel
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_SpecularAttachment);
 		glBindTexture(GL_TEXTURE_2D, m_SpecularAttachment);
 		glTexStorage2D(GL_TEXTURE_2D,
-			1, GL_RGBA16F, m_Specification.Width, m_Specification.Height);
+			1, GL_RGBA32F, m_Specification.Width, m_Specification.Height);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, black);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER /*GL_CLAMP_TO_EDGE*/);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER /*GL_CLAMP_TO_EDGE*/);
+
+
+		glCreateTextures(GL_TEXTURE_2D, 1, &m_BloomAttachment);
+		glBindTexture(GL_TEXTURE_2D, m_BloomAttachment);
+		glTexStorage2D(GL_TEXTURE_2D,
+			1, GL_RGBA32F, m_Specification.Width, m_Specification.Height);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -166,12 +196,16 @@ namespace vel
 			m_VertexWorldPosition, 0);
 
 		glFramebufferTexture(GL_FRAMEBUFFER,
-			GL_COLOR_ATTACHMENT2,			// Vertex world position goes here (to #1)
+			GL_COLOR_ATTACHMENT2,			//Normal  (to #2)
 			m_NormalAttachment, 0);
 
 		glFramebufferTexture(GL_FRAMEBUFFER,
-			GL_COLOR_ATTACHMENT3,			// Vertex world position goes here (to #1)
+			GL_COLOR_ATTACHMENT3,			// Specular (to #3)
 			m_SpecularAttachment, 0);
+
+		glFramebufferTexture(GL_FRAMEBUFFER,
+			GL_COLOR_ATTACHMENT4,			// Bloom (to #4)
+			m_BloomAttachment, 0);
 
 		glFramebufferTexture(GL_FRAMEBUFFER,
 			GL_DEPTH_STENCIL_ATTACHMENT,
@@ -183,9 +217,10 @@ namespace vel
 			GL_COLOR_ATTACHMENT1,		// vertex world position
 			GL_COLOR_ATTACHMENT2,		// normals
 			GL_COLOR_ATTACHMENT3,		// specular
+			GL_COLOR_ATTACHMENT4,		// bloom
 			GL_DEPTH_STENCIL_ATTACHMENT
 		};
-		glDrawBuffers(4, draw_bufers);
+		glDrawBuffers(5, draw_bufers);
 
 		bool bFrameBufferIsGoodToGo = true;
 		std::string error = "";

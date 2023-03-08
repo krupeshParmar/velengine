@@ -1449,6 +1449,8 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\vel\Scene\MeshRenderer.h" />
+    <ClInclude Include="src\vel\Scene\MaterialSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
@@ -1542,5 +1544,7 @@
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\vel\Scene\EntityManager.cpp" />
+    <ClCompile Include="src\vel\Scene\MeshRenderer.cpp" />
+    <ClCompile Include="src\vel\Scene\MaterialSystem.cpp" />
   </ItemGroup>
 </Project>

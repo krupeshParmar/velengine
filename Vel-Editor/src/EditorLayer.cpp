@@ -12,7 +12,7 @@ namespace vel
 	{
 
 	}
-
+	static glm::vec4 camPos = glm::vec4(0.f, 30.f, -20.f, 1.0);
 	void EditorLayer::OnAttach()
 	{
 		FrameBufferSpecification fbSpec;
@@ -21,13 +21,33 @@ namespace vel
 		m_RenderBuffer = FrameBuffer::Create(fbSpec);
 
 		m_FullScreenFrameBuffer = FrameBuffer::Create(fbSpec);
+		m_PostProcessFrameBuffer = FrameBuffer::Create(fbSpec);
+		m_BedroomFrameBuffer = FrameBuffer::Create(fbSpec);
+		m_PingFrameBuffer = FrameBuffer::Create(fbSpec);
+		m_PongFrameBuffer = FrameBuffer::Create(fbSpec);
+
+		m_SceneManager = CreateScope<SceneManager>();
+
 
 		m_ShaderLibrary.Load("assets/shaders/DeferredShader.glsl");
+		m_ShaderLibrary.Load("assets/shaders/PostProcessing.glsl");
+		m_ShaderLibrary.Load("assets/shaders/GaussianBlur.glsl");
+		m_ShaderLibrary.Get("GaussianBlur")->Bind();
+		m_ShaderLibrary.Get("GaussianBlur")->SetInt("screenTexture", 4);
+
 		m_ShaderLibrary.Get("DeferredShader")->Bind();
 		m_ShaderLibrary.Get("DeferredShader")->SetInt("gAlbedoSpec", 0);
 		m_ShaderLibrary.Get("DeferredShader")->SetInt("gPosition", 1);
 		m_ShaderLibrary.Get("DeferredShader")->SetInt("gNormal", 2);
 		m_ShaderLibrary.Get("DeferredShader")->SetInt("gSpecular", 3);
+		m_ShaderLibrary.Get("DeferredShader")->SetInt("gBloom", 4);
+
+		m_ShaderLibrary.Get("PostProcessing")->Bind();
+		m_ShaderLibrary.Get("PostProcessing")->SetInt("gAlbedoSpec", 0);
+		m_ShaderLibrary.Get("PostProcessing")->SetInt("gPosition", 1);
+		m_ShaderLibrary.Get("PostProcessing")->SetInt("gNormal", 2);
+		m_ShaderLibrary.Get("PostProcessing")->SetInt("gSpecular", 3);
+		m_ShaderLibrary.Get("PostProcessing")->SetInt("gBloom", 4);
 
 		m_SquareVertexArray = VertexArray::Create();
 		float sqVertices[6 * 4] = {
@@ -75,8 +95,35 @@ namespace vel
 
 		{
 			VEL_PROFILE_SCOPE("Renderer Prep");
+
+			/*if (m_SceneManager->ToBeDrawn)
+			{
+				m_BedroomFrameBuffer->Bind();
+				RenderCommand::SetClearColor(glm::vec4(0.8f, 0.8f, 0.2f, 1));
+				RenderCommand::Clear();
+				RenderCommand::EnableDepth();
+				glm::vec3 eyeLocation = m_EditorCamera.GetPosition();
+				glm::mat4 matView = glm::lookAt(
+					glm::vec3(eyeLocation.x, eyeLocation.y, eyeLocation.z),
+					glm::vec3(0.f),
+					glm::vec3(0.f, 1.f, 0.f)
+				);
+
+				glm::mat4 matProjection = glm::perspective(
+					45.0f,
+					4.0f / 3.0f,
+					10.f,
+					200.0f);
+				Renderer::BeginScene(matView, matProjection);
+				TransformComponent* transform = m_SceneManager->GetEntityManager()->GetComponentByType<TransformComponent>(m_SceneManager->ToBeDrawn->GetID());
+				MeshComponent* meshComp = m_SceneManager->GetEntityManager()->GetComponentByType<MeshComponent>(m_SceneManager->ToBeDrawn->GetID());
+				meshComp->ModelIns->DrawMesh(m_SceneManager->m_FBORenderBuffer, m_BedroomFrameBuffer, m_SceneManager->m_Shader, meshComp->MaterialIns, transform->GetTransform());
+
+				m_BedroomFrameBuffer->Unbind();
+			}*/
+			m_SceneManager->DrawBedroom(m_SceneManager->m_RenderBuffer, camPos);
 			m_RenderBuffer->Bind();
-			RenderCommand::SetClearColor(glm::vec4(0.8f, 0.2f, 0.8f, 1));
+			RenderCommand::SetClearColor(glm::vec4(0.f, 0.f, 0.f, 1));
 			RenderCommand::Clear();
 			RenderCommand::EnableDepth();
 		}
@@ -85,17 +132,18 @@ namespace vel
 			VEL_PROFILE_SCOPE("Renderer Draw");
 			Renderer::BeginScene(m_EditorCamera.GetViewMatrix(), m_EditorCamera.GetUnReversedProjectionMatrix());
 
-			m_SceneManager.Update(ts, glm::vec4(m_EditorCamera.GetPosition(), 1.0));
+			m_SceneManager->Update(m_RenderBuffer, ts, glm::vec4(m_EditorCamera.GetPosition(), 1.0));
+
 
 			Renderer::EndScene();
 
 			m_RenderBuffer->Unbind();
 
-			//RenderCommand::EnableDepth();
-			//m_FullScreenFrameBuffer->CopyDepthData(m_RenderBuffer);
 			m_FullScreenFrameBuffer->Bind();
-			//m_FullScreenFrameBuffer->Bind();
+			RenderCommand::Clear();
+			m_FullScreenFrameBuffer->EnableGammaCorrection();
 
+			//------------------------------------	
 
 			m_ShaderLibrary.Get("DeferredShader")->Bind();
 			m_ShaderLibrary.Get("DeferredShader")->
@@ -106,19 +154,48 @@ namespace vel
 			m_RenderBuffer->BindWorldPositionTexture();
 			m_RenderBuffer->BindNormalTexture();
 			m_RenderBuffer->BindSpecularTexture();
-			m_SceneManager.BindLightData(m_ShaderLibrary.Get("DeferredShader"), glm::vec4(m_EditorCamera.GetPosition(), 1.0));
+			m_RenderBuffer->BindBloomTexture();
+			m_ShaderLibrary.Get("DeferredShader")->SetFloat("Exposure", m_SceneManager->Exposure);
+			m_ShaderLibrary.Get("DeferredShader")->SetFloat("BloomThreshold", m_SceneManager->BloomThreshold);
+			//m_ShaderLibrary.Get("DeferredShader")->SetBool("UseBloom", m_SceneManager->UseBloom);
+			//m_ShaderLibrary.Get("DeferredShader")->SetFloat("BloomIntensity", m_SceneManager->BloomIntensity);
+			m_SceneManager->BindLightData(m_ShaderLibrary.Get("DeferredShader"), glm::vec4(m_EditorCamera.GetPosition(), 1.0));
 
 			Renderer::Submit(
 				m_ShaderLibrary.Get("DeferredShader"),
 				m_SquareVertexArray);
 
-			// To render the skybox properly
 			m_FullScreenFrameBuffer->CopyDepthData(m_RenderBuffer);
-
 			m_FullScreenFrameBuffer->Bind();
-			m_SceneManager.DrawSkyBox(m_EditorCamera.GetUnReversedProjectionMatrix() * m_EditorCamera.GetViewMatrix() * glm::scale(glm::mat4(1.0), glm::vec3(9000.f)));
-			
+			m_SceneManager->DrawSkyBox(m_EditorCamera.GetUnReversedProjectionMatrix()* m_EditorCamera.GetViewMatrix()* glm::scale(glm::mat4(1.0), glm::vec3(9000.f)));			
 			m_FullScreenFrameBuffer->Unbind();
+			//****************** POST PROCESSING ************************
+			m_PostProcessFrameBuffer->Bind();
+			RenderCommand::Clear();
+			m_ShaderLibrary.Get("PostProcessing")->Bind();
+			m_ShaderLibrary.Get("PostProcessing")->
+				SetFloat2("screen_width_height", {
+				Application::Get().GetWindow().GetWidth(),Application::Get().GetWindow().GetHeight()
+					});
+			m_FullScreenFrameBuffer->BindColorTexture();
+			m_FullScreenFrameBuffer->BindWorldPositionTexture();
+			m_FullScreenFrameBuffer->BindNormalTexture();
+			m_FullScreenFrameBuffer->BindSpecularTexture();
+			m_FullScreenFrameBuffer->BindBloomTexture();
+			m_ShaderLibrary.Get("PostProcessing")->SetBool("UseBloom", m_SceneManager->UseBloom);
+			m_ShaderLibrary.Get("PostProcessing")->SetFloat("BloomIntensity", m_SceneManager->BloomIntensity);
+
+			Renderer::Submit(
+				m_ShaderLibrary.Get("PostProcessing"),
+				m_SquareVertexArray);
+
+
+			m_PostProcessFrameBuffer->CopyDepthData(m_FullScreenFrameBuffer);
+			//m_PostProcessFrameBuffer->Bind();
+			//m_SceneManager->DrawSkyBox(m_EditorCamera.GetUnReversedProjectionMatrix()* m_EditorCamera.GetViewMatrix()* glm::scale(glm::mat4(1.0), glm::vec3(9000.f)));
+
+			m_PostProcessFrameBuffer->Unbind();
+			// To render the skybox properly
 		}
 	}
 
@@ -185,11 +262,15 @@ namespace vel
 
 				ImGui::Separator();
 
-				ImGui::MenuItem("New Scene", "Ctrl+N");
+				if (ImGui::MenuItem("New Scene", "Ctrl+N"))
+				{
+					m_SceneManager->GetEntityManager()->Clear();
+					saveProjectCalled = true;
+				}
 				//NewScene();
 
 				if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
-					m_SceneManager.SaveScene();
+					m_SceneManager->SaveScene();
 
 				if(ImGui::MenuItem("Save Scene As...", "Ctrl+Shift+S"))
 					saveProjectCalled = true;
@@ -237,19 +318,35 @@ namespace vel
 			m_ViewPortSize = { viewportPanelSize.x, viewportPanelSize.y };
 		}
 
-		uint32_t textureID = m_FullScreenFrameBuffer->GetColorAttachmenRendererID();
+		uint32_t textureID = m_PostProcessFrameBuffer->GetColorAttachmenRendererID();
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewPortSize.x, m_ViewPortSize.y }, ImVec2{0,1}, ImVec2{1,0});
 		ImGui::End();
 		ImGui::PopStyleVar();
 		SceneHierarchy();
 		Inspector();
+		{
+			/*bool open = false;
+			ImGui::Begin("OffscreenTexture", &open, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoResize);
+			uint32_t offScreenTextureID = m_SceneManager->m_RenderBuffer->GetColorAttachmenRendererID();
+			ImGui::Image((void*)offScreenTextureID, ImVec2{ 200,200 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+
+			ImGui::End();*/
+		}
+
+
+		ImGui::Begin("Bloom");
+		uint32_t BloomID = m_FullScreenFrameBuffer->GetBloomAttachmenRendererID();
+		ImGui::Image((void*)BloomID, ImVec2{ m_ViewPortSize.x, m_ViewPortSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+
+		ImGui::End();
 	}
 
 	void EditorLayer::SceneHierarchy()
 	{
 		ImGui::ShowDemoWindow();
 		ImGui::Begin("Scene Hierachy");
-		std::vector<Ref<Entity>> entityList = m_SceneManager.GetEntityManager()->GetAllEntities();
+		ImGui::InputFloat4("cam pos", glm::value_ptr(camPos));
+		std::vector<Ref<Entity>> entityList = m_SceneManager->GetEntityManager()->GetAllEntities();
 		for(int i = 0; i < entityList.size(); i++)
 		{
 			char label[50];
@@ -264,8 +361,8 @@ namespace vel
 		}
 		if (ImGui::Button("Add Entity"))
 		{
-			int number = m_SceneManager.GetEntityManager()->GetAllEntities().size();
-			m_SceneManager.GetEntityManager()->CreateEntity("New Entity" + std::to_string(number));
+			int number = m_SceneManager->GetEntityManager()->GetAllEntities().size();
+			m_SceneManager->GetEntityManager()->CreateEntity("New Entity" + std::to_string(number));
 		}
 		ImGui::End();
 	}
@@ -275,9 +372,13 @@ namespace vel
 		bool hasMesh = false;
 		bool hasLight = false;
 		ImGui::Begin("Inspector");
+		ImGui::InputFloat("Exposure##sceneExp", &m_SceneManager->Exposure);
+		ImGui::Checkbox("Use Bloom##scenebloom", &m_SceneManager->UseBloom);
+		ImGui::SliderFloat("Bloom Intensity##scenebloomIntes", &m_SceneManager->BloomIntensity, 0.f, 0.2f);
+		ImGui::SliderFloat("Bloom Threshold##scenebloomThres", &m_SceneManager->BloomThreshold, 0.f, 20.f);
 		if (m_SelectedEntity != -1)
 		{
-			std::vector<Ref<Entity>> entityList = m_SceneManager.GetEntityManager()->GetAllEntities();
+			std::vector<Ref<Entity>> entityList = m_SceneManager->GetEntityManager()->GetAllEntities();
 			Ref<Entity> entity = entityList.at(m_SelectedEntity);
 			ImGui::BeginGroup();
 			/*--Position*/
@@ -308,7 +409,7 @@ namespace vel
 					ImGui::Text("Position");
 					ImGui::SameLine();
 					TransformComponent* transform = 
-						m_SceneManager.GetEntityManager()->
+						m_SceneManager->GetEntityManager()->
 						GetComponentByType<TransformComponent>(entity->GetID());
 
 					ImGui::InputFloat3("##pos", glm::value_ptr(transform->Translation));
@@ -325,18 +426,22 @@ namespace vel
 				}
 				ImGui::EndGroup();
 			}
-
+			if (entity->name == "BedroomQuad")
+			{
+				uint32_t textureID = m_SceneManager->m_FBORenderBuffer->GetColorAttachmenRendererID();
+				ImGui::Image((void*)textureID, ImVec2{ m_ViewPortSize.x, m_ViewPortSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+			}
 			ImGui::BeginGroup();
 			{
-				if (m_SceneManager.GetEntityManager()->HasComponent< LightComponent>(entity->GetID()))
+				if (m_SceneManager->GetEntityManager()->HasComponent< LightComponent>(entity->GetID()))
 				{
 					hasLight = true;
 					LightComponent* light =
-						m_SceneManager.GetEntityManager()->
+						m_SceneManager->GetEntityManager()->
 						GetComponentByType<LightComponent>(entity->GetID());
 
 					ImGui::Separator();
-					ImGui::BulletText("Light##lightLight");
+					ImGui::BulletText("Light");
 					ImGui::SameLine();
 					ImGui::Checkbox("##EnableLight", &light->Enabled);
 					ImGui::ColorEdit4("Diffuse##lightDiffuse", glm::value_ptr(light->Diffuse));
@@ -349,17 +454,18 @@ namespace vel
 					ImGui::InputFloat("inner Cutt Off##lightCuttoff", &light->LightParams[1]);
 					ImGui::InputFloat("Outter Cut Off##lightOutCuttoff", &light->LightParams[2]);
 					ImGui::InputFloat("On Off##lightOnoff", &light->LightParams[3]);
+					ImGui::SliderFloat("Intensity##lightintensity", &light->Intensity, 0.f, 100.0f);
 				}
 			}
 			ImGui::EndGroup();
 
 			ImGui::BeginGroup();
 			{
-				if (m_SceneManager.GetEntityManager()->HasComponent< MeshComponent>(entity->GetID()))
+				if (m_SceneManager->GetEntityManager()->HasComponent< MeshComponent>(entity->GetID()))
 				{
 					hasMesh = true;
 					MeshComponent* mesh =
-						m_SceneManager.GetEntityManager()->
+						m_SceneManager->GetEntityManager()->
 						GetComponentByType<MeshComponent>(entity->GetID());
 
 					ImGui::Separator();
@@ -371,12 +477,25 @@ namespace vel
 					ImGui::SameLine();
 					if (ImGui::Button("Load Mesh"))
 					{
-						mesh->ModelIns = CreateRef<Model>(mesh->Path, mesh->UseFBXTextures, false);
+						mesh->ModelIns = MeshRenderer::LoadMesh(mesh->Path, mesh->UseFBXTextures, false);
 					}
 					ImGui::Separator();
 					ImGui::BulletText("Material");
 					ImGui::InputText("Name", &mesh->MaterialIns->Name);
 					ImGui::InputText("Path", &mesh->MaterialPath);
+					if (ImGui::Button("Load Material##matLoadBtn"))
+					{
+						Ref<Material> mat = MaterialSystem::GetMaterial(mesh->MaterialPath);
+						if (mat)
+							mesh->MaterialIns = mat;
+					}
+					if (ImGui::Button("Save Material##matSaveBtn"))
+					{
+						if (!mesh->MaterialPath.empty() && mesh->MaterialIns)
+						{
+							SaveMaterial(mesh->MaterialPath, mesh->MaterialIns);
+						}
+					}
 					ImGui::ColorEdit4("Diffuse##difmaterial", glm::value_ptr(mesh->MaterialIns->Diffuse));
 					ImGui::ColorEdit4("Specular##specmaterial", glm::value_ptr(mesh->MaterialIns->Specular));
 					ImGui::InputFloat("Ambient##ambmaterial", &mesh->MaterialIns->Ambient);
@@ -490,7 +609,7 @@ namespace vel
 							if (ImGui::MenuItem("Light Component"))
 							{
 								addComponentCalled = false;
-								m_SceneManager.GetEntityManager()->AddComponent(entity->GetID(), new LightComponent());
+								m_SceneManager->GetEntityManager()->AddComponent(entity->GetID(), new LightComponent());
 								ImGui::CloseCurrentPopup();
 							}
 						}
@@ -499,7 +618,7 @@ namespace vel
 							if (ImGui::MenuItem("Mesh Component"))
 							{
 								addComponentCalled = false;
-								m_SceneManager.GetEntityManager()->AddComponent(entity->GetID(), new MeshComponent());
+								m_SceneManager->GetEntityManager()->AddComponent(entity->GetID(), new MeshComponent());
 								ImGui::CloseCurrentPopup();
 							}
 						}
@@ -528,10 +647,10 @@ namespace vel
 		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 		if (ImGui::BeginPopupModal("Open Project", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 		{
-			ImGui::InputText("Project Name", &m_SceneManager.ScenePath);
+			ImGui::InputText("Project Name", &m_SceneManager->ScenePath);
 			if (ImGui::Button("Load"))
 			{
-				m_SceneManager.LoadScene();
+				m_SceneManager->LoadScene();
 				openProjectCalled = false;
 				ImGui::CloseCurrentPopup();
 			}
@@ -552,10 +671,10 @@ namespace vel
 		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
 		if (ImGui::BeginPopupModal("Save Project", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 		{
-			ImGui::InputText("Project Name", &m_SceneManager.ScenePath);
+			ImGui::InputText("Project Name", &m_SceneManager->ScenePath);
 			if (ImGui::Button("Save"))
 			{
-				m_SceneManager.SaveScene();
+				m_SceneManager->SaveScene();
 				saveProjectCalled = false;
 				ImGui::CloseCurrentPopup();
 			}

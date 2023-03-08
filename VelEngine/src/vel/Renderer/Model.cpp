@@ -22,7 +22,7 @@ namespace vel
         :m_UseFBXTextures(useTextures), m_LoadAsync(loadAsync)
 	{
         m_InitCriticalSections();
-        m_Meshes = std::vector<MeshData>();
+        m_Meshes = std::vector<Ref<MeshData>>();
 		m_Importer = std::make_unique<Assimp::Importer>();
         const aiScene* scene = m_Importer->ReadFile(source, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
 
@@ -49,22 +49,22 @@ namespace vel
         {
             wholeMeshData.m_Vertices.insert(
                 wholeMeshData.m_Vertices.end(), 
-                m_Meshes[i].m_Vertices.begin(), 
-                m_Meshes[i].m_Vertices.end()
+                m_Meshes[i]->m_Vertices.begin(), 
+                m_Meshes[i]->m_Vertices.end()
             );
 
             wholeMeshData.m_Indices.insert(
                 wholeMeshData.m_Indices.end(),
-                m_Meshes[i].m_Indices.begin(),
-                m_Meshes[i].m_Indices.end()
+                m_Meshes[i]->m_Indices.begin(),
+                m_Meshes[i]->m_Indices.end()
             );
 
             wholeMeshData.m_Textures.insert(
                 wholeMeshData.m_Textures.end(),
-                m_Meshes[i].m_Textures.begin(),
-                m_Meshes[i].m_Textures.end()
+                m_Meshes[i]->m_Textures.begin(),
+                m_Meshes[i]->m_Textures.end()
             );
-            wholeMeshData.m_VertexArray = m_Meshes[i].m_VertexArray;
+            wholeMeshData.m_VertexArray = m_Meshes[i]->m_VertexArray;
         }
         return wholeMeshData;
     }
@@ -87,7 +87,7 @@ namespace vel
     }
 
     //DWORD WINAPI ProcessMesh1(LPVOID pParameters)
-    MeshData Model::ProcessMesh(aiMesh* aimesh, const aiScene* scene)
+    Ref<MeshData> Model::ProcessMesh(aiMesh* aimesh, const aiScene* scene)
     {
         /*MeshLoadingInfo* fileInfo = (MeshLoadingInfo*)pParameters;
         aiMesh* aimesh = fileInfo->aimesh;
@@ -96,7 +96,7 @@ namespace vel
         bool m_UseFBXTextures = fileInfo->m_UseFBXTextures;
         std::vector<MeshData>* m_Meshes = fileInfo->m_Meshes;*/
 
-        MeshData newMeshData;
+        Ref<MeshData> newMeshData = CreateRef<MeshData>();
 
         // Get all the vertex data
         for (unsigned int i = 0; i < aimesh->mNumVertices; i++)
@@ -137,7 +137,7 @@ namespace vel
                 vertex.v0 = 0.f;
             }
 
-            newMeshData.m_Vertices.push_back(vertex);
+            newMeshData->m_Vertices.push_back(vertex);
         }
 
         // Get all the indices
@@ -145,7 +145,7 @@ namespace vel
         {
             aiFace face = aimesh->mFaces[i];
             for (unsigned int j = 0; j < face.mNumIndices; j++)
-                newMeshData.m_Indices.push_back(face.mIndices[j]);
+                newMeshData->m_Indices.push_back(face.mIndices[j]);
         }
 
 
@@ -156,7 +156,7 @@ namespace vel
         //    std::vector<Ref<Texture2D>> diffuseTextures = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
         //    newMeshData.m_Textures.insert(newMeshData.m_Textures.end(), diffuseTextures.begin(), diffuseTextures.end());
         //}
-        newMeshData.m_Loaded = true;
+        newMeshData->m_Loaded = true;
         /*EnterCriticalSection(&ModelLoader_Lock);
 
         m_Meshes->push_back(newMeshData);
@@ -165,11 +165,11 @@ namespace vel
 
         if (!m_LoadAsync)
         {
-            newMeshData.m_VertexArray = VertexArray::Create();
+            newMeshData->m_VertexArray = VertexArray::Create();
             vel::Ref<vel::VertexBuffer> vertexBuffer;
             vertexBuffer = vel::VertexBuffer::Create(
-                &newMeshData.m_Vertices[0],
-                sizeof(vel::Vertices) * newMeshData.m_Vertices.size()
+                &newMeshData->m_Vertices[0],
+                sizeof(vel::Vertices) * newMeshData->m_Vertices.size()
             );
             vertexBuffer->SetLayout({
                     { vel::ShaderDataType::Float4, "vColour"},
@@ -181,12 +181,12 @@ namespace vel
                     { vel::ShaderDataType::Float4, "vBoneID"},
                     { vel::ShaderDataType::Float4, "vBoneWeight"}
                 });
-            newMeshData.m_VertexArray->AddVertexBuffer(vertexBuffer);
+            newMeshData->m_VertexArray->AddVertexBuffer(vertexBuffer);
             Ref<IndexBuffer> ib = IndexBuffer::Create(
-                &newMeshData.m_Indices[0],
-                newMeshData.m_Indices.size()
+                &newMeshData->m_Indices[0],
+                newMeshData->m_Indices.size()
             );
-            newMeshData.m_VertexArray->SetIndexBuffer(ib);
+            newMeshData->m_VertexArray->SetIndexBuffer(ib);
         }
 
          return newMeshData;
@@ -279,32 +279,32 @@ namespace vel
     {
         if (m_Meshes.empty())
             return;
-        for (MeshData meshData : m_Meshes)
+        for (Ref<MeshData> meshData : m_Meshes)
         {
            /* for (Ref<Texture2D> texture : meshData.m_Textures)
             {
                 texture->Bind();
             }*/
-            if(meshData.m_Textures.size() > 0)
-                meshData.m_Textures[0]->Bind();
-            Renderer::Submit(shader, meshData.m_VertexArray, transform);
+            if(meshData->m_Textures.size() > 0)
+                meshData->m_Textures[0]->Bind();
+            Renderer::Submit(shader, meshData->m_VertexArray, transform);
         }
     }
     void Model::DrawMesh(Ref<Shader> shader, const Ref<Material> material, const glm::mat4& transform)
     {
         if (m_Meshes.empty())
             return;
-        for (MeshData meshData : m_Meshes)
+        for (Ref<MeshData> meshData : m_Meshes)
         {
-            if (meshData.m_VertexArray == nullptr)
+            if (!meshData->m_VertexArray)
             {
-                if (meshData.m_Loaded)
+                if (meshData->m_Loaded)
                 {
-                    meshData.m_VertexArray = VertexArray::Create();
+                    meshData->m_VertexArray = VertexArray::Create();
                     vel::Ref<vel::VertexBuffer> vertexBuffer;
                     vertexBuffer = vel::VertexBuffer::Create(
-                        &meshData.m_Vertices[0],
-                        sizeof(vel::Vertices) * meshData.m_Vertices.size()
+                        &meshData->m_Vertices[0],
+                        sizeof(vel::Vertices) * meshData->m_Vertices.size()
                     );
                     vertexBuffer->SetLayout({
                             { vel::ShaderDataType::Float4, "vColour"},
@@ -316,12 +316,12 @@ namespace vel
                             { vel::ShaderDataType::Float4, "vBoneID"},
                             { vel::ShaderDataType::Float4, "vBoneWeight"}
                         });
-                    meshData.m_VertexArray->AddVertexBuffer(vertexBuffer);
+                    meshData->m_VertexArray->AddVertexBuffer(vertexBuffer);
                     Ref<IndexBuffer> ib = IndexBuffer::Create(
-                        &meshData.m_Indices[0],
-                        meshData.m_Indices.size()
+                        &meshData->m_Indices[0],
+                        meshData->m_Indices.size()
                     );
-                    meshData.m_VertexArray->SetIndexBuffer(ib);
+                    meshData->m_VertexArray->SetIndexBuffer(ib);
                 }
                 else continue;
             }
@@ -337,26 +337,26 @@ namespace vel
                 shader->SetFloat4("SPEC", material->Specular);
                 shader->SetFloat("SHIN", material->Shininess);
                 shader->SetBool("useTextureDiffuse", true);
-                Renderer::Submit(shader, meshData.m_VertexArray, meshData.m_Textures, transform);
+                Renderer::Submit(shader, meshData->m_VertexArray, meshData->m_Textures, transform);
             }
             else {
                 bool useDifMap = false;
                 bool useSpeMap = false;
                 bool useNorMap = false;
 
-                if (material->DiffuseTexture != nullptr && material->DiffuseTexture->IsLoaded())
+                if (material && material->DiffuseTexture != nullptr && material->DiffuseTexture->IsLoaded())
                 {
                     useDifMap = true;
                 }
                 shader->SetFloat4("RGBA", material->Diffuse);
 
-                if (material->SpecularTexture != nullptr && material->SpecularTexture->IsLoaded())
+                if (material && material->SpecularTexture != nullptr && material->SpecularTexture->IsLoaded())
                 {
                     useSpeMap = true;
                 }
                 shader->SetFloat4("SPEC", material->Specular);
 
-                if (material->NormalTexture != nullptr && material->NormalTexture->IsLoaded())
+                if (material && material->NormalTexture != nullptr && material->NormalTexture->IsLoaded())
                 {
                     useNorMap = true;
                 }
@@ -369,8 +369,69 @@ namespace vel
                 textures.push_back(material->NormalTexture);
                 textures.push_back(material->SpecularTexture);
 
-                Renderer::Submit(shader, meshData.m_VertexArray, textures, transform);
+                Renderer::Submit(shader, meshData->m_VertexArray, textures, transform);
             }
+        }
+    }
+    
+    void Model::DrawMesh(Ref<FrameBuffer> buffer, Ref<FrameBuffer> mainbuffer, Ref<Shader> shader, const Ref<Material> material, const glm::mat4& transform)
+    {
+        if (m_Meshes.empty())
+            return;
+        for (Ref<MeshData> meshData : m_Meshes)
+        {
+            if (!meshData->m_VertexArray)
+            {
+                if (meshData->m_Loaded)
+                {
+                    meshData->m_VertexArray = VertexArray::Create();
+                    vel::Ref<vel::VertexBuffer> vertexBuffer;
+                    vertexBuffer = vel::VertexBuffer::Create(
+                        &meshData->m_Vertices[0],
+                        sizeof(vel::Vertices) * meshData->m_Vertices.size()
+                    );
+                    vertexBuffer->SetLayout({
+                            { vel::ShaderDataType::Float4, "vColour"},
+                            { vel::ShaderDataType::Float4, "vPosition"},
+                            { vel::ShaderDataType::Float4, "vNormal"},
+                            { vel::ShaderDataType::Float4, "vUVx2"},
+                            { vel::ShaderDataType::Float4, "vTangent"},
+                            { vel::ShaderDataType::Float4, "vBiNormal"},
+                            { vel::ShaderDataType::Float4, "vBoneID"},
+                            { vel::ShaderDataType::Float4, "vBoneWeight"}
+                        });
+                    meshData->m_VertexArray->AddVertexBuffer(vertexBuffer);
+                    Ref<IndexBuffer> ib = IndexBuffer::Create(
+                        &meshData->m_Indices[0],
+                        meshData->m_Indices.size()
+                    );
+                    meshData->m_VertexArray->SetIndexBuffer(ib);
+                }
+                else continue;
+            }
+
+            shader->Bind();
+
+            bool useSpeMap = false;
+            bool useNorMap = false;
+            shader->SetFloat4("RGBA", material->Diffuse);
+
+            if (material->SpecularTexture != nullptr && material->SpecularTexture->IsLoaded())
+            {
+                useSpeMap = true;
+            }
+            shader->SetFloat4("SPEC", material->Specular);
+
+            if (material->NormalTexture != nullptr && material->NormalTexture->IsLoaded())
+            {
+                useNorMap = true;
+            }
+            shader->SetFloat("SHIN", material->Shininess);
+            shader->SetBool("useTextureNormal", useNorMap);
+            shader->SetBool("useTextureSpecular", useSpeMap);
+            shader->SetBool("useTextureDiffuse", true);
+
+            Renderer::Submit(shader, meshData->m_VertexArray, buffer, mainbuffer, transform);
         }
     }
 }

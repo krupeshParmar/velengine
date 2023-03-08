@@ -36,6 +36,16 @@ namespace vel
 
 		virtual void SetPolygonMode(bool) = 0;
 
+		virtual void SetStencilTest(bool) = 0; 
+
+		virtual void SetColorMask(bool) = 0;
+
+		virtual void SetStencilMask(int mask) = 0;
+
+		virtual void SetStencilFunc() = 0;
+
+		virtual void BindTextureUnit(uint32_t slot, uint32_t renderID) = 0;
+
 		inline static API GetAPI() { return s_API; }
 
 	private:

@@ -22,5 +22,5 @@ namespace vel
 	/// <param name="filename">Name of the save file</param>
 	/// <param name="entityManager">To get info of all entities</param>
 	/// <returns>If loaded successfully</returns>
-	bool LoadSceneFile(std::string filename, Ref<EntityManager> entityManager);
+	bool LoadSceneFile(std::string filename, Ref<EntityManager> entityManager, bool async = true);
 }

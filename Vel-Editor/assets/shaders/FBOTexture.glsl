@@ -17,6 +17,9 @@ void main()
 #version 330 core
 
 layout(location = 0) out vec4 color;
+layout(location = 1) out vec4 pos;
+layout(location = 2) out vec4 norm;
+layout(location = 3) out vec4 spec;
 in vec2 v_TextureCoords;
 
 uniform float u_TilingFactor;
@@ -27,4 +30,5 @@ void main()
 	color = texture(gAlbedoSpec, v_TextureCoords);
 	/*float average = (0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b) / 3.0;
 	color = vec4(average, average, average, 1.0);*/
+	spec = vec4(1.0, 1.0, 1.0, 1.0);
 }

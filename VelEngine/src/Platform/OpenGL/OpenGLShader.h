@@ -53,5 +53,6 @@ namespace vel
 	private:
 		uint32_t m_RendererID;
 		std::string m_Name;
+		std::string m_Path;
 	};
 }

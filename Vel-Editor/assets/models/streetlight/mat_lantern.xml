@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<material>
+	<name>mat_lantern</name>
+	<diffuse>
+		<r>0.749020</r>
+		<g>0.749020</g>
+		<b>0.749020</b>
+		<a>1.000000</a>
+	</diffuse>
+	<specular>
+		<r>0.749020</r>
+		<g>0.749020</g>
+		<b>0.749020</b>
+		<a>1.000000</a>
+	</specular>
+	<ambient>1.000000</ambient>
+	<shininess>0.000000</shininess>
+	<diffuse_texture>assets/models/streetlight/LowPolyTexture_Variant1.png</diffuse_texture>
+	<specular_texture></specular_texture>
+	<normal_texture></normal_texture>
+</material>

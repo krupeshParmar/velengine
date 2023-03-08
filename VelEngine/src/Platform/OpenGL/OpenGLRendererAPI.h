@@ -24,5 +24,17 @@ namespace vel
 		virtual void SetDepthMask(bool) override;
 
 		virtual void SetPolygonMode(bool) override;
+
+		virtual void SetStencilTest(bool) override;
+
+		virtual void SetColorMask(bool) override;
+
+		virtual void SetStencilMask(int mask) override;
+
+		virtual void SetStencilFunc() override;
+
+		virtual void BindTextureUnit(uint32_t slot, uint32_t renderID) override;
+
+
 	};
 }

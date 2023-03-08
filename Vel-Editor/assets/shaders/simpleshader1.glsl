@@ -33,6 +33,8 @@ void main()
 #version 330 core
 layout(location = 0) out vec4 f_color;
 layout(location = 1) out vec4 f_position;
+layout(location = 2) out vec4 f_normal;
+layout(location = 3) out vec4 f_specular;
 
 in VS_OUT
 {
@@ -48,9 +50,6 @@ uniform sampler2D u_TextureSpecular;
 uniform bool useTextureDiffuse;
 uniform bool useTextureNormal;
 uniform bool useTextureSpecular;
-uniform bool isAWall;
-uniform bool isInControl;
-uniform bool isGround;
 uniform vec4 eyeLocation; 
 uniform vec4 SPEC;
 uniform vec4 RGBA;
@@ -71,7 +70,7 @@ const int SPOT_LIGHT_TYPE = 1;
 const int DIRECTIONAL_LIGHT_TYPE = 2;
 
 const int NUMBEROFLIGHTS = 20;
-uniform Light theLights[NUMBEROFLIGHTS];  	
+Light theLights[NUMBEROFLIGHTS];  	
 
 vec4 calculateLightContrib(vec3 vertexMaterialColour, vec3 vertexNormal,
     vec3 vertexWorldPos, vec4 vertexSpecular);
@@ -92,13 +91,25 @@ void main()
 	if (useTextureSpecular)
 		specularColour = texture(u_TextureSpecular, fs_in.TexCoords);
 
+	////// TEMP FOR PROJECT
+	theLights[0].position = vec4(0.0, 30.0, 0.0, 1.0);
+	theLights[0].direction = vec4(0.0, 0.0, 0.0, 1.0);
+	theLights[0].diffuse =	vec4(1.0, 1.0, 1.0, 1.0);
+	theLights[0].specular = vec4(0.906863, 0.906863, 0.475658, 1.0);
+	theLights[0].atten = vec4(0.075000, 0.049000, 0.0, 1.0);
+	theLights[0].param1 = vec4(0.0, 0.0, 0.0, 1.0);
+
 	vec4 outColour = calculateLightContrib(textColour0.rgb, normalValue.xyz,
 		fs_in.FragPos.xyz, specularColour);
 
 	f_color = vec4(outColour.rgb, 1.0);
 
-	float ambientLight = 0.08f;
+	float ambientLight = 0.3f;
 	f_color.rgb += (textColour0.rgb * ambientLight);
+	f_color.w = 1.0f;
+	f_position = vec4(fs_in.FragPos, 1.0);
+	f_normal = vec4(normalValue, 1.0);
+	f_specular = specularColour;
 }
 
 vec4 calculateLightContrib(vec3 vertexMaterialColour, vec3 vertexNormal,
