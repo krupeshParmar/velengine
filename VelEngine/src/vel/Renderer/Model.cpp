@@ -333,7 +333,9 @@ namespace vel
             {
                 shader->SetBool("useTextureNormal", false);
                 shader->SetBool("useTextureSpecular", false);
+                shader->SetBool("useTextureEmissive", false);
                 shader->SetFloat4("RGBA", material->Diffuse);
+                shader->SetFloat4("EMIS", material->Emissive);
                 shader->SetFloat4("SPEC", material->Specular);
                 shader->SetFloat("SHIN", material->Shininess);
                 shader->SetBool("useTextureDiffuse", true);
@@ -343,6 +345,7 @@ namespace vel
                 bool useDifMap = false;
                 bool useSpeMap = false;
                 bool useNorMap = false;
+                bool useEmiMap = false;
 
                 if (material && material->DiffuseTexture != nullptr && material->DiffuseTexture->IsLoaded())
                 {
@@ -360,14 +363,22 @@ namespace vel
                 {
                     useNorMap = true;
                 }
+                if (material && material->EmissiveTexture != nullptr && material->EmissiveTexture->IsLoaded())
+                {
+                    useEmiMap = true;
+                }
+                shader->SetFloat4("EMIS", material->Emissive);
                 shader->SetFloat("SHIN", material->Shininess);
+                shader->SetFloat("EmissiveIntensity", material->EmissiveIntensity);
                 shader->SetBool("useTextureNormal", useNorMap);
                 shader->SetBool("useTextureSpecular", useSpeMap);
                 shader->SetBool("useTextureDiffuse", useDifMap);
+                shader->SetBool("useTextureEmissive", useEmiMap);
 
                 textures.push_back(material->DiffuseTexture);
                 textures.push_back(material->NormalTexture);
                 textures.push_back(material->SpecularTexture);
+                textures.push_back(material->EmissiveTexture);
 
                 Renderer::Submit(shader, meshData->m_VertexArray, textures, transform);
             }

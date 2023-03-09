@@ -13,9 +13,17 @@
 		<b>0.750000</b>
 		<a>0.750000</a>
 	</specular>
+	<emissive>
+		<r>0.000000</r>
+		<g>0.000000</g>
+		<b>0.000000</b>
+		<a>1.000000</a>
+	</emissive>
 	<ambient>1.000000</ambient>
 	<shininess>0.000000</shininess>
+	<emissive_intensity>1.000000</emissive_intensity>
 	<diffuse_texture>assets/models/bench/LowPolyTexture_Variant1.png</diffuse_texture>
 	<specular_texture></specular_texture>
 	<normal_texture></normal_texture>
+	<emissive_texture></emissive_texture>
 </material>

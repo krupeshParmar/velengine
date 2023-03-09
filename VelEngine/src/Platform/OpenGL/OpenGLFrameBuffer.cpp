@@ -18,6 +18,8 @@ namespace vel
 		glDeleteTextures(1, &m_VertexWorldPosition);
 		glDeleteTextures(1, &m_NormalAttachment);
 		glDeleteTextures(1, &m_SpecularAttachment);
+		glDeleteTextures(1, &m_EmissiveAttachment);
+		glDeleteTextures(1, &m_BloomAttachment);
 		glDeleteTextures(1, &m_DepthAttachment);
 	}
 
@@ -62,9 +64,15 @@ namespace vel
 		glBindTexture(GL_TEXTURE_2D, m_SpecularAttachment);
 	}
 
-	void OpenGLFrameBuffer::BindBloomTexture()
+	void OpenGLFrameBuffer::BindEmissiveTexture()
 	{
 		glActiveTexture(GL_TEXTURE4);
+		glBindTexture(GL_TEXTURE_2D, m_EmissiveAttachment);
+	}
+
+	void OpenGLFrameBuffer::BindBloomTexture()
+	{
+		glActiveTexture(GL_TEXTURE5);
 		glBindTexture(GL_TEXTURE_2D, m_BloomAttachment);
 	}
 
@@ -98,6 +106,7 @@ namespace vel
 			glDeleteTextures(1, &m_VertexWorldPosition);
 			glDeleteTextures(1, &m_NormalAttachment);
 			glDeleteTextures(1, &m_SpecularAttachment);
+			glDeleteTextures(1, &m_EmissiveAttachment);
 			glDeleteTextures(1, &m_BloomAttachment);
 			glDeleteTextures(1, &m_DepthAttachment);
 		}
@@ -120,7 +129,7 @@ namespace vel
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER /*GL_CLAMP_TO_EDGE*/);
 
 		
-
+		// Vertex position
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_VertexWorldPosition);
 		glBindTexture(GL_TEXTURE_2D, m_VertexWorldPosition);
 
@@ -137,7 +146,7 @@ namespace vel
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER /*GL_CLAMP_TO_EDGE*/);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER /*GL_CLAMP_TO_EDGE*/);
 
-
+		// Normals
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_NormalAttachment);
 		glBindTexture(GL_TEXTURE_2D, m_NormalAttachment);
 		glTexStorage2D(GL_TEXTURE_2D,
@@ -152,7 +161,7 @@ namespace vel
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER /*GL_CLAMP_TO_EDGE*/);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER /*GL_CLAMP_TO_EDGE*/);
 
-
+		// Specular
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_SpecularAttachment);
 		glBindTexture(GL_TEXTURE_2D, m_SpecularAttachment);
 		glTexStorage2D(GL_TEXTURE_2D,
@@ -166,6 +175,21 @@ namespace vel
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER /*GL_CLAMP_TO_EDGE*/);
 
 
+		// Emissive
+		glCreateTextures(GL_TEXTURE_2D, 1, &m_EmissiveAttachment);
+		glBindTexture(GL_TEXTURE_2D, m_EmissiveAttachment);
+		glTexStorage2D(GL_TEXTURE_2D,
+			1, GL_RGBA32F, m_Specification.Width, m_Specification.Height);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, black);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER /*GL_CLAMP_TO_EDGE*/);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER /*GL_CLAMP_TO_EDGE*/);
+
+
+		// Bloom
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_BloomAttachment);
 		glBindTexture(GL_TEXTURE_2D, m_BloomAttachment);
 		glTexStorage2D(GL_TEXTURE_2D,
@@ -204,7 +228,11 @@ namespace vel
 			m_SpecularAttachment, 0);
 
 		glFramebufferTexture(GL_FRAMEBUFFER,
-			GL_COLOR_ATTACHMENT4,			// Bloom (to #4)
+			GL_COLOR_ATTACHMENT4,			// Emissive (to #4)
+			m_EmissiveAttachment, 0);
+
+		glFramebufferTexture(GL_FRAMEBUFFER,
+			GL_COLOR_ATTACHMENT5,			// Bloom (to #5)
 			m_BloomAttachment, 0);
 
 		glFramebufferTexture(GL_FRAMEBUFFER,
@@ -217,10 +245,11 @@ namespace vel
 			GL_COLOR_ATTACHMENT1,		// vertex world position
 			GL_COLOR_ATTACHMENT2,		// normals
 			GL_COLOR_ATTACHMENT3,		// specular
-			GL_COLOR_ATTACHMENT4,		// bloom
+			GL_COLOR_ATTACHMENT4,		// emissive
+			GL_COLOR_ATTACHMENT5,		// bloom
 			GL_DEPTH_STENCIL_ATTACHMENT
 		};
-		glDrawBuffers(5, draw_bufers);
+		glDrawBuffers(6, draw_bufers);
 
 		bool bFrameBufferIsGoodToGo = true;
 		std::string error = "";

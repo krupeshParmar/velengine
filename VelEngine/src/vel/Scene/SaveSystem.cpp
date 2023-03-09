@@ -232,12 +232,33 @@ namespace vel
 			aNode.append_child(pugi::node_pcdata).set_value(
 				std::to_string(material->Specular.w).c_str());
 		}
+		pugi::xml_node emissiveNode = materialNode.append_child("emissive");
+		{
+			pugi::xml_node xNode = emissiveNode.append_child("r");
+			xNode.append_child(pugi::node_pcdata).set_value(
+				std::to_string(material->Emissive.x).c_str());
+
+			pugi::xml_node yNode = emissiveNode.append_child("g");
+			yNode.append_child(pugi::node_pcdata).set_value(
+				std::to_string(material->Emissive.y).c_str());
+
+			pugi::xml_node zNode = emissiveNode.append_child("b");
+			zNode.append_child(pugi::node_pcdata).set_value(
+				std::to_string(material->Emissive.z).c_str());
+
+			pugi::xml_node aNode = emissiveNode.append_child("a");
+			aNode.append_child(pugi::node_pcdata).set_value(
+				std::to_string(material->Emissive.w).c_str());
+		}
 
 		pugi::xml_node ambientNode = materialNode.append_child("ambient");
 		ambientNode.append_child(pugi::node_pcdata).set_value(std::to_string(material->Ambient).c_str());
 
 		pugi::xml_node shininessNode = materialNode.append_child("shininess");
 		shininessNode.append_child(pugi::node_pcdata).set_value(std::to_string(material->Shininess).c_str());
+		
+		pugi::xml_node emissiveIntesityNode = materialNode.append_child("emissive_intensity");
+		emissiveIntesityNode.append_child(pugi::node_pcdata).set_value(std::to_string(material->EmissiveIntensity).c_str());
 
 		pugi::xml_node diffusetextureNode = materialNode.append_child("diffuse_texture");
 		diffusetextureNode.append_child(pugi::node_pcdata).set_value(material->DiffuseTexturePath.c_str());
@@ -247,6 +268,9 @@ namespace vel
 
 		pugi::xml_node normaltextureNode = materialNode.append_child("normal_texture");
 		normaltextureNode.append_child(pugi::node_pcdata).set_value(material->NormalTexturePath.c_str());
+
+		pugi::xml_node emissivetextureNode = materialNode.append_child("emissive_texture");
+		emissivetextureNode.append_child(pugi::node_pcdata).set_value(material->EmissiveTexturePath.c_str());
 
 		return doc.save_file(materialPath.c_str());
 	}
@@ -329,6 +353,33 @@ namespace vel
 						std::stof(specularNode.child_value());
 				}
 			}
+			if(matNodeName == "emissive")
+			{
+				pugi::xml_object_range<pugi::xml_node_iterator>
+					emissiveChildren = matNode.children();
+				for (pugi::xml_node_iterator emissiveIterator = emissiveChildren.begin();
+					emissiveIterator != emissiveChildren.end();
+					emissiveIterator++)
+				{
+					pugi::xml_node emissiveNode = *emissiveIterator;
+					std::string emissiveNodeName = emissiveNode.name();
+					if (emissiveNodeName == "r")
+						material->Emissive.x =
+						std::stof(emissiveNode.child_value());
+
+					if (emissiveNodeName == "g")
+						material->Emissive.y =
+						std::stof(emissiveNode.child_value());
+
+					if (emissiveNodeName == "b")
+						material->Emissive.z =
+						std::stof(emissiveNode.child_value());
+
+					if (emissiveNodeName == "a")
+						material->Emissive.w =
+						std::stof(emissiveNode.child_value());
+				}
+			}
 			if (matNodeName == "ambient")
 			{
 				material->Ambient = std::stof(matNode.child_value());
@@ -336,6 +387,10 @@ namespace vel
 			if (matNodeName == "shininess")
 			{
 				material->Shininess = std::stof(matNode.child_value());
+			}
+			if (matNodeName == "emissive_intensity")
+			{
+				material->EmissiveIntensity = std::stof(matNode.child_value());
 			}
 			if (matNodeName == "diffuse_texture")
 			{
@@ -348,6 +403,10 @@ namespace vel
 			if (matNodeName == "normal_texture")
 			{
 				material->NormalTexturePath = matNode.child_value();
+			}
+			if (matNodeName == "emissive_texture")
+			{
+				material->EmissiveTexturePath = matNode.child_value();
 			}
 		}
 		return material;

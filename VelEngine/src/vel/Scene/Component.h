@@ -23,9 +23,11 @@ namespace vel
 		glm::vec3 Scale = { 1.0f, 1.0f, 1.0f };
 
 		TransformComponent() = default;
-		TransformComponent(const TransformComponent& other) = default;
+		TransformComponent(const TransformComponent& other) 
+			:Translation(other.Translation), Rotation(other.Rotation), Scale(other.Scale)
+		{}
 		TransformComponent(const glm::vec3& translation)
-			: Translation(translation) {}
+			: Translation(translation){}
 
 		glm::vec3 GetRotation() const
 		{
@@ -72,7 +74,7 @@ namespace vel
 			ModelIns = CreateRef<Model>(Path, useFBXTextures, false);
 		}
 		MeshComponent(const MeshComponent& other)
-			: Mesh(other.Mesh), SubmeshIndex(other.SubmeshIndex), MaterialIns(other.MaterialIns)
+			: Mesh(other.Mesh), SubmeshIndex(other.SubmeshIndex), MaterialIns(other.MaterialIns), ModelIns(other.ModelIns), UseFBXTextures(other.UseFBXTextures), MaterialPath(other.MaterialPath)
 		{
 		}
 	};
@@ -87,6 +89,20 @@ namespace vel
 	class LightComponent : public Component
 	{
 	public:
+		LightComponent(const LightComponent& other)
+			: Position(other.Position),
+			Diffuse(other.Diffuse),
+			Specular(other.Specular),
+			Ambient(other.Ambient),
+			Attenuation(other.Attenuation),
+			Direction(other.Direction),
+			LightParams(other.LightParams),
+			Intensity(other.Intensity),
+			InnerCutOff(other.InnerCutOff),
+			OuterCutOff(other.OuterCutOff)
+		{
+
+		}
 		LightComponent()
 		{
 			Position = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
@@ -139,10 +155,6 @@ namespace vel
 		{
 			this->LightParams.w = 0;
 		}
-
-		float Constant;
-		float Linear;
-		float Quadratic;
 
 		float InnerCutOff;
 		float OuterCutOff;

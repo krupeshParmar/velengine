@@ -22,9 +22,6 @@ namespace vel
 
 		m_FullScreenFrameBuffer = FrameBuffer::Create(fbSpec);
 		m_PostProcessFrameBuffer = FrameBuffer::Create(fbSpec);
-		m_BedroomFrameBuffer = FrameBuffer::Create(fbSpec);
-		m_PingFrameBuffer = FrameBuffer::Create(fbSpec);
-		m_PongFrameBuffer = FrameBuffer::Create(fbSpec);
 
 		m_SceneManager = CreateScope<SceneManager>();
 
@@ -40,14 +37,16 @@ namespace vel
 		m_ShaderLibrary.Get("DeferredShader")->SetInt("gPosition", 1);
 		m_ShaderLibrary.Get("DeferredShader")->SetInt("gNormal", 2);
 		m_ShaderLibrary.Get("DeferredShader")->SetInt("gSpecular", 3);
-		m_ShaderLibrary.Get("DeferredShader")->SetInt("gBloom", 4);
+		m_ShaderLibrary.Get("DeferredShader")->SetInt("gEmissive", 4);
+		m_ShaderLibrary.Get("DeferredShader")->SetInt("gBloom", 5);
 
 		m_ShaderLibrary.Get("PostProcessing")->Bind();
 		m_ShaderLibrary.Get("PostProcessing")->SetInt("gAlbedoSpec", 0);
 		m_ShaderLibrary.Get("PostProcessing")->SetInt("gPosition", 1);
 		m_ShaderLibrary.Get("PostProcessing")->SetInt("gNormal", 2);
 		m_ShaderLibrary.Get("PostProcessing")->SetInt("gSpecular", 3);
-		m_ShaderLibrary.Get("PostProcessing")->SetInt("gBloom", 4);
+		m_ShaderLibrary.Get("PostProcessing")->SetInt("gEmissive", 4);
+		m_ShaderLibrary.Get("PostProcessing")->SetInt("gBloom", 5);
 
 		m_SquareVertexArray = VertexArray::Create();
 		float sqVertices[6 * 4] = {
@@ -154,6 +153,7 @@ namespace vel
 			m_RenderBuffer->BindWorldPositionTexture();
 			m_RenderBuffer->BindNormalTexture();
 			m_RenderBuffer->BindSpecularTexture();
+			m_RenderBuffer->BindEmissiveTexture();
 			m_RenderBuffer->BindBloomTexture();
 			m_ShaderLibrary.Get("DeferredShader")->SetFloat("Exposure", m_SceneManager->Exposure);
 			m_ShaderLibrary.Get("DeferredShader")->SetFloat("BloomThreshold", m_SceneManager->BloomThreshold);
@@ -181,6 +181,7 @@ namespace vel
 			m_FullScreenFrameBuffer->BindWorldPositionTexture();
 			m_FullScreenFrameBuffer->BindNormalTexture();
 			m_FullScreenFrameBuffer->BindSpecularTexture();
+			m_FullScreenFrameBuffer->BindEmissiveTexture();
 			m_FullScreenFrameBuffer->BindBloomTexture();
 			m_ShaderLibrary.Get("PostProcessing")->SetBool("UseBloom", m_SceneManager->UseBloom);
 			m_ShaderLibrary.Get("PostProcessing")->SetFloat("BloomIntensity", m_SceneManager->BloomIntensity);
@@ -334,11 +335,18 @@ namespace vel
 		}
 
 
-		ImGui::Begin("Bloom");
-		uint32_t BloomID = m_FullScreenFrameBuffer->GetBloomAttachmenRendererID();
-		ImGui::Image((void*)BloomID, ImVec2{ m_ViewPortSize.x, m_ViewPortSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
-
-		ImGui::End();
+		{
+			ImGui::Begin("Bloom");
+			uint32_t BloomID = m_FullScreenFrameBuffer->GetBloomAttachmenRendererID();
+			ImGui::Image((void*)BloomID, ImVec2{ m_ViewPortSize.x, m_ViewPortSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+			ImGui::End();
+		}
+		{
+			ImGui::Begin("Color");
+			uint32_t ColorID = m_FullScreenFrameBuffer->GetColorAttachmenRendererID();
+			ImGui::Image((void*)ColorID, ImVec2{ m_ViewPortSize.x, m_ViewPortSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+			ImGui::End();
+		}
 	}
 
 	void EditorLayer::SceneHierarchy()
@@ -398,7 +406,30 @@ namespace vel
 			ImGui::Button("Duplicate");
 			if (ImGui::IsItemClicked())
 			{
-				//this->DuplicateGameObject(entity, shaderID);
+				uint32_t id = m_SceneManager->GetEntityManager()->CreateEntity();
+				Ref<Entity> newentity = m_SceneManager->GetEntityManager()->GetEntity(id);
+				newentity->name = entity->name + " duplicate " + std::to_string(m_SceneManager->GetEntityManager()->GetAllEntities().size());
+				TransformComponent* newtransform =
+					m_SceneManager->GetEntityManager()->
+					GetComponentByType<TransformComponent>(id);
+				TransformComponent* transform =
+					m_SceneManager->GetEntityManager()->
+					GetComponentByType<TransformComponent>(entity->GetID());
+				*newtransform = TransformComponent(*transform);
+				if (m_SceneManager->GetEntityManager()->HasComponent< LightComponent>(entity->GetID()))
+				{
+					LightComponent* light =
+						m_SceneManager->GetEntityManager()->
+						GetComponentByType<LightComponent>(entity->GetID());
+					m_SceneManager->GetEntityManager()->AddComponent(id, new LightComponent(*light));
+				}
+				if (m_SceneManager->GetEntityManager()->HasComponent< MeshComponent>(entity->GetID()))
+				{
+					MeshComponent* mesh =
+						m_SceneManager->GetEntityManager()->
+						GetComponentByType<MeshComponent>(entity->GetID());
+					m_SceneManager->GetEntityManager()->AddComponent(id, new MeshComponent(*mesh));
+				}
 			}
 
 			ImGui::Separator();
@@ -498,8 +529,10 @@ namespace vel
 					}
 					ImGui::ColorEdit4("Diffuse##difmaterial", glm::value_ptr(mesh->MaterialIns->Diffuse));
 					ImGui::ColorEdit4("Specular##specmaterial", glm::value_ptr(mesh->MaterialIns->Specular));
+					ImGui::ColorEdit4("Emissive##emismaterial", glm::value_ptr(mesh->MaterialIns->Emissive));
 					ImGui::InputFloat("Ambient##ambmaterial", &mesh->MaterialIns->Ambient);
-					ImGui::SliderFloat("Shininess##ambmaterial", &mesh->MaterialIns->Shininess, 0, 1.0f);
+					ImGui::SliderFloat("Shininess##ambmaterial", &mesh->MaterialIns->Shininess, 0, 10.0f);
+					ImGui::SliderFloat("Emissive Intensity##emintematerial", &mesh->MaterialIns->EmissiveIntensity, 0, 10.0f);
 
 					if (mesh->MaterialIns->DiffuseTexture && mesh->MaterialIns->DiffuseTexture->IsLoaded())
 					{
@@ -583,6 +616,34 @@ namespace vel
 								if (texture->IsLoaded())
 								{
 									mesh->MaterialIns->NormalTexture = texture;
+								}
+							}
+						}
+					}
+					if (mesh->MaterialIns->EmissiveTexture && mesh->MaterialIns->EmissiveTexture->IsLoaded())
+					{
+						ImGui::Image((void*)mesh->MaterialIns->EmissiveTexture->GetRendererID(), ImVec2{ 128, 128 });
+						if (ImGui::Button("Unload##btnemisUNLoad"))
+						{
+							mesh->MaterialIns->EmissiveTexture->RemoveData();
+						}
+					}
+					else
+					{
+						ImGui::InputText("Emissive Texture##emisTexmaterial", &mesh->MaterialIns->EmissiveTexturePath);
+						ImGui::SameLine();
+						if (ImGui::Button("Load##btnemisLoad"))
+						{
+							if (mesh->MaterialIns->EmissiveTexture)
+							{
+								mesh->MaterialIns->EmissiveTexture->CreateData(mesh->MaterialIns->EmissiveTexturePath);
+							}
+							else
+							{
+								Ref<Texture2D> texture = Texture2D::Create(mesh->MaterialIns->EmissiveTexturePath);
+								if (texture->IsLoaded())
+								{
+									mesh->MaterialIns->EmissiveTexture = texture;
 								}
 							}
 						}

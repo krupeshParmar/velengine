@@ -36,7 +36,8 @@ layout(location = 0) out vec4 f_albedo;
 layout(location = 1) out vec4 f_position;
 layout(location = 2) out vec4 f_normal;
 layout(location = 3) out vec4 f_specular;
-layout(location = 4) out vec4 f_bloom;
+layout(location = 4) out vec4 f_emissive;
+layout(location = 5) out vec4 f_bloom;
 
 in VS_OUT
 {
@@ -49,13 +50,17 @@ in VS_OUT
 uniform sampler2D u_TextureDiffuse;
 uniform sampler2D u_TextureNormal;
 uniform sampler2D u_TextureSpecular;
+uniform sampler2D u_TextureEmissive;
 uniform bool useTextureDiffuse;
 uniform bool useTextureNormal;
 uniform bool useTextureSpecular;
+uniform bool useTextureEmissive;
 uniform vec4 SPEC;
 uniform vec4 RGBA;
+uniform vec4 EMIS;
 uniform samplerCube skyBox;
 uniform float SHIN;
+uniform float EmissiveIntensity;
 uniform float u_texsize;
 uniform vec4 eyeLocation;
 
@@ -83,11 +88,16 @@ void main()
 	if (useTextureSpecular)
 		specularColour = texture(u_TextureSpecular, fs_in.TexCoords);
 
+	vec4 emissiveColour = EMIS;
+	if(useTextureEmissive)
+		emissiveColour = texture(u_TextureEmissive, fs_in.TexCoords);
+
 	f_albedo.rgb = textColour0.rgb;
 	f_albedo.a = transparency;
 	f_position = fs_in.FragPos;
 	f_normal = vec4(normalValue.xyz, 1.0);
 	f_specular = specularColour;
+	f_emissive = emissiveColour * EmissiveIntensity;
 
 	float ratio = 1.00 / 1.52;
 	vec3 I = normalize(fs_in.FragPos.xyz - eyeLocation.xyz);
@@ -100,7 +110,7 @@ void main()
 
 	//if (useBloom)
 	{
-		if (f_albedo.r > 0.05f)
+		/*if (f_albedo.r > 0.05f)
 			f_albedo.r *= 2.0f;
 
 		if (f_albedo.g > 0.05f)
@@ -111,6 +121,6 @@ void main()
 
 		float brightness = dot(f_albedo.rgb, vec3(0.2126f, 0.7152f, 0.0722f));
 		if (brightness > 0.15f)
-			f_bloom = vec4(f_albedo.rgb, 1.0);
+			f_bloom = vec4(f_albedo.rgb, 1.0);*/
 	}
 }

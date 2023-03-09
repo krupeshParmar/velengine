@@ -106,7 +106,8 @@ namespace vel
 		m_Shader->SetInt("u_TextureDiffuse", 0);
 		m_Shader->SetInt("u_TextureNormal", 1);
 		m_Shader->SetInt("u_TextureSpecular", 2);
-		m_Shader->SetInt("skyBox", 3);
+		m_Shader->SetInt("u_TextureEmissive", 3);
+		m_Shader->SetInt("skyBox", 4);
 
 
 		m_SkyBoxShader = m_ShaderLibrary.Load("assets/shaders/SkyBox.glsl");
@@ -177,12 +178,20 @@ namespace vel
 								meshComp->MaterialIns->SpecularTexture = specTex;
 							}
 						}
+						if (meshComp->MaterialIns && !meshComp->MaterialIns->EmissiveTexturePath.empty())
+						{
+							Ref<Texture2D> emisTex = Texture2D::Create(meshComp->MaterialIns->EmissiveTexturePath);
+							if (emisTex != nullptr)
+							{
+								meshComp->MaterialIns->EmissiveTexture = emisTex;
+							}
+						}
 						meshComp->MaterialIns->IsCompiled = true;
 					}
 					if (meshComp->ModelIns && meshComp->MaterialIns)
 					{
 						m_Shader->Bind();
-						BindSkyBox(3);
+						BindSkyBox(4);
 						m_Shader->SetFloat4("eyeLocation", eyeLocation);
 						if (entity->name == "Plane")
 							meshComp->MaterialIns->TextureSize = 10.f;

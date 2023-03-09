@@ -20,7 +20,8 @@ layout(location = 0) out vec4 f_color;
 layout(location = 1) out vec4 f_position;
 layout(location = 2) out vec4 f_normal;
 layout(location = 3) out vec4 f_specular;
-layout(location = 4) out vec4 f_bloom;
+layout(location = 4) out vec4 f_emissive;
+layout(location = 5) out vec4 f_bloom;
 in vec2 v_TextureCoords;
 
 uniform float u_TilingFactor;
