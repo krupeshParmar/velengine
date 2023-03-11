@@ -9,6 +9,12 @@
 
 namespace vel
 {
+	struct EntityData
+	{
+		std::vector<Component*>* ComponentsList;
+		std::vector<uint32_t>* ChildrenList;
+	};
+
 	class EntityManager
 	{
 	public:
@@ -23,8 +29,11 @@ namespace vel
 		Ref<Entity> GetEntity(uint32_t id);
 
 		uint32_t CreateEntity(std::string name = "GameObject");
+		void CreateEntity(uint32_t id);
 
-		void AddChild(Entity* parentEntity, Entity* childEntity);
+		void AddChild(uint32_t parentID, uint32_t childID);
+
+		EntityData* GetEntityData(uint32_t id);
 
 		inline void Clear() {
 			m_EntityMap.clear();
@@ -36,10 +45,10 @@ namespace vel
 		template<class T>
 		bool HasComponent(uint32_t entityID)
 		{
-			std::map<uint32_t, std::vector<Component*>*>::iterator entityIT = m_EntityMap.find(entityID);
+			std::map<uint32_t, EntityData*>::iterator entityIT = m_EntityMap.find(entityID);
 			if (entityIT != m_EntityMap.end())
 			{
-				std::vector<Component*>* componentList = entityIT->second;
+				std::vector<Component*>* componentList = entityIT->second->ComponentsList;
 				for (int i = 0; i < componentList->size(); i++)
 				{
 					T* component = dynamic_cast<T*>(componentList->at(i));
@@ -53,10 +62,10 @@ namespace vel
 		template<class T>
 		T* GetComponentByType(uint32_t entityID)
 		{
-			std::map<uint32_t, std::vector<Component*>*>::iterator entityIT = m_EntityMap.find(entityID);
+			std::map<uint32_t, EntityData*>::iterator entityIT = m_EntityMap.find(entityID);
 			if (entityIT != m_EntityMap.end())
 			{
-				std::vector<Component*>* componentList = entityIT->second;
+				std::vector<Component*>* componentList = entityIT->second->ComponentsList;
 				for (int i = 0; i < componentList->size(); i++)
 				{
 					T* component = dynamic_cast<T*>(componentList->at(i));
@@ -70,10 +79,10 @@ namespace vel
 		template<class T>
 		bool AddComponent(uint32_t entityID, T* newComponent)
 		{
-			std::map<uint32_t, std::vector<Component*>*>::iterator entityIT = m_EntityMap.find(entityID);
+			std::map<uint32_t, EntityData*>::iterator entityIT = m_EntityMap.find(entityID);
 			if (entityIT != m_EntityMap.end())
 			{
-				std::vector<Component*>* componentList = entityIT->second;
+				std::vector<Component*>* componentList = entityIT->second->ComponentsList;
 				if (HasComponent<T>(entityID))
 				{
 					return false;
@@ -93,10 +102,10 @@ namespace vel
 		template<class T>
 		T* RemoveComponent(uint32_t entityID)
 		{
-			std::map<uint32_t, std::vector<Component*>*>::iterator entityIT = m_EntityMap.find(entityID);
+			std::map<uint32_t, EntityData*>::iterator entityIT = m_EntityMap.find(entityID);
 			if (entityIT != m_EntityMap.end())
 			{
-				std::vector<Component*>* componentList = entityIT->second;
+				std::vector<Component*>* componentList = entityIT->second->ComponentsList;
 				for (std::vector<Component*>::iterator it = componentList->begin();
 					it != componentList->end(); it++)
 				{
@@ -113,8 +122,10 @@ namespace vel
 
 
 	private:
-		std::map<uint32_t, std::vector<Component*>* > m_EntityMap;
+		std::map<uint32_t, EntityData* > m_EntityMap;
 		Ref<std::vector<Ref<Entity>>> m_EntityList;
+		Ref < std::map < uint32_t, std::vector<uint32_t> > > m_ParentToChildMap;
+
 		uint32_t m_NextEntityID;
 	};
 }

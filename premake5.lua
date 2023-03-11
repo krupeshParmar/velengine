@@ -22,6 +22,7 @@ IncludeDir["PugiXML"] = "VelEngine/vendor/pugixml/src"
 IncludeDir["iPhysics"] = "Libraries/iPhysics/src"
 IncludeDir["VelPhysics"] = "Libraries/VelPhysics/src"
 IncludeDir["Assimp"] = "%{wks.location}/VelEngine/vendor/assimp/include"
+IncludeDir["entt"] = "%{wks.location}/VelEngine/vendor/entt/include"
 
 
 Library = {}
@@ -88,7 +89,8 @@ project "VelEngine"
 		"%{IncludeDir.stb_image}",
 		"%{IncludeDir.PugiXML}",
 		"%{IncludeDir.iPhysics}",
-		"%{IncludeDir.VelPhysics}"
+		"%{IncludeDir.VelPhysics}",
+		"%{IncludeDir.entt}",
 	}
 
 	links
@@ -154,6 +156,7 @@ project "Sandbox"
 		"VelEngine/vendor/pugixml/src",
 		"Libraries/iPhysics/src",
 		"Libraries/VelPhysics/src",
+		"%{IncludeDir.entt}",
 	}
 
 	links
@@ -212,6 +215,7 @@ project "Vel-Editor"
 		"VelEngine/vendor/pugixml/src",
 		"Libraries/iPhysics/src",
 		"Libraries/VelPhysics/src",
+		"%{IncludeDir.entt}",
 	}
 
 	links

@@ -189,6 +189,12 @@
     <ClInclude Include="src\vel\Scene\LightManager.h">
       <Filter>src\vel\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\vel\Scene\MaterialSystem.h">
+      <Filter>src\vel\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Scene\MeshRenderer.h">
+      <Filter>src\vel\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\vel\Scene\SaveSystem.h">
       <Filter>src\vel\Scene</Filter>
     </ClInclude>
@@ -1449,8 +1455,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\vel\Scene\MeshRenderer.h" />
-    <ClInclude Include="src\vel\Scene\MaterialSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
@@ -1531,7 +1535,16 @@
     <ClCompile Include="src\vel\Renderer\VertexArray.cpp">
       <Filter>src\vel\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\vel\Scene\EntityManager.cpp">
+      <Filter>src\vel\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\vel\Scene\LightManager.cpp">
+      <Filter>src\vel\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vel\Scene\MaterialSystem.cpp">
+      <Filter>src\vel\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vel\Scene\MeshRenderer.cpp">
       <Filter>src\vel\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\vel\Scene\SaveSystem.cpp">
@@ -1543,8 +1556,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\vel\Scene\EntityManager.cpp" />
-    <ClCompile Include="src\vel\Scene\MeshRenderer.cpp" />
-    <ClCompile Include="src\vel\Scene\MaterialSystem.cpp" />
   </ItemGroup>
 </Project>

@@ -12,6 +12,7 @@
 #include <assimp/mesh.h>
 #include <assimp/postprocess.h>
 #include "Renderer.h"
+#include <vel/Scene/EntityManager.h>
 
 // controls acces to the vector of m_Meshes
 CRITICAL_SECTION ModelLoader_Lock;
@@ -39,6 +40,26 @@ namespace vel
 
         VEL_CORE_TRACE("{0} Model loaded", m_Name);
 	}
+
+    Model::Model(std::string source, bool useTextures, bool loadAsync, Ref<EntityManager> entityManager)
+    {
+        m_InitCriticalSections();
+        m_Meshes = std::vector<Ref<MeshData>>();
+        m_Importer = std::make_unique<Assimp::Importer>();
+        const aiScene* scene = m_Importer->ReadFile(source, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
+
+        if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+        {
+            VEL_CORE_ERROR("ERROR::ASSIMP:: {0}", m_Importer->GetErrorString());
+            return;
+        }
+        m_Path = source.substr(0, source.find_last_of('/'));
+        m_Name = source.substr(source.find_last_of('/') + 1, source.size());
+
+        ProcessNode(scene->mRootNode, scene);
+
+        VEL_CORE_TRACE("{0} Model loaded", m_Name);
+    }
 
     Model::~Model() { m_DeleteCriticalSections(); }
 
@@ -230,11 +251,13 @@ namespace vel
                     lpThreadId
                 );*/
 
+            VEL_CORE_TRACE("Mesh: {0}, Node: {1}", mesh->mName.C_Str(), node->mName.C_Str());
             m_Meshes.push_back(ProcessMesh(mesh, scene));
         }
         // then do the same for each of its children
         for (unsigned int i = 0; i < node->mNumChildren; i++)
         {
+            VEL_CORE_TRACE("Parent : {0}, Child Mesh: {1}", node->mChildren[i]->mParent->mName.C_Str(), node->mChildren[i]->mName.C_Str());
             ProcessNode(node->mChildren[i], scene);
         }
     }

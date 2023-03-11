@@ -15,13 +15,13 @@
 	</specular>
 	<emissive>
 		<r>1.000000</r>
-		<g>0.000000</g>
+		<g>0.205882</g>
 		<b>0.000000</b>
 		<a>1.000000</a>
 	</emissive>
 	<ambient>1.000000</ambient>
 	<shininess>0.000000</shininess>
-	<emissive_intensity>3.113000</emissive_intensity>
+	<emissive_intensity>4.821000</emissive_intensity>
 	<diffuse_texture></diffuse_texture>
 	<specular_texture></specular_texture>
 	<normal_texture></normal_texture>

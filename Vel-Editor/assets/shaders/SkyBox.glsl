@@ -12,12 +12,12 @@ layout(location = 7)in vec4 vBoneWeight;
 
 out vec3 TexCoords;
 
-uniform mat4 viewprojection;
+uniform mat4 modelviewprojection;
 
 void main()
 {
     TexCoords = vPosition.xyz;
-    vec4 pos = viewprojection * vec4(vPosition.xyz, 1.0);
+    vec4 pos = modelviewprojection * vec4(vPosition.xyz, 1.0);
     gl_Position = pos.xyww;
 }
 

@@ -30,12 +30,17 @@ uniform sampler2D gPosition;
 uniform sampler2D gNormal;
 uniform sampler2D gSpecular;
 uniform sampler2D gBloom;
+uniform sampler2D gNoise;
 uniform vec2 screen_width_height;					// x = width, y = height
 uniform bool UseBloom;
 
 uniform float Exposure;
 uniform float BloomIntensity;
 uniform float weights1[5] = float[](0.227027f, 0.1945946f, 0.1216216f, 0.054054f, 0.016216f);
+
+uniform float time; // time in seconds
+uniform bool nightVision;
+float hash(in float n) { return fract(sin(n) * 43758.5453123); }
 
 const int M = 16;
 const int N = 2 * M + 1;
@@ -92,6 +97,73 @@ float logisticDepth(float depth, float steepness = 0.05f, float offset = 5.0f)
 	return (1 / (1 + exp(-steepness * zVal - offset)));
 }
 
+const float linecount = 120.0;
+const vec4 gradA = vec4(0.0, 0.0, 0.0, 1.0);
+const vec4 gradB = vec4(0.5, 0.7, 0.6, 1.0);
+const vec4 gradC = vec4(1.0, 1.0, 1.0, 1.0);
+
+vec2 pos, uv;
+
+float noisef(float factor)
+{
+	vec4 v = texture(gNoise, uv + time * vec2(9.0, 7.0));
+	return factor * v.x + (1.0 - factor);
+}
+
+vec4 base(void)
+{
+	return texture(gAlbedo, uv + .1 * noisef(1.0) * vec2(0.02, 0.0));
+}
+
+float triangle(float phase)
+{
+	//phase *= 2.0;
+	//return 1.0 - abs(mod(phase, 2.0) - 1.0);
+	// sin is not really a triangle.. but it's easier to do bandlimited
+	float y = sin(phase * 3.14159);
+	// if you want something brighter but more aliased, change 1.0 here to something like 0.3
+	return pow(y * y, 1.0);
+}
+
+float scanline(float factor, float contrast)
+{
+	vec4 v = base();
+	float lum = .2 * v.x + .5 * v.y + .3 * v.z;
+	lum *= noisef(0.3);
+	float tri = triangle(pos.y * linecount);
+	tri = pow(tri, contrast * (1.0 - lum) + .5);
+	return tri * lum;
+}
+
+vec4 gradient(float i)
+{
+	i = clamp(i, 0.0, 1.0) * 2.0;
+	if (i < 1.0) {
+		return (1.0 - i) * gradA + i * gradB;
+	}
+	else {
+		i -= 1.0;
+		return (1.0 - i) * gradB + i * gradC;
+	}
+}
+
+vec4 vignette(vec4 at)
+{
+	float dx = 1.3 * abs(pos.x - .5);
+	float dy = 1.3 * abs(pos.y - .5);
+	return at * (1.0 - dx * dx - dy * dy);
+}
+
+vec4 gammaf(vec4 x, float f)
+{
+	return pow(x, vec4(1. / f));
+}
+
+float random2D(vec2 coord)
+{
+	return fract(sin(dot(coord.xy, vec2(12.9898, 78.233))) * 43758.5453);
+}
+
 
 void main()
 {
@@ -143,6 +215,18 @@ void main()
 	//}
 
 	f_color = vec4(Diffuse.rgb, 1.0) + vec4(result.rgb, 1.0) * BloomIntensity;
+
+	//// NIGHT VISION
+	if (nightVision)
+	{
+		float v = max(max(Diffuse.r, Diffuse.g), Diffuse.b);
+		f_color = vec4(0.f, v, 0.f, 1.0);
+		float noise = (random2D(v_TextureCoords + time) - 0.5) * 0.6;
+		//float noise = noisef(1.0);
+		f_color.g += noise;
+		f_color.r += noise;
+		f_color.b += noise;
+	}
 
 	/*float average = (0.2126 * f_color.r + 0.7152 * f_color.g + 0.0722 * f_color.b) / 3.0;
 	f_color = vec4(average, average, average, 1.0);*/

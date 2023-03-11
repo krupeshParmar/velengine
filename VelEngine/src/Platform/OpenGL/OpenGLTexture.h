@@ -52,7 +52,7 @@ namespace vel {
         virtual void CreateData(const std::vector<std::string>) override;
         virtual void RemoveData() override;
 
-        virtual void DrawSkyBox(glm::mat4 viewProjection, Ref<Shader> shader, Ref<VertexArray> vertexArray) override;
+        virtual void DrawSkyBox(glm::mat4 modelviewprojection, Ref<Shader> shader, Ref<VertexArray> vertexArray) override;
 
         virtual uint32_t GetWidth() const override { return 0; }
         virtual uint32_t GetHeight() const override { return 0; }

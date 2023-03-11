@@ -158,7 +158,7 @@ namespace vel
 		glDeleteTextures(1, &m_RendererID);
 	}
 
-	void OpenGLTextureCubeMap::DrawSkyBox(glm::mat4 viewProjection, Ref<Shader> shader, Ref<VertexArray> vertexArray)
+	void OpenGLTextureCubeMap::DrawSkyBox(glm::mat4 modelviewprojection, Ref<Shader> shader, Ref<VertexArray> vertexArray)
 	{
 		if (!m_Loaded)
 			return;
@@ -168,7 +168,7 @@ namespace vel
 		glDepthFunc(GL_LEQUAL);
 		glCullFace(GL_FRONT);
 		shader->Bind();
-		shader->SetMat4("viewprojection", viewProjection);
+		shader->SetMat4("modelviewprojection", modelviewprojection);
 
 		shader->SetFloat3("tilingfactor", tilingfactor);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, m_RendererID);

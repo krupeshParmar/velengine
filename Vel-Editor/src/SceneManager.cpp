@@ -23,6 +23,8 @@ namespace vel
 		fbSpec.Height = 600;
 		m_RenderBuffer = FrameBuffer::Create(fbSpec);
 		m_FBORenderBuffer = FrameBuffer::Create(fbSpec);
+		m_FBOSecRenderBuffer = FrameBuffer::Create(fbSpec);
+		m_SecRenderBuffer = FrameBuffer::Create(fbSpec);
 
 		m_SquareVertexArray = VertexArray::Create();
 		float sqVertices[6 * 4] = {
@@ -71,6 +73,7 @@ namespace vel
 				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayBack2048.bmp",
 			}
 		*/
+		skyboxRotation = glm::vec3(0.f);
 		skybox = new SkyBox(
 			{
 				"assets/textures/skyboxes/space/SpaceBox_right1_posX.jpg",
@@ -231,7 +234,8 @@ namespace vel
 
 	void SceneManager::DrawSkyBox(glm::mat4 viewProjection)
 	{
-		skybox->skyboxTexture->DrawSkyBox(viewProjection, m_SkyBoxShader, skybox->cubeModel->GetMeshData().m_VertexArray);
+		skyboxRotation.y += 0.0002f;
+		skybox->skyboxTexture->DrawSkyBox(viewProjection * glm::toMat4(glm::quat(skyboxRotation)), m_SkyBoxShader, skybox->cubeModel->GetMeshData().m_VertexArray);
 	}
 	void SceneManager::BindLightData(Ref<Shader> shader, glm::vec4 eyepos)
 	{
@@ -241,7 +245,7 @@ namespace vel
 	}
 
 	// This is a MESS
-	void SceneManager::DrawBedroom(Ref<FrameBuffer> buffer, glm::vec4 eyeLocation)
+	void SceneManager::DrawInventory(Ref<FrameBuffer> buffer, glm::vec4 eyeLocation, float dt)
 	{
 		buffer->Bind();
 		RenderCommand::SetClearColor(glm::vec4(1.f));
@@ -395,9 +399,130 @@ namespace vel
 		RenderCommand::Clear();
 		m_ShaderLibrary.Get("FBOTexture")->Bind();
 		buffer->BindColorTexture();
+		std::chrono::duration<float> time =  (std::chrono::steady_clock::now() - start);
+		m_ShaderLibrary.Get("FBOTexture")->SetFloat("time", time.count());
+		m_ShaderLibrary.Get("FBOTexture")->SetBool("rippleEffect",true);
+		m_ShaderLibrary.Get("FBOTexture")->SetBool("nightVision",false);
+		m_ShaderLibrary.Get("FBOTexture")->SetFloat2("resolution", { Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight() });
 		Renderer::Submit(
 			m_ShaderLibrary.Get("FBOTexture"),
 			m_SquareVertexArray);
 		m_FBORenderBuffer->Unbind();
+	}
+	void SceneManager::DrawSecurityCameraView(float dt)
+	{
+		m_SecRenderBuffer->Bind();
+		RenderCommand::SetClearColor(glm::vec4(1.f));
+		RenderCommand::EnableDepth();
+		RenderCommand::Clear();
+		std::vector<Ref<Entity>> entities = m_EntityManager->GetAllEntities();
+
+		glm::vec4 eyeLocation =  { 321.463, 99.477, 134.068, 1.0};
+		glm::mat4 matView = glm::mat4(
+			{0.360, -0.147, 0.921, 0.0},
+			{0.0, 0.987, 0.158, 0.0},
+			{-0.933, -0.057, 0.355, 0.0},
+			{9.513, -43.313, -359.503, 1.0}
+		);
+		glm::mat4 matProjection = glm::perspective(
+			45.0f,
+			1280.f / 720.f,
+			1.f,
+			1000.0f);
+		Renderer::BeginScene(matView, matProjection);
+		for (std::vector<Ref<Entity>>::iterator entityit = entities.begin();
+			entityit != entities.end();
+			entityit++)
+		{
+			Ref<Entity> entity = *entityit;
+			if (!entity || !entity->enabled)
+				continue;
+			TransformComponent* transform = m_EntityManager->GetComponentByType<TransformComponent>(entity->GetID());
+			if (m_EntityManager->HasComponent<LightComponent>(entity->GetID()))
+			{
+				LightComponent* lightComp = m_EntityManager->GetComponentByType<LightComponent>(entity->GetID());
+				if (lightComp->Enabled)
+				{
+					lightComp->Position = glm::vec4(transform->Translation, 1.0);
+					lightComp->Direction = glm::vec4(transform->GetRotation(), 1.0);
+				}
+			}
+
+			if (m_EntityManager->HasComponent<MeshComponent>(entity->GetID()))
+			{
+				MeshComponent* meshComp = m_EntityManager->GetComponentByType<MeshComponent>(entity->GetID());
+				if (meshComp->Enabled)
+				{
+					if (meshComp->MaterialIns && !meshComp->MaterialIns->IsCompiled)
+					{
+						if (!meshComp->MaterialIns->DiffuseTexturePath.empty())
+						{
+							Ref<Texture2D> diffTex = Texture2D::Create(meshComp->MaterialIns->DiffuseTexturePath);
+							if (diffTex != nullptr)
+							{
+								meshComp->MaterialIns->DiffuseTexture = diffTex;
+							}
+						}
+						if (meshComp->MaterialIns && !meshComp->MaterialIns->NormalTexturePath.empty())
+						{
+							Ref<Texture2D> normTex = Texture2D::Create(meshComp->MaterialIns->NormalTexturePath);
+							if (normTex != nullptr)
+							{
+								meshComp->MaterialIns->NormalTexture = normTex;
+							}
+						}
+						if (meshComp->MaterialIns && !meshComp->MaterialIns->SpecularTexturePath.empty())
+						{
+							Ref<Texture2D> specTex = Texture2D::Create(meshComp->MaterialIns->SpecularTexturePath);
+							if (specTex != nullptr)
+							{
+								meshComp->MaterialIns->SpecularTexture = specTex;
+							}
+						}
+						if (meshComp->MaterialIns && !meshComp->MaterialIns->EmissiveTexturePath.empty())
+						{
+							Ref<Texture2D> emisTex = Texture2D::Create(meshComp->MaterialIns->EmissiveTexturePath);
+							if (emisTex != nullptr)
+							{
+								meshComp->MaterialIns->EmissiveTexture = emisTex;
+							}
+						}
+						meshComp->MaterialIns->IsCompiled = true;
+					}
+					if (meshComp->ModelIns && meshComp->MaterialIns)
+					{
+						m_Shader->Bind();
+						BindSkyBox(4);
+						m_Shader->SetFloat4("eyeLocation", eyeLocation);
+						if (entity->name == "Plane")
+							meshComp->MaterialIns->TextureSize = 10.f;
+
+						m_Shader->SetFloat("u_texsize", meshComp->MaterialIns->TextureSize);
+
+						if (entity->name == "BedroomQuad")
+						{
+							ToBeDrawn = entity;
+							//meshComp->ModelIns->DrawMesh(m_FBORenderBuffer, buffer, m_Shader, meshComp->MaterialIns, transform->GetTransform());
+						}
+						else meshComp->ModelIns->DrawMesh(m_Shader, meshComp->MaterialIns, transform->GetTransform());
+					}
+				}
+			}
+		}
+
+		m_SecRenderBuffer->Unbind();
+		m_FBOSecRenderBuffer->Bind();
+		RenderCommand::Clear();
+		m_ShaderLibrary.Get("FBOTexture")->Bind();
+		m_SecRenderBuffer->BindColorTexture();
+		std::chrono::duration<float> time = (std::chrono::steady_clock::now() - start);
+		m_ShaderLibrary.Get("FBOTexture")->SetFloat("time", time.count());
+		m_ShaderLibrary.Get("FBOTexture")->SetBool("rippleEffect", false);
+		m_ShaderLibrary.Get("FBOTexture")->SetBool("nightVision", true);
+		m_ShaderLibrary.Get("FBOTexture")->SetFloat2("resolution", { Application::Get().GetWindow().GetWidth(), Application::Get().GetWindow().GetHeight() });
+		Renderer::Submit(
+			m_ShaderLibrary.Get("FBOTexture"),
+			m_SquareVertexArray);
+		m_FBOSecRenderBuffer->Unbind();
 	}
 }

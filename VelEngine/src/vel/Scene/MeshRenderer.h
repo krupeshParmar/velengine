@@ -12,7 +12,7 @@ namespace vel
 		MeshRenderer();
 		~MeshRenderer();
 
-		static Ref<Model> LoadMesh(std::string& path, bool useTextures, bool loadAsync);
+		static Ref<Model> LoadMesh(std::string& path, bool useTextures, bool loadAsync, Ref<EntityManager> entityManger = nullptr);
 		static bool HasMesh(std::string& path);
 		static Ref<Model> GetMesh(std::string& path);
 

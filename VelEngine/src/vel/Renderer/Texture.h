@@ -19,7 +19,7 @@ namespace vel
 		virtual void CreateData(const std::string& path) = 0;
 
 		virtual void CreateData(const std::vector<std::string>) = 0;
-		virtual void DrawSkyBox(glm::mat4 viewProjection, Ref<Shader> shader, Ref<VertexArray> vertexArray) = 0;
+		virtual void DrawSkyBox(glm::mat4 modelviewprojection, Ref<Shader> shader, Ref<VertexArray> vertexArray) = 0;
 
 		virtual void RemoveData() = 0;
 

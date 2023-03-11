@@ -17,7 +17,7 @@ namespace vel
 		DeleteCriticalSection(&MeshMapList_Lock);
 	}
 
-	Ref<Model> MeshRenderer::LoadMesh(std::string& path, bool useTextures, bool loadAsync)
+	Ref<Model> MeshRenderer::LoadMesh(std::string& path, bool useTextures, bool loadAsync, Ref<EntityManager> entityManager)
 	{
 		for (int x = 0; x < path.size(); x++)
 			path[x] = tolower(path[x]);

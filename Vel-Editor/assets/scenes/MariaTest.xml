@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <scene>
 	<name>assets/scenes/MariaTest.xml</name>
-	<entity>
+	<entity id="0">
 		<name>BedroomQuad</name>
 		<enabled>1</enabled>
 		<components>
@@ -30,7 +30,7 @@
 			</meshobject>
 		</components>
 	</entity>
-	<entity>
+	<entity id="1">
 		<name>Maria</name>
 		<enabled>1</enabled>
 		<components>
@@ -59,7 +59,7 @@
 			</meshobject>
 		</components>
 	</entity>
-	<entity>
+	<entity id="2">
 		<name>spotlight</name>
 		<enabled>1</enabled>
 		<components>
@@ -67,12 +67,12 @@
 				<position>
 					<x>-70.000000</x>
 					<y>120.000000</y>
-					<z>50.000000</z>
+					<z>125.000000</z>
 				</position>
 				<rotation>
 					<x>0.000000</x>
-					<y>-10.000000</y>
-					<z>20.000000</z>
+					<y>1.000000</y>
+					<z>-50.000000</z>
 				</rotation>
 				<scale>
 					<x>1.000000</x>
@@ -82,7 +82,7 @@
 			</transform>
 			<light>
 				<enabled>1</enabled>
-				<intensity>7.438000</intensity>
+				<intensity>31.129000</intensity>
 				<diffuse>
 					<r>1.000000</r>
 					<g>1.000000</g>
@@ -109,14 +109,14 @@
 				</lightparams>
 			</light>
 			<meshobject>
-				<enabled>0</enabled>
+				<enabled>1</enabled>
 				<path>assets/models/debug_sphere.fbx</path>
 				<material_path></material_path>
 				<use_fbx_textures>0</use_fbx_textures>
 			</meshobject>
 		</components>
 	</entity>
-	<entity>
+	<entity id="3">
 		<name>Bench</name>
 		<enabled>0</enabled>
 		<components>
@@ -145,7 +145,7 @@
 			</meshobject>
 		</components>
 	</entity>
-	<entity>
+	<entity id="4">
 		<name>Plane</name>
 		<enabled>1</enabled>
 		<components>
@@ -174,7 +174,7 @@
 			</meshobject>
 		</components>
 	</entity>
-	<entity>
+	<entity id="5">
 		<name>directional light</name>
 		<enabled>1</enabled>
 		<components>
@@ -225,7 +225,7 @@
 			</light>
 		</components>
 	</entity>
-	<entity>
+	<entity id="6">
 		<name>medea</name>
 		<enabled>0</enabled>
 		<components>
@@ -254,7 +254,7 @@
 			</meshobject>
 		</components>
 	</entity>
-	<entity>
+	<entity id="7">
 		<name>Theatre</name>
 		<enabled>1</enabled>
 		<components>
@@ -283,7 +283,7 @@
 			</meshobject>
 		</components>
 	</entity>
-	<entity>
+	<entity id="8">
 		<name>Hotel</name>
 		<enabled>1</enabled>
 		<components>
@@ -312,9 +312,9 @@
 			</meshobject>
 		</components>
 	</entity>
-	<entity>
+	<entity id="9">
 		<name>Low Rise building</name>
-		<enabled>1</enabled>
+		<enabled>0</enabled>
 		<components>
 			<transform>
 				<position>
@@ -341,7 +341,7 @@
 			</meshobject>
 		</components>
 	</entity>
-	<entity>
+	<entity id="10">
 		<name>streetlamp</name>
 		<enabled>1</enabled>
 		<components>
@@ -370,7 +370,7 @@
 			</meshobject>
 		</components>
 	</entity>
-	<entity>
+	<entity id="11">
 		<name>streetlamp_light</name>
 		<enabled>1</enabled>
 		<components>
@@ -427,7 +427,7 @@
 			</meshobject>
 		</components>
 	</entity>
-	<entity>
+	<entity id="12">
 		<name>bed</name>
 		<enabled>0</enabled>
 		<components>
@@ -456,7 +456,7 @@
 			</meshobject>
 		</components>
 	</entity>
-	<entity>
+	<entity id="13">
 		<name>puddle</name>
 		<enabled>1</enabled>
 		<components>
@@ -485,7 +485,7 @@
 			</meshobject>
 		</components>
 	</entity>
-	<entity>
+	<entity id="14">
 		<name>NeonWires</name>
 		<enabled>1</enabled>
 		<components>
@@ -514,7 +514,7 @@
 			</meshobject>
 		</components>
 	</entity>
-	<entity>
+	<entity id="15">
 		<name>Hotel Base</name>
 		<enabled>1</enabled>
 		<components>
@@ -543,7 +543,7 @@
 			</meshobject>
 		</components>
 	</entity>
-	<entity>
+	<entity id="16">
 		<name>Hotel Upper</name>
 		<enabled>1</enabled>
 		<components>
@@ -572,7 +572,7 @@
 			</meshobject>
 		</components>
 	</entity>
-	<entity>
+	<entity id="17">
 		<name>floor</name>
 		<enabled>1</enabled>
 		<components>
@@ -629,7 +629,7 @@
 			</meshobject>
 		</components>
 	</entity>
-	<entity>
+	<entity id="18">
 		<name>Hotel Text</name>
 		<enabled>1</enabled>
 		<components>
@@ -658,7 +658,7 @@
 			</meshobject>
 		</components>
 	</entity>
-	<entity>
+	<entity id="19">
 		<name>Hotel Globe</name>
 		<enabled>1</enabled>
 		<components>
@@ -715,7 +715,7 @@
 			</meshobject>
 		</components>
 	</entity>
-	<entity>
+	<entity id="20">
 		<name>Hotel Upper duplicate 21</name>
 		<enabled>1</enabled>
 		<components>
@@ -744,7 +744,7 @@
 			</meshobject>
 		</components>
 	</entity>
-	<entity>
+	<entity id="21">
 		<name>floor duplicate 22</name>
 		<enabled>1</enabled>
 		<components>
@@ -801,7 +801,7 @@
 			</meshobject>
 		</components>
 	</entity>
-	<entity>
+	<entity id="22">
 		<name>Hotel Upper duplicate 23</name>
 		<enabled>1</enabled>
 		<components>
@@ -830,7 +830,7 @@
 			</meshobject>
 		</components>
 	</entity>
-	<entity>
+	<entity id="23">
 		<name>floor duplicate 22 duplicate 24</name>
 		<enabled>1</enabled>
 		<components>
@@ -883,6 +883,208 @@
 				<enabled>1</enabled>
 				<path>assets/models/plane.fbx</path>
 				<material_path>assets/models/hotel/hotel_floor_base_mat.xml</material_path>
+				<use_fbx_textures>0</use_fbx_textures>
+			</meshobject>
+		</components>
+	</entity>
+	<entity id="24">
+		<name>Shop1Base</name>
+		<enabled>1</enabled>
+		<components>
+			<transform>
+				<position>
+					<x>0.000000</x>
+					<y>0.000000</y>
+					<z>-130.000000</z>
+				</position>
+				<rotation>
+					<x>-90.000000</x>
+					<y>-90.000000</y>
+					<z>0.000000</z>
+				</rotation>
+				<scale>
+					<x>15.000000</x>
+					<y>15.000000</y>
+					<z>15.000000</z>
+				</scale>
+			</transform>
+			<meshobject>
+				<enabled>1</enabled>
+				<path>assets/models/shop/shopfrontv1.fbx</path>
+				<material_path>assets/models/shop/shopfrontv1_mat.xml</material_path>
+				<use_fbx_textures>0</use_fbx_textures>
+			</meshobject>
+		</components>
+	</entity>
+	<entity id="25">
+		<name>spotlight duplicate 26</name>
+		<enabled>1</enabled>
+		<components>
+			<transform>
+				<position>
+					<x>-70.000000</x>
+					<y>120.000000</y>
+					<z>50.000000</z>
+				</position>
+				<rotation>
+					<x>0.000000</x>
+					<y>-10.000000</y>
+					<z>20.000000</z>
+				</rotation>
+				<scale>
+					<x>1.000000</x>
+					<y>1.000000</y>
+					<z>1.000000</z>
+				</scale>
+			</transform>
+			<light>
+				<enabled>1</enabled>
+				<intensity>7.438000</intensity>
+				<diffuse>
+					<r>1.000000</r>
+					<g>1.000000</g>
+					<b>1.000000</b>
+					<w>1.000000</w>
+				</diffuse>
+				<specular>
+					<r>0.925490</r>
+					<g>0.000000</g>
+					<b>0.843137</b>
+					<w>1.000000</w>
+				</specular>
+				<attenuation>
+					<x>0.067000</x>
+					<y>0.013000</y>
+					<z>0.000000</z>
+					<w>1.000000</w>
+				</attenuation>
+				<lightparams>
+					<x>1.000000</x>
+					<y>10.000000</y>
+					<z>40.000000</z>
+					<w>1.000000</w>
+				</lightparams>
+			</light>
+			<meshobject>
+				<enabled>1</enabled>
+				<path>assets/models/debug_sphere.fbx</path>
+				<material_path></material_path>
+				<use_fbx_textures>0</use_fbx_textures>
+			</meshobject>
+		</components>
+	</entity>
+	<entity id="26">
+		<name>ShopUpperFloor</name>
+		<enabled>1</enabled>
+		<components>
+			<transform>
+				<position>
+					<x>0.000000</x>
+					<y>102.000000</y>
+					<z>-130.000000</z>
+				</position>
+				<rotation>
+					<x>-90.000000</x>
+					<y>-90.000000</y>
+					<z>0.000000</z>
+				</rotation>
+				<scale>
+					<x>15.000000</x>
+					<y>15.000000</y>
+					<z>15.000000</z>
+				</scale>
+			</transform>
+			<meshobject>
+				<enabled>1</enabled>
+				<path>assets/models/shop/upperfloor.fbx</path>
+				<material_path>assets/models/shop/shopupper_floor_mat.xml</material_path>
+				<use_fbx_textures>0</use_fbx_textures>
+			</meshobject>
+		</components>
+	</entity>
+	<entity id="27">
+		<name>TopWallV1</name>
+		<enabled>1</enabled>
+		<components>
+			<transform>
+				<position>
+					<x>0.000000</x>
+					<y>52.500000</y>
+					<z>-130.000000</z>
+				</position>
+				<rotation>
+					<x>-90.000000</x>
+					<y>-90.000000</y>
+					<z>0.000000</z>
+				</rotation>
+				<scale>
+					<x>15.000000</x>
+					<y>15.000000</y>
+					<z>15.000000</z>
+				</scale>
+			</transform>
+			<meshobject>
+				<enabled>1</enabled>
+				<path>assets/models/shop/topwallv1.fbx</path>
+				<material_path>assets/models/shop/topwallv1_mat.xml</material_path>
+				<use_fbx_textures>0</use_fbx_textures>
+			</meshobject>
+		</components>
+	</entity>
+	<entity id="28">
+		<name>Window</name>
+		<enabled>1</enabled>
+		<components>
+			<transform>
+				<position>
+					<x>-60.000000</x>
+					<y>20.000000</y>
+					<z>-140.000000</z>
+				</position>
+				<rotation>
+					<x>0.000000</x>
+					<y>0.000000</y>
+					<z>0.000000</z>
+				</rotation>
+				<scale>
+					<x>40.000000</x>
+					<y>30.000000</y>
+					<z>2.000000</z>
+				</scale>
+			</transform>
+			<meshobject>
+				<enabled>1</enabled>
+				<path>assets/models/plane.fbx</path>
+				<material_path>assets/materials/window_mat.xml</material_path>
+				<use_fbx_textures>0</use_fbx_textures>
+			</meshobject>
+		</components>
+	</entity>
+	<entity id="29">
+		<name>Window duplicate 30</name>
+		<enabled>1</enabled>
+		<components>
+			<transform>
+				<position>
+					<x>-60.000000</x>
+					<y>150.000000</y>
+					<z>-130.000000</z>
+				</position>
+				<rotation>
+					<x>0.000000</x>
+					<y>0.000000</y>
+					<z>0.000000</z>
+				</rotation>
+				<scale>
+					<x>40.000000</x>
+					<y>30.000000</y>
+					<z>2.000000</z>
+				</scale>
+			</transform>
+			<meshobject>
+				<enabled>1</enabled>
+				<path>assets/models/plane.fbx</path>
+				<material_path>assets/materials/window_mat.xml</material_path>
 				<use_fbx_textures>0</use_fbx_textures>
 			</meshobject>
 		</components>

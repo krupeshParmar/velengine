@@ -23,6 +23,7 @@ enum aiTextureType;
 
 namespace vel
 {
+	class EntityManager;
 	struct MeshData
 	{
 		std::vector<Vertices> m_Vertices;
@@ -38,13 +39,12 @@ namespace vel
 	{
 	public:
 		Model(std::string source, bool useTextures, bool loadAsync);
+		Model(std::string source, bool useTextures, bool loadAsync, Ref<EntityManager> entityManager);
 		~Model();
 		MeshData GetMeshData();
 		void DrawMesh(Ref<Shader> shader, const glm::mat4& transform);
 		void DrawMesh(Ref<Shader> shader,const Ref<Material> material, const glm::mat4& transform);
 		
-
-
 		/// <summary>
 		/// MESSSSSSS
 		/// </summary>

@@ -15,6 +15,7 @@ namespace vel
 	static glm::vec4 camPos = glm::vec4(0.f, 30.f, -20.f, 1.0);
 	void EditorLayer::OnAttach()
 	{
+		m_NoiseTexture = Texture2D::Create("assets/textures/WhiteNoiseDithering.png");
 		FrameBufferSpecification fbSpec;
 		fbSpec.Width = Application::Get().GetWindow().GetWidth();
 		fbSpec.Height = Application::Get().GetWindow().GetHeight();
@@ -45,8 +46,9 @@ namespace vel
 		m_ShaderLibrary.Get("PostProcessing")->SetInt("gPosition", 1);
 		m_ShaderLibrary.Get("PostProcessing")->SetInt("gNormal", 2);
 		m_ShaderLibrary.Get("PostProcessing")->SetInt("gSpecular", 3);
-		m_ShaderLibrary.Get("PostProcessing")->SetInt("gEmissive", 4);
+		//m_ShaderLibrary.Get("PostProcessing")->SetInt("gEmissive", 4);
 		m_ShaderLibrary.Get("PostProcessing")->SetInt("gBloom", 5);
+		m_ShaderLibrary.Get("PostProcessing")->SetInt("gNoise", 6);
 
 		m_SquareVertexArray = VertexArray::Create();
 		float sqVertices[6 * 4] = {
@@ -120,7 +122,8 @@ namespace vel
 
 				m_BedroomFrameBuffer->Unbind();
 			}*/
-			m_SceneManager->DrawBedroom(m_SceneManager->m_RenderBuffer, camPos);
+			m_SceneManager->DrawSecurityCameraView(ts);
+			m_SceneManager->DrawInventory(m_SceneManager->m_RenderBuffer, camPos, ts.GetSeconds());
 			m_RenderBuffer->Bind();
 			RenderCommand::SetClearColor(glm::vec4(0.f, 0.f, 0.f, 1));
 			RenderCommand::Clear();
@@ -183,13 +186,19 @@ namespace vel
 			m_FullScreenFrameBuffer->BindSpecularTexture();
 			m_FullScreenFrameBuffer->BindEmissiveTexture();
 			m_FullScreenFrameBuffer->BindBloomTexture();
+			m_NoiseTexture->Bind(6);
 			m_ShaderLibrary.Get("PostProcessing")->SetBool("UseBloom", m_SceneManager->UseBloom);
 			m_ShaderLibrary.Get("PostProcessing")->SetFloat("BloomIntensity", m_SceneManager->BloomIntensity);
+
+			std::chrono::duration<float> time = (std::chrono::steady_clock::now() - starttime);
+			m_ShaderLibrary.Get("PostProcessing")->SetFloat("time", ts.GetSeconds());
+			m_ShaderLibrary.Get("PostProcessing")->SetBool("nightVision", false);
+
+			m_ShaderLibrary.Get("PostProcessing")->SetFloat2("screen_width_height", { m_ViewPortSize.x, m_ViewPortSize.y});
 
 			Renderer::Submit(
 				m_ShaderLibrary.Get("PostProcessing"),
 				m_SquareVertexArray);
-
 
 			m_PostProcessFrameBuffer->CopyDepthData(m_FullScreenFrameBuffer);
 			//m_PostProcessFrameBuffer->Bind();
@@ -325,16 +334,24 @@ namespace vel
 		ImGui::PopStyleVar();
 		SceneHierarchy();
 		Inspector();
-		{
-			/*bool open = false;
-			ImGui::Begin("OffscreenTexture", &open, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoResize);
-			uint32_t offScreenTextureID = m_SceneManager->m_RenderBuffer->GetColorAttachmenRendererID();
+		/*{
+			bool open = false;
+			ImGui::Begin("OffscreenTexture1", &open, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
+			uint32_t offScreenTextureID = m_SceneManager->m_FBORenderBuffer->GetColorAttachmenRendererID();
 			ImGui::Image((void*)offScreenTextureID, ImVec2{ 200,200 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 
-			ImGui::End();*/
+			ImGui::End();
 		}
+		{
+			bool open = false;
+			ImGui::Begin("OffscreenTexture2", &open, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoBackground);
+			uint32_t offScreenTextureID = m_SceneManager->m_FBOSecRenderBuffer->GetColorAttachmenRendererID();
+			ImGui::Image((void*)offScreenTextureID, ImVec2{ 200,200 }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 
+			ImGui::End();
+		}*/
 
+		// Render Passes
 		{
 			ImGui::Begin("Bloom");
 			uint32_t BloomID = m_FullScreenFrameBuffer->GetBloomAttachmenRendererID();
@@ -353,7 +370,6 @@ namespace vel
 	{
 		ImGui::ShowDemoWindow();
 		ImGui::Begin("Scene Hierachy");
-		ImGui::InputFloat4("cam pos", glm::value_ptr(camPos));
 		std::vector<Ref<Entity>> entityList = m_SceneManager->GetEntityManager()->GetAllEntities();
 		for(int i = 0; i < entityList.size(); i++)
 		{
@@ -361,10 +377,41 @@ namespace vel
 			strcpy(label, entityList.at(i)->name.c_str());
 			//std::string latter = "##" + std::to_string(entityList[i]->GetID());
 			//strcat(label, latter.c_str());
-
-			if (ImGui::Selectable(label, m_SelectedEntity == i))
+			EntityData* data = m_SceneManager->GetEntityManager()->GetEntityData(entityList.at(i)->GetID());
+			
+			if (data->ChildrenList->size() > 0)
 			{
-				m_SelectedEntity = i;
+				if (ImGui::TreeNode(label))
+				{
+					if (ImGui::IsItemClicked())
+					{
+						m_SelectedEntity = i;
+					}
+					if (data != nullptr)
+					{
+						for (int k = 0; k < data->ChildrenList->size(); k++)
+						{
+							std::string entityName = m_SceneManager->GetEntityManager()->GetEntity(data->ChildrenList->at(k))->name;
+							if (m_SelectedEntity == data->ChildrenList->at(k))
+							{
+								ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), entityName.c_str());
+							}
+							else ImGui::Text(entityName.c_str());
+							if (ImGui::IsItemClicked())
+							{
+								m_SelectedEntity = data->ChildrenList->at(k);
+							}
+						}
+					}
+					ImGui::TreePop();
+				}
+			}
+			else
+			{
+				if (ImGui::Selectable(label, m_SelectedEntity == i))
+				{
+					m_SelectedEntity = i;
+				}
 			}
 		}
 		if (ImGui::Button("Add Entity"))
@@ -454,6 +501,14 @@ namespace vel
 					ImGui::SameLine();
 
 					ImGui::InputFloat3("##sca", glm::value_ptr(transform->Scale));
+					if (ImGui::Button("Copy Component"))
+					{
+						copiedTransform = *transform;
+					}
+					if (ImGui::Button("Paste Component"))
+					{
+						*transform = copiedTransform;
+					}
 				}
 				ImGui::EndGroup();
 			}
@@ -486,6 +541,14 @@ namespace vel
 					ImGui::InputFloat("Outter Cut Off##lightOutCuttoff", &light->LightParams[2]);
 					ImGui::InputFloat("On Off##lightOnoff", &light->LightParams[3]);
 					ImGui::SliderFloat("Intensity##lightintensity", &light->Intensity, 0.f, 100.0f);
+					if (ImGui::Button("Copy Component"))
+					{
+						copiedLight = *light;
+					}
+					if (ImGui::Button("Paste Component"))
+					{
+						*light = copiedLight;
+					}
 				}
 			}
 			ImGui::EndGroup();
@@ -647,6 +710,15 @@ namespace vel
 								}
 							}
 						}
+					}
+
+					if (ImGui::Button("Copy Component"))
+					{
+						copiedMesh = *mesh;
+					}
+					if (ImGui::Button("Paste Component"))
+					{
+						*mesh = copiedMesh;
 					}
 				}
 			}

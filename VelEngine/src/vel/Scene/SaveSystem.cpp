@@ -29,6 +29,7 @@ namespace vel
 		{
 			Ref<Entity> entity = entityList.at(i);
 			pugi::xml_node gameobjectNode = saveNode.append_child("entity");
+			gameobjectNode.append_attribute("id").set_value(entity->GetID());
 			pugi::xml_node nameNode = gameobjectNode.append_child("name");
 			nameNode.append_child(pugi::node_pcdata).set_value(entity->name.c_str());
 			pugi::xml_node enabledNode = gameobjectNode.append_child("enabled");
@@ -441,11 +442,21 @@ namespace vel
 
 			if (sceneNodeName == "entity")
 			{
-				pugi::xml_object_range<pugi::xml_node_iterator> gameObjectData = sceneNode.children();
+				std::string idText = sceneNode.attribute("id").value();
+				uint32_t id;
+				if (!idText.empty())
+				{
+					id = (uint32_t) std::stoi(idText);
 
-				uint32_t id = entityManager->CreateEntity();
+					entityManager->CreateEntity(id);
+				}
+				else
+					id = entityManager->CreateEntity();
 
 				Ref<Entity> entity = entityManager->GetEntity(id);
+
+				pugi::xml_object_range<pugi::xml_node_iterator> gameObjectData = sceneNode.children();
+
 				for (pugi::xml_node_iterator gameobjectsDataIterator = gameObjectData.begin();
 					gameobjectsDataIterator != gameObjectData.end(); gameobjectsDataIterator++)
 				{
@@ -730,7 +741,7 @@ namespace vel
 								}
 								if (!meshObject->Path.empty())
 								{
-									meshObject->ModelIns = MeshRenderer::LoadMesh(meshObject->Path, meshObject->UseFBXTextures, async);
+									meshObject->ModelIns = MeshRenderer::LoadMesh(meshObject->Path, meshObject->UseFBXTextures, async, entityManager);
 								}
 								entityManager->AddComponent(entity->GetID(), meshObject);
 							}

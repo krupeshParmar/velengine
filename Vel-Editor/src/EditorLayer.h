@@ -29,6 +29,7 @@ namespace vel
 
 		ShaderLibrary m_ShaderLibrary;
 		Ref<Texture2D> m_Texture;
+		Ref<Texture2D> m_NoiseTexture;
 		Ref<FrameBuffer> m_RenderBuffer;
 		Ref<FrameBuffer> m_FullScreenFrameBuffer;
 		Ref<FrameBuffer> m_PostProcessFrameBuffer;
@@ -60,5 +61,10 @@ namespace vel
 		bool openProjectCalled = false;
 		bool saveProjectCalled = false;
 		bool addComponentCalled = false;
+		std::chrono::time_point<std::chrono::steady_clock> starttime = std::chrono::steady_clock::now();
+
+		TransformComponent copiedTransform;
+		LightComponent copiedLight;
+		MeshComponent copiedMesh;
 	};
 }

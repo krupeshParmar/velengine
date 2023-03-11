@@ -74,7 +74,7 @@ namespace vel
 			ModelIns = CreateRef<Model>(Path, useFBXTextures, false);
 		}
 		MeshComponent(const MeshComponent& other)
-			: Mesh(other.Mesh), SubmeshIndex(other.SubmeshIndex), MaterialIns(other.MaterialIns), ModelIns(other.ModelIns), UseFBXTextures(other.UseFBXTextures), MaterialPath(other.MaterialPath)
+			: Mesh(other.Mesh),Path(other.Path), SubmeshIndex(other.SubmeshIndex), MaterialIns(other.MaterialIns), ModelIns(other.ModelIns), UseFBXTextures(other.UseFBXTextures), MaterialPath(other.MaterialPath)
 		{
 		}
 	};
