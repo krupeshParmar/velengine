@@ -1,7 +1,36 @@
 <?xml version="1.0"?>
 <scene>
 	<name>assets/scenes/MariaTest.xml</name>
-	<entity id="0">
+  <entity id="13">
+    <name>puddle</name>
+    <enabled>1</enabled>
+    <components>
+      <transform>
+        <position>
+          <x>0.000000</x>
+          <y>0.500000</y>
+          <z>0.000000</z>
+        </position>
+        <rotation>
+          <x>-90.000000</x>
+          <y>90.000000</y>
+          <z>0.000000</z>
+        </rotation>
+        <scale>
+          <x>200.000000</x>
+          <y>200.000000</y>
+          <z>1.000000</z>
+        </scale>
+      </transform>
+      <meshobject>
+        <enabled>1</enabled>
+        <path>assets/models/plane.fbx</path>
+        <material_path>assets/models/ground/mat_ground.xml</material_path>
+        <use_fbx_textures>0</use_fbx_textures>
+      </meshobject>
+    </components>
+  </entity>
+	<entity id="40">
 		<name>BedroomQuad</name>
 		<enabled>1</enabled>
 		<components>
@@ -30,35 +59,7 @@
 			</meshobject>
 		</components>
 	</entity>
-	<entity id="1">
-		<name>Maria</name>
-		<enabled>1</enabled>
-		<components>
-			<transform>
-				<position>
-					<x>0.000000</x>
-					<y>0.000000</y>
-					<z>0.000000</z>
-				</position>
-				<rotation>
-					<x>0.000000</x>
-					<y>0.000000</y>
-					<z>0.000000</z>
-				</rotation>
-				<scale>
-					<x>0.200000</x>
-					<y>0.200000</y>
-					<z>0.200000</z>
-				</scale>
-			</transform>
-			<meshobject>
-				<enabled>1</enabled>
-				<path>assets/models/maria/maria.fbx</path>
-				<material_path>assets/models/maria/mat_maria.xml</material_path>
-				<use_fbx_textures>0</use_fbx_textures>
-			</meshobject>
-		</components>
-	</entity>
+	
 	<entity id="2">
 		<name>spotlight</name>
 		<enabled>1</enabled>
@@ -138,7 +139,7 @@
 				</scale>
 			</transform>
 			<meshobject>
-				<enabled>1</enabled>
+				<enabled>0</enabled>
 				<path>assets/models/bench/bench.fbx</path>
 				<material_path>assets/models/bench/mat_bench.xml</material_path>
 				<use_fbx_textures>0</use_fbx_textures>
@@ -333,12 +334,6 @@
 					<z>0.200000</z>
 				</scale>
 			</transform>
-			<meshobject>
-				<enabled>1</enabled>
-				<path>assets/models/lowrise_building/ait01w2w4.fbx</path>
-				<material_path>assets/models/lowrise_building/mat_lrbuilding.xml</material_path>
-				<use_fbx_textures>0</use_fbx_textures>
-			</meshobject>
 		</components>
 	</entity>
 	<entity id="10">
@@ -449,42 +444,14 @@
 				</scale>
 			</transform>
 			<meshobject>
-				<enabled>1</enabled>
+				<enabled>0</enabled>
 				<path>assets/models/bed/bed83h.fbx</path>
 				<material_path>assets/models/bed/bed_mat.xml</material_path>
 				<use_fbx_textures>0</use_fbx_textures>
 			</meshobject>
 		</components>
 	</entity>
-	<entity id="13">
-		<name>puddle</name>
-		<enabled>1</enabled>
-		<components>
-			<transform>
-				<position>
-					<x>0.000000</x>
-					<y>0.500000</y>
-					<z>0.000000</z>
-				</position>
-				<rotation>
-					<x>-90.000000</x>
-					<y>90.000000</y>
-					<z>0.000000</z>
-				</rotation>
-				<scale>
-					<x>200.000000</x>
-					<y>200.000000</y>
-					<z>1.000000</z>
-				</scale>
-			</transform>
-			<meshobject>
-				<enabled>1</enabled>
-				<path>assets/models/plane.fbx</path>
-				<material_path>assets/models/ground/mat_ground.xml</material_path>
-				<use_fbx_textures>0</use_fbx_textures>
-			</meshobject>
-		</components>
-	</entity>
+	
 	<entity id="14">
 		<name>NeonWires</name>
 		<enabled>1</enabled>
@@ -1089,4 +1056,33 @@
 			</meshobject>
 		</components>
 	</entity>
+  <entity id="1">
+    <name>Maria</name>
+    <enabled>1</enabled>
+    <components>
+      <transform>
+        <position>
+          <x>0.000000</x>
+          <y>0.000000</y>
+          <z>0.000000</z>
+        </position>
+        <rotation>
+          <x>0.000000</x>
+          <y>0.000000</y>
+          <z>0.000000</z>
+        </rotation>
+        <scale>
+          <x>0.200000</x>
+          <y>0.200000</y>
+          <z>0.200000</z>
+        </scale>
+      </transform>
+      <meshobject>
+        <enabled>1</enabled>
+        <path>assets/models/maria/maria.fbx</path>
+        <material_path>assets/models/maria/mat_maria.xml</material_path>
+        <use_fbx_textures>0</use_fbx_textures>
+      </meshobject>
+    </components>
+  </entity>
 </scene>

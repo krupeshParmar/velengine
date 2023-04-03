@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<asset id="194527999285721536">
+	<name>bench.fbx</name>
+	<id>1663253405403433680</id>
+	<name>Bench_$AssimpFbx$_RotationPivot</name>
+	<id>10287071815440336652</id>
+	<name>Bench_$AssimpFbx$_RotationPivotInverse</name>
+	<id>5347117902411733923</id>
+	<name>Bench_$AssimpFbx$_ScalingPivot</name>
+	<id>9481714241192263277</id>
+	<name>Bench_$AssimpFbx$_ScalingPivotInverse</name>
+	<id>6274422912199658363</id>
+	<name>Bench</name>
+	<id>12845220322587296018</id>
+</asset>

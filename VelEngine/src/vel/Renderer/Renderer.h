@@ -27,6 +27,8 @@ namespace vel
 		static void Submit(const Ref<Shader>& shader,const std::shared_ptr<VertexArray>& vertexArray, std::vector<Ref<Texture2D>> textures, const glm::mat4& transform = glm::mat4(1.f));
 		static void Submit(const Ref<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, Ref<FrameBuffer> buffer, Ref<FrameBuffer> mainbuffer, const glm::mat4& transform);
 		
+		static void DrawFullscreenQuad(const Ref<Shader>& shader);
+
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 
 	private:

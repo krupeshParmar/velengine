@@ -16,7 +16,7 @@ void main()
 #type fragment
 #version 420 core
 
-layout(location = 0) out vec4 color;
+layout(location = 0) out vec4 f_color;
 layout(location = 1) out vec4 f_position;
 layout(location = 2) out vec4 f_normal;
 layout(location = 3) out vec4 f_specular;
@@ -85,25 +85,22 @@ void main()
 	vec4 outColour = calculateLightContrib(Diffuse, Normal.xyz,
 		FragPos, Specular);
 
-	color = vec4(outColour.rgb, 1.0);
+	f_color = vec4(outColour.rgb, 1.0);
 
 	float ambientLight = 0.08f;
-	color.rgb += (Diffuse * ambientLight) + (Emissive.rgb);
+	f_color.rgb += (Diffuse * ambientLight) + (Emissive.rgb);
 	f_bloom = vec4(0.0, 0.0, 0.0, 1.0);
 
-	if (dot(color.rgb, vec3(0.2126f, 0.7152f, 0.0722f)) > BloomThreshold)
+	if (dot(f_color.rgb, vec3(0.2126f, 0.7152f, 0.0722f)) > BloomThreshold)
 	{
-		f_bloom.rgb = color.rgb;
+		f_bloom.rgb = f_color.rgb;
 	}
-
-	vec3 result = vec3(0.0f, 0.f, 0.f);
-
 	f_position = vec4(FragPos, 1.0);
 
-	vec3 toneMapped = vec3(1.0f) - exp(-color.rgb * Exposure);
+	vec3 toneMapped = vec3(1.0f) - exp(-f_color.rgb * Exposure);
 
-	color.rgb = pow(toneMapped, vec3(1.0 / gamma));
-	color.w = 1.0f;
+	f_color.rgb = pow(toneMapped, vec3(1.0 / gamma));
+	f_color.w = 1.0f;
 	f_normal = vec4(Normal.xyz, 1.0);
 	f_specular = Specular;
 	f_emissive = Emissive;

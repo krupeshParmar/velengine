@@ -147,13 +147,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\EditorLayer.h" />
+    <ClInclude Include="src\EditorLayer2.h" />
     <ClInclude Include="src\Example.h" />
     <ClInclude Include="src\SceneManager.h" />
+    <ClInclude Include="src\temp\AIProject2.h" />
     <ClInclude Include="src\temp\PhysicsProject1.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorLayer.cpp" />
+    <ClCompile Include="src\EditorLayer2.cpp" />
     <ClCompile Include="src\SceneManager.cpp" />
+    <ClCompile Include="src\temp\AIProject2.cpp" />
     <ClCompile Include="src\VelEngineApp.cpp" />
     <ClCompile Include="src\temp\PhysicsProject1.cpp" />
   </ItemGroup>

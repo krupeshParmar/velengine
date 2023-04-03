@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<assets_list id="4677746484298582412">
+	<asset>
+		<name>neonwires.fbx</name>
+		<id>18255653774796960828</id>
+	</asset>
+	<asset>
+		<name>NeonWire1</name>
+		<id>8178838398309772271</id>
+	</asset>
+	<asset>
+		<name>BezierCurve.002_Mesh</name>
+		<id>10280400189669160576</id>
+	</asset>
+	<asset>
+		<name>NeonWire2</name>
+		<id>7727071545512956519</id>
+	</asset>
+	<asset>
+		<name>BezierCurve.003_Mesh</name>
+		<id>13937856052398079621</id>
+	</asset>
+</assets_list>

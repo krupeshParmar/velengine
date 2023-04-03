@@ -76,7 +76,7 @@ namespace vel
 		m_InternalFormat = internalFormat;
 		m_DataFormat = dataFormat;
 
-		VEL_CORE_ASSERT(internalFormat & dataFormat, "[OpenGLTexture]: Format not supported!!");
+		//VEL_CORE_ASSERT(internalFormat & dataFormat, "[OpenGLTexture]: Format not supported!!");
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
 		glTextureStorage2D(m_RendererID, 1, internalFormat, m_Width, m_Height);

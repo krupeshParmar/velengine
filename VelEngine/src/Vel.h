@@ -39,6 +39,7 @@
 
 
 // --------Scene----------
+#include "vel/Scene/Scene.h"
 #include "vel/Scene/Entity.h"
 #include "vel/Scene/Component.h"
 #include "vel/Scene/EntityManager.h"

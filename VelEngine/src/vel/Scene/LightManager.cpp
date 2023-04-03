@@ -11,7 +11,7 @@ namespace vel
 
 	LightManager::LightManager()
 	{
-
+		Clear();
 	}
 
 	void LightManager::Clear()

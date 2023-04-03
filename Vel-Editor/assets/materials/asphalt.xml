@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <material>
 	<name>asphalt</name>
+	<transparent>0</transparent>
+	<texture_size>10.000000</texture_size>
 	<diffuse>
 		<r>0.750000</r>
 		<g>0.750000</g>

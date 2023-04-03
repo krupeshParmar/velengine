@@ -29,8 +29,9 @@ in vec3 TexCoords;
 
 uniform samplerCube skybox;
 uniform vec3 tilingfactor;
+uniform float step;
 
 void main()
 {
-    FragColor = texture(skybox, TexCoords);
+    FragColor = texture(skybox, TexCoords + vec3(step, 0, 0));
 }

@@ -15,10 +15,10 @@ namespace vel
 		static Ref<Material> LoadMaterial(std::string& path, Ref<Material> material);
 		static bool HasMaterial(std::string& path);
 		static Ref<Material> GetMaterial(std::string& path);
+		static Ref<Material> defaultMaterial;
 
 	private:
 		static std::map<std::string, Ref<Material>> m_PathToMaterial;
-		static Ref<Material> defaultMaterial;
 
 	};
 }

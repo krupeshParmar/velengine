@@ -1,0 +1,524 @@
+#include "velpch.h"
+#include "Scene.h"
+#include "Entity.h"
+#include "vel/Debug/Instrumentor.h"
+#include "MeshRenderer.h"
+#include "MaterialSystem.h"
+#include "SaveSystem.h"
+#include "LightManager.h"
+CRITICAL_SECTION cs_EntityMapLock;
+
+namespace vel
+{
+	Scene::Scene()
+	{
+		entt::entity entity = m_Registry.create();
+		InitializeCriticalSection(&cs_EntityMapLock);
+		MeshRenderer();
+		MaterialSystem();
+		LightManager();
+		std::string maria = "assets/models/maria/Maria.fbx";
+		std::string rfa = "assets/models/rfa/rfa_separate_cloth.fbx";
+		std::string nightshade = "assets/models/nightshade/Nightshade J Friedrich@Idle.fbx";
+		std::string medea = "assets/models/medea/medea_m_arrebola.fbx";
+		std::string props = "assets/models/camp/props.fbx";
+		std::string bench = "assets/models/bench/bench.fbx";
+		
+		/*FrameBufferSpecification fbSpec;
+		fbSpec.Width = 800;
+		fbSpec.Height = 600;
+		m_RenderBuffer = FrameBuffer::Create(fbSpec);
+		m_FBORenderBuffer = FrameBuffer::Create(fbSpec);
+		m_FBOSecRenderBuffer = FrameBuffer::Create(fbSpec);
+		m_SecRenderBuffer = FrameBuffer::Create(fbSpec);*/
+		
+		//m_SquareVertexArray = VertexArray::Create();
+		//float sqVertices[6 * 4] = {
+		//	0.0f, 0.0f,	-1.f,	-1.f,	0.0f,	1.f,
+		//	1.0f, 0.0f, 1.f,	-1.f,	0.0f,	1.f,
+		//	1.0f, 1.0f, 1.f,	1.f,	0.0f,	1.f,
+		//	0.0f, 1.0f, -1.f,	1.f,	0.0f,	1.f
+		//};
+		//m_SquareVertexArray = VertexArray::Create();
+		//Ref<VertexBuffer> squareVB;
+		//squareVB = (VertexBuffer::Create(sqVertices, sizeof(sqVertices)));
+		//
+		//squareVB->SetLayout({
+		//		{ ShaderDataType::Float2, "a_TextureCoords"},
+		//		{ ShaderDataType::Float4, "a_Position"}
+		//	});
+		//m_SquareVertexArray->AddVertexBuffer(squareVB);
+		//
+		//uint32_t sq_indices[6] = {
+		//	0, 1, 2, 2, 3, 0
+		//};
+		//
+		//// index buffer
+		//Ref<IndexBuffer> squareIB;
+		//squareIB = (IndexBuffer::Create(sq_indices, sizeof(sq_indices) / sizeof(uint32_t)));
+		//m_SquareVertexArray->SetIndexBuffer(squareIB);
+		
+		skyboxRotation = glm::vec3(0.f);
+		skybox = new SkyBox(
+			{
+				"assets/textures/skyboxes/space/SpaceBox_right1_posX.jpg",
+				"assets/textures/skyboxes/space/SpaceBox_left2_negX.jpg",
+				"assets/textures/skyboxes/space/SpaceBox_top3_posY.jpg",
+				"assets/textures/skyboxes/space/SpaceBox_bottom4_negY.jpg",
+				"assets/textures/skyboxes/space/SpaceBox_front5_posZ.jpg",
+				"assets/textures/skyboxes/space/SpaceBox_back6_negZ.jpg",
+			},
+			/*{
+				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayRight2048.bmp",
+				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayLeft2048.bmp",
+				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayUp2048.bmp",
+				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayDown2048.bmp",
+				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayFront2048.bmp",
+				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayBack2048.bmp",
+			},*/
+			"assets/models/box.fbx"
+		);
+		
+		/*m_ShaderLibrary.Load("assets/shaders/FBOTexture.glsl");
+		m_ShaderLibrary.Get("FBOTexture")->SetInt("gAlbedoSpec", 0);*/
+		
+		m_Shader = m_ShaderLibrary.Load("assets/shaders/gBuffer.glsl");
+		m_Shader->Bind();
+		m_Shader->SetInt("u_TextureDiffuse", 0);
+		m_Shader->SetInt("u_TextureNormal", 1);
+		m_Shader->SetInt("u_TextureSpecular", 2);
+		m_Shader->SetInt("u_TextureEmissive", 3);
+		m_Shader->SetInt("skyBox", 4);
+		
+		m_SkyBoxShader = m_ShaderLibrary.Load("assets/shaders/SkyBox.glsl");
+		m_SkyBoxShader->Bind();
+		m_SkyBoxShader->SetInt("skybox", 0);
+		//-1.7939719, 28.011202, -68.473145
+		ScenePath = "MariaTest3";
+		LoadScene();
+	}
+	Scene::~Scene()
+	{
+		DeleteCriticalSection(&cs_EntityMapLock);
+	}
+	void Scene::OnUpdateRuntime(Timestep ts)
+	{
+	}
+	void Scene::OnUpdateEditor(Timestep ts, glm::vec4 eyeLocation)
+	{	// Lights
+		{
+			auto lightView = m_Registry.group<LightComponent>(entt::get<TransformComponent>);
+			for (auto lights : lightView)
+			{
+				auto [transform, light] = lightView.get<TransformComponent, LightComponent>(lights);
+				Entity entity = Entity(lights, this);
+				if (entity.enabled)
+				{
+					glm::vec3 pos, sca;
+					glm::quat rot;
+					Math::DecomposeTransform(GetWorldSpaceTransformMatrix(entity), pos, rot, sca);
+					light.Position = glm::vec4(pos, 1.0);
+					light.Direction = glm::vec4(glm::eulerAngles(rot), 1.0);
+				}
+			}
+		}
+		{
+			auto view = m_Registry.group<MeshComponent>(entt::get<TransformComponent>);
+			int l = view.size();
+			std::vector<entt::entity> transparentEntities;
+			for (auto e : view)
+			{
+				Entity entity = Entity(e, this);
+				auto [transformComponent, meshComponent] = view.get<TransformComponent, MeshComponent>(e);
+				glm::mat4 transform = GetWorldSpaceTransformMatrix(entity);
+				if (IsEnabled(entity))
+				{
+					Ref<Material> MaterialIns = MaterialSystem::GetMaterial(meshComponent.MaterialPath);
+
+					if (MaterialIns && !MaterialIns->IsCompiled)
+					{
+						if (MaterialIns && !MaterialIns->DiffuseTexturePath.empty())
+						{
+							Ref<Texture2D> diffTex = Texture2D::Create(MaterialIns->DiffuseTexturePath);
+							if (diffTex != nullptr)
+							{
+								MaterialIns->DiffuseTexture = diffTex;
+							}
+						}
+						if (MaterialIns && !MaterialIns->NormalTexturePath.empty())
+						{
+							Ref<Texture2D> normTex = Texture2D::Create(MaterialIns->NormalTexturePath);
+							if (normTex != nullptr)
+							{
+								MaterialIns->NormalTexture = normTex;
+							}
+						}
+						if (MaterialIns && !MaterialIns->SpecularTexturePath.empty())
+						{
+							Ref<Texture2D> specTex = Texture2D::Create(MaterialIns->SpecularTexturePath);
+							if (specTex != nullptr)
+							{
+								MaterialIns->SpecularTexture = specTex;
+							}
+						}
+						if (MaterialIns && !MaterialIns->EmissiveTexturePath.empty())
+						{
+							Ref<Texture2D> emisTex = Texture2D::Create(MaterialIns->EmissiveTexturePath);
+							if (emisTex != nullptr)
+							{
+								MaterialIns->EmissiveTexture = emisTex;
+							}
+						}
+						MaterialIns->IsCompiled = true;
+					}
+					if (MaterialIns)
+					{
+						meshComponent.MaterialIns = MaterialIns;
+						if (MaterialIns->IsTransparent)
+						{
+							transparentEntities.push_back(e);
+							continue;
+						}
+						m_Shader->Bind();
+						BindSkyBox(4);
+						m_Shader->SetFloat4("eyeLocation", eyeLocation);
+
+						m_Shader->SetFloat("u_texsize", MaterialIns->TextureSize);
+						meshComponent.shader = m_Shader;
+						MeshRenderer::DrawMesh(meshComponent, transform);
+					}
+				}
+			}
+
+			for (entt::entity handle : transparentEntities)
+			{
+				Entity entity = Entity(handle, this);
+				MeshComponent& meshComponent = entity.GetComponent<MeshComponent>();
+				Ref<Material> MaterialIns = MaterialSystem::GetMaterial(meshComponent.MaterialPath);
+				glm::mat4 transform = GetWorldSpaceTransformMatrix(entity);
+				m_Shader->Bind();
+				BindSkyBox(4);
+				m_Shader->SetFloat4("eyeLocation", eyeLocation);
+				m_Shader->SetFloat("u_texsize", MaterialIns->TextureSize);
+				meshComponent.shader = m_Shader;
+				MeshRenderer::DrawMesh(meshComponent, transform);
+			}
+		}
+		
+	}
+	void Scene::OnEvent(Event& e)
+	{
+	}
+	void Scene::SetViewportSize(uint32_t width, uint32_t height)
+	{
+	}
+	Entity Scene::CreateEntity(const std::string& name, EntityType type)
+	{
+		return CreateChildEntity({}, name, type);
+	}
+	Entity Scene::CreateChildEntity(Entity parent, const std::string& name, EntityType type)
+	{
+		auto entity = Entity{ m_Registry.create(), this };
+		auto& idComponent = entity.AddComponent<IDComponent>();
+		idComponent.ID = {};
+		idComponent.Type = type;
+
+		entity.AddComponent<TransformComponent>();
+		if (!name.empty())
+			entity.AddComponent<TagComponent>(name);
+		else
+			entity.AddComponent<TagComponent>(Entity::NoName);
+
+		entity.AddComponent<RelationshipComponent>();
+
+		if (parent)
+			entity.SetParent(parent);
+
+		EnterCriticalSection(&cs_EntityMapLock);
+		m_EntityIDMap.emplace(idComponent.ID,entity);
+		LeaveCriticalSection(&cs_EntityMapLock);
+		SortEntities();
+
+		return entity;
+	}
+	Entity Scene::CreateEntityWithID(GUID guid, const std::string& name, bool shouldSort, EntityType type)
+	{
+		VEL_PROFILE_FUNCTION();
+
+		auto entity = Entity{ m_Registry.create(), this };
+		auto& idComponent = entity.AddComponent<IDComponent>();
+		idComponent.ID = guid;
+		idComponent.Type = type;
+
+		entity.AddComponent<TransformComponent>();
+		if (!name.empty())
+			entity.AddComponent<TagComponent>(name);
+		else 
+			entity.AddComponent<TagComponent>(Entity::NoName);
+		
+		entity.AddComponent<RelationshipComponent>();
+
+		VEL_CORE_ASSERT(m_EntityIDMap.find(guid) == m_EntityIDMap.end(),"");
+
+
+		EnterCriticalSection(&cs_EntityMapLock);
+		m_EntityIDMap[guid] = entity;
+		LeaveCriticalSection(&cs_EntityMapLock);
+
+		if (shouldSort)
+			SortEntities();
+
+		return entity;
+	}
+	Entity Scene::CreateChildEntityWithID(GUID guid, Entity parent, const std::string& name, bool shouldSort, EntityType type)
+	{
+		VEL_PROFILE_FUNCTION();
+
+		auto entity = Entity{ m_Registry.create(), this };
+		auto& idComponent = entity.AddComponent<IDComponent>();
+		idComponent.ID = guid;
+		idComponent.Type = type;
+
+		entity.AddComponent<TransformComponent>();
+		if (!name.empty())
+			entity.AddComponent<TagComponent>(name);
+		else
+			entity.AddComponent<TagComponent>(Entity::NoName);
+
+		entity.AddComponent<RelationshipComponent>();
+
+		if (parent)
+			entity.SetParent(parent);
+
+		//VEL_CORE_ASSERT(m_EntityIDMap.find(guid) == m_EntityIDMap.end(), "");
+
+
+		EnterCriticalSection(&cs_EntityMapLock);
+		m_EntityIDMap[guid] = entity;
+		LeaveCriticalSection(&cs_EntityMapLock);
+
+		if (shouldSort)
+			SortEntities();
+
+		return entity;
+	}
+	Entity Scene::CreateAssetEntityWithID(GUID guid, Entity parent, const std::string& name, bool shouldSort, EntityType type)
+	{
+		VEL_PROFILE_FUNCTION();
+
+		auto entity = Entity{ m_Registry.create(), this };
+		auto& idComponent = entity.AddComponent<IDComponent>();
+		idComponent.ID = {};
+		idComponent.AssetID = guid;
+		idComponent.Type = type;
+
+		entity.AddComponent<TransformComponent>();
+		if (!name.empty())
+			entity.AddComponent<TagComponent>(name);
+		else
+			entity.AddComponent<TagComponent>(Entity::NoName);
+
+		entity.AddComponent<RelationshipComponent>();
+
+		if (parent)
+			entity.SetParent(parent);
+
+		VEL_CORE_ASSERT(m_EntityIDMap.find(idComponent.ID) == m_EntityIDMap.end(), "");
+
+
+		EnterCriticalSection(&cs_EntityMapLock);
+		m_EntityIDMap.emplace(idComponent.ID,entity);
+		LeaveCriticalSection(&cs_EntityMapLock);
+
+		if (shouldSort)
+			SortEntities();
+
+		return entity;
+	}
+	Entity Scene::GetEntityWithGUID(GUID id) const
+	{
+		VEL_PROFILE_FUNCTION();
+		VEL_CORE_ASSERT(m_EntityIDMap.find(id) != m_EntityIDMap.end(), "Invalid entity ID or entity doesn't exist in scene!");
+		return m_EntityIDMap.at(id);
+	}
+	Entity Scene::GetAssetEntityWithGUID(GUID id) const
+	{
+
+		VEL_CORE_ASSERT(m_EntityIDMap.find(id) != m_EntityIDMap.end(), "Invalid entity ID or entity doesn't exist in scene!");
+		return m_EntityIDMap.at(id);
+	}
+	Entity Scene::TryGetEntityWithGUID(GUID id) const
+	{
+		if (const auto iter = m_EntityIDMap.find(id); iter != m_EntityIDMap.end())
+			return iter->second;
+		return Entity{};
+	}
+	Entity Scene::TryGetEntityWithTag(const std::string& tag)
+	{
+		VEL_PROFILE_FUNCTION();
+		auto entities = GetAllEntitiesWith<TagComponent>();
+		for (auto e : entities)
+		{
+			if (entities.get<TagComponent>(e).Tag == tag)
+				return Entity(e, const_cast<Scene*>(this));
+		}
+
+		return Entity{};
+	}
+	Entity Scene::TryGetDescendantEntityWithTag(Entity entity, const std::string& tag)
+	{
+		return Entity();
+	}
+	void Scene::ParentEntity(Entity entity, Entity parent)
+	{
+		VEL_PROFILE_FUNCTION();
+
+		if (parent.IsDescendantOf(entity))
+		{
+			UnparentEntity(parent);
+
+			Entity newParent = TryGetEntityWithGUID(entity.GetParentGUID());
+			if (newParent)
+			{
+				UnparentEntity(entity);
+				ParentEntity(parent, newParent);
+			}
+		}
+		else
+		{
+			Entity previousParent = TryGetEntityWithGUID(entity.GetParentGUID());
+
+			if (previousParent)
+				UnparentEntity(entity);
+		}
+
+		entity.SetParentGUID(parent.GetGUID());
+		parent.Children().push_back(entity.GetGUID());
+
+		ConvertToLocalSpace(entity);
+	}
+
+	void Scene::UnparentEntity(Entity entity, bool convertToWorldSpace)
+	{
+		VEL_PROFILE_FUNCTION();
+
+		Entity parent = TryGetEntityWithGUID(entity.GetParentGUID());
+		if (!parent)
+			return;
+
+		auto& parentChildren = parent.Children();
+		parentChildren.erase(std::remove(parentChildren.begin(), parentChildren.end(), entity.GetGUID()), parentChildren.end());
+
+		if (convertToWorldSpace)
+			ConvertToWorldSpace(entity);
+
+		entity.SetParentGUID(0);
+	}
+
+	void Scene::ConvertToLocalSpace(Entity entity)
+	{
+		VEL_PROFILE_FUNCTION();
+
+		Entity parent = TryGetEntityWithGUID(entity.GetParentGUID());
+
+		if (!parent)
+			return;
+
+		auto& transform = entity.Transform();
+		glm::mat4 parentTransform = GetWorldSpaceTransformMatrix(parent);
+		glm::mat4 localTransform = glm::inverse(parentTransform) * transform.GetTransform();
+		transform.SetTransform(localTransform);
+	}
+
+	void Scene::ConvertToWorldSpace(Entity entity)
+	{
+		VEL_PROFILE_FUNCTION();
+
+		Entity parent = TryGetEntityWithGUID(entity.GetParentGUID());
+
+		if (!parent)
+			return;
+
+		glm::mat4 transform = GetWorldSpaceTransformMatrix(entity);
+		auto& entityTransform = entity.Transform();
+		entityTransform.SetTransform(transform);
+	}
+
+	glm::mat4 Scene::GetWorldSpaceTransformMatrix(Entity entity)
+	{
+		glm::mat4 transform(1.0f);
+
+		Entity parent = TryGetEntityWithGUID(entity.GetParentGUID());
+		//parent.SetScene(this);
+		//std::string parentName = parent.Name();
+		if (parent)
+			transform = GetWorldSpaceTransformMatrix(parent);
+
+		return transform * entity.Transform().GetTransform();
+	}
+
+	TransformComponent Scene::GetWorldSpaceTransform(Entity entity)
+	{
+		glm::mat4 transform = GetWorldSpaceTransformMatrix(entity);
+		TransformComponent transformComponent;
+		transformComponent.SetTransform(transform);
+		return transformComponent;
+	}
+
+	void Scene::BindSkyBox(int i)
+	{
+		skybox->skyboxTexture->Bind(i);
+	}
+
+	void Scene::LoadScene()
+	{	
+		m_Registry.clear();
+		const std::string path = "assets/scenes/" + ScenePath + ".xml";
+		VEL_CORE_INFO("Loading Scene: {0}", path);
+		LightManager::Clear();
+		LoadSceneFile(path, this, true);
+	}
+
+	void Scene::SaveScene()
+	{
+		const std::string path = "assets/scenes/" + ScenePath + ".xml";
+		VEL_INFO("Saving Scene: {0}", path);
+		SaveSceneFile(path, this);
+	}
+
+	void Scene::DrawSkyBox(glm::mat4 viewProjection)
+	{
+		//step += 0.0002f;
+		m_SkyBoxShader->Bind();
+		m_SkyBoxShader->SetFloat("step", step);
+		skybox->skyboxTexture->DrawSkyBox(viewProjection * glm::toMat4(glm::quat(skyboxRotation)), m_SkyBoxShader, skybox->cubeModel->GetMeshData().m_VertexArray);
+	}
+
+	void Scene::BindLightData(Ref<Shader> shader, glm::vec4 eyepos)
+	{
+		shader->SetFloat4("eyeLocation", eyepos);
+		LightManager::CopyLightInformationToShader(shader);
+	}
+
+	void Scene::SortEntities()
+	{
+		m_Registry.sort<IDComponent>([&](const auto lhs, const auto rhs)
+		{
+			auto lhsEntity = m_EntityIDMap.find(lhs.ID);
+			auto rhsEntity = m_EntityIDMap.find(rhs.ID);
+			return static_cast<uint32_t>(lhsEntity->second) < static_cast<uint32_t>(rhsEntity->second);
+		});
+	}
+	bool Scene::IsEnabled(Entity entity)
+	{
+		bool enabled = entity.Transform().enabled;
+		if (!enabled)
+			return false;
+		Entity parent = TryGetEntityWithGUID(entity.GetParentGUID());
+		if (parent)
+		{
+			enabled = IsEnabled(parent);
+		}
+		return enabled;
+	}
+}

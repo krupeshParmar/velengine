@@ -198,6 +198,9 @@
     <ClInclude Include="src\vel\Scene\SaveSystem.h">
       <Filter>src\vel\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\vel\Scene\Scene.h">
+      <Filter>src\vel\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\vel\Scene\SceneEnvironment.h">
       <Filter>src\vel\Scene</Filter>
     </ClInclude>
@@ -1455,6 +1458,10 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\vel\Core\GUID.h" />
+    <ClInclude Include="src\vel\Math\Math.h" />
+    <ClInclude Include="src\vel\Math\Random.h" />
+    <ClInclude Include="src\vel\Renderer\ParticleSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
@@ -1550,11 +1557,18 @@
     <ClCompile Include="src\vel\Scene\SaveSystem.cpp">
       <Filter>src\vel\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\vel\Scene\Scene.cpp">
+      <Filter>src\vel\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\velpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\vel\Core\GUID.cpp" />
+    <ClCompile Include="src\vel\Math\Math.cpp" />
+    <ClCompile Include="src\vel\Math\Random.cpp" />
+    <ClCompile Include="src\vel\Renderer\ParticleSystem.cpp" />
   </ItemGroup>
 </Project>

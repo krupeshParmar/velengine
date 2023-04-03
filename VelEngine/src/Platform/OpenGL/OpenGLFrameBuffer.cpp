@@ -76,6 +76,24 @@ namespace vel
 		glBindTexture(GL_TEXTURE_2D, m_BloomAttachment);
 	}
 
+	void OpenGLFrameBuffer::ShouldDraw(bool should)
+	{
+		if (!should)
+			glDrawBuffer(GL_NONE);
+	}
+
+	void OpenGLFrameBuffer::ShouldRead(bool should)
+	{
+		if (!should)
+			glReadBuffer(GL_NONE);
+	}
+
+	void OpenGLFrameBuffer::BindShadowTexture()
+	{
+		glActiveTexture(GL_TEXTURE6);
+		glBindTexture(GL_TEXTURE_2D, m_EmissiveAttachment);
+	}
+
 	void OpenGLFrameBuffer::EnableGammaCorrection()
 	{
 		glEnable(GL_FRAMEBUFFER_SRGB);
@@ -98,6 +116,7 @@ namespace vel
 	void OpenGLFrameBuffer::Invalidate()
 	{
 		GLfloat black[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+		GLfloat white[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 		if (m_RendererID)
 		{
@@ -203,6 +222,19 @@ namespace vel
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER /*GL_CLAMP_TO_EDGE*/);
 		
 
+		// Shadow
+		//glCreateTextures(GL_TEXTURE_2D, 1, &m_ShadowAttachment);
+		//glBindTexture(GL_TEXTURE_2D, m_ShadowAttachment);
+		//glTexStorage2D(GL_TEXTURE_2D,
+		//	1, GL_DEPTH_COMPONENT, m_Specification.Width, m_Specification.Height);
+
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		//glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, white);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER /*GL_CLAMP_TO_EDGE*/);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER /*GL_CLAMP_TO_EDGE*/);
+
 		// Create the depth buffer (texture)
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_DepthAttachment);
 		glBindTexture(GL_TEXTURE_2D, m_DepthAttachment);
@@ -235,6 +267,10 @@ namespace vel
 			GL_COLOR_ATTACHMENT5,			// Bloom (to #5)
 			m_BloomAttachment, 0);
 
+		//glFramebufferTexture(GL_FRAMEBUFFER,
+		//	GL_DEPTH_ATTACHMENT,			// Shadow (to #5)
+		//	m_ShadowAttachment, 0);
+
 		glFramebufferTexture(GL_FRAMEBUFFER,
 			GL_DEPTH_STENCIL_ATTACHMENT,
 			m_DepthAttachment, 0);
@@ -247,6 +283,7 @@ namespace vel
 			GL_COLOR_ATTACHMENT3,		// specular
 			GL_COLOR_ATTACHMENT4,		// emissive
 			GL_COLOR_ATTACHMENT5,		// bloom
+			//GL_DEPTH_ATTACHMENT,		// shadow
 			GL_DEPTH_STENCIL_ATTACHMENT
 		};
 		glDrawBuffers(6, draw_bufers);

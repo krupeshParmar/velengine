@@ -31,7 +31,12 @@ namespace vel
 		virtual void BindNormalTexture() = 0;
 		virtual void BindSpecularTexture() = 0;
 		virtual void BindEmissiveTexture() = 0;
+		virtual void BindShadowTexture() = 0;
 		virtual void BindBloomTexture() = 0;
+
+		virtual void ShouldDraw(bool) = 0;
+		virtual void ShouldRead(bool) = 0;
+
 		virtual void CopyDepthData(Ref<FrameBuffer> buffer) = 0;
 
 		virtual void EnableGammaCorrection() = 0;
@@ -42,6 +47,7 @@ namespace vel
 		virtual uint32_t GetEmissiveAttachmenRendererID() const = 0;
 		virtual uint32_t GetNormalAttachmenRendererID() const = 0;
 		virtual uint32_t GetVerteWorldPositionAttachmenRendererID() const = 0;
+		virtual uint32_t GetShadowAttachmenRendererID() const = 0;
 		virtual uint32_t GetBloomAttachmenRendererID() const = 0;
 
 		//virtual const SetSpecification(FrameBufferSpecification& specs) = 0;

@@ -9,6 +9,7 @@ namespace vel
 	{
 	public:
 		bool IsCompiled = false;
+		bool IsTransparent = false;
 		std::string Name = "";
 		glm::vec4 Diffuse = glm::vec4(0.75f, 0.75f, 0.75f,1.0f);
 		glm::vec4 Specular = glm::vec4(0.75f, 0.75f, 0.75f, 1.0f);
@@ -16,7 +17,7 @@ namespace vel
 		float Ambient = 1.0f;
 		float Shininess = 0.5f;
 		float EmissiveIntensity = 1.f;
-
+		
 		float TextureSize = 1.0f;
 
 		Ref<Texture2D> DiffuseTexture;

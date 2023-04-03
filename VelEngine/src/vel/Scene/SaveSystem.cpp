@@ -6,17 +6,19 @@
 #include <Windows.h>
 #include "MeshRenderer.h"
 #include "MaterialSystem.h"
+#include "Entity.h"
+#include "LightManager.h"
 
 namespace vel
 {
 	struct SceneDataLoadInfo
 	{
 		std::string filename;
-		Ref<EntityManager> entityManager;
+		Scene* scene;
 		bool async;
 	};
 
-
+	/*
 	bool SaveSceneFile(std::string filename, Ref<EntityManager> entityManager)
 	{
 		pugi::xml_document doc;
@@ -187,7 +189,7 @@ namespace vel
 
 		return doc.save_file((filename).c_str());
 	}
-
+	*/
 	bool SaveMaterial(std::string materialPath, Ref<Material> material)
 	{
 		pugi::xml_document doc;
@@ -195,6 +197,17 @@ namespace vel
 		pugi::xml_node materialNameNode = materialNode.append_child("name");
 		materialNameNode.append_child(pugi::node_pcdata).set_value(
 			material->Name.substr(material->Name.find_last_of('/') + 1, material->Name.size()).c_str());
+
+		pugi::xml_node isTransparentNode = materialNode.append_child("transparent");
+
+		if (material->IsTransparent)
+		{
+			isTransparentNode.append_child(pugi::node_pcdata).set_value("1");
+		}
+		else isTransparentNode.append_child(pugi::node_pcdata).set_value("0");
+
+		pugi::xml_node materialTextureSizeNode = materialNode.append_child("texture_size");
+		materialTextureSizeNode.append_child(pugi::node_pcdata).set_value(std::to_string(material->TextureSize).c_str());
 
 		pugi::xml_node diffuseNode = materialNode.append_child("diffuse");
 		{
@@ -276,7 +289,7 @@ namespace vel
 		return doc.save_file(materialPath.c_str());
 	}
 
-	Ref<Material> LoadMaterial(std::string materialPath)
+	Ref<Material> GetMaterialFromSaveFile(std::string materialPath)
 	{
 		pugi::xml_document matDoc;
 		if (!matDoc.load_file(materialPath.c_str()))
@@ -300,6 +313,18 @@ namespace vel
 			{
 				material->Name = matNode.child_value();
 			}
+			if (matNodeName == "transparent")
+			{
+				if (std::string(matNode.child_value()) == "1")
+					material->IsTransparent = true;
+				else material->IsTransparent = false;
+			}
+
+			if (matNodeName == "texture_size")
+			{
+				material->TextureSize = std::stof(matNode.child_value());
+			}
+
 			if(matNodeName == "diffuse")
 			{
 				pugi::xml_object_range<pugi::xml_node_iterator>
@@ -413,10 +438,239 @@ namespace vel
 		return material;
 	}
 
-
-	bool LoadFileForReal(std::string filename, Ref<EntityManager> entityManager, bool async)
+	bool SaveSceneFile(std::string filename, Scene* scene)
 	{
-		entityManager->Clear();
+		pugi::xml_document doc;
+		pugi::xml_node saveNode = doc.append_child("scene");
+		pugi::xml_node sceneNameNode = saveNode.append_child("name");
+		sceneNameNode.append_child(pugi::node_pcdata).set_value(filename.c_str());
+		auto view = scene->GetAllEntitiesWith<IDComponent>();
+
+		for (auto entityHandle : view)
+		{
+			Entity entity = Entity(entityHandle, scene);
+			if (entity.GetComponent<IDComponent>().Type == IsAsset)
+			{
+				if (entity.HasComponent<MeshComponent>())
+				{
+					MeshComponent& meshComponent = entity.GetComponent<MeshComponent>();
+					SaveMaterial(meshComponent.Path, meshComponent.MaterialIns);
+				}
+				continue;
+			}
+			pugi::xml_node gameobjectNode = saveNode.append_child("entity");
+			gameobjectNode.append_attribute("id").set_value(entity.GetGUID());
+			pugi::xml_node nameNode = gameobjectNode.append_child("name");
+			nameNode.append_child(pugi::node_pcdata).set_value(entity.Name().c_str());
+
+			pugi::xml_node componentNode = gameobjectNode.append_child("components");
+			pugi::xml_node transformNode = componentNode.append_child("transform");
+
+			TransformComponent& transform = entity.Transform();
+			//if (transform)
+			{
+				pugi::xml_node transformEnabledNode = transformNode.append_child("enabled");
+
+				if (transform.enabled)
+					transformEnabledNode.append_child(pugi::node_pcdata).set_value("1");
+				else
+					transformEnabledNode.append_child(pugi::node_pcdata).set_value("0");
+				pugi::xml_node positionNode = transformNode.append_child("position");
+				{
+					pugi::xml_node xNode = positionNode.append_child("x");
+					xNode.append_child(pugi::node_pcdata).set_value(
+						std::to_string(transform.Translation.x).c_str());
+					pugi::xml_node yNode = positionNode.append_child("y");
+					yNode.append_child(pugi::node_pcdata).set_value(
+						std::to_string(transform.Translation.y).c_str());
+					pugi::xml_node zNode = positionNode.append_child("z");
+					zNode.append_child(pugi::node_pcdata).set_value(
+						std::to_string(transform.Translation.z).c_str());
+				}
+
+				pugi::xml_node rotationNode = transformNode.append_child("rotation");
+				{
+					pugi::xml_node xNode = rotationNode.append_child("x");
+					xNode.append_child(pugi::node_pcdata).set_value(
+						std::to_string(transform.RotationEuler.x).c_str());
+					pugi::xml_node yNode = rotationNode.append_child("y");
+					yNode.append_child(pugi::node_pcdata).set_value(
+						std::to_string(transform.RotationEuler.y).c_str());
+					pugi::xml_node zNode = rotationNode.append_child("z");
+					zNode.append_child(pugi::node_pcdata).set_value(
+						std::to_string(transform.RotationEuler.z).c_str());
+				}
+
+				pugi::xml_node scaleNode = transformNode.append_child("scale");
+				{
+					pugi::xml_node xNode = scaleNode.append_child("x");
+					xNode.append_child(pugi::node_pcdata).set_value(
+						std::to_string(transform.Scale.x).c_str());
+					pugi::xml_node yNode = scaleNode.append_child("y");
+					yNode.append_child(pugi::node_pcdata).set_value(
+						std::to_string(transform.Scale.y).c_str());
+					pugi::xml_node zNode = scaleNode.append_child("z");
+					zNode.append_child(pugi::node_pcdata).set_value(
+						std::to_string(transform.Scale.z).c_str());
+				}
+			}
+
+			if (entity.HasComponent<LightComponent>())
+			{
+				LightComponent lightComponent = entity.GetComponent<LightComponent>();
+				pugi::xml_node lightNode = componentNode.append_child("light");
+
+				pugi::xml_node lightEnabledNode = lightNode.append_child("enabled");
+
+				if (lightComponent.Enabled)
+					lightEnabledNode.append_child(pugi::node_pcdata).set_value("1");
+				else
+					lightEnabledNode.append_child(pugi::node_pcdata).set_value("0");
+
+				pugi::xml_node lightIntensityNode = lightNode.append_child("intensity");
+				lightIntensityNode.append_child(pugi::node_pcdata).set_value(std::to_string(lightComponent.Intensity).c_str());
+				pugi::xml_node diffuseNode = lightNode.append_child("diffuse");
+				{
+					pugi::xml_node rNode = diffuseNode.append_child("r");
+					rNode.append_child(pugi::node_pcdata).set_value(std::to_string(lightComponent.Diffuse.r).c_str());
+
+					pugi::xml_node gNode = diffuseNode.append_child("g");
+					gNode.append_child(pugi::node_pcdata).set_value(std::to_string(lightComponent.Diffuse.g).c_str());
+
+					pugi::xml_node bNode = diffuseNode.append_child("b");
+					bNode.append_child(pugi::node_pcdata).set_value(std::to_string(lightComponent.Diffuse.b).c_str());
+
+					pugi::xml_node wNode = diffuseNode.append_child("w");
+					wNode.append_child(pugi::node_pcdata).set_value(std::to_string(lightComponent.Diffuse.w).c_str());
+				}
+				pugi::xml_node specularNode = lightNode.append_child("specular");
+				{
+					pugi::xml_node rNode = specularNode.append_child("r");
+					rNode.append_child(pugi::node_pcdata).set_value(std::to_string(lightComponent.Specular.r).c_str());
+
+					pugi::xml_node gNode = specularNode.append_child("g");
+					gNode.append_child(pugi::node_pcdata).set_value(std::to_string(lightComponent.Specular.g).c_str());
+
+					pugi::xml_node bNode = specularNode.append_child("b");
+					bNode.append_child(pugi::node_pcdata).set_value(std::to_string(lightComponent.Specular.b).c_str());
+
+					pugi::xml_node wNode = specularNode.append_child("w");
+					wNode.append_child(pugi::node_pcdata).set_value(std::to_string(lightComponent.Specular.w).c_str());
+				}
+
+				pugi::xml_node attenNode = lightNode.append_child("attenuation");
+				{
+					pugi::xml_node xNode = attenNode.append_child("x");
+					xNode.append_child(pugi::node_pcdata).set_value(std::to_string(lightComponent.Attenuation.x).c_str());
+
+					pugi::xml_node yNode = attenNode.append_child("y");
+					yNode.append_child(pugi::node_pcdata).set_value(std::to_string(lightComponent.Attenuation.y).c_str());
+
+					pugi::xml_node zNode = attenNode.append_child("z");
+					zNode.append_child(pugi::node_pcdata).set_value(std::to_string(lightComponent.Attenuation.z).c_str());
+
+					pugi::xml_node wNode = attenNode.append_child("w");
+					wNode.append_child(pugi::node_pcdata).set_value(std::to_string(lightComponent.Attenuation.w).c_str());
+				}
+
+				pugi::xml_node param1Node = lightNode.append_child("lightparams");
+				{
+					pugi::xml_node xNode = param1Node.append_child("x");
+					xNode.append_child(pugi::node_pcdata).set_value(std::to_string(lightComponent.LightParams.x).c_str());
+
+					pugi::xml_node yNode = param1Node.append_child("y");
+					yNode.append_child(pugi::node_pcdata).set_value(std::to_string(lightComponent.LightParams.y).c_str());
+
+					pugi::xml_node zNode = param1Node.append_child("z");
+					zNode.append_child(pugi::node_pcdata).set_value(std::to_string(lightComponent.LightParams.z).c_str());
+
+					pugi::xml_node wNode = param1Node.append_child("w");
+					wNode.append_child(pugi::node_pcdata).set_value(std::to_string(lightComponent.LightParams.w).c_str());
+				}
+			}
+
+			if (entity.HasComponent<AssetComponent>())
+			{
+				AssetComponent assetComponent = entity.GetComponent<AssetComponent>();
+				pugi::xml_node assetComponentNode = componentNode.append_child("asset_component");
+
+				pugi::xml_node assetComponentPathNode = assetComponentNode.append_child("file_location");
+				assetComponentPathNode.append_child(pugi::node_pcdata).set_value(assetComponent.FileLocation.c_str());
+				
+				Ref<Model> model = assetComponent.ModelInstance;
+				if (model)
+				{
+					int break_me = 0;
+				}
+				Entity* parentAssetEntity = model->m_ModelPrefab;
+
+				for (Asset asset : model->GetAssets())
+				{
+					Entity assetEntity = scene->GetEntityWithGUID(asset.ID);
+
+					pugi::xml_node assetNode = assetComponentNode.append_child("asset");
+					pugi::xml_attribute idAttr = assetNode.append_attribute("id");
+					idAttr.set_value(asset.AssetID);
+
+					if (assetEntity.HasComponent<MeshComponent>())
+					{
+						std::string materialPath = assetEntity.GetComponent<MeshComponent>().MaterialPath;
+
+						if (!materialPath.empty())
+						{
+							pugi::xml_node assetMaterial = assetNode.append_child("material_path");
+							assetMaterial.append_child(pugi::node_pcdata).set_value(materialPath.c_str());
+						}
+					}
+
+					for (GUID id : assetEntity.Children())
+					{
+						Entity childEntity = scene->GetEntityWithGUID(id);
+						if (childEntity.HasComponent<IDComponent>())
+						{
+							IDComponent idComponent = childEntity.GetComponent<IDComponent>();
+							if (idComponent.Type == NotAsset)
+							{
+								pugi::xml_node assetChild = assetNode.append_child("child");
+								assetChild.append_child(pugi::node_pcdata).set_value(std::to_string(idComponent.ID).c_str());
+							}
+						}
+					}
+				}
+			}
+
+			if (entity.HasComponent<MeshComponent>())
+			{
+				MeshComponent& meshComponent = entity.GetComponent<MeshComponent>();
+				pugi::xml_node meshObjectNode = componentNode.append_child("meshobject");
+				pugi::xml_node meshObjectEnabledNode = meshObjectNode.append_child("enabled");
+
+				if (meshComponent.Enabled)
+					meshObjectEnabledNode.append_child(pugi::node_pcdata).set_value("1");
+				else
+					meshObjectEnabledNode.append_child(pugi::node_pcdata).set_value("0");
+
+				pugi::xml_node meshObjectPathNode = meshObjectNode.append_child("path");
+				meshObjectPathNode.append_child(pugi::node_pcdata).set_value(meshComponent.Path.c_str());
+
+				pugi::xml_node meshObjectMaterialPathNode = meshObjectNode.append_child("material_path");
+				meshObjectMaterialPathNode.append_child(pugi::node_pcdata).set_value(meshComponent.MaterialPath.c_str());
+
+				pugi::xml_node use_fbx_texturesNode = meshObjectNode.append_child("use_fbx_textures");
+				if (meshComponent.UseFBXTextures)
+					use_fbx_texturesNode.append_child(pugi::node_pcdata).set_value("1");
+				else
+					use_fbx_texturesNode.append_child(pugi::node_pcdata).set_value("0");
+				SaveMaterial(meshComponent.MaterialPath, meshComponent.MaterialIns);
+
+			}
+		}
+
+		return doc.save_file((filename).c_str());
+	}
+		
+	bool LoadFileForReal(std::string filename, Scene* scene, bool async)
+	{
 		std::string materialPath = "";
 		Ref<Material> material;
 		pugi::xml_document sceneDoc;
@@ -443,18 +697,17 @@ namespace vel
 			if (sceneNodeName == "entity")
 			{
 				std::string idText = sceneNode.attribute("id").value();
-				uint32_t id;
-				if (!idText.empty())
+				uint64_t id;
+				/*if (!idText.empty())
 				{
-					id = (uint32_t) std::stoi(idText);
-
-					entityManager->CreateEntity(id);
+					id = (uint64_t) std::stoi(idText);
+					scene->CreateEntityWithID(id);
 				}
 				else
-					id = entityManager->CreateEntity();
+					*/id = scene->CreateEntity().GetGUID();
 
-				Ref<Entity> entity = entityManager->GetEntity(id);
-
+				Entity* entity = &scene->GetEntityMap()[id];
+				entity->SetScene(scene);
 				pugi::xml_object_range<pugi::xml_node_iterator> gameObjectData = sceneNode.children();
 
 				for (pugi::xml_node_iterator gameobjectsDataIterator = gameObjectData.begin();
@@ -464,7 +717,7 @@ namespace vel
 					std::string nodeName = gameObjectNode.name();
 					if (nodeName == "name")
 					{
-						entity->name = gameObjectNode.child_value();
+						entity->Name() = gameObjectNode.child_value();
 					}
 					if (nodeName == "enabled")
 					{
@@ -485,7 +738,8 @@ namespace vel
 							std::string componentNodeName = componentNode.name();
 							if (componentNodeName == "transform")
 							{
-								TransformComponent* transform = entityManager->GetComponentByType<TransformComponent>(entity->GetID());
+								TransformComponent* transform = new TransformComponent();
+								glm::vec3 rotation = glm::vec3(0.f);
 								pugi::xml_object_range<pugi::xml_node_iterator>
 									transformNodeChildren = componentNode.children();
 								for (pugi::xml_node_iterator transformNodeIterator = transformNodeChildren.begin();
@@ -494,6 +748,13 @@ namespace vel
 								{
 									pugi::xml_node transformNode = *transformNodeIterator;
 									std::string transformNodeName = transformNode.name();
+									if (transformNodeName == "enabled")
+									{
+										std::string isEnabled = transformNode.child_value();
+										if (isEnabled == "1")
+											transform->enabled = true;
+										else transform->enabled = false;
+									}
 									if (transformNodeName == "position")
 									{
 										pugi::xml_object_range<pugi::xml_node_iterator>
@@ -527,14 +788,15 @@ namespace vel
 										{
 											pugi::xml_node rotationNode = *rotationNodeIterator;
 											std::string rotationNodeName = rotationNode.name();
+
 											if (rotationNodeName == "x")
-												transform->Rotation.x =
+												rotation.x =
 												std::stof(rotationNode.child_value());
 											if (rotationNodeName == "y")
-												transform->Rotation.y =
+												rotation.y =
 												std::stof(rotationNode.child_value());
 											if (rotationNodeName == "z")
-												transform->Rotation.z =
+												rotation.z =
 												std::stof(rotationNode.child_value());
 										}
 									}
@@ -560,15 +822,17 @@ namespace vel
 										}
 									}
 								}
+								
+								transform->SetRotationEuler(rotation);
+								entity->Transform() = *transform;
+								delete transform;
 							}
 
 							if (componentNodeName == "light")
 							{
 								LightComponent* light = new LightComponent();
-								entityManager->AddComponent(entity->GetID(), light);
 								pugi::xml_object_range<pugi::xml_node_iterator>
 									lightNodeChildren = componentNode.children();
-								//continue;
 								for (pugi::xml_node_iterator lightNodeIterator = lightNodeChildren.begin();
 									lightNodeIterator != lightNodeChildren.end();
 									lightNodeIterator++)
@@ -696,10 +960,63 @@ namespace vel
 										}
 									}
 								}
+
+								entity->AddComponent<LightComponent>(*light);
+								LightManager::AddNewLightInfo(&entity->GetComponent<LightComponent>());
+							}
+
+							if (componentNodeName == "asset_component")
+							{
+								pugi::xml_object_range<pugi::xml_node_iterator>
+									assetComponentNodesChildren = componentNode.children();
+								std::map<GUID, Asset> assetsData;
+								std::string assetFileLocation;
+								for (pugi::xml_node_iterator assetComponentIterator = componentNode.children().begin();
+									assetComponentIterator != componentNode.children().end();
+									assetComponentIterator++)
+								{
+									pugi::xml_node assetNode = *assetComponentIterator;
+									std::string assetNodeName = assetNode.name();
+									if (assetNodeName == "file_location")
+									{
+										assetFileLocation = assetNode.child_value();
+										assetsData = LoadAssetFile(assetFileLocation);
+									}
+									if (assetNodeName == "asset")
+									{
+										GUID id = std::stoull(assetNode.attribute("id").value());
+										for (pugi::xml_node_iterator assetNodeIterator = assetNode.children().begin();
+											assetNodeIterator != assetNode.children().end();
+											assetNodeIterator++)
+										{
+											pugi::xml_node assetDataNode = *assetNodeIterator;
+											std::string assetDataNodeName = assetDataNode.name();
+											if (assetDataNodeName == "material_path")
+											{
+												std::map<GUID, Asset>::iterator assMapIT = assetsData.find(GUID(id));
+												if (assMapIT != assetsData.end())
+												{
+													assMapIT->second.MaterialLocation = assetDataNode.child_value();
+													MaterialSystem::LoadMaterial(assMapIT->second.MaterialLocation, GetMaterialFromSaveFile(assMapIT->second.MaterialLocation));
+												}
+											}
+										}
+									}
+								}
+
+								ModelLoadData data;
+								data.gameScene = scene;
+								data.useTextures = false;
+								data.loadAsync = async;
+								data.source = assetFileLocation.substr(0, assetFileLocation.size() - 7);
+								data.parentEntity = entity;
+								data.assetData = assetsData;
+								MeshRenderer::LoadMesh(data);
 							}
 
 							if (componentNodeName == "meshobject")
 							{
+								//continue;
 								MeshComponent* meshObject = new MeshComponent();
 								for (pugi::xml_node_iterator meshNodeIterator = componentNode.children().begin();
 									meshNodeIterator != componentNode.children().end();
@@ -730,7 +1047,7 @@ namespace vel
 											if (mat)
 												meshObject->MaterialIns = mat;
 											else 
-												meshObject->MaterialIns = MaterialSystem::LoadMaterial(meshObject->MaterialPath, LoadMaterial(meshObject->MaterialPath));
+												meshObject->MaterialIns = MaterialSystem::LoadMaterial(meshObject->MaterialPath, GetMaterialFromSaveFile(meshObject->MaterialPath));
 										}
 
 									}
@@ -740,10 +1057,20 @@ namespace vel
 									}
 								}
 								if (!meshObject->Path.empty())
-								{
-									meshObject->ModelIns = MeshRenderer::LoadMesh(meshObject->Path, meshObject->UseFBXTextures, async, entityManager);
+								{ 
+									ModelLoadData data;
+									data.gameScene = scene;
+									data.useTextures = meshObject->UseFBXTextures;
+									data.loadAsync = async;
+									data.source = meshObject->Path;
+									data.material = meshObject->MaterialIns;
+									data.materialPath = meshObject->MaterialPath;
+									data.parentEntity = entity;
+									std::map<GUID, Asset> assetsData = LoadAssetFile(meshObject->Path+".vasset");
+									//data.assetData = assetsData;
+									Entity* assetEntity = MeshRenderer::LoadMesh(data);
 								}
-								entityManager->AddComponent(entity->GetID(), meshObject);
+								//entity->AddComponent<MeshComponent>(*meshObject);
 							}
 						}
 					}
@@ -759,17 +1086,17 @@ namespace vel
 	{
 		SceneDataLoadInfo* pFileParams = (SceneDataLoadInfo*)pParameters;
 
-		LoadFileForReal(pFileParams->filename, pFileParams->entityManager, pFileParams->async);
+		LoadFileForReal(pFileParams->filename, pFileParams->scene, pFileParams->async);
 		return 0;
 	}
-
-	bool LoadSceneFile(std::string filename, Ref<EntityManager> entityManager, bool async)
+	
+	bool LoadSceneFile(std::string filename, Scene* scene, bool async)
 	{
 		if (async)
 		{
 			SceneDataLoadInfo* fileInfo = new SceneDataLoadInfo();
 			fileInfo->filename = filename;
-			fileInfo->entityManager = entityManager;
+			fileInfo->scene = scene;
 			fileInfo->async = async;
 
 			LPDWORD lpThreadId = 0;
@@ -785,9 +1112,70 @@ namespace vel
 				);
 			return true;
 		}
-		
-		return LoadFileForReal(filename, entityManager, async);
-	}
 
-	
+		return LoadFileForReal(filename, scene, async);
+	}
+	bool SaveAssetFile(GUID assetID, std::string filename, std::vector<Asset> assets)
+	{
+		pugi::xml_document doc;
+		pugi::xml_node assetListNode = doc.append_child("assets_list");
+		pugi::xml_attribute idNode = assetListNode.append_attribute("id");
+		idNode.set_value(assetID);
+		for (int i = 0; i < assets.size(); i++)
+		{
+			pugi::xml_node assetNode = assetListNode.append_child("asset");
+			pugi::xml_node assetNameNode = assetNode.append_child("name");
+			assetNameNode.append_child(pugi::node_pcdata).set_value(assets[i].Name.c_str());
+
+			pugi::xml_node assetIDNode = assetNode.append_child("id");
+			assetIDNode.append_child(pugi::node_pcdata).set_value(std::to_string(assets[i].AssetID).c_str());
+		}
+
+		return doc.save_file(filename.c_str());
+	}
+	std::map<GUID,Asset> LoadAssetFile(std::string filename)
+	{
+		std::map<GUID, Asset> assets;
+		pugi::xml_document assetDoc;
+		if (!assetDoc.load_file(filename.c_str()))
+		{
+			VEL_CORE_ERROR("Couldn't open " + filename);
+			return assets;
+		}
+		pugi::xml_object_range<pugi::xml_node_iterator> assetsList = assetDoc.child("assets_list").children();
+		if (assetsList.empty())
+		{
+			VEL_CORE_ERROR("Material has no data!");
+			return assets;
+		}
+		pugi::xml_node_iterator assetIterator = assetsList.begin();
+		for (; assetIterator != assetsList.end(); assetIterator++)
+		{
+			pugi::xml_node assetNode = *assetIterator;
+			std::string assetNodeName = assetNode.name();
+
+			if (assetNodeName == "asset")
+			{
+				Asset asset;
+				for (pugi::xml_node_iterator assetNodeIterator = assetNode.begin();
+					assetNodeIterator != assetNode.end();
+					assetNodeIterator++)
+				{
+					pugi::xml_node assetDataNode = *assetNodeIterator;
+					std::string assetDataNodeName = assetDataNode.name();
+
+					if (assetDataNodeName == "name")
+					{
+						asset.Name = assetDataNode.child_value();
+					}
+					if (assetDataNodeName == "id")
+					{
+						asset.ID = std::stoull(assetDataNode.child_value());
+					}
+				}
+				assets.emplace(asset.ID, asset);
+			}
+		}
+		return assets;
+	}
 }

@@ -67,7 +67,6 @@ uniform vec4 eyeLocation;
 
 void main()
 {
-	bool useBloom = false;
 	vec4 normalValue = normalize(fs_in.Normal);
 	if (useTextureNormal)
 	{
@@ -81,7 +80,6 @@ void main()
 	{
 		textColour0 = RGBA.rgb;
 		transparency = RGBA.a;
-		useBloom = true;
 	}
 
 	vec4 specularColour = SPEC;
@@ -98,6 +96,7 @@ void main()
 	f_normal = vec4(normalValue.xyz, 1.0);
 	f_specular = specularColour;
 	f_emissive = emissiveColour * EmissiveIntensity;
+	f_emissive.a = 1.f;
 
 	float ratio = 1.00 / 1.52;
 	vec3 I = normalize(fs_in.FragPos.xyz - eyeLocation.xyz);
@@ -107,20 +106,4 @@ void main()
 	f_albedo.rgb += texture(skyBox, RR).xyz * SHIN;
 	f_albedo.rgb += texture(skyBox, RL).xyz * SHIN;
 	f_bloom = vec4(0.0, 0.0, 0.0, 0.0);
-
-	//if (useBloom)
-	{
-		/*if (f_albedo.r > 0.05f)
-			f_albedo.r *= 2.0f;
-
-		if (f_albedo.g > 0.05f)
-			f_albedo.g *= 2.0f;
-
-		if (f_albedo.b > 0.05f)
-			f_albedo.b *= 2.0f;
-
-		float brightness = dot(f_albedo.rgb, vec3(0.2126f, 0.7152f, 0.0722f));
-		if (brightness > 0.15f)
-			f_bloom = vec4(f_albedo.rgb, 1.0);*/
-	}
 }

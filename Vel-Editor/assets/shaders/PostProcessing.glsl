@@ -31,15 +31,22 @@ uniform sampler2D gNormal;
 uniform sampler2D gSpecular;
 uniform sampler2D gBloom;
 uniform sampler2D gNoise;
+uniform vec4 eyeLocation;
 uniform vec2 screen_width_height;					// x = width, y = height
-uniform bool UseBloom;
-
 uniform float Exposure;
+
+uniform bool DepthOfField;
+uniform float FocalDistance;
+
+uniform bool UseBloom;
 uniform float BloomIntensity;
 uniform float weights1[5] = float[](0.227027f, 0.1945946f, 0.1216216f, 0.054054f, 0.016216f);
 
 uniform float time; // time in seconds
+uniform float timeInc;
 uniform bool nightVision;
+uniform bool rippleEffect;
+uniform bool grayscale;
 float hash(in float n) { return fract(sin(n) * 43758.5453123); }
 
 const int M = 16;
@@ -97,57 +104,7 @@ float logisticDepth(float depth, float steepness = 0.05f, float offset = 5.0f)
 	return (1 / (1 + exp(-steepness * zVal - offset)));
 }
 
-const float linecount = 120.0;
-const vec4 gradA = vec4(0.0, 0.0, 0.0, 1.0);
-const vec4 gradB = vec4(0.5, 0.7, 0.6, 1.0);
-const vec4 gradC = vec4(1.0, 1.0, 1.0, 1.0);
-
-vec2 pos, uv;
-
-float noisef(float factor)
-{
-	vec4 v = texture(gNoise, uv + time * vec2(9.0, 7.0));
-	return factor * v.x + (1.0 - factor);
-}
-
-vec4 base(void)
-{
-	return texture(gAlbedo, uv + .1 * noisef(1.0) * vec2(0.02, 0.0));
-}
-
-float triangle(float phase)
-{
-	//phase *= 2.0;
-	//return 1.0 - abs(mod(phase, 2.0) - 1.0);
-	// sin is not really a triangle.. but it's easier to do bandlimited
-	float y = sin(phase * 3.14159);
-	// if you want something brighter but more aliased, change 1.0 here to something like 0.3
-	return pow(y * y, 1.0);
-}
-
-float scanline(float factor, float contrast)
-{
-	vec4 v = base();
-	float lum = .2 * v.x + .5 * v.y + .3 * v.z;
-	lum *= noisef(0.3);
-	float tri = triangle(pos.y * linecount);
-	tri = pow(tri, contrast * (1.0 - lum) + .5);
-	return tri * lum;
-}
-
-vec4 gradient(float i)
-{
-	i = clamp(i, 0.0, 1.0) * 2.0;
-	if (i < 1.0) {
-		return (1.0 - i) * gradA + i * gradB;
-	}
-	else {
-		i -= 1.0;
-		return (1.0 - i) * gradB + i * gradC;
-	}
-}
-
-vec4 vignette(vec4 at)
+vec4 vignette(vec4 at, vec4 pos)
 {
 	float dx = 1.3 * abs(pos.x - .5);
 	float dy = 1.3 * abs(pos.y - .5);
@@ -164,28 +121,21 @@ float random2D(vec2 coord)
 	return fract(sin(dot(coord.xy, vec2(12.9898, 78.233))) * 43758.5453);
 }
 
-
-void main()
+vec3 blurImage(sampler2D text, int iterations, int whichWeights)
 {
-	const float gamma = 2.2;
-	vec3 FragPos = texture(gPosition, v_TextureCoords).rgb;
-	vec4 Normal = texture(gNormal, v_TextureCoords);
-	vec3 Diffuse = texture(gAlbedo, v_TextureCoords).rgb;
-	vec4 Specular = texture(gSpecular, v_TextureCoords);
-
 	vec3 result = vec3(0.0f, 0.f, 0.f);
-	if (UseBloom)
+	vec2 tex_offset = 1.0f / textureSize(text, 0);
+
+	for (int k = 0; k < iterations; k++)
 	{
-		vec2 tex_offset = 1.0f / textureSize(gBloom, 0);
-		
-		for (int k = 0; k < 5; k++)
+		if (whichWeights == 0)
 		{
 			for (int i = 0; i < N; ++i)
 			{
 				//result += texture(gBloom, v_TextureCoords + vec2(tex_offset.x * i, 0.0)).rgb * weights2[i];
 				//result += texture(gBloom, v_TextureCoords - vec2(tex_offset.x * i, 0.0)).rgb * weights2[i];
 				vec2 tc = v_TextureCoords + tex_offset * vec2(float(i - M), 0);
-				result += weights2[i] * texture(gBloom, tc).rgb;
+				result += weights2[i] * texture(text, tc).rgb;
 			}
 
 			for (int j = 0; j < N; ++j)
@@ -193,11 +143,53 @@ void main()
 				//result += texture(gBloom, v_TextureCoords + vec2(0.f, tex_offset.y * j)).rgb * weights2[j];
 				//result += texture(gBloom, v_TextureCoords - vec2(0.f, tex_offset.y * j)).rgb * weights2[j];
 				vec2 tc = v_TextureCoords + tex_offset * vec2(0, float(j - M));
-				result += weights2[j] * texture(gBloom, tc).rgb;
+				result += weights2[j] * texture(text, tc).rgb;
 			}
 		}
+		else
+		{
+			for (int i = 0; i < N; ++i)
+			{
+				//result += texture(gBloom, v_TextureCoords + vec2(tex_offset.x * i, 0.0)).rgb * weights2[i];
+				//result += texture(gBloom, v_TextureCoords - vec2(tex_offset.x * i, 0.0)).rgb * weights2[i];
+				vec2 tc = v_TextureCoords + tex_offset * vec2(float(i - M), float(i - M));
+				result += weights2[i] * texture(text, tc).rgb;
+			}
 
-		f_bloom = vec4(result, 1.0f);
+			//for (int j = 0; j < 5; ++j)
+			//{
+			//	//result += texture(gBloom, v_TextureCoords + vec2(0.f, tex_offset.y * j)).rgb * weights2[j];
+			//	//result += texture(gBloom, v_TextureCoords - vec2(0.f, tex_offset.y * j)).rgb * weights2[j];
+			//	vec2 tc = v_TextureCoords + tex_offset * vec2(0, float(j - 2));
+			//	result += weights2[j] * texture(text, tc).rgb;
+			//}
+		}
+	}
+	return result;
+}
+
+
+void main()
+{
+	vec3 FragPos = texture(gPosition, v_TextureCoords).rgb;
+	vec4 Normal = texture(gNormal, v_TextureCoords);
+	vec3 Diffuse = texture(gAlbedo, v_TextureCoords).rgb;
+	vec4 Specular = texture(gSpecular, v_TextureCoords);
+
+	f_color = vec4(Diffuse.rgb, 1.0);
+
+	/// DOF
+	if (DepthOfField)
+	{
+		if (distance(eyeLocation.rgb, FragPos) > FocalDistance)
+			f_color = vec4(blurImage(gAlbedo, 1, 1), 1.f);
+	}
+
+	if (UseBloom)
+	{
+		f_bloom = vec4(blurImage(gBloom, 10, 0), 1.0f);
+
+		f_color += vec4(f_bloom.rgb, 1.0) * BloomIntensity;
 	}
 
 	f_position = vec4(FragPos, 1.0);
@@ -214,8 +206,6 @@ void main()
 	//	}
 	//}
 
-	f_color = vec4(Diffuse.rgb, 1.0) + vec4(result.rgb, 1.0) * BloomIntensity;
-
 	//// NIGHT VISION
 	if (nightVision)
 	{
@@ -228,6 +218,22 @@ void main()
 		f_color.b += noise;
 	}
 
-	/*float average = (0.2126 * f_color.r + 0.7152 * f_color.g + 0.0722 * f_color.b) / 3.0;
-	f_color = vec4(average, average, average, 1.0);*/
+	/// Ripple
+	if (rippleEffect)
+	{
+		vec2 tc = v_TextureCoords.xy;
+		vec2 p = -1.0 + 2.0 * tc;
+		float len = length(p);
+		vec2 uv = tc + (p / len) * cos(len * 12.0 - timeInc * 4.0) * 0.03;
+		vec3 col = texture2D(gAlbedo, uv).xyz;
+		f_color = vec4(col, 1.0);
+	}
+
+
+	/// Grayscale
+	if (grayscale)
+	{
+		float average = (0.2126 * f_color.r + 0.7152 * f_color.g + 0.0722 * f_color.b) / 3.0;
+		f_color = vec4(average, average, average, 1.0);
+	}
 }

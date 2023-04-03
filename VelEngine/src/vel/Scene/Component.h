@@ -5,36 +5,95 @@
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include "vel/Renderer/Texture.h"
+#include "vel/Core/GUID.h"
+#include "vel/Math/Math.h"
 
 namespace vel
 {
-	class Component
+	enum EntityType
 	{
-	public:
-		Component() {}
-		virtual ~Component() = default;
+		NotAsset,
+		IsAsset,
 	};
-	class TransformComponent : public Component
+	struct IDComponent
+	{
+		GUID ID = 0;
+		GUID AssetID;
+		EntityType Type = EntityType::NotAsset;
+	};
+
+	struct AssetComponent
+	{
+		AssetComponent(std::string fileLocation, Ref<Model> modelInstance)
+			:FileLocation(fileLocation), ModelInstance(modelInstance)
+		{
+
+		}
+		std::string FileLocation;
+		Ref<Model> ModelInstance;
+	};
+
+	struct Asset
+	{
+		Asset() {};
+		Asset(std::string name, GUID id, GUID assetID, std::string materialLocation) : Name(name), ID(id), AssetID(assetID), MaterialLocation(materialLocation){}
+		std::string Name;
+		GUID ID = 0;
+		GUID AssetID = 0;
+		std::string MaterialLocation;
+	};
+
+	struct TagComponent
+	{
+		std::string Tag;
+
+		TagComponent() = default;
+		TagComponent(const TagComponent& other) = default;
+		TagComponent(const std::string& tag)
+			: Tag(tag) {}
+
+		operator std::string& () { return Tag; }
+		operator const std::string& () const { return Tag; }
+	};
+
+	struct RelationshipComponent
+	{
+		GUID ParentHandle = 0;
+		std::vector<GUID> Children;
+
+		RelationshipComponent() = default;
+		RelationshipComponent(const RelationshipComponent& other) = default;
+		RelationshipComponent(GUID parent)
+			: ParentHandle(parent) {}
+	};
+
+	struct TransformComponent
 	{
 	public:
-		virtual ~TransformComponent() {}
+		bool enabled = true;
 		glm::vec3 Translation = { 0.0f, 0.0f, 0.0f };
-		glm::vec3 Rotation = { 0.0f, 0.0f, 0.0f };
 		glm::vec3 Scale = { 1.0f, 1.0f, 1.0f };
 
+	private:
+		// Should not be accessed directly
+		// Only use functions
+		glm::quat Rotation = { 1.f, 0.0f, 0.0f, 0.0f };
+
+	public:
+		glm::vec3 RotationEuler = { 0.0f, 0.0f, 0.0f };
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent& other) 
-			:Translation(other.Translation), Rotation(other.Rotation), Scale(other.Scale)
+			:Translation(other.Translation), Rotation(other.Rotation), RotationEuler(other.RotationEuler), Scale(other.Scale)
 		{}
 		TransformComponent(const glm::vec3& translation)
 			: Translation(translation){}
 
-		glm::vec3 GetRotation() const
+		glm::vec3 GetRotationInRad() const
 		{
 			return glm::vec3(
-				glm::radians(Rotation.x),
-				glm::radians(Rotation.y),
-				glm::radians(Rotation.z)
+				glm::radians(RotationEuler.x),
+				glm::radians(RotationEuler.y),
+				glm::radians(RotationEuler.z)
 			);
 		}
 
@@ -42,26 +101,66 @@ namespace vel
 		{
 			return glm::translate(glm::mat4(1.0f), Translation)
 				* glm::toMat4(glm::quat(
-						GetRotation()
+					GetRotationInRad()
 					)
 				)
 				* glm::scale(glm::mat4(1.0f), Scale);
 		}
+
+		void SetTransform(const glm::mat4& transform)
+		{
+			Math::DecomposeTransform(transform, Translation, Rotation, Scale);
+			RotationEuler = glm::eulerAngles(Rotation);
+		}
+
+		glm::vec3 GetRotationEuler() const
+		{
+			return RotationEuler;
+		}
+
+		void SetRotationEuler(const glm::vec3& euler)
+		{
+			RotationEuler = glm::vec3(euler);
+			Rotation = glm::quat(RotationEuler);
+		}
+
+		glm::quat GetRotation() const
+		{
+			return Rotation;
+		}
+
+		void SetRotation(const glm::quat& quat)
+		{
+			Rotation = quat;
+			RotationEuler = glm::eulerAngles(Rotation);
+		}
+	};
+	struct MeshData
+	{
+		std::vector<Vertices> m_Vertices;
+		std::vector<uint32_t> m_Indices;
+		std::vector<Ref<Texture2D>> m_Textures;
+
+		bool m_Loaded = false;
+
+		Ref<VertexArray> m_VertexArray;
 	};
 
-	class MeshComponent : public Component
+	struct MeshComponent
 	{
-	public:
-		virtual ~MeshComponent() {}
+		Ref<GUID> ID;
 		std::string Mesh;
 		std::string Path;
 		bool UseFBXTextures;
 		bool Enabled = true;
 
+
 		std::string MaterialPath;
 		Ref<Material> MaterialIns;
+		Ref<Shader> shader;
 		Ref<Model> ModelIns;
 		uint32_t SubmeshIndex = 0;
+		Ref<MeshData> MeshDrawData;
 
 		MeshComponent()
 		{
@@ -86,9 +185,8 @@ namespace vel
 		Direct = 2
 	};
 
-	class LightComponent : public Component
+	struct LightComponent
 	{
-	public:
 		LightComponent(const LightComponent& other)
 			: Position(other.Position),
 			Diffuse(other.Diffuse),
@@ -112,7 +210,6 @@ namespace vel
 			Direction = glm::vec4(0.0f, 0.0f, 0.0f, 0.f);
 			LightParams = glm::vec4(2.f, 0.0f, 0.0f, 1.0f);
 		}
-		virtual ~LightComponent() {}
 		LightTypes LightType;
 		glm::vec4 Position;
 		glm::vec4 Diffuse;
@@ -128,30 +225,30 @@ namespace vel
 		bool Enabled = true;
 
 
-		inline void SetConstantAttenuation(float newConstAtten)
+		void SetConstantAttenuation(float newConstAtten)
 		{
 			this->Attenuation.x = newConstAtten;
 			return;
 		}
 
-		inline void SetLinearAttenuation(float newLinearAtten)
+		void SetLinearAttenuation(float newLinearAtten)
 		{
 			this->Attenuation.y = newLinearAtten;
 			return;
 		}
 
-		inline void SetQuadraticAttenuation(float newQuadraticAtten)
+		void SetQuadraticAttenuation(float newQuadraticAtten)
 		{
 			this->Attenuation.z = newQuadraticAtten;
 			return;
 		}
 
-		inline void TurnON(void)
+		void TurnON(void)
 		{
 			this->LightParams.w = 1;
 		}
 
-		inline void TurnOFF(void)
+		void TurnOFF(void)
 		{
 			this->LightParams.w = 0;
 		}
@@ -189,26 +286,22 @@ namespace vel
 		bool Enabled = true;
 	};
 
-	class Volume : public Component
+	struct Volume
 	{
-	public:
-		virtual ~Volume() {}
-
 		Bloom bloom;
 		DepthOfField depthOfField;
 		bool Enabled = true;
 	};
 
-	class SkyBox : public Component
+	struct SkyBox
 	{
-	public:
 		SkyBox() = default;
 		SkyBox(std::vector<std::string> texturePaths, std::string modelPath)
 		{
 			CreateSkyBox(texturePaths, modelPath);
 		}
 
-		virtual ~SkyBox() {
+		~SkyBox() {
 			skyboxTexture->RemoveData();
 		}
 
@@ -216,7 +309,7 @@ namespace vel
 		{
 			skyboxTexture = TextureCubeMap::Create(texturePaths);
 
-			cubeModel = CreateRef<Model>(modelPath, false, false);
+			cubeModel = CreateRef<Model>(modelPath, false, false, nullptr);
 			skyBox = VertexArray::Create();
 			Ref<VertexBuffer> vb = VertexBuffer::Create(&skyboxVertices[0], 108);
 			vb->SetLayout({

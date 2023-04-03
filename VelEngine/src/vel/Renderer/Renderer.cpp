@@ -26,36 +26,34 @@ namespace vel
 	};
 
 	static RendererData s_Data;
-
+	static Ref<VertexArray> m_QuadVertexArray;
 	void Renderer::Init()
 	{
 		VEL_PROFILE_FUNCTION();
-		/*s_Data.QuadVertexArray = VertexArray::Create();
-		Ref<VertexBuffer> squareVB = VertexBuffer::Create(s_Data.MaxVertices * sizeof(vel::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones));
+		float sqVertices[6 * 4] = {
+			0.0f, 0.0f,	-1.f,	-1.f,	0.0f,	1.f,
+			1.0f, 0.0f, 1.f,	-1.f,	0.0f,	1.f,
+			1.0f, 1.0f, 1.f,	1.f,	0.0f,	1.f,
+			0.0f, 1.0f, -1.f,	1.f,	0.0f,	1.f
+		};
+		m_QuadVertexArray = VertexArray::Create();
+		Ref<VertexBuffer> squareVB;
+		squareVB = (VertexBuffer::Create(sqVertices, sizeof(sqVertices)));
+
 		squareVB->SetLayout({
-			{ShaderDataType::Float3, "a_Position"},
-			{ShaderDataType::Float4, "a_Color"},
-			{ShaderDataType::Float2, "a_TextureCoords"},
+				{ ShaderDataType::Float2, "a_TextureCoords"},
+				{ ShaderDataType::Float4, "a_Position"}
 			});
-		s_Data.QuadVertexArray->AddVertexBuffer(squareVB);
+		m_QuadVertexArray->AddVertexBuffer(squareVB);
 
-		s_Data.vertexDataBufferBase = new vel::sVertex_RGBA_XYZ_N_UV_T_BiN_Bones[s_Data.MaxVertices];
+		uint32_t sq_indices[6] = {
+			0, 1, 2, 2, 3, 0
+		};
 
-		uint32_t* quadIndices = new uint32_t[s_Data.MaxIndices];
-
-		Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices,s_Data.MaxIndices);
-		s_Data.QuadVertexArray->SetIndexBuffer(quadIB);
-		delete[] quadIndices;
-
-		s_Data.FinalTexture = Texture2D::Create(1, 1);
-		uint32_t textureData = 0xffffffff;
-		s_Data.FinalTexture->SetData(&textureData, sizeof(uint32_t));*/
-
-		/*s_Data.TextureShader = Shader::Create("assets/shaders/simpleshader1.glsl");
-		s_Data.TextureShader->Bind();
-		s_Data.TextureShader->SetInt("u_Texture", 0);
-		s_Data.TextureShader->SetFloat("u_TilingFactor", s_Data.TilingFactor);*/
-
+		// index buffer
+		Ref<IndexBuffer> squareIB;
+		squareIB = (IndexBuffer::Create(sq_indices, sizeof(sq_indices) / sizeof(uint32_t)));
+		m_QuadVertexArray->SetIndexBuffer(squareIB);
 
 		RenderCommand::Init();
 	}
@@ -169,6 +167,16 @@ namespace vel
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);
 		vertexArray->Unbind();
+	}
+
+	void Renderer::DrawFullscreenQuad(const Ref<Shader>& shader)
+	{
+		shader->Bind();
+		shader->SetMat4("u_Transform", glm::mat4(1.f));
+
+		m_QuadVertexArray->Bind();
+		RenderCommand::DrawIndexed(m_QuadVertexArray);
+		m_QuadVertexArray->Unbind();
 	}
 
 }

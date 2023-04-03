@@ -110,6 +110,7 @@ void main()
 	f_position = vec4(fs_in.FragPos, 1.0);
 	f_normal = vec4(normalValue, 1.0);
 	f_specular = specularColour;
+	f_color = vec4(textColour0.rgb, 1.f);
 }
 
 vec4 calculateLightContrib(vec3 vertexMaterialColour, vec3 vertexNormal,

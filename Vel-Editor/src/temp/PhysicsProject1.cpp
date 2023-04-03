@@ -241,24 +241,6 @@ void PhysicsScene::OnUpdate(vel::Timestep ts)
 				controlBall->ApplyForce(
 					direction
 				);
-
-				/*
-				if (vel::Input::IsKeyPressed(KeyCode::Left))
-				{
-					controlBall->ApplyForce(glm::vec3(-5.f, 0.f, 0.f) * m_EditorCamera.GetForwardDirection());
-				}
-				if (vel::Input::IsKeyPressed(KeyCode::Right))
-				{
-					controlBall->ApplyForce(glm::vec3(5.f, 0.f, 0.f));
-				}
-				if (vel::Input::IsKeyPressed(KeyCode::Up))
-				{
-					controlBall->ApplyForce(glm::vec3(0.f, 0.f, -5.f));
-				}
-				if (vel::Input::IsKeyPressed(KeyCode::Down))
-				{
-					controlBall->ApplyForce(glm::vec3(0.f, 0.f, 5.f));
-				}*/
 			}
 			glm::mat4x4 matModel = glm::mat4x4(1.0f);
 			if (gameObject->rigidBody)

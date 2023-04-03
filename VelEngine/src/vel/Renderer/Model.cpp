@@ -13,12 +13,62 @@
 #include <assimp/postprocess.h>
 #include "Renderer.h"
 #include <vel/Scene/EntityManager.h>
+#include <vel/Scene/Scene.h>
+#include "vel/Scene/Entity.h"
+#include "vel/Scene/Component.h"
+#include "vel/Scene/SaveSystem.h"
+#include "vel/Scene/MeshRenderer.h"
+#include "vel/Core/GUID.h"
+#include "vel/Scene/MaterialSystem.h"
 
 // controls acces to the vector of m_Meshes
 CRITICAL_SECTION ModelLoader_Lock;
 
 namespace vel
 {
+    Model::Model(ModelLoadData data)
+        :modelLoadData(data), m_GameScene(data.gameScene)
+        ,m_UseFBXTextures(data.useTextures), m_LoadAsync(data.loadAsync), m_MaterialPath(data.materialPath)
+    {
+        m_InitCriticalSections();
+        m_Meshes = std::vector<Ref<MeshData>>();
+        m_Importer = std::make_unique<Assimp::Importer>();
+        const aiScene* scene = m_Importer->ReadFile(data.source, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
+
+        if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+        {
+            VEL_CORE_ERROR("ERROR::ASSIMP:: {0}", m_Importer->GetErrorString());
+            return;
+        }
+        m_Path = modelLoadData.source.substr(0, modelLoadData.source.find_last_of('/'));
+        m_Name = modelLoadData.source.substr(modelLoadData.source.find_last_of('/') + 1, modelLoadData.source.find_first_of('.'));
+
+        std::string path = m_Path + "/" + m_Name + ".vasset";
+
+        if (m_GameScene)
+        {
+            bool entitycreated = false;
+            if (modelLoadData.assetData.size() > 0)
+            {
+                for (auto const& [key, val] : modelLoadData.assetData)
+                {
+                    if (val.Name == m_Name)
+                    {
+                        m_ModelPrefab = &m_GameScene->CreateAssetEntityWithID(key, *modelLoadData.parentEntity,m_Name, false, IsAsset);
+                        entitycreated = true;
+                        break;
+                    }
+                }
+            }
+            if(!entitycreated)
+                m_ModelPrefab = &m_GameScene->CreateChildEntity(*modelLoadData.parentEntity,m_Name, IsAsset);
+            m_AssetHandle.push_back({ m_ModelPrefab->Name(),m_ModelPrefab->GetGUID() , m_ModelPrefab->GetAssetID(), ""});
+        }
+        m_MaterialIns = modelLoadData.material;
+        ProcessNode(scene->mRootNode, scene, m_ModelPrefab);
+
+        VEL_CORE_TRACE("{0} Model loaded", m_Name);
+    }
     Model::Model(std::string source, bool useTextures, bool loadAsync)
         :m_UseFBXTextures(useTextures), m_LoadAsync(loadAsync)
 	{
@@ -36,12 +86,13 @@ namespace vel
         m_Name = source.substr(source.find_last_of('/') + 1, source.size());
 
 
-        ProcessNode(scene->mRootNode, scene);
+        ProcessNode(scene->mRootNode, scene, nullptr);
 
         VEL_CORE_TRACE("{0} Model loaded", m_Name);
 	}
 
-    Model::Model(std::string source, bool useTextures, bool loadAsync, Ref<EntityManager> entityManager)
+    Model::Model(std::string source, bool useTextures, bool loadAsync, Scene* gameScene)
+        :m_UseFBXTextures(useTextures), m_LoadAsync(loadAsync),m_GameScene(gameScene)
     {
         m_InitCriticalSections();
         m_Meshes = std::vector<Ref<MeshData>>();
@@ -54,9 +105,16 @@ namespace vel
             return;
         }
         m_Path = source.substr(0, source.find_last_of('/'));
-        m_Name = source.substr(source.find_last_of('/') + 1, source.size());
-
-        ProcessNode(scene->mRootNode, scene);
+        m_Name = source.substr(source.find_last_of('/') + 1, source.find('.'));
+        //Entity* entity = nullptr;
+        if (m_GameScene)
+        {
+            m_ModelPrefab = &m_GameScene->CreateEntity(m_Name, IsAsset);
+            m_ModelPrefab->SetScene(m_GameScene);
+           // m_ModelPrefab = entity;
+            m_AssetHandle.push_back({ m_ModelPrefab->Name(),m_ModelPrefab->GetGUID(),m_ModelPrefab->GetAssetID(), ""});
+        }
+        ProcessNode(scene->mRootNode, scene, m_ModelPrefab);
 
         VEL_CORE_TRACE("{0} Model loaded", m_Name);
     }
@@ -169,14 +227,24 @@ namespace vel
                 newMeshData->m_Indices.push_back(face.mIndices[j]);
         }
 
+        if (aimesh->HasBones())
+        {
+            for (unsigned int i = 0; i < aimesh->mNumBones; i++)
+            {
+                aiBone* bone = aimesh->mBones[i];
+                if (bone->mNode)
+                    VEL_CORE_WARN("Bone Node: {0}", bone->mNode->mName.C_Str());
+                VEL_CORE_TRACE("Bone:{0}", bone->mName.C_Str());
+            }
+        }
 
-        //if (m_UseFBXTextures)
-        //{
-        //    // Process the materials
-        //    aiMaterial* material = scene->mMaterials[aimesh->mMaterialIndex];
-        //    std::vector<Ref<Texture2D>> diffuseTextures = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-        //    newMeshData.m_Textures.insert(newMeshData.m_Textures.end(), diffuseTextures.begin(), diffuseTextures.end());
-        //}
+        if (m_UseFBXTextures)
+        {
+            // Process the materials
+            aiMaterial* material = scene->mMaterials[aimesh->mMaterialIndex];
+            std::vector<Ref<Texture2D>> diffuseTextures = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+            newMeshData->m_Textures.insert(newMeshData->m_Textures.end(), diffuseTextures.begin(), diffuseTextures.end());
+        }
         newMeshData->m_Loaded = true;
         /*EnterCriticalSection(&ModelLoader_Lock);
 
@@ -227,11 +295,13 @@ namespace vel
         */
     }
 
-    void Model::ProcessNode(aiNode* node, const aiScene* scene)
+    void Model::ProcessNode(aiNode* node, const aiScene* scene, Entity* parentEntity)
     {
         for (unsigned int i = 0; i < node->mNumMeshes; i++)
         {
             aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+            
+            VEL_CORE_INFO("Mesh: {0}, Node: {1}", mesh->mName.C_Str(), node->mName.C_Str());
 
             /*MeshLoadingInfo* fileInfo = new MeshLoadingInfo();
             fileInfo->aimesh = mesh;
@@ -251,15 +321,83 @@ namespace vel
                     lpThreadId
                 );*/
 
-            VEL_CORE_TRACE("Mesh: {0}, Node: {1}", mesh->mName.C_Str(), node->mName.C_Str());
-            m_Meshes.push_back(ProcessMesh(mesh, scene));
+            Ref<MeshData> data = ProcessMesh(mesh, scene);
+
+            Entity* entity = nullptr;
+
+            bool entitycreated = false;
+
+            if (parentEntity)
+            {
+                for (auto const& [key, val] : modelLoadData.assetData)
+                {
+                    if (val.Name == std::string(mesh->mName.C_Str()) + "_Mesh")
+                    {
+                        entity = &m_GameScene->CreateAssetEntityWithID(key, *parentEntity, std::string(mesh->mName.C_Str()) + "_Mesh", true, IsAsset);
+                        entitycreated = true;
+                        break;
+                    }
+                }
+
+                if(!entitycreated)
+                    entity = &m_GameScene->CreateChildEntity(*parentEntity, std::string(mesh->mName.C_Str()) + "_Mesh", IsAsset);
+            }
+            if (entity)
+            {
+                entity->AddComponent<MeshComponent>(MeshComponent());
+                MeshComponent* meshcomp = &entity->GetComponent<MeshComponent>();
+                meshcomp->MeshDrawData = data;
+                meshcomp->MaterialIns = m_MaterialIns;
+                meshcomp->MaterialPath = modelLoadData.materialPath;
+                meshcomp->ID = CreateRef<GUID>(entity->GetGUID());
+                VEL_CORE_INFO("Parent ID: {0}, Child ID: {1}", entity->GetGUID(), parentEntity->GetGUID());
+                VEL_CORE_INFO("ID: {0}, Mesh Name: {1}", *meshcomp->ID, mesh->mName.C_Str());
+               // m_IDToMeshData.emplace(entity->GetGUID(), data);
+                std::string materialLocation = modelLoadData.materialPath;
+                if (modelLoadData.assetData.find(entity->GetAssetID()) != modelLoadData.assetData.end())
+                {
+                    materialLocation = modelLoadData.assetData[entity->GetAssetID()].MaterialLocation;
+                    Ref<Material> material = MaterialSystem::GetMaterial(materialLocation);
+                    if (material)
+                        meshcomp->MaterialIns = material;
+                    meshcomp->MaterialPath = materialLocation;
+                }
+                m_AssetHandle.push_back({ entity->Name(),entity->GetGUID(),entity->GetAssetID(), materialLocation});
+                //MeshRenderer::AddMeshData(entity->GetAssetID(), data);
+            }
+            m_Meshes.push_back(data);
         }
         // then do the same for each of its children
         for (unsigned int i = 0; i < node->mNumChildren; i++)
         {
             VEL_CORE_TRACE("Parent : {0}, Child Mesh: {1}", node->mChildren[i]->mParent->mName.C_Str(), node->mChildren[i]->mName.C_Str());
-            ProcessNode(node->mChildren[i], scene);
+            Entity* entity = nullptr;
+
+            if (m_GameScene != nullptr)
+            {
+                bool entitycreated = false;
+                if (parentEntity)
+                {
+                    for (auto const& [key, val] : modelLoadData.assetData)
+                    {
+                        if (val.Name == node->mChildren[i]->mName.C_Str())
+                        {
+                            entity = &m_GameScene->CreateAssetEntityWithID(key, *parentEntity, node->mChildren[i]->mName.C_Str(), true, IsAsset);
+                            entitycreated = true;
+                            break;
+                        }
+                    }
+
+                    if (!entitycreated)
+                        entity = &m_GameScene->CreateChildEntity(*parentEntity, node->mChildren[i]->mName.C_Str(), IsAsset);
+                }
+                else entity = &m_GameScene->CreateEntity(node->mChildren[i]->mParent->mName.C_Str(), IsAsset);
+                entity->SetScene(m_GameScene);
+                m_AssetHandle.push_back({ entity->Name(),entity->GetGUID(), entity->GetAssetID(), ""});
+            }
+            ProcessNode(node->mChildren[i], scene, entity);
         }
+        SaveAssetFile(GUID(), m_Path + "/" + m_Name + ".vasset", m_AssetHandle);
     }
 
     std::vector<Ref<Texture2D>>  Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typesname)
