@@ -7,3 +7,5 @@ bin-int/
 #files
 *.user
 *.json
+/Vel-Editor/Vel-Profile-Shutdown.json
+/Vel-Editor/Vel-Profile-Startup.json
