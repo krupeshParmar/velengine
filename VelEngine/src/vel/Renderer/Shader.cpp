@@ -53,6 +53,17 @@ namespace vel
 		return shader;
 	}
 
+	Ref<Shader> ShaderLibrary::Reload(const std::string& filepath, const std::string& name)
+	{
+		VEL_CORE_ASSERT(Exists(name), "Shader does not exists!");
+		std::unordered_map<std::string, Ref<Shader>>::iterator it = m_Shaders.find(name); 
+		//it->second->DeleteProgram();
+		m_Shaders.erase(it);
+		auto shader = Shader::Create(filepath);
+		Add(shader->GetName(), shader);
+		return shader;
+	}
+
 	Ref<Shader> ShaderLibrary::Load(const std::string& name, const std::string& filepath)
 	{
 		auto shader = Shader::Create(filepath);

@@ -92,10 +92,23 @@ namespace vel
 		{
 			if (!meshData->m_VertexArray)
 			{
-				//if (meshData->m_Loaded)
+				if (meshData->m_Loaded)
 				{
 					meshData->m_VertexArray = VertexArray::Create();
 					vel::Ref<vel::VertexBuffer> vertexBuffer;
+					if (meshData->m_UseBones)
+					{
+						for (const Vertices& vertex : meshData->m_Vertices)
+						{
+							for (int i = 0; i < MAX_BONE_INFLUENCE; i++)
+							{
+								if (vertex.vBoneID[i] >= 100)
+								{
+									VEL_CORE_ASSERT(0, "");
+								}
+							}
+						}
+					}
 					vertexBuffer = vel::VertexBuffer::Create(
 						&meshData->m_Vertices[0],
 						sizeof(vel::Vertices) * meshData->m_Vertices.size()
@@ -107,7 +120,7 @@ namespace vel
 							{ vel::ShaderDataType::Float4, "vUVx2"},
 							{ vel::ShaderDataType::Float4, "vTangent"},
 							{ vel::ShaderDataType::Float4, "vBiNormal"},
-							{ vel::ShaderDataType::Float4, "vBoneID"},
+							{ vel::ShaderDataType::Int4, "vBoneID"},
 							{ vel::ShaderDataType::Float4, "vBoneWeight"}
 						});
 					meshData->m_VertexArray->AddVertexBuffer(vertexBuffer);
@@ -147,6 +160,7 @@ namespace vel
 			shader->SetBool("useTextureSpecular", useSpeMap);
 			shader->SetBool("useTextureDiffuse", useDifMap);
 			shader->SetBool("useTextureEmissive", useEmiMap);
+			shader->SetBool("u_UseBone", meshData->m_UseBones);
 
 			textures.push_back(material->DiffuseTexture);
 			textures.push_back(material->NormalTexture);

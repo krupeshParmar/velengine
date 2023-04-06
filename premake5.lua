@@ -21,18 +21,22 @@ IncludeDir["stb_image"] = "VelEngine/vendor/stb_image"
 IncludeDir["PugiXML"] = "VelEngine/vendor/pugixml/src"
 IncludeDir["iPhysics"] = "Libraries/iPhysics/src"
 IncludeDir["VelPhysics"] = "Libraries/VelPhysics/src"
-IncludeDir["Assimp"] = "%{wks.location}/VelEngine/vendor/assimp/include"
+IncludeDir["Assimp"] = "%{wks.location}/VelEngine/vendor/assimp3.2/include"
 IncludeDir["entt"] = "%{wks.location}/VelEngine/vendor/entt/include"
 
 
 Library = {}
-Library["Assimp_Debug"] = "%{wks.location}/VelEngine/vendor/assimp/bin/Debug/assimp-vc143-mtd.lib"
-Library["Assimp_Release"] = "%{wks.location}/VelEngine/vendor/assimp/bin/Release/assimp-vc143-mt.lib"
+Library["Assimp_Debug"] = "%{wks.location}/VelEngine/vendor/assimp3.2/bin/Debug/assimp-vc130-mtd.lib"
+Library["Assimp_Release"] = "%{wks.location}/VelEngine/vendor/assimp3.2/bin/Release/assimp-vc130-mt.lib"
+--Library["Assimp_Debug"] = "%{wks.location}/VelEngine/vendor/assimp/bin/Debug/assimp-vc143-mtd.lib"
+--Library["Assimp_Release"] = "%{wks.location}/VelEngine/vendor/assimp/bin/Release/assimp-vc143-mt.lib"
 
 
 Binaries = {}
-Binaries["Assimp_Debug"] = "%{wks.location}/VelEngine/vendor/assimp/bin/Debug/assimp-vc143-mtd.dll"
-Binaries["Assimp_Release"] = "%{wks.location}/VelEngine/vendor/assimp/bin/Release/assimp-vc143-mt.dll"
+--Binaries["Assimp_Debug"] = "%{wks.location}/VelEngine/vendor/assimp/bin/Debug/assimp-vc143-mtd.dll"
+--Binaries["Assimp_Release"] = "%{wks.location}/VelEngine/vendor/assimp/bin/Release/assimp-vc143-mt.dll"
+Binaries["Assimp_Debug"] = "%{wks.location}/VelEngine/vendor/assimp3.2/bin/Debug/assimp-vc130-mtd.dll"
+Binaries["Assimp_Release"] = "%{wks.location}/VelEngine/vendor/assimp3.2/bin/Release/assimp-vc130-mt.dll"
 
 group "Dependencies"
 include "VelEngine/vendor/GLFW"

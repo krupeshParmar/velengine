@@ -25,7 +25,7 @@ namespace vel
 		virtual void SetMat4(const std::string& uniformName, const glm::mat4& value) = 0;
 
 		virtual const std::string& GetName() const = 0;
-
+		virtual void DeleteProgram() = 0;
 		static Ref<Shader> Create(const std::string& shaderFilePath);
 		static Ref<Shader> Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
 	};
@@ -36,6 +36,7 @@ namespace vel
 		void Add(const Ref<Shader>& shader);
 		void Add(const std::string& name, const Ref<Shader>& shader);
 		Ref<Shader> Load(const std::string& filepath);
+		Ref<Shader> Reload(const std::string& filepath, const std::string& name);
 		Ref<Shader> Load(const std::string& name, const std::string& filepath);
 
 		Ref<Shader> Get(const std::string& name);

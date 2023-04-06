@@ -2,6 +2,8 @@
 #include "Renderer.h"
 #include "Texture.h"
 #include <glad/glad.h>
+#include "vel/Math/Math.h"
+#include <glm/gtx/quaternion.hpp>
 
 namespace vel
 {

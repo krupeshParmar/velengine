@@ -31,8 +31,14 @@
     <Filter Include="src\vel\ImGui">
       <UniqueIdentifier>{4D16C605-B9D6-413C-8211-8BB9EE908618}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\vel\Math">
+      <UniqueIdentifier>{9CEDAAF0-8850-3A95-31D6-724B1D180618}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\vel\Renderer">
       <UniqueIdentifier>{E97584C4-D56E-A316-FEA0-889BEAF88222}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\vel\Renderer\Animation">
+      <UniqueIdentifier>{18669067-0476-3C38-6D2F-A156595E2BD1}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\vel\Scene">
       <UniqueIdentifier>{400E7606-ACCE-F13C-7509-3BBAE1883619}</UniqueIdentifier>
@@ -99,6 +105,9 @@
     <ClInclude Include="src\vel\Core\EntryPoint.h">
       <Filter>src\vel\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\vel\Core\GUID.h">
+      <Filter>src\vel\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\vel\Core\Input.h">
       <Filter>src\vel\Core</Filter>
     </ClInclude>
@@ -141,6 +150,24 @@
     <ClInclude Include="src\vel\ImGui\ImGuiLayer.h">
       <Filter>src\vel\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="src\vel\Math\AssimpGLMHelpers.h">
+      <Filter>src\vel\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Math\Math.h">
+      <Filter>src\vel\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Math\Random.h">
+      <Filter>src\vel\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Renderer\Animation\Animation.h">
+      <Filter>src\vel\Renderer\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Renderer\Animation\Animator.h">
+      <Filter>src\vel\Renderer\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Renderer\Animation\BoneAnim.h">
+      <Filter>src\vel\Renderer\Animation</Filter>
+    </ClInclude>
     <ClInclude Include="src\vel\Renderer\Buffer.h">
       <Filter>src\vel\Renderer</Filter>
     </ClInclude>
@@ -157,6 +184,9 @@
       <Filter>src\vel\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\vel\Renderer\Model.h">
+      <Filter>src\vel\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Renderer\ParticleSystem.h">
       <Filter>src\vel\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\vel\Renderer\RenderCommand.h">
@@ -1458,10 +1488,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\vel\Core\GUID.h" />
-    <ClInclude Include="src\vel\Math\Math.h" />
-    <ClInclude Include="src\vel\Math\Random.h" />
-    <ClInclude Include="src\vel\Renderer\ParticleSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
@@ -1494,6 +1520,9 @@
     <ClCompile Include="src\vel\Core\Application.cpp">
       <Filter>src\vel\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\vel\Core\GUID.cpp">
+      <Filter>src\vel\Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\vel\Core\Layer.cpp">
       <Filter>src\vel\Core</Filter>
     </ClCompile>
@@ -1512,6 +1541,21 @@
     <ClCompile Include="src\vel\ImGui\ImGuiLayer.cpp">
       <Filter>src\vel\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="src\vel\Math\Math.cpp">
+      <Filter>src\vel\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vel\Math\Random.cpp">
+      <Filter>src\vel\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vel\Renderer\Animation\Animation.cpp">
+      <Filter>src\vel\Renderer\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vel\Renderer\Animation\Animator.cpp">
+      <Filter>src\vel\Renderer\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vel\Renderer\Animation\BoneAnim.cpp">
+      <Filter>src\vel\Renderer\Animation</Filter>
+    </ClCompile>
     <ClCompile Include="src\vel\Renderer\Buffer.cpp">
       <Filter>src\vel\Renderer</Filter>
     </ClCompile>
@@ -1522,6 +1566,9 @@
       <Filter>src\vel\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\vel\Renderer\Model.cpp">
+      <Filter>src\vel\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vel\Renderer\ParticleSystem.cpp">
       <Filter>src\vel\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\vel\Renderer\RenderCommand.cpp">
@@ -1566,9 +1613,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\vel\Core\GUID.cpp" />
-    <ClCompile Include="src\vel\Math\Math.cpp" />
-    <ClCompile Include="src\vel\Math\Random.cpp" />
-    <ClCompile Include="src\vel\Renderer\ParticleSystem.cpp" />
   </ItemGroup>
 </Project>

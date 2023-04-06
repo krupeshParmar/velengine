@@ -20,6 +20,8 @@
 #include "vel/Scene/MeshRenderer.h"
 #include "vel/Core/GUID.h"
 #include "vel/Scene/MaterialSystem.h"
+#include "vel/Math/AssimpGLMHelpers.h"
+#include "Animation/Animation.h"
 
 // controls acces to the vector of m_Meshes
 CRITICAL_SECTION ModelLoader_Lock;
@@ -32,7 +34,7 @@ namespace vel
     {
         m_InitCriticalSections();
         m_Meshes = std::vector<Ref<MeshData>>();
-        m_Importer = std::make_unique<Assimp::Importer>();
+        m_Importer = CreateScope<Assimp::Importer>();
         const aiScene* scene = m_Importer->ReadFile(data.source, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
 
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
@@ -67,7 +69,7 @@ namespace vel
         m_MaterialIns = modelLoadData.material;
         ProcessNode(scene->mRootNode, scene, m_ModelPrefab);
 
-        VEL_CORE_TRACE("{0} Model loaded", m_Name);
+        VEL_CORE_INFO("{0} Model loaded", m_Name);
     }
     Model::Model(std::string source, bool useTextures, bool loadAsync)
         :m_UseFBXTextures(useTextures), m_LoadAsync(loadAsync)
@@ -165,6 +167,72 @@ namespace vel
         DeleteCriticalSection(&ModelLoader_Lock);
     }
 
+    void Model::SetVertexBoneDataToDefault(Vertices* vertex)
+    {
+        for (int i = 0; i < MAX_BONE_INFLUENCE; i++)
+        {
+            vertex->vBoneID[i] = -1;
+            vertex->vBoneWeight[i] = 0.0f;
+        }
+    }
+
+    void Model::SetVertexBoneData(Vertices* vertex, int boneID, float weight)
+    {
+        if (boneID >= 100)
+            VEL_CORE_ERROR("Invalid bone ID for {0}, {1}", m_Name, boneID);
+        for (int i = 0; i < MAX_BONE_INFLUENCE; i++)
+        {
+            if (vertex->vBoneID[i] == -1)
+            {
+                vertex->vBoneID[i] = boneID;
+                vertex->vBoneWeight[i] = weight;
+                return;
+            }
+        }
+        VEL_CORE_ERROR("Bone not assigned for {0},{1}", m_Name, boneID);
+    }
+
+    void Model::ExtractBoneWeightForVertices(Ref<MeshData> meshData, aiMesh* mesh, const aiScene* scene)
+    {
+        meshData->m_UseBones = true;
+        std::vector<Vertices>* vertices = &meshData->m_Vertices;
+        m_BoneCounter = 0;
+        meshData->m_BoneInfoMap = new std::unordered_map<std::string, BoneInfo>();
+        meshData->m_BoneInfoMap->reserve(mesh->mNumBones);
+        VEL_CORE_INFO("{0} has {1} bones", mesh->mName.data, mesh->mNumBones);
+        for (int boneIndex = 0; boneIndex < mesh->mNumBones; boneIndex++)
+        {
+            int boneID = -1;
+            std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();
+            if (meshData->m_BoneInfoMap->find(boneName) == meshData->m_BoneInfoMap->end())
+            {
+                BoneInfo newBoneInfo;
+                newBoneInfo.id = meshData->m_BoneCounter;
+                newBoneInfo.offset = AssimpGLMHelpers::ConvertMatrixToGLMFormat(
+                    mesh->mBones[boneIndex]->mOffsetMatrix);
+                meshData->m_BoneInfoMap->emplace(boneName,newBoneInfo);
+                boneID = meshData->m_BoneCounter;
+                meshData->m_BoneCounter++;
+            }
+            else
+            {
+                boneID = meshData->m_BoneInfoMap->at(boneName).id;
+            }
+            VEL_CORE_ASSERT(boneID != -1, "Bone is invalid");
+            VEL_CORE_WARN("{0} Adding {1}, index: {2}",m_Name,boneName, boneID);
+            auto weights = mesh->mBones[boneIndex]->mWeights;
+            int numWeights = mesh->mBones[boneIndex]->mNumWeights;
+
+            for (int weightIndex = 0; weightIndex < numWeights; weightIndex++)
+            {
+                int vertexId = weights[weightIndex].mVertexId;
+                float weight = weights[weightIndex].mWeight;
+                VEL_CORE_ASSERT(vertexId <= vertices->size(), "VertexId is invalid");
+                SetVertexBoneData(&(vertices->at(vertexId)), boneID, weight);
+            }
+        }
+    }
+
     //DWORD WINAPI ProcessMesh1(LPVOID pParameters)
     Ref<MeshData> Model::ProcessMesh(aiMesh* aimesh, const aiScene* scene)
     {
@@ -176,11 +244,14 @@ namespace vel
         std::vector<MeshData>* m_Meshes = fileInfo->m_Meshes;*/
 
         Ref<MeshData> newMeshData = CreateRef<MeshData>();
-
+        int numVer = 0;
         // Get all the vertex data
+        VEL_CORE_TRACE("{0}: Total vertices: {1}", m_Name, aimesh->mNumVertices);
         for (unsigned int i = 0; i < aimesh->mNumVertices; i++)
         {
             Vertices vertex;
+            SetVertexBoneDataToDefault(&vertex);
+            numVer++;
             vertex.x = aimesh->mVertices[i].x;
             vertex.y = aimesh->mVertices[i].y;
             vertex.z = aimesh->mVertices[i].z;
@@ -218,6 +289,7 @@ namespace vel
 
             newMeshData->m_Vertices.push_back(vertex);
         }
+        VEL_CORE_TRACE("{0}: Total vertices transformed: {1}", m_Name, numVer);
 
         // Get all the indices
         for (unsigned int i = 0; i < aimesh->mNumFaces; i++)
@@ -226,16 +298,9 @@ namespace vel
             for (unsigned int j = 0; j < face.mNumIndices; j++)
                 newMeshData->m_Indices.push_back(face.mIndices[j]);
         }
-
         if (aimesh->HasBones())
         {
-            for (unsigned int i = 0; i < aimesh->mNumBones; i++)
-            {
-                aiBone* bone = aimesh->mBones[i];
-                if (bone->mNode)
-                    VEL_CORE_WARN("Bone Node: {0}", bone->mNode->mName.C_Str());
-                VEL_CORE_TRACE("Bone:{0}", bone->mName.C_Str());
-            }
+            ExtractBoneWeightForVertices(newMeshData, aimesh, scene);
         }
 
         if (m_UseFBXTextures)
@@ -267,7 +332,7 @@ namespace vel
                     { vel::ShaderDataType::Float4, "vUVx2"},
                     { vel::ShaderDataType::Float4, "vTangent"},
                     { vel::ShaderDataType::Float4, "vBiNormal"},
-                    { vel::ShaderDataType::Float4, "vBoneID"},
+                    { vel::ShaderDataType::Int4, "vBoneID"},
                     { vel::ShaderDataType::Float4, "vBoneWeight"}
                 });
             newMeshData->m_VertexArray->AddVertexBuffer(vertexBuffer);
@@ -301,7 +366,7 @@ namespace vel
         {
             aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
             
-            VEL_CORE_INFO("Mesh: {0}, Node: {1}", mesh->mName.C_Str(), node->mName.C_Str());
+            //VEL_CORE_INFO("Mesh: {0}, Node: {1}", mesh->mName.C_Str(), node->mName.C_Str());
 
             /*MeshLoadingInfo* fileInfo = new MeshLoadingInfo();
             fileInfo->aimesh = mesh;
@@ -350,8 +415,8 @@ namespace vel
                 meshcomp->MaterialIns = m_MaterialIns;
                 meshcomp->MaterialPath = modelLoadData.materialPath;
                 meshcomp->ID = CreateRef<GUID>(entity->GetGUID());
-                VEL_CORE_INFO("Parent ID: {0}, Child ID: {1}", entity->GetGUID(), parentEntity->GetGUID());
-                VEL_CORE_INFO("ID: {0}, Mesh Name: {1}", *meshcomp->ID, mesh->mName.C_Str());
+                //VEL_CORE_INFO("Parent ID: {0}, Child ID: {1}", entity->GetGUID(), parentEntity->GetGUID());
+                //VEL_CORE_INFO("ID: {0}, Mesh Name: {1}", *meshcomp->ID, mesh->mName.C_Str());
                // m_IDToMeshData.emplace(entity->GetGUID(), data);
                 std::string materialLocation = modelLoadData.materialPath;
                 if (modelLoadData.assetData.find(entity->GetAssetID()) != modelLoadData.assetData.end())
@@ -370,7 +435,7 @@ namespace vel
         // then do the same for each of its children
         for (unsigned int i = 0; i < node->mNumChildren; i++)
         {
-            VEL_CORE_TRACE("Parent : {0}, Child Mesh: {1}", node->mChildren[i]->mParent->mName.C_Str(), node->mChildren[i]->mName.C_Str());
+            //VEL_CORE_TRACE("Parent : {0}, Child Mesh: {1}", node->mChildren[i]->mParent->mName.C_Str(), node->mChildren[i]->mName.C_Str());
             Entity* entity = nullptr;
 
             if (m_GameScene != nullptr)

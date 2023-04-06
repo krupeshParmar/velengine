@@ -33,6 +33,7 @@ namespace vel
 
 		virtual const std::string& GetName() const override { return m_Name; };
 
+		virtual void DeleteProgram() override;
 		void UploadUniformInt(const std::string& uniformName, int value);
 		void UploadUniformBool(const std::string& uniformName, bool value);
 

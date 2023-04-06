@@ -14,20 +14,78 @@ out VS_OUT
 	vec4 FragPos;
 	vec4 Normal;
 	vec2 TexCoords;
+	vec4 vColour;
 } vs_out;
 
 uniform mat4 u_View;
 uniform mat4 u_Projection;
 uniform mat4 u_Transform;
 uniform mat4 u_InverseTransform;
-
+uniform bool u_UseBone;
+const int MAX_BONES = 100;
+const int MAX_BONE_INFLUENCE = 4;
+uniform mat4 finalBonesMatrices[MAX_BONES];
+uniform mat4 u_RotationMatrix[MAX_BONES];
+//assets/models/maria/Maria WProp J J Ong@Two Handed Sword Death.fbx
+//assets/models/maria/Maria WProp J J Ong@Great Sword Idle.fbx
 void main()
 {
 	vs_out.TexCoords = vec2(vUVx2.x, -vUVx2.y);
-	vs_out.FragPos = u_Transform * vec4(vPosition.xyz, 1.0);
-	vs_out.Normal.xyz = normalize(u_InverseTransform * vec4(vNormal.xyz, 1.0f)).xyz;
-	vs_out.Normal.w = 1.0f;
-	gl_Position = u_Projection * u_View * u_Transform * vec4(vPosition.xyz, 1.0);
+	vec4 originalPosition = vec4(vPosition.xyz, 1.f);
+	vec4 totalPosition = originalPosition;
+	vec4 normal = vec4(0.f);
+	normal.xyz = normalize(u_InverseTransform * vec4(vNormal.xyz, 1.f)).xyz;
+	normal.w = 1.f;
+	vs_out.vColour = vec4(1.f, 1.f, 1.f,1.f);
+	if (u_UseBone)
+	{
+		totalPosition = vec4(0.f);
+		normal.xyz = vec3(0.f);
+		int boneId0 = int(vBoneID[0]);
+		int boneId1 = int(vBoneID[1]);
+		int boneId2 = int(vBoneID[2]);
+		int boneId3 = int(vBoneID[3]);
+		vs_out.vColour = vec4(1.f, 0.f, 1.f,1.f);
+		mat4 boneTransform = finalBonesMatrices[boneId0] * vBoneWeight[0];
+		boneTransform += finalBonesMatrices[boneId1] * vBoneWeight[1];
+		boneTransform += finalBonesMatrices[boneId2] * vBoneWeight[2];
+		boneTransform += finalBonesMatrices[boneId3] * vBoneWeight[3];
+		totalPosition = boneTransform * originalPosition;
+		//totalPosition.w = 1.f;
+		normal.xyz = mat3(finalBonesMatrices[boneId0]) * normalize(vNormal.xyz) * vBoneWeight[0];
+		normal.xyz += mat3(finalBonesMatrices[boneId1]) * normalize(vNormal.xyz) * vBoneWeight[1];
+		normal.xyz += mat3(finalBonesMatrices[boneId2]) * normalize(vNormal.xyz) * vBoneWeight[2];
+		normal.xyz += mat3(finalBonesMatrices[boneId3]) * normalize(vNormal.xyz) * vBoneWeight[3];
+
+		// for (int i = 0; i < MAX_BONE_INFLUENCE; ++i)
+		// {
+		// 	if (vBoneID[i] == -1)
+		// 	{
+		// 		vs_out.vColour = vec4(0.f, 0.f, 1.f,1.f);
+		// 		continue;
+		// 	}
+		// 	if (vBoneID[i] > MAX_BONES)
+		// 	{
+		// 		totalPosition = originalPosition;
+		// 		vs_out.vColour = vec4(1.f, 1.f, 0.f, 1.f);
+		// 		normal.xyz = normalize(u_InverseTransform * vec4(vNormal.xyz, 1.0f)).xyz;
+		// 		break;
+		// 	}
+		// 	if(vBoneID[i] == 0)
+		// 		vs_out.vColour = vec4(0.f, 1.f, 0.f,1.f);
+		// 	else
+		// 		vs_out.vColour = vec4(1.f, 0.f, 1.f,1.f);
+		// 	vec4 localPosition = finalBonesMatrices[vBoneID[i]] * originalPosition;
+		// 	totalPosition += localPosition * vBoneWeight[i];
+		// 	normal.xyz += mat3(finalBonesMatrices[vBoneID[i]]) * normalize(vNormal.xyz) * vBoneWeight[i];
+
+		// 	normal.xyz = (u_RotationMatrix[vBoneID[i]] * normalize(normal)).xyz;
+		// }
+		normal.w = 1.f;
+	}
+	vs_out.FragPos = u_Transform * totalPosition;
+	vs_out.Normal = normalize(normal);
+	gl_Position = u_Projection * u_View * u_Transform * totalPosition;
 }
 
 #type fragment
@@ -44,6 +102,7 @@ in VS_OUT
 	vec4 FragPos;
 	vec4 Normal;
 	vec2 TexCoords;
+	vec4 vColour;
 } fs_in;
 
 
@@ -91,6 +150,7 @@ void main()
 		emissiveColour = texture(u_TextureEmissive, fs_in.TexCoords);
 
 	f_albedo.rgb = textColour0.rgb;
+	//f_albedo.rgb = fs_in.vColour.rgb;
 	f_albedo.a = transparency;
 	f_position = fs_in.FragPos;
 	f_normal = vec4(normalValue.xyz, 1.0);

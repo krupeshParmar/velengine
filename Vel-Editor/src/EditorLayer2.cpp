@@ -296,7 +296,11 @@ namespace vel
 		Inspector();
 
 		{
-			ImGui::Begin("Post Processing");
+			ImGui::Begin("Post Processing and Shader");
+			if (ImGui::Button("Reload Shader##reloadShaderbtn"))
+			{
+				m_ActiveScene->ReloadShader();
+			}
 
 			ImGui::InputFloat("Exposure##sceneExp", &m_ActiveScene->Exposure);
 			ImGui::Checkbox("Depth Of Field##sceneDOF", &m_ActiveScene->DepthOfField);
@@ -411,6 +415,7 @@ namespace vel
 	void EditorLayer2::Inspector()
 	{
 		bool hasMesh = false;
+		bool hasAnimator = false;
 		bool hasAsset = false;
 		bool hasLight = false;
 		ImGui::Begin("Inspector");
@@ -517,6 +522,29 @@ namespace vel
 							asset->FileLocation += ".vasset";
 							MeshRenderer::LoadMesh(data);
 						}
+					}
+				}
+			}
+
+			ImGui::EndGroup();
+
+			ImGui::BeginGroup();
+
+			{
+				if (entity.HasComponent<AnimatorComponent>())
+				{
+					AnimatorComponent& animator = entity.GetComponent<AnimatorComponent>();
+					hasAnimator = true;
+					ImGui::InputText("AnimationPath##textInputAnimPath", &animator.AnimationPath);
+					if (ImGui::Button("Load Animation##btnLoadAnim"))
+					{
+						MeshComponent& mesh = entity.GetComponent<MeshComponent>();
+						if (!animator.animator)
+						{
+							animator.animator = CreateRef<Animator>(nullptr);
+						}
+						animator.LoadAnimation(mesh.MeshDrawData);
+						//m_ActiveScene->LoadAnimation(animator.animation);
 					}
 				}
 			}
@@ -748,6 +776,18 @@ namespace vel
 								addComponentCalled = false;
 								entity.AddComponent<AssetComponent>(AssetComponent("",nullptr));
 								ImGui::CloseCurrentPopup();
+							}
+						}
+						if (!hasAnimator)
+						{
+							if (hasMesh)
+							{
+								if (ImGui::MenuItem("Animator Component"))
+								{
+									addComponentCalled = false;
+									entity.AddComponent<AnimatorComponent>(AnimatorComponent());
+									ImGui::CloseCurrentPopup();
+								}
 							}
 						}
 						/*if (!hasMesh)

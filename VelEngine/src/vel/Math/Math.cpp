@@ -56,7 +56,7 @@ namespace vel::Math {
 		scale.z = length(Row[2]);
 		Row[2] = Scale(Row[2], static_cast<T>(1));
 
-#if _DEBUG
+#if false
 		// At this point, the matrix (in rows[]) is orthonormal.
 		// Check for a coordinate system flip.  If the determinant
 		// is -1, then negate the matrix and the scaling factors.

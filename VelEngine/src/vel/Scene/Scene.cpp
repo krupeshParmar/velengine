@@ -1,5 +1,6 @@
 #include "velpch.h"
 #include "Scene.h"
+#include <vel/Renderer/Animation/Animator.h>
 #include "Entity.h"
 #include "vel/Debug/Instrumentor.h"
 #include "MeshRenderer.h"
@@ -11,6 +12,7 @@ CRITICAL_SECTION cs_EntityMapLock;
 namespace vel
 {
 	Scene::Scene()
+		:mainAnimator(new Animator(nullptr))
 	{
 		entt::entity entity = m_Registry.create();
 		InitializeCriticalSection(&cs_EntityMapLock);
@@ -101,11 +103,22 @@ namespace vel
 	{
 		DeleteCriticalSection(&cs_EntityMapLock);
 	}
+	void Scene::ReloadShader()
+	{
+		m_Shader = m_ShaderLibrary.Reload("assets/shaders/gBuffer.glsl","gBuffer");
+		m_Shader->Bind();
+		m_Shader->SetInt("u_TextureDiffuse", 0);
+		m_Shader->SetInt("u_TextureNormal", 1);
+		m_Shader->SetInt("u_TextureSpecular", 2);
+		m_Shader->SetInt("u_TextureEmissive", 3);
+		m_Shader->SetInt("skyBox", 4);
+	}
 	void Scene::OnUpdateRuntime(Timestep ts)
 	{
 	}
 	void Scene::OnUpdateEditor(Timestep ts, glm::vec4 eyeLocation)
 	{	// Lights
+		mainAnimator->UpdateAnimation(ts);
 		{
 			auto lightView = m_Registry.group<LightComponent>(entt::get<TransformComponent>);
 			for (auto lights : lightView)
@@ -176,15 +189,36 @@ namespace vel
 						meshComponent.MaterialIns = MaterialIns;
 						if (MaterialIns->IsTransparent)
 						{
-							transparentEntities.push_back(e);
+							AddTransparentEntiy(&transparentEntities, e);
 							continue;
 						}
 						m_Shader->Bind();
 						BindSkyBox(4);
 						m_Shader->SetFloat4("eyeLocation", eyeLocation);
-
 						m_Shader->SetFloat("u_texsize", MaterialIns->TextureSize);
 						meshComponent.shader = m_Shader;
+						if (meshComponent.MeshDrawData && meshComponent.MeshDrawData->m_UseBones)
+						{
+							if (entity.HasComponent<AnimatorComponent>())
+							{
+								AnimatorComponent& animator = entity.GetComponent<AnimatorComponent>();
+								if (animator.animator)
+								{
+									animator.animator->UpdateAnimation(ts);
+									std::vector<glm::mat4>& transforms = animator.animator->GetFinalBoneMatrices();
+									//m_Shader->SetMat4("u_RotationMatrix", glm::mat4(1.f) * glm::toMat4(transformComponent.GetRotation()));
+									for (int i = 0; i < transforms.size(); ++i)
+									{
+										m_Shader->SetMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
+
+										glm::vec3 pos, sca;
+										glm::quat rotation;
+										Math::DecomposeTransform(transform, pos, rotation, sca);
+										m_Shader->SetMat4("u_RotationMatrix[" + std::to_string(i) + "]", glm::mat4(1.f) * glm::toMat4(rotation));
+									}
+								}
+							}
+						}
 						MeshRenderer::DrawMesh(meshComponent, transform);
 					}
 				}
@@ -500,6 +534,11 @@ namespace vel
 		LightManager::CopyLightInformationToShader(shader);
 	}
 
+	void Scene::LoadAnimation(Animation* animation)
+	{
+		mainAnimator = new Animator(animation);
+	}
+
 	void Scene::SortEntities()
 	{
 		m_Registry.sort<IDComponent>([&](const auto lhs, const auto rhs)
@@ -509,6 +548,12 @@ namespace vel
 			return static_cast<uint32_t>(lhsEntity->second) < static_cast<uint32_t>(rhsEntity->second);
 		});
 	}
+
+	void Scene::AddTransparentEntiy(std::vector<entt::entity>* list, entt::entity entity)
+	{
+		list->push_back(entity);
+	}
+
 	bool Scene::IsEnabled(Entity entity)
 	{
 		bool enabled = entity.Transform().enabled;

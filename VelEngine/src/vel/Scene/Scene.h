@@ -11,13 +11,15 @@ namespace vel
 {
 	class Entity;
 	using EntityMap = std::unordered_map<GUID, Entity>;
+	class Animation;
+	class Animator;
 
 	class Scene
 	{
 	public:
 		Scene();
 		~Scene();
-
+		void ReloadShader();
 		void OnUpdateRuntime(Timestep ts);
 		void OnUpdateEditor(Timestep ts, glm::vec4 eyeLocation);
 
@@ -73,6 +75,7 @@ namespace vel
 		void SaveScene();
 		void DrawSkyBox(glm::mat4 viewProjection);
 		void BindLightData(Ref<Shader> shader, glm::vec4 eyepos);
+		void LoadAnimation(Animation* animation);
 
 		std::string ScenePath;
 		Ref<Shader> m_Shader;
@@ -91,6 +94,7 @@ namespace vel
 
 	private:
 		void SortEntities();
+		void AddTransparentEntiy(std::vector<entt::entity>* list, entt::entity);
 		bool IsEnabled(Entity entity);
 
 	private:
@@ -103,6 +107,8 @@ namespace vel
 		Ref<Shader> m_SkyBoxShader;
 		glm::vec3 skyboxRotation;
 		float step = 0;
+
+		Animator* mainAnimator;
 
 		friend class Entity;
 	};

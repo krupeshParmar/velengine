@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<assets_list id="12024037463197251745">
+<assets_list id="5005103916654638848">
 	<asset>
 		<name>harlem_apollo_theatre.fbx</name>
 		<id>10306981295989386757</id>
@@ -25,11 +25,11 @@
 		<id>6305289223262160197</id>
 	</asset>
 	<asset>
-		<name>polySurface938_Mesh</name>
-		<id>3379696031391835300</id>
+		<name>_Mesh</name>
+		<id>3434768239766810838</id>
 	</asset>
 	<asset>
-		<name>polySurface938_Mesh</name>
-		<id>3379696031391835300</id>
+		<name>_Mesh</name>
+		<id>3434768239766810838</id>
 	</asset>
 </assets_list>

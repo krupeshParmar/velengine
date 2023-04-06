@@ -2,6 +2,8 @@
 #include <string>
 #include <vel/Renderer/Material.h>
 #include "vel/Renderer/Model.h"
+#include "vel/Renderer/Animation/Animation.h"
+#include "vel/Renderer/Animation/Animator.h"
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include "vel/Renderer/Texture.h"
@@ -135,6 +137,13 @@ namespace vel
 			RotationEuler = glm::eulerAngles(Rotation);
 		}
 	};
+
+	struct BoneInfo
+	{
+		int id;
+		glm::mat4 offset;
+	};
+
 	struct MeshData
 	{
 		std::vector<Vertices> m_Vertices;
@@ -142,8 +151,12 @@ namespace vel
 		std::vector<Ref<Texture2D>> m_Textures;
 
 		bool m_Loaded = false;
-
+		bool m_UseBones = false;
 		Ref<VertexArray> m_VertexArray;
+		std::unordered_map<std::string, BoneInfo>* m_BoneInfoMap;
+		int m_BoneCounter = 0;
+		std::unordered_map<std::string, BoneInfo>* GetBoneInfoMap() { return m_BoneInfoMap; }
+		int& GetBoneCount() { return m_BoneCounter; }
 	};
 
 	struct MeshComponent
@@ -175,6 +188,27 @@ namespace vel
 		MeshComponent(const MeshComponent& other)
 			: Mesh(other.Mesh),Path(other.Path), SubmeshIndex(other.SubmeshIndex), MaterialIns(other.MaterialIns), ModelIns(other.ModelIns), UseFBXTextures(other.UseFBXTextures), MaterialPath(other.MaterialPath)
 		{
+		}
+	};
+
+	struct AnimatorComponent
+	{
+		AnimatorComponent()
+		{
+
+		}
+		Ref<Animator> animator;
+		std::string AnimationPath;
+		Animation* animation;
+
+		void LoadAnimation(Ref<MeshData> meshData)
+		{
+			if (!AnimationPath.empty())
+			{
+				animation = new Animation(AnimationPath, meshData);
+				animator->PlayAnimation(animation);
+			}
+			else animation = nullptr;
 		}
 	};
 

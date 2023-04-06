@@ -89,10 +89,10 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>..\VelEngine\vendor\assimp\bin\Debug\assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\VelEngine\vendor\assimp3.2\bin\Debug\assimp-vc130-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST "$(SolutionDir)\VelEngine\vendor\assimp\bin\Debug\assimp-vc143-mtd.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\VelEngine\vendor\assimp\bin\Debug\assimp-vc143-mtd.dll" "..\bin\Debug-windows-x86_64\Vel-Editor" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\VelEngine\vendor\assimp\bin\Debug\assimp-vc143-mtd.dll" "..\bin\Debug-windows-x86_64\Vel-Editor" &gt; nul)</Command>
+      <Command>IF EXIST "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Debug\assimp-vc130-mtd.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Debug\assimp-vc130-mtd.dll" "..\bin\Debug-windows-x86_64\Vel-Editor" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Debug\assimp-vc130-mtd.dll" "..\bin\Debug-windows-x86_64\Vel-Editor" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -114,10 +114,10 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>..\VelEngine\vendor\assimp\bin\Release\assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST "$(SolutionDir)\VelEngine\vendor\assimp\bin\Release\assimp-vc143-mt.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\VelEngine\vendor\assimp\bin\Release\assimp-vc143-mt.dll" "..\bin\Release-windows-x86_64\Vel-Editor" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\VelEngine\vendor\assimp\bin\Release\assimp-vc143-mt.dll" "..\bin\Release-windows-x86_64\Vel-Editor" &gt; nul)</Command>
+      <Command>IF EXIST "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.dll" "..\bin\Release-windows-x86_64\Vel-Editor" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.dll" "..\bin\Release-windows-x86_64\Vel-Editor" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
@@ -139,10 +139,10 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>..\VelEngine\vendor\assimp\bin\Release\assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST "$(SolutionDir)\VelEngine\vendor\assimp\bin\Release\assimp-vc143-mt.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\VelEngine\vendor\assimp\bin\Release\assimp-vc143-mt.dll" "..\bin\Dist-windows-x86_64\Vel-Editor" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\VelEngine\vendor\assimp\bin\Release\assimp-vc143-mt.dll" "..\bin\Dist-windows-x86_64\Vel-Editor" &gt; nul)</Command>
+      <Command>IF EXIST "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.dll" "..\bin\Dist-windows-x86_64\Vel-Editor" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.dll" "..\bin\Dist-windows-x86_64\Vel-Editor" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -157,8 +157,8 @@
     <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\EditorLayer2.cpp" />
     <ClCompile Include="src\SceneManager.cpp" />
-    <ClCompile Include="src\temp\AIProject2.cpp" />
     <ClCompile Include="src\VelEngineApp.cpp" />
+    <ClCompile Include="src\temp\AIProject2.cpp" />
     <ClCompile Include="src\temp\PhysicsProject1.cpp" />
   </ItemGroup>
   <ItemGroup>

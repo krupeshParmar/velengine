@@ -41,15 +41,8 @@ namespace vel
 	};
 
 	struct MeshData;
-	/*{
-		std::vector<Vertices> m_Vertices;
-		std::vector<uint32_t> m_Indices;
-		std::vector<Ref<Texture2D>> m_Textures;
 
-		bool m_Loaded = false;
-
-		Ref<VertexArray> m_VertexArray;
-	};*/
+	struct BoneInfo;
 
 	class Model
 	{
@@ -86,12 +79,15 @@ namespace vel
 		
 		void m_InitCriticalSections(void);
 		void m_DeleteCriticalSections(void);
+		void SetVertexBoneDataToDefault(Vertices* vertex);
+		void SetVertexBoneData(Vertices* vertex, int boneID, float weight);
+		void ExtractBoneWeightForVertices(Ref<MeshData> meshData, aiMesh* mesh, const aiScene* scene);
 
 	private:
 		ModelLoadData modelLoadData;
 		bool m_UseFBXTextures;
 		bool m_LoadAsync = false;
-		Ref<Assimp::Importer> m_Importer;
+		Scope<Assimp::Importer> m_Importer;
 		std::string m_Path, m_Name;
 		std::vector<Ref<MeshData>> m_Meshes;
 		std::vector<Ref<Texture2D>> m_TexturesLoaded;
@@ -99,6 +95,8 @@ namespace vel
 		std::vector<Asset> m_AssetHandle;
 		Ref<Material> m_MaterialIns;
 		std::string m_MaterialPath;
+		std::unordered_map<std::string, BoneInfo>* m_BoneInfoMap;
+		int m_BoneCounter = 0;
 	};
 
 }

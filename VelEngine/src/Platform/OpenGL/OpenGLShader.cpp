@@ -158,7 +158,7 @@ namespace vel
 			{
 				glDeleteShader(id);
 			}
-
+			VEL_CORE_ERROR("{0}: {1}", m_Path, infoLog.data());
 			VEL_CORE_ASSERT(false, "Shader linking failed!!");
 			return;
 		}
@@ -226,6 +226,11 @@ namespace vel
 	{
 		VEL_PROFILE_FUNCTION();
 		UploadUniformMat4(uniformName, value);
+	}
+
+	void OpenGLShader::DeleteProgram()
+	{
+		glDeleteProgram(m_RendererID);
 	}
 
 	void OpenGLShader::UploadUniformInt(const std::string& uniformName, int value)
