@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<assets_list id="254653154672086181">
+<assets_list id="8282286817609379171">
 	<asset>
 		<name>Adventurer Aland.fbx</name>
 		<id>7880683480036828084</id>
@@ -414,626 +414,626 @@
 	</asset>
 	<asset>
 		<name>RigRArmPalmGizmo_$AssimpFbx$_Translation</name>
-		<id>15350720806995334494</id>
+		<id>6821323930489449866</id>
 	</asset>
 	<asset>
 		<name>RigRArmPalmGizmo_$AssimpFbx$_PreRotation</name>
-		<id>11139679073708465699</id>
+		<id>15707648693637362519</id>
 	</asset>
 	<asset>
 		<name>RigRArmPalmGizmo_$AssimpFbx$_Rotation</name>
-		<id>8376711664071135586</id>
+		<id>15494278442160997876</id>
 	</asset>
 	<asset>
 		<name>RigRArmPalmGizmo_$AssimpFbx$_Scaling</name>
-		<id>8655012552004306783</id>
+		<id>12258862260398229919</id>
 	</asset>
 	<asset>
 		<name>RigRArmPalmGizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>2867481228292929148</id>
+		<id>15480356623442316131</id>
 	</asset>
 	<asset>
 		<name>RigRArmPalmGizmo</name>
-		<id>2822361062737303466</id>
+		<id>15105991775425590411</id>
 	</asset>
 	<asset>
 		<name>RigLPalmGizmo_$AssimpFbx$_Translation</name>
-		<id>18023711129965254355</id>
+		<id>15736950743222167179</id>
 	</asset>
 	<asset>
 		<name>RigLPalmGizmo_$AssimpFbx$_PreRotation</name>
-		<id>18296309438055885049</id>
+		<id>3309908687221078120</id>
 	</asset>
 	<asset>
 		<name>RigLPalmGizmo_$AssimpFbx$_Rotation</name>
-		<id>11037548806266146417</id>
+		<id>478637570008385148</id>
 	</asset>
 	<asset>
 		<name>RigLPalmGizmo_$AssimpFbx$_Scaling</name>
-		<id>17411624614150493751</id>
+		<id>13926615633586525356</id>
 	</asset>
 	<asset>
 		<name>RigLPalmGizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>18324778475815237716</id>
+		<id>3354284133871997233</id>
 	</asset>
 	<asset>
 		<name>RigLPalmGizmo</name>
-		<id>1531896101709754145</id>
+		<id>3743486052521502237</id>
 	</asset>
 	<asset>
 		<name>RigLThumb1Gizmo_$AssimpFbx$_Translation</name>
-		<id>10561520467328143081</id>
+		<id>424447668476012241</id>
 	</asset>
 	<asset>
 		<name>RigLThumb1Gizmo_$AssimpFbx$_PreRotation</name>
-		<id>8602229560821834529</id>
+		<id>2043167321661012219</id>
 	</asset>
 	<asset>
 		<name>RigLThumb1Gizmo_$AssimpFbx$_Rotation</name>
-		<id>3504372225472122441</id>
+		<id>15123235231787382326</id>
 	</asset>
 	<asset>
 		<name>RigLThumb1Gizmo_$AssimpFbx$_Scaling</name>
-		<id>14877952639115302405</id>
+		<id>4238974430990906166</id>
 	</asset>
 	<asset>
 		<name>RigLThumb1Gizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>10247631323659626120</id>
+		<id>15656013182911590714</id>
 	</asset>
 	<asset>
 		<name>RigLThumb1Gizmo</name>
-		<id>9097619221863764816</id>
+		<id>6129564072962963395</id>
 	</asset>
 	<asset>
 		<name>RigLThumb2Gizmo_$AssimpFbx$_Translation</name>
-		<id>4197717551638798217</id>
+		<id>6530222108014763712</id>
 	</asset>
 	<asset>
 		<name>RigLThumb2Gizmo_$AssimpFbx$_PreRotation</name>
-		<id>9139046779269145242</id>
+		<id>2911134701275487738</id>
 	</asset>
 	<asset>
 		<name>RigLThumb2Gizmo_$AssimpFbx$_Rotation</name>
-		<id>16142511762042664205</id>
+		<id>7422990079585673348</id>
 	</asset>
 	<asset>
 		<name>RigLThumb2Gizmo_$AssimpFbx$_Scaling</name>
-		<id>4618039206899824331</id>
+		<id>15614272661704708246</id>
 	</asset>
 	<asset>
 		<name>RigLThumb2Gizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>12242466980530170512</id>
+		<id>9557344177915405648</id>
 	</asset>
 	<asset>
 		<name>RigLThumb2Gizmo</name>
-		<id>6324163613566213997</id>
+		<id>8762138403626983777</id>
 	</asset>
 	<asset>
 		<name>RigLIndex1Gizmo_$AssimpFbx$_Translation</name>
-		<id>14130697672590927947</id>
+		<id>14734670575704946128</id>
 	</asset>
 	<asset>
 		<name>RigLIndex1Gizmo_$AssimpFbx$_PreRotation</name>
-		<id>7728888564768610595</id>
+		<id>4472597104761905740</id>
 	</asset>
 	<asset>
 		<name>RigLIndex1Gizmo_$AssimpFbx$_Rotation</name>
-		<id>17921535040138178022</id>
+		<id>4061686575005622426</id>
 	</asset>
 	<asset>
 		<name>RigLIndex1Gizmo_$AssimpFbx$_Scaling</name>
-		<id>5110147167123709793</id>
+		<id>12193126832684816324</id>
 	</asset>
 	<asset>
 		<name>RigLIndex1Gizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>12745586035451357013</id>
+		<id>10942215348825794297</id>
 	</asset>
 	<asset>
 		<name>RigLIndex1Gizmo</name>
-		<id>17727756062750683404</id>
+		<id>3598299635295503879</id>
 	</asset>
 	<asset>
 		<name>RigLIndex2Gizmo_$AssimpFbx$_Translation</name>
-		<id>4552687186511427764</id>
+		<id>3428093424867074468</id>
 	</asset>
 	<asset>
 		<name>RigLIndex2Gizmo_$AssimpFbx$_PreRotation</name>
-		<id>5238900627491797592</id>
+		<id>16800658491279134617</id>
 	</asset>
 	<asset>
 		<name>RigLIndex2Gizmo_$AssimpFbx$_Rotation</name>
-		<id>11480245053785926447</id>
+		<id>1634218532384888456</id>
 	</asset>
 	<asset>
 		<name>RigLIndex2Gizmo_$AssimpFbx$_Scaling</name>
-		<id>1065947462937205640</id>
+		<id>2238323739019051610</id>
 	</asset>
 	<asset>
 		<name>RigLIndex2Gizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>15648998741760005507</id>
+		<id>10539863702026016304</id>
 	</asset>
 	<asset>
 		<name>RigLIndex2Gizmo</name>
-		<id>17488706284178069455</id>
+		<id>14982852026181347953</id>
 	</asset>
 	<asset>
 		<name>RigLIndex3Gizmo_$AssimpFbx$_Translation</name>
-		<id>6503952355693753889</id>
+		<id>15087591946672183488</id>
 	</asset>
 	<asset>
 		<name>RigLIndex3Gizmo_$AssimpFbx$_PreRotation</name>
-		<id>15010373956625994579</id>
+		<id>12885844448707208576</id>
 	</asset>
 	<asset>
 		<name>RigLIndex3Gizmo_$AssimpFbx$_Rotation</name>
-		<id>13228184570569076711</id>
+		<id>7533895646110018095</id>
 	</asset>
 	<asset>
 		<name>RigLIndex3Gizmo_$AssimpFbx$_Scaling</name>
-		<id>14198447591503690931</id>
+		<id>12452779925359023967</id>
 	</asset>
 	<asset>
 		<name>RigLIndex3Gizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>8813774484488235648</id>
+		<id>8223522733131654426</id>
 	</asset>
 	<asset>
 		<name>RigLIndex3Gizmo</name>
-		<id>6047425952177257369</id>
+		<id>7587915834281663615</id>
 	</asset>
 	<asset>
 		<name>RigLPinky1Gizmo_$AssimpFbx$_Translation</name>
-		<id>11899827301781842716</id>
+		<id>946955834701380047</id>
 	</asset>
 	<asset>
 		<name>RigLPinky1Gizmo_$AssimpFbx$_PreRotation</name>
-		<id>177272570161677736</id>
+		<id>10616646186511786117</id>
 	</asset>
 	<asset>
 		<name>RigLPinky1Gizmo_$AssimpFbx$_Rotation</name>
-		<id>9170062441303349157</id>
+		<id>8603442196216598827</id>
 	</asset>
 	<asset>
 		<name>RigLPinky1Gizmo_$AssimpFbx$_Scaling</name>
-		<id>18371682241715933996</id>
+		<id>300095207089220923</id>
 	</asset>
 	<asset>
 		<name>RigLPinky1Gizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>9212339424177632002</id>
+		<id>1878162871665795725</id>
 	</asset>
 	<asset>
 		<name>RigLPinky1Gizmo</name>
-		<id>4222395463950790371</id>
+		<id>7390662791510443022</id>
 	</asset>
 	<asset>
 		<name>RigLPinky2Gizmo_$AssimpFbx$_Translation</name>
-		<id>4799329094622079128</id>
+		<id>15488290601503610988</id>
 	</asset>
 	<asset>
 		<name>RigLPinky2Gizmo_$AssimpFbx$_PreRotation</name>
-		<id>16846740946656116651</id>
+		<id>11796750715093001051</id>
 	</asset>
 	<asset>
 		<name>RigLPinky2Gizmo_$AssimpFbx$_Rotation</name>
-		<id>8076351283177990948</id>
+		<id>1149394709758921794</id>
 	</asset>
 	<asset>
 		<name>RigLPinky2Gizmo_$AssimpFbx$_Scaling</name>
-		<id>14614045313198895416</id>
+		<id>816345457027329498</id>
 	</asset>
 	<asset>
 		<name>RigLPinky2Gizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>4612273839048919762</id>
+		<id>11939499065793533634</id>
 	</asset>
 	<asset>
 		<name>RigLPinky2Gizmo</name>
-		<id>8532102036954994964</id>
+		<id>4777577311454686282</id>
 	</asset>
 	<asset>
 		<name>RigLPinky3Gizmo_$AssimpFbx$_Translation</name>
-		<id>518577726207094246</id>
+		<id>15905751116201647528</id>
 	</asset>
 	<asset>
 		<name>RigLPinky3Gizmo_$AssimpFbx$_PreRotation</name>
-		<id>2285213810051412370</id>
+		<id>5279199355986321753</id>
 	</asset>
 	<asset>
 		<name>RigLPinky3Gizmo_$AssimpFbx$_Rotation</name>
-		<id>11351559376648316607</id>
+		<id>1492943122134396057</id>
 	</asset>
 	<asset>
 		<name>RigLPinky3Gizmo_$AssimpFbx$_Scaling</name>
-		<id>12947455759609149876</id>
+		<id>3875825513342427284</id>
 	</asset>
 	<asset>
 		<name>RigLPinky3Gizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>1338896372702327299</id>
+		<id>1202235795030096119</id>
 	</asset>
 	<asset>
 		<name>RigLPinky3Gizmo</name>
-		<id>9144130756346322481</id>
+		<id>17412273748554536738</id>
 	</asset>
 	<asset>
 		<name>RigRArmThumb1Gizmo_$AssimpFbx$_Translation</name>
-		<id>13501416578412355377</id>
+		<id>4340533115004499580</id>
 	</asset>
 	<asset>
 		<name>RigRArmThumb1Gizmo_$AssimpFbx$_PreRotation</name>
-		<id>3505889947112382430</id>
+		<id>15756316532386484444</id>
 	</asset>
 	<asset>
 		<name>RigRArmThumb1Gizmo_$AssimpFbx$_Rotation</name>
-		<id>9877381106805807013</id>
+		<id>877953592482601967</id>
 	</asset>
 	<asset>
 		<name>RigRArmThumb1Gizmo_$AssimpFbx$_Scaling</name>
-		<id>7908362382519264524</id>
+		<id>1564948156726689372</id>
 	</asset>
 	<asset>
 		<name>RigRArmThumb1Gizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>5918271542592345507</id>
+		<id>18196806215101170758</id>
 	</asset>
 	<asset>
 		<name>RigRArmThumb1Gizmo</name>
-		<id>6888969244417890622</id>
+		<id>16649688490782950711</id>
 	</asset>
 	<asset>
 		<name>RigRArmThumb2Gizmo_$AssimpFbx$_Translation</name>
-		<id>16979217432369233078</id>
+		<id>5763467433787611144</id>
 	</asset>
 	<asset>
 		<name>RigRArmThumb2Gizmo_$AssimpFbx$_PreRotation</name>
-		<id>5225091967026893920</id>
+		<id>13324132057652921848</id>
 	</asset>
 	<asset>
 		<name>RigRArmThumb2Gizmo_$AssimpFbx$_Rotation</name>
-		<id>10642897323019477486</id>
+		<id>5464228002094266693</id>
 	</asset>
 	<asset>
 		<name>RigRArmThumb2Gizmo_$AssimpFbx$_Scaling</name>
-		<id>14057554067813292255</id>
+		<id>6211665367008605761</id>
 	</asset>
 	<asset>
 		<name>RigRArmThumb2Gizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>12008454001481435715</id>
+		<id>11951251311932860960</id>
 	</asset>
 	<asset>
 		<name>RigRArmThumb2Gizmo</name>
-		<id>2311251069098982354</id>
+		<id>12025088993850379131</id>
 	</asset>
 	<asset>
 		<name>RigRArmIndex1Gizmo_$AssimpFbx$_Translation</name>
-		<id>8591485556211621545</id>
+		<id>12048633284663545151</id>
 	</asset>
 	<asset>
 		<name>RigRArmIndex1Gizmo_$AssimpFbx$_PreRotation</name>
-		<id>2124352803835925305</id>
+		<id>12852256200422343373</id>
 	</asset>
 	<asset>
 		<name>RigRArmIndex1Gizmo_$AssimpFbx$_Rotation</name>
-		<id>8006536120787463362</id>
+		<id>6989632297606705879</id>
 	</asset>
 	<asset>
 		<name>RigRArmIndex1Gizmo_$AssimpFbx$_Scaling</name>
-		<id>7967037006423936838</id>
+		<id>3345886961631904067</id>
 	</asset>
 	<asset>
 		<name>RigRArmIndex1Gizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>17017360842111728975</id>
+		<id>11334225855161162768</id>
 	</asset>
 	<asset>
 		<name>RigRArmIndex1Gizmo</name>
-		<id>690894610836946928</id>
+		<id>13426370212052489245</id>
 	</asset>
 	<asset>
 		<name>RigRArmIndex2Gizmo_$AssimpFbx$_Translation</name>
-		<id>15621915202959907183</id>
+		<id>9639728184675267699</id>
 	</asset>
 	<asset>
 		<name>RigRArmIndex2Gizmo_$AssimpFbx$_PreRotation</name>
-		<id>4559949179059669101</id>
+		<id>7268436206606386945</id>
 	</asset>
 	<asset>
 		<name>RigRArmIndex2Gizmo_$AssimpFbx$_Rotation</name>
-		<id>15579005336781853850</id>
+		<id>15139339556210378670</id>
 	</asset>
 	<asset>
 		<name>RigRArmIndex2Gizmo_$AssimpFbx$_Scaling</name>
-		<id>5488068681312825551</id>
+		<id>5329420925859405225</id>
 	</asset>
 	<asset>
 		<name>RigRArmIndex2Gizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>413688263518187789</id>
+		<id>16137751152504758528</id>
 	</asset>
 	<asset>
 		<name>RigRArmIndex2Gizmo</name>
-		<id>4425161021295528618</id>
+		<id>16041766311173267564</id>
 	</asset>
 	<asset>
 		<name>RigRArmIndex3Gizmo_$AssimpFbx$_Translation</name>
-		<id>10028270427178176793</id>
+		<id>6329727678927033192</id>
 	</asset>
 	<asset>
 		<name>RigRArmIndex3Gizmo_$AssimpFbx$_PreRotation</name>
-		<id>2891120387861120374</id>
+		<id>17777274143322227044</id>
 	</asset>
 	<asset>
 		<name>RigRArmIndex3Gizmo_$AssimpFbx$_Rotation</name>
-		<id>6265341407944305127</id>
+		<id>4944789593636629743</id>
 	</asset>
 	<asset>
 		<name>RigRArmIndex3Gizmo_$AssimpFbx$_Scaling</name>
-		<id>4900160097589811750</id>
+		<id>11317890540364522127</id>
 	</asset>
 	<asset>
 		<name>RigRArmIndex3Gizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>4170758863955269501</id>
+		<id>13905896198562195326</id>
 	</asset>
 	<asset>
 		<name>RigRArmIndex3Gizmo</name>
-		<id>15977717463050329494</id>
+		<id>17586613946027266896</id>
 	</asset>
 	<asset>
 		<name>RigRArmPinky1Gizmo_$AssimpFbx$_Translation</name>
-		<id>16348251876714518843</id>
+		<id>4946007362793024490</id>
 	</asset>
 	<asset>
 		<name>RigRArmPinky1Gizmo_$AssimpFbx$_PreRotation</name>
-		<id>6313340153478962652</id>
+		<id>678499842915750937</id>
 	</asset>
 	<asset>
 		<name>RigRArmPinky1Gizmo_$AssimpFbx$_Rotation</name>
-		<id>10924228993958418709</id>
+		<id>15217202098710740502</id>
 	</asset>
 	<asset>
 		<name>RigRArmPinky1Gizmo_$AssimpFbx$_Scaling</name>
-		<id>11727905368936969151</id>
+		<id>2885148508309554709</id>
 	</asset>
 	<asset>
 		<name>RigRArmPinky1Gizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>2036558057071381057</id>
+		<id>14221560509029613657</id>
 	</asset>
 	<asset>
 		<name>RigRArmPinky1Gizmo</name>
-		<id>8479114636806751021</id>
+		<id>2438549247595676852</id>
 	</asset>
 	<asset>
 		<name>RigRArmPinky2Gizmo_$AssimpFbx$_Translation</name>
-		<id>9500423868712426818</id>
+		<id>1777559597648611261</id>
 	</asset>
 	<asset>
 		<name>RigRArmPinky2Gizmo_$AssimpFbx$_PreRotation</name>
-		<id>1133300158749037763</id>
+		<id>1065929472871541884</id>
 	</asset>
 	<asset>
 		<name>RigRArmPinky2Gizmo_$AssimpFbx$_Rotation</name>
-		<id>980974376864983151</id>
+		<id>13662382306470196995</id>
 	</asset>
 	<asset>
 		<name>RigRArmPinky2Gizmo_$AssimpFbx$_Scaling</name>
-		<id>12246567869430126673</id>
+		<id>15708926936814169236</id>
 	</asset>
 	<asset>
 		<name>RigRArmPinky2Gizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>10848080894773299991</id>
+		<id>3664236334890312803</id>
 	</asset>
 	<asset>
 		<name>RigRArmPinky2Gizmo</name>
-		<id>17874261370440416446</id>
+		<id>9038780740806438598</id>
 	</asset>
 	<asset>
 		<name>RigRArmPinky3Gizmo_$AssimpFbx$_Translation</name>
-		<id>6534802206693123126</id>
+		<id>8159196784100291954</id>
 	</asset>
 	<asset>
 		<name>RigRArmPinky3Gizmo_$AssimpFbx$_PreRotation</name>
-		<id>12179875424740026495</id>
+		<id>18229859036382935608</id>
 	</asset>
 	<asset>
 		<name>RigRArmPinky3Gizmo_$AssimpFbx$_Rotation</name>
-		<id>3544629295917216961</id>
+		<id>4006578466370939734</id>
 	</asset>
 	<asset>
 		<name>RigRArmPinky3Gizmo_$AssimpFbx$_Scaling</name>
-		<id>12410811826778810673</id>
+		<id>6799020370560439919</id>
 	</asset>
 	<asset>
 		<name>RigRArmPinky3Gizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>1238693797906133231</id>
+		<id>17685501711970563915</id>
 	</asset>
 	<asset>
 		<name>RigRArmPinky3Gizmo</name>
-		<id>9707908066314214711</id>
+		<id>15738859340948404847</id>
 	</asset>
 	<asset>
 		<name>RigCape2Gizmo_$AssimpFbx$_Translation</name>
-		<id>1129926256105380325</id>
+		<id>10550991563318102171</id>
 	</asset>
 	<asset>
 		<name>RigCape2Gizmo_$AssimpFbx$_PreRotation</name>
-		<id>267518736669791185</id>
+		<id>14378911529074221710</id>
 	</asset>
 	<asset>
 		<name>RigCape2Gizmo_$AssimpFbx$_Rotation</name>
-		<id>12481902875799061339</id>
+		<id>2113291220419743203</id>
 	</asset>
 	<asset>
 		<name>RigCape2Gizmo_$AssimpFbx$_Scaling</name>
-		<id>8516424247911081882</id>
+		<id>13276586351729745810</id>
 	</asset>
 	<asset>
 		<name>RigCape2Gizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>13066962117475294699</id>
+		<id>4409711521313801727</id>
 	</asset>
 	<asset>
 		<name>RigCape2Gizmo</name>
-		<id>8278267062437143908</id>
+		<id>11278928855447817216</id>
 	</asset>
 	<asset>
 		<name>RigCape1Gizmo_$AssimpFbx$_Translation</name>
-		<id>11899037261027001871</id>
+		<id>2737505010536878191</id>
 	</asset>
 	<asset>
 		<name>RigCape1Gizmo_$AssimpFbx$_PreRotation</name>
-		<id>9259023496691373830</id>
+		<id>14339428353332954227</id>
 	</asset>
 	<asset>
 		<name>RigCape1Gizmo_$AssimpFbx$_Rotation</name>
-		<id>17609061689371429374</id>
+		<id>15554755375909878522</id>
 	</asset>
 	<asset>
 		<name>RigCape1Gizmo_$AssimpFbx$_Scaling</name>
-		<id>16433777362359107051</id>
+		<id>6356139228568509938</id>
 	</asset>
 	<asset>
 		<name>RigCape1Gizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>6442896494210788336</id>
+		<id>11269733127813466460</id>
 	</asset>
 	<asset>
 		<name>RigCape1Gizmo</name>
-		<id>9982885843422301257</id>
+		<id>6013052154793223709</id>
 	</asset>
 	<asset>
 		<name>RigCape3Gizmo_$AssimpFbx$_Translation</name>
-		<id>12905700904638375959</id>
+		<id>11212913862343232150</id>
 	</asset>
 	<asset>
 		<name>RigCape3Gizmo_$AssimpFbx$_PreRotation</name>
-		<id>4433589687851789986</id>
+		<id>1138413461345156869</id>
 	</asset>
 	<asset>
 		<name>RigCape3Gizmo_$AssimpFbx$_Rotation</name>
-		<id>7134549883078153204</id>
+		<id>1151699283495899994</id>
 	</asset>
 	<asset>
 		<name>RigCape3Gizmo_$AssimpFbx$_Scaling</name>
-		<id>16802595561437569012</id>
+		<id>17773144561080017389</id>
 	</asset>
 	<asset>
 		<name>RigCape3Gizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>3141670239837598167</id>
+		<id>2722535068856402990</id>
 	</asset>
 	<asset>
 		<name>RigCape3Gizmo</name>
-		<id>9597270660643200283</id>
+		<id>12527032742398994715</id>
 	</asset>
 	<asset>
 		<name>RigCape4Gizmo_$AssimpFbx$_Translation</name>
-		<id>7828235550831262528</id>
+		<id>5225671756782759828</id>
 	</asset>
 	<asset>
 		<name>RigCape4Gizmo_$AssimpFbx$_PreRotation</name>
-		<id>3896235491247276846</id>
+		<id>9998438861026723196</id>
 	</asset>
 	<asset>
 		<name>RigCape4Gizmo_$AssimpFbx$_Rotation</name>
-		<id>8500731170233352881</id>
+		<id>13065660926957744251</id>
 	</asset>
 	<asset>
 		<name>RigCape4Gizmo_$AssimpFbx$_Scaling</name>
-		<id>4690097972575528741</id>
+		<id>10539595627146914201</id>
 	</asset>
 	<asset>
 		<name>RigCape4Gizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>10442660321487768060</id>
+		<id>9323117576334305747</id>
 	</asset>
 	<asset>
 		<name>RigCape4Gizmo</name>
-		<id>1871631737557762573</id>
+		<id>5947883419478449143</id>
 	</asset>
 	<asset>
 		<name>RigCape5Gizmo_$AssimpFbx$_Translation</name>
-		<id>12743098108378503389</id>
+		<id>1809594345173219201</id>
 	</asset>
 	<asset>
 		<name>RigCape5Gizmo_$AssimpFbx$_PreRotation</name>
-		<id>5566511043970023990</id>
+		<id>11513812413706120886</id>
 	</asset>
 	<asset>
 		<name>RigCape5Gizmo_$AssimpFbx$_Rotation</name>
-		<id>1342014580749612205</id>
+		<id>254351250918281727</id>
 	</asset>
 	<asset>
 		<name>RigCape5Gizmo_$AssimpFbx$_Scaling</name>
-		<id>5881197981723773648</id>
+		<id>10089318542326740854</id>
 	</asset>
 	<asset>
 		<name>RigCape5Gizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>536144016587963317</id>
+		<id>10779988123781981608</id>
 	</asset>
 	<asset>
 		<name>RigCape5Gizmo</name>
-		<id>16188938477540380059</id>
+		<id>17667685749646719919</id>
 	</asset>
 	<asset>
 		<name>RigPelvisGizmo_$AssimpFbx$_Translation</name>
-		<id>6526748081087258995</id>
+		<id>4436960314600194995</id>
 	</asset>
 	<asset>
 		<name>RigPelvisGizmo_$AssimpFbx$_PreRotation</name>
-		<id>8471173016931614307</id>
+		<id>17557519783577609135</id>
 	</asset>
 	<asset>
 		<name>RigPelvisGizmo_$AssimpFbx$_Rotation</name>
-		<id>8873585271583433440</id>
+		<id>564498680071209997</id>
 	</asset>
 	<asset>
 		<name>RigPelvisGizmo_$AssimpFbx$_Scaling</name>
-		<id>18306466866728853464</id>
+		<id>9933069643703724944</id>
 	</asset>
 	<asset>
 		<name>RigPelvisGizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>16400249283682339577</id>
+		<id>3243835868968365753</id>
 	</asset>
 	<asset>
 		<name>RigPelvisGizmo</name>
-		<id>15923557078502233003</id>
+		<id>16017813410404172908</id>
 	</asset>
 	<asset>
 		<name>RigRibcageGizmo_$AssimpFbx$_Translation</name>
-		<id>5662560059332976863</id>
+		<id>16647733503494839853</id>
 	</asset>
 	<asset>
 		<name>RigRibcageGizmo_$AssimpFbx$_PreRotation</name>
-		<id>8244919150754946240</id>
+		<id>16117279983734171331</id>
 	</asset>
 	<asset>
 		<name>RigRibcageGizmo_$AssimpFbx$_Rotation</name>
-		<id>8728257625113293956</id>
+		<id>7731703402212178135</id>
 	</asset>
 	<asset>
 		<name>RigRibcageGizmo_$AssimpFbx$_Scaling</name>
-		<id>595410454983708723</id>
+		<id>10314384134102876577</id>
 	</asset>
 	<asset>
 		<name>RigRibcageGizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>7658765312147272103</id>
+		<id>11463315271433583671</id>
 	</asset>
 	<asset>
 		<name>RigRibcageGizmo</name>
-		<id>710688546758584962</id>
+		<id>9621119413198340941</id>
 	</asset>
 	<asset>
 		<name>RigHeadGizmo_$AssimpFbx$_Translation</name>
-		<id>6383748451934980636</id>
+		<id>9156660422646766573</id>
 	</asset>
 	<asset>
 		<name>RigHeadGizmo_$AssimpFbx$_PreRotation</name>
-		<id>340518257206041584</id>
+		<id>18295792623904180799</id>
 	</asset>
 	<asset>
 		<name>RigHeadGizmo_$AssimpFbx$_Rotation</name>
-		<id>8672637954975676839</id>
+		<id>13234721020632064474</id>
 	</asset>
 	<asset>
 		<name>RigHeadGizmo_$AssimpFbx$_Scaling</name>
-		<id>3279320859037480687</id>
+		<id>17891079397140374381</id>
 	</asset>
 	<asset>
 		<name>RigHeadGizmo_$AssimpFbx$_GeometricRotation</name>
-		<id>10557747403606690599</id>
+		<id>5094123188717062785</id>
 	</asset>
 	<asset>
 		<name>RigHeadGizmo</name>
-		<id>5013505582094035688</id>
+		<id>1427427009888421038</id>
 	</asset>
 </assets_list>

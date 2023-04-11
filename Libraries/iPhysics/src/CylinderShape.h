@@ -8,10 +8,13 @@ namespace physics
 	class CylinderShape : public iShape
 	{
 	public:
-		CylinderShape(const Vector3& halfExtents);
+		CylinderShape(float radius, float height);
 		virtual ~CylinderShape();
 
 		const Vector3& GetHalfExtents() const;
+
+		float GetRadius() { return mRadius; }
+		float GetHeight() { return mHeight; }
 
 		static CylinderShape* Cast(iShape* shape);
 
@@ -20,7 +23,7 @@ namespace physics
 			: iShape(shapeType) {}
 
 	private:
-		Vector3 m_HalfExtents;
+		float mRadius, mHeight;
 		CylinderShape(const CylinderShape&) : iShape(ShapeType::Cylinder) {}
 		CylinderShape& operator=(const CylinderShape&) {
 			return *this;

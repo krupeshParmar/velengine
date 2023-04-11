@@ -548,6 +548,7 @@
     <ClInclude Include="..\..\VelEngine\vendor\glm\glm\vector_relational.hpp" />
     <ClInclude Include="src\BodyType.h" />
     <ClInclude Include="src\BoxShape.h" />
+    <ClInclude Include="src\CharacterControllerDesc.h" />
     <ClInclude Include="src\CylinderShape.h" />
     <ClInclude Include="src\PhyMath.h" />
     <ClInclude Include="src\PlaneShape.h" />
@@ -555,6 +556,7 @@
     <ClInclude Include="src\ShapeType.h" />
     <ClInclude Include="src\SoftBodyDesc.h" />
     <ClInclude Include="src\SphereShape.h" />
+    <ClInclude Include="src\iCharacterController.h" />
     <ClInclude Include="src\iCollisionBody.h" />
     <ClInclude Include="src\iPhysicsFactory.h" />
     <ClInclude Include="src\iPhysicsWorld.h" />

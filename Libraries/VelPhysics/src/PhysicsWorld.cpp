@@ -57,6 +57,11 @@ namespace physics
 			// TODO:
 		}
 
+		iCharacterController* PhysicsWorld::CreateCharacterController(CharacterControllerDesc desc)
+		{
+			return nullptr;
+		}
+
 		void PhysicsWorld::TimeStep(float dt)
 		{
 			int bodyCount = m_Bodies.size();

@@ -2,18 +2,13 @@
 
 namespace physics
 {
-	CylinderShape::CylinderShape(const Vector3& halfExtents)
+	CylinderShape::CylinderShape(float radius, float height)
 		: iShape(ShapeType::Cylinder)
-		, m_HalfExtents(halfExtents)
+		, mRadius(radius), mHeight(height)
 	{ }
 
 	CylinderShape::~CylinderShape()
 	{ }
-
-	const Vector3& CylinderShape::GetHalfExtents() const
-	{
-		return m_HalfExtents;
-	}
 
 	CylinderShape* CylinderShape::Cast(iShape* shape)
 	{

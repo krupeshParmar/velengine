@@ -2,10 +2,11 @@
 .vs/
 bin/
 bin-int/
-
+PhysX/
 
 #files
 *.user
 *.json
 /Vel-Editor/Vel-Profile-Shutdown.json
 /Vel-Editor/Vel-Profile-Startup.json
+/Libraries/PhysxPhysics/obj/Debug

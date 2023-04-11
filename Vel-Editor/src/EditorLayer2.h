@@ -55,5 +55,6 @@ namespace vel
 		bool addComponentCalled = false;
 		std::chrono::time_point<std::chrono::steady_clock> starttime = std::chrono::steady_clock::now();
 		glm::vec3* rotation = new glm::vec3(0.f);
+		physics::iCharacterController* controller = nullptr;
 	};
 }

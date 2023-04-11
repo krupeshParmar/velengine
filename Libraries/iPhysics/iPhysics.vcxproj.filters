@@ -1284,6 +1284,9 @@
     <ClInclude Include="src\BoxShape.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\CharacterControllerDesc.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="src\CylinderShape.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -1303,6 +1306,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\SphereShape.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\iCharacterController.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\iCollisionBody.h">

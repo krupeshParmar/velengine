@@ -21,6 +21,7 @@ IncludeDir["stb_image"] = "VelEngine/vendor/stb_image"
 IncludeDir["PugiXML"] = "VelEngine/vendor/pugixml/src"
 IncludeDir["iPhysics"] = "Libraries/iPhysics/src"
 IncludeDir["VelPhysics"] = "Libraries/VelPhysics/src"
+IncludeDir["PhysxPhysics"] = "%{wks.location}/Libraries/PhysxPhysics/src"
 IncludeDir["Assimp"] = "%{wks.location}/VelEngine/vendor/assimp3.2/include"
 IncludeDir["entt"] = "%{wks.location}/VelEngine/vendor/entt/include"
 
@@ -31,12 +32,20 @@ Library["Assimp_Release"] = "%{wks.location}/VelEngine/vendor/assimp3.2/bin/Rele
 --Library["Assimp_Debug"] = "%{wks.location}/VelEngine/vendor/assimp/bin/Debug/assimp-vc143-mtd.lib"
 --Library["Assimp_Release"] = "%{wks.location}/VelEngine/vendor/assimp/bin/Release/assimp-vc143-mt.lib"
 
+PhysicsLibs = {}
+PhysicsLibs["PHYSX_DEBUG"] = "%{wks.location}/Libraries/PhysxPhysics/vendor/PhysX/physx/bin/win.x86_64.vc143.mt/debug"
+PhysicsLibs["PHYSX_RELEASE"] = "%{wks.location}/Libraries/PhysxPhysics/vendor/PhysX/physx/bin/win.x86_64.vc143.mt/release"
+
 
 Binaries = {}
 --Binaries["Assimp_Debug"] = "%{wks.location}/VelEngine/vendor/assimp/bin/Debug/assimp-vc143-mtd.dll"
 --Binaries["Assimp_Release"] = "%{wks.location}/VelEngine/vendor/assimp/bin/Release/assimp-vc143-mt.dll"
 Binaries["Assimp_Debug"] = "%{wks.location}/VelEngine/vendor/assimp3.2/bin/Debug/assimp-vc130-mtd.dll"
 Binaries["Assimp_Release"] = "%{wks.location}/VelEngine/vendor/assimp3.2/bin/Release/assimp-vc130-mt.dll"
+
+PhysicsBins = {}
+PhysicsBins["PHYSX_DEBUG"] = "%{wks.location}/Libraries/PhysxPhysics/vendor/PhysX/physx/bin/win.x86_64.vc143.mt/debug/*.dll"
+PhysicsBins["PHYSX_RELEASE"] = "%{wks.location}/Libraries/PhysxPhysics/vendor/PhysX/physx/bin/win.x86_64.vc143.mt/release/*.dll"
 
 group "Dependencies"
 include "VelEngine/vendor/GLFW"
@@ -48,6 +57,7 @@ group ""
 group "Physics"
 include "Libraries/iPhysics"
 include "Libraries/VelPhysics"
+include "Libraries/PhysxPhysics"
 group ""
 
 project "VelEngine"
@@ -94,6 +104,8 @@ project "VelEngine"
 		"%{IncludeDir.PugiXML}",
 		"%{IncludeDir.iPhysics}",
 		"%{IncludeDir.VelPhysics}",
+		"%{IncludeDir.PhysxPhysics}",
+		"Libraries/PhysxPhysics/vendor/PhysX/physx/include",
 		"%{IncludeDir.entt}",
 	}
 
@@ -104,6 +116,7 @@ project "VelEngine"
 		"ImGui",
 		"iPhysics",
 		"VelPhysics",
+		"PhysxPhysics",
 		"PugiXML",
 		"opengl32.lib"
 	}
@@ -123,15 +136,92 @@ project "VelEngine"
 		runtime "Debug"
 		symbols "on"
 
+		links
+		{
+			"%{PhysicsLibs.PHYSX_DEBUG}/LowLevel_static_64.lib",
+			"%{PhysicsLibs.PHYSX_DEBUG}/LowLevelAABB_static_64.lib",
+			"%{PhysicsLibs.PHYSX_DEBUG}/LowLevelDynamics_static_64.lib",
+			"%{PhysicsLibs.PHYSX_DEBUG}/PhysX_64.lib",
+			"%{PhysicsLibs.PHYSX_DEBUG}/PhysXCharacterKinematic_static_64.lib",
+			"%{PhysicsLibs.PHYSX_DEBUG}/PhysXCommon_64.lib",
+			"%{PhysicsLibs.PHYSX_DEBUG}/PhysXCooking_64.lib",
+			"%{PhysicsLibs.PHYSX_DEBUG}/PhysXExtensions_static_64.lib",
+			"%{PhysicsLibs.PHYSX_DEBUG}/PhysXFoundation_64.lib",
+			"%{PhysicsLibs.PHYSX_DEBUG}/PhysXPvdSDK_static_64.lib",
+			"%{PhysicsLibs.PHYSX_DEBUG}/PhysXTask_static_64.lib",
+			"%{PhysicsLibs.PHYSX_DEBUG}/PhysXVehicle_static_64.lib",
+			"%{PhysicsLibs.PHYSX_DEBUG}/PhysXVehicle2_static_64.lib",
+			"%{PhysicsLibs.PHYSX_DEBUG}/PVDRuntime_64.lib",
+			"%{PhysicsLibs.PHYSX_DEBUG}/SceneQuery_static_64.lib",
+			"%{PhysicsLibs.PHYSX_DEBUG}/SimulationController_static_64.lib",
+			"%{PhysicsLibs.PHYSX_DEBUG}/SnippetRender_static_64.lib",
+			"%{PhysicsLibs.PHYSX_DEBUG}/SnippetUtils_static_64.lib",
+		}
+		
+
 	filter "configurations:Release"
 		defines "VEL_RELEASE"
 		runtime "Release"
 		optimize "on"
 
+		links
+		{
+			"%{PhysicsLibs.PHYSX_RELEASE}/LowLevel_static_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/LowLevelAABB_static_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/LowLevelDynamics_static_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/PhysX_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/PhysXCharacterKinematic_static_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/PhysXCommon_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/PhysXCooking_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/PhysXExtensions_static_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/PhysXFoundation_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/PhysXPvdSDK_static_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/PhysXTask_static_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/PhysXVehicle_static_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/PhysXVehicle2_static_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/PVDRuntime_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/SceneQuery_static_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/SimulationController_static_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/SnippetRender_static_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/SnippetUtils_static_64.lib",
+		}
+
+		defines
+		{
+			"NDEBUG",
+		}
+
 	filter "configurations:Dist"
 		defines "VEL_DIST"
 		runtime "Release"
 		optimize "on"
+
+		links
+		{
+			"%{PhysicsLibs.PHYSX_RELEASE}/LowLevel_static_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/LowLevelAABB_static_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/LowLevelDynamics_static_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/PhysX_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/PhysXCharacterKinematic_static_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/PhysXCommon_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/PhysXCooking_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/PhysXExtensions_static_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/PhysXFoundation_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/PhysXPvdSDK_static_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/PhysXTask_static_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/PhysXVehicle_static_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/PhysXVehicle2_static_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/PVDRuntime_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/SceneQuery_static_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/SimulationController_static_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/SnippetRender_static_64.lib",
+			"%{PhysicsLibs.PHYSX_RELEASE}/SnippetUtils_static_64.lib",
+		}
+
+		defines
+		{
+			"NDEBUG",
+		}
 
 project "Sandbox"
 	location "Sandbox"
@@ -224,7 +314,7 @@ project "Vel-Editor"
 
 	links
 	{
-		"VelEngine"
+		"VelEngine",
 	}
 
 	filter "system:windows"
@@ -247,6 +337,7 @@ project "Vel-Editor"
 
 		postbuildcommands 
 		{
+			'{COPY} "%{PhysicsBins.PHYSX_DEBUG}" "%{cfg.targetdir}"',
 			'{COPY} "%{Binaries.Assimp_Debug}" "%{cfg.targetdir}"'
 		}
 
@@ -262,6 +353,7 @@ project "Vel-Editor"
 
 		postbuildcommands 
 		{
+			'{COPY} "%{PhysicsBins.PHYSX_RELEASE}" "%{cfg.targetdir}"',
 			'{COPY} "%{Binaries.Assimp_Release}" "%{cfg.targetdir}"'
 		}
 
@@ -277,5 +369,6 @@ project "Vel-Editor"
 
 		postbuildcommands 
 		{
+			'{COPY} "%{PhysicsBins.PHYSX_RELEASE}" "%{cfg.targetdir}"',
 			'{COPY} "%{Binaries.Assimp_Release}" "%{cfg.targetdir}"'
 		}

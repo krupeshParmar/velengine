@@ -20,7 +20,10 @@ namespace physics
 			, friction(0.4f)
 			, linearDamping(0.01f)
 			, angularDamping(0.05f)
-		{}
+		{
+			if (mass == 0)
+				isStatic = true;
+		}
 
 		float mass;
 		bool isStatic;
@@ -29,6 +32,7 @@ namespace physics
 
 		Vector3 position;
 		Vector3 linearVelocity;
+		float volume;
 
 		Vector3 linearFactor;
 		Vector3 angularFactor;

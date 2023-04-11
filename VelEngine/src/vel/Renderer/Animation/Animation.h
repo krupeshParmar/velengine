@@ -4,6 +4,7 @@
 #include <vector>
 #include <unordered_map>
 #include "BoneAnim.h"
+#include <string>
 
 class aiAnimation;
 class aiNode;
@@ -41,6 +42,7 @@ namespace vel
 			return m_BoneInfoMap;
 		}
 
+		std::string name;
 	private:
 		void ReadMissingBones(const aiAnimation* animation, MeshData& mesh);
 		void ReadHeirarchyData(AssimpNodeData& dest, const aiNode* src);
@@ -49,6 +51,5 @@ namespace vel
 		std::vector<BoneAnim> m_Bones;
 		AssimpNodeData m_RootNode;
 		std::unordered_map<std::string, BoneInfo>* m_BoneInfoMap;
-
 	};
 }

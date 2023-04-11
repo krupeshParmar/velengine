@@ -25,7 +25,6 @@ namespace physics
 
 		virtual void ApplyTorque(const Vector3& torque) = 0;
 		virtual void ApplyTorqueImpulse(const Vector3& torqueImpulse) = 0;
-
 		virtual void SetRenderPosition(Vector3* position) = 0;
 
 	protected:

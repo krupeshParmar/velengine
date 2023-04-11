@@ -7,6 +7,7 @@
 #include "MaterialSystem.h"
 #include "SaveSystem.h"
 #include "LightManager.h"
+#include <PhysxPhysicsFactory.h>
 CRITICAL_SECTION cs_EntityMapLock;
 
 namespace vel
@@ -84,6 +85,9 @@ namespace vel
 		/*m_ShaderLibrary.Load("assets/shaders/FBOTexture.glsl");
 		m_ShaderLibrary.Get("FBOTexture")->SetInt("gAlbedoSpec", 0);*/
 		
+
+		m_PhysicsFactory = new physics::physxim::PhysicsFactory();
+		m_PhysicsWorld = m_PhysicsFactory->CreateWorld();
 		m_Shader = m_ShaderLibrary.Load("assets/shaders/gBuffer.glsl");
 		m_Shader->Bind();
 		m_Shader->SetInt("u_TextureDiffuse", 0);
@@ -119,6 +123,7 @@ namespace vel
 	void Scene::OnUpdateEditor(Timestep ts, glm::vec4 eyeLocation)
 	{	// Lights
 		mainAnimator->UpdateAnimation(ts);
+		m_PhysicsWorld->TimeStep(1 / 60.f);
 		{
 			auto lightView = m_Registry.group<LightComponent>(entt::get<TransformComponent>);
 			for (auto lights : lightView)
@@ -142,6 +147,12 @@ namespace vel
 			for (auto e : view)
 			{
 				Entity entity = Entity(e, this);
+				if (entity.HasComponent<CharacterControllerComponent>())
+				{
+					CharacterControllerComponent characterController = entity.GetComponent<CharacterControllerComponent>();
+
+					entity.Transform().Translation = characterController.characterController->GetPosition();
+				}
 				auto [transformComponent, meshComponent] = view.get<TransformComponent, MeshComponent>(e);
 				glm::mat4 transform = GetWorldSpaceTransformMatrix(entity);
 				if (IsEnabled(entity))
@@ -216,6 +227,18 @@ namespace vel
 										Math::DecomposeTransform(transform, pos, rotation, sca);
 										m_Shader->SetMat4("u_RotationMatrix[" + std::to_string(i) + "]", glm::mat4(1.f) * glm::toMat4(rotation));
 									}
+								}
+							}
+							else
+							{
+								for (int i = 0; i < 100; ++i)
+								{
+									m_Shader->SetMat4("finalBonesMatrices[" + std::to_string(i) + "]", glm::mat4(1.f));
+
+									glm::vec3 pos, sca;
+									glm::quat rotation;
+									Math::DecomposeTransform(transform, pos, rotation, sca);
+									m_Shader->SetMat4("u_RotationMatrix[" + std::to_string(i) + "]", glm::mat4(1.f) * glm::toMat4(rotation));
 								}
 							}
 						}

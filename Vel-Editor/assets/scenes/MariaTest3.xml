@@ -1,97 +1,7 @@
 <?xml version="1.0"?>
 <scene>
 	<name>assets/scenes/MariaTest3.xml</name>
-	<entity id="13744952304822884143">
-		<name>floor duplicate 22</name>
-		<components>
-			<transform>
-				<enabled>1</enabled>
-				<position>
-					<x>230.000000</x>
-					<y>218.000000</y>
-					<z>150.000000</z>
-				</position>
-				<rotation>
-					<x>90.000000</x>
-					<y>0.000000</y>
-					<z>0.000000</z>
-				</rotation>
-				<scale>
-					<x>130.000000</x>
-					<y>20.000000</y>
-					<z>1.000000</z>
-				</scale>
-			</transform>
-			<light>
-				<enabled>1</enabled>
-				<intensity>1.000000</intensity>
-				<diffuse>
-					<r>1.000000</r>
-					<g>1.000000</g>
-					<b>1.000000</b>
-					<w>1.000000</w>
-				</diffuse>
-				<specular>
-					<r>1.000000</r>
-					<g>1.000000</g>
-					<b>1.000000</b>
-					<w>1.000000</w>
-				</specular>
-				<attenuation>
-					<x>0.010000</x>
-					<y>0.010000</y>
-					<z>0.000000</z>
-					<w>1.000000</w>
-				</attenuation>
-				<lightparams>
-					<x>2.000000</x>
-					<y>0.000000</y>
-					<z>0.000000</z>
-					<w>0.000000</w>
-				</lightparams>
-			</light>
-			<asset_component>
-				<file_location>assets/models/plane.fbx.vasset</file_location>
-				<asset id="16733578272278694185" />
-				<asset id="4698752832796492098" />
-				<asset id="4006000822398687977">
-					<material_path>assets/models/hotel/hotel_floor_base_mat.xml</material_path>
-				</asset>
-			</asset_component>
-		</components>
-	</entity>
-	<entity id="12105020553346211527">
-		<name>Hotel Upper duplicate 23</name>
-		<components>
-			<transform>
-				<enabled>1</enabled>
-				<position>
-					<x>100.000000</x>
-					<y>327.000000</y>
-					<z>150.000000</z>
-				</position>
-				<rotation>
-					<x>-90.000000</x>
-					<y>90.000000</y>
-					<z>0.000000</z>
-				</rotation>
-				<scale>
-					<x>15.000000</x>
-					<y>15.000000</y>
-					<z>15.000000</z>
-				</scale>
-			</transform>
-			<asset_component>
-				<file_location>assets//models/hotel/hotelupper.fbx.vasset</file_location>
-				<asset id="13892452436661511033" />
-				<asset id="16030070613010530148" />
-				<asset id="3401543588729655467">
-					<material_path>assets//models/hotel/hotel_upper_mat.xml</material_path>
-				</asset>
-			</asset_component>
-		</components>
-	</entity>
-	<entity id="10065657947334433250">
+	<entity id="4991427178451496587">
 		<name>floor duplicate 22 duplicate 24</name>
 		<components>
 			<transform>
@@ -150,7 +60,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="7084002641543687799">
+	<entity id="13236552637327262623">
 		<name>Shop1Base</name>
 		<components>
 			<transform>
@@ -181,7 +91,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="1924533073441870937">
+	<entity id="16903203326255157044">
 		<name>spotlight duplicate 26</name>
 		<components>
 			<transform>
@@ -238,7 +148,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="8775780041534991402">
+	<entity id="17864142080855486765">
 		<name>ShopUpperFloor</name>
 		<components>
 			<transform>
@@ -269,7 +179,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="384294550146365964">
+	<entity id="178757864584005383">
 		<name>TopWallV1</name>
 		<components>
 			<transform>
@@ -300,7 +210,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="16106310663035697448">
+	<entity id="8719089279780060037">
 		<name>Window</name>
 		<components>
 			<transform>
@@ -331,7 +241,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="14352577425240263905">
+	<entity id="13857317733324408879">
 		<name>Window duplicate 30</name>
 		<components>
 			<transform>
@@ -362,7 +272,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="14778530913197332031">
+	<entity id="1448470290563164968">
 		<name>Maria</name>
 		<components>
 			<transform>
@@ -476,7 +386,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="7448721819068768469">
+	<entity id="10094538915486809453">
 		<name>puddle</name>
 		<components>
 			<transform>
@@ -507,7 +417,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="6000781505765308581">
+	<entity id="11865576223649335742">
 		<name>BedroomQuad</name>
 		<components>
 			<transform>
@@ -536,7 +446,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="2096396776842123307">
+	<entity id="6946634440855961599">
 		<name>spotlight</name>
 		<components>
 			<transform>
@@ -593,7 +503,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="10003325083586944998">
+	<entity id="1233520050440761792">
 		<name>Bench</name>
 		<components>
 			<transform>
@@ -619,7 +529,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="6383036353135819114">
+	<entity id="15958189762658371591">
 		<name>Plane</name>
 		<components>
 			<transform>
@@ -650,7 +560,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="1074710323001737563">
+	<entity id="13959463572373359834">
 		<name>directional light</name>
 		<components>
 			<transform>
@@ -701,7 +611,7 @@
 			</light>
 		</components>
 	</entity>
-	<entity id="14342886364214984047">
+	<entity id="15731249087526603081">
 		<name>Shop</name>
 		<components>
 			<transform>
@@ -786,7 +696,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="15407385970119301478">
+	<entity id="10577011571685835055">
 		<name>Theatre</name>
 		<components>
 			<transform>
@@ -815,12 +725,12 @@
 				<asset id="16421176438950774444" />
 				<asset id="6009505174726946867" />
 				<asset id="6305289223262160197" />
-				<asset id="6366567569757865102" />
-				<asset id="6366567569757865102" />
+				<asset id="3434768239766810838" />
+				<asset id="3434768239766810838" />
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="17736564793830529319">
+	<entity id="661972471237130712">
 		<name>Hotel</name>
 		<components>
 			<transform>
@@ -849,12 +759,12 @@
 				<asset id="7221605602552492105" />
 				<asset id="15677014556747548922" />
 				<asset id="13425938363714139739" />
-				<asset id="13395352928084320129" />
-				<asset id="13395352928084320129" />
+				<asset id="3453743361186641446" />
+				<asset id="3453743361186641446" />
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="3801201909770323275">
+	<entity id="6790917546456192203">
 		<name>Low Rise building</name>
 		<components>
 			<transform>
@@ -877,7 +787,7 @@
 			</transform>
 		</components>
 	</entity>
-	<entity id="4292987120878641781">
+	<entity id="3934098254338777015">
 		<name>streetlamp</name>
 		<components>
 			<transform>
@@ -903,7 +813,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="8621672390750460498">
+	<entity id="6359186311167894330">
 		<name>streetlamp_light</name>
 		<components>
 			<transform>
@@ -960,7 +870,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="6552426889913974201">
+	<entity id="14236729717674430327">
 		<name>bed</name>
 		<components>
 			<transform>
@@ -991,7 +901,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="13445540323554215154">
+	<entity id="14855712758969724326">
 		<name>RFA_Cloth</name>
 		<components>
 			<transform>
@@ -1022,7 +932,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="7501926446650860320">
+	<entity id="14325248667868222591">
 		<name>NeonWires</name>
 		<components>
 			<transform>
@@ -1057,7 +967,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="2821103800006231509">
+	<entity id="3973273347887731327">
 		<name>Hotel Base</name>
 		<components>
 			<transform>
@@ -1088,7 +998,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="11365860436228492636">
+	<entity id="16296040808627960036">
 		<name>Hotel Upper</name>
 		<components>
 			<transform>
@@ -1119,7 +1029,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="12315638963276704102">
+	<entity id="7786293256488471793">
 		<name>Aland</name>
 		<components>
 			<transform>
@@ -1149,16 +1059,16 @@
 				<asset id="2889716991972728319" />
 				<asset id="6423224688667409071" />
 				<asset id="7984259914808019183" />
-				<asset id="8312850667855568297" />
+				<asset id="8030113089126648079" />
 				<asset id="4199150420943785794" />
 				<asset id="16416897382705617218" />
 				<asset id="17062906565998501067" />
-				<asset id="7891019430288847209" />
+				<asset id="1451111685157144547" />
 				<asset id="14412044812872651274" />
 				<asset id="6823034214396042126" />
 				<asset id="10812988739204753252" />
 				<asset id="14465577408849489176" />
-				<asset id="8181190296696478416" />
+				<asset id="1668031969273951218" />
 				<asset id="16722725830545320923" />
 				<asset id="1550229350445099251" />
 				<asset id="17890636284322216940" />
@@ -1200,7 +1110,7 @@
 				<asset id="1209673571870224113" />
 				<asset id="7614617203079529005" />
 				<asset id="3042065729740563129" />
-				<asset id="8312850667855568297" />
+				<asset id="8030113089126648079" />
 				<asset id="4790607821477093819" />
 				<asset id="2474016778108276541" />
 				<asset id="15500809760215212610" />
@@ -1214,12 +1124,12 @@
 				<asset id="8784105035394727021" />
 				<asset id="516005726106737833" />
 				<asset id="16622807233956378107" />
-				<asset id="15625150822483214824" />
+				<asset id="7178132943938405398" />
 				<asset id="7787023534064532107" />
 				<asset id="1371983845272104645" />
 				<asset id="7916467582758632355" />
 				<asset id="4068666161367863393" />
-				<asset id="4955030557994232171" />
+				<asset id="2905722877546055343" />
 				<asset id="4816384560718653326" />
 				<asset id="12034891496922267406" />
 				<asset id="894298410960917612" />
@@ -1245,166 +1155,166 @@
 				<asset id="4624587844528211674" />
 				<asset id="17094338233448933717" />
 				<asset id="4001636472487427894" />
-				<asset id="15350720806995334494" />
-				<asset id="11139679073708465699" />
-				<asset id="8376711664071135586" />
-				<asset id="8655012552004306783" />
-				<asset id="2867481228292929148" />
-				<asset id="2822361062737303466" />
-				<asset id="18023711129965254355" />
-				<asset id="18296309438055885049" />
-				<asset id="11037548806266146417" />
-				<asset id="17411624614150493751" />
-				<asset id="18324778475815237716" />
-				<asset id="1531896101709754145" />
-				<asset id="10561520467328143081" />
-				<asset id="8602229560821834529" />
-				<asset id="3504372225472122441" />
-				<asset id="14877952639115302405" />
-				<asset id="10247631323659626120" />
-				<asset id="9097619221863764816" />
-				<asset id="4197717551638798217" />
-				<asset id="9139046779269145242" />
-				<asset id="16142511762042664205" />
-				<asset id="4618039206899824331" />
-				<asset id="12242466980530170512" />
-				<asset id="6324163613566213997" />
-				<asset id="14130697672590927947" />
-				<asset id="7728888564768610595" />
-				<asset id="17921535040138178022" />
-				<asset id="5110147167123709793" />
-				<asset id="12745586035451357013" />
-				<asset id="17727756062750683404" />
-				<asset id="4552687186511427764" />
-				<asset id="5238900627491797592" />
-				<asset id="11480245053785926447" />
-				<asset id="1065947462937205640" />
-				<asset id="15648998741760005507" />
-				<asset id="17488706284178069455" />
-				<asset id="6503952355693753889" />
-				<asset id="15010373956625994579" />
-				<asset id="13228184570569076711" />
-				<asset id="14198447591503690931" />
-				<asset id="8813774484488235648" />
-				<asset id="6047425952177257369" />
-				<asset id="11899827301781842716" />
-				<asset id="177272570161677736" />
-				<asset id="9170062441303349157" />
-				<asset id="18371682241715933996" />
-				<asset id="9212339424177632002" />
-				<asset id="4222395463950790371" />
-				<asset id="4799329094622079128" />
-				<asset id="16846740946656116651" />
-				<asset id="8076351283177990948" />
-				<asset id="14614045313198895416" />
-				<asset id="4612273839048919762" />
-				<asset id="8532102036954994964" />
-				<asset id="518577726207094246" />
-				<asset id="2285213810051412370" />
-				<asset id="11351559376648316607" />
-				<asset id="12947455759609149876" />
-				<asset id="1338896372702327299" />
-				<asset id="9144130756346322481" />
-				<asset id="13501416578412355377" />
-				<asset id="3505889947112382430" />
-				<asset id="9877381106805807013" />
-				<asset id="7908362382519264524" />
-				<asset id="5918271542592345507" />
-				<asset id="6888969244417890622" />
-				<asset id="16979217432369233078" />
-				<asset id="5225091967026893920" />
-				<asset id="10642897323019477486" />
-				<asset id="14057554067813292255" />
-				<asset id="12008454001481435715" />
-				<asset id="2311251069098982354" />
-				<asset id="8591485556211621545" />
-				<asset id="2124352803835925305" />
-				<asset id="8006536120787463362" />
-				<asset id="7967037006423936838" />
-				<asset id="17017360842111728975" />
-				<asset id="690894610836946928" />
-				<asset id="15621915202959907183" />
-				<asset id="4559949179059669101" />
-				<asset id="15579005336781853850" />
-				<asset id="5488068681312825551" />
-				<asset id="413688263518187789" />
-				<asset id="4425161021295528618" />
-				<asset id="10028270427178176793" />
-				<asset id="2891120387861120374" />
-				<asset id="6265341407944305127" />
-				<asset id="4900160097589811750" />
-				<asset id="4170758863955269501" />
-				<asset id="15977717463050329494" />
-				<asset id="16348251876714518843" />
-				<asset id="6313340153478962652" />
-				<asset id="10924228993958418709" />
-				<asset id="11727905368936969151" />
-				<asset id="2036558057071381057" />
-				<asset id="8479114636806751021" />
-				<asset id="9500423868712426818" />
-				<asset id="1133300158749037763" />
-				<asset id="980974376864983151" />
-				<asset id="12246567869430126673" />
-				<asset id="10848080894773299991" />
-				<asset id="17874261370440416446" />
-				<asset id="6534802206693123126" />
-				<asset id="12179875424740026495" />
-				<asset id="3544629295917216961" />
-				<asset id="12410811826778810673" />
-				<asset id="1238693797906133231" />
-				<asset id="9707908066314214711" />
-				<asset id="1129926256105380325" />
-				<asset id="267518736669791185" />
-				<asset id="12481902875799061339" />
-				<asset id="8516424247911081882" />
-				<asset id="13066962117475294699" />
-				<asset id="8278267062437143908" />
-				<asset id="11899037261027001871" />
-				<asset id="9259023496691373830" />
-				<asset id="17609061689371429374" />
-				<asset id="16433777362359107051" />
-				<asset id="6442896494210788336" />
-				<asset id="9982885843422301257" />
-				<asset id="12905700904638375959" />
-				<asset id="4433589687851789986" />
-				<asset id="7134549883078153204" />
-				<asset id="16802595561437569012" />
-				<asset id="3141670239837598167" />
-				<asset id="9597270660643200283" />
-				<asset id="7828235550831262528" />
-				<asset id="3896235491247276846" />
-				<asset id="8500731170233352881" />
-				<asset id="4690097972575528741" />
-				<asset id="10442660321487768060" />
-				<asset id="1871631737557762573" />
-				<asset id="12743098108378503389" />
-				<asset id="5566511043970023990" />
-				<asset id="1342014580749612205" />
-				<asset id="5881197981723773648" />
-				<asset id="536144016587963317" />
-				<asset id="16188938477540380059" />
-				<asset id="6526748081087258995" />
-				<asset id="8471173016931614307" />
-				<asset id="8873585271583433440" />
-				<asset id="18306466866728853464" />
-				<asset id="16400249283682339577" />
-				<asset id="15923557078502233003" />
-				<asset id="5662560059332976863" />
-				<asset id="8244919150754946240" />
-				<asset id="8728257625113293956" />
-				<asset id="595410454983708723" />
-				<asset id="7658765312147272103" />
-				<asset id="710688546758584962" />
-				<asset id="6383748451934980636" />
-				<asset id="340518257206041584" />
-				<asset id="8672637954975676839" />
-				<asset id="3279320859037480687" />
-				<asset id="10557747403606690599" />
-				<asset id="5013505582094035688" />
+				<asset id="6821323930489449866" />
+				<asset id="15707648693637362519" />
+				<asset id="15494278442160997876" />
+				<asset id="12258862260398229919" />
+				<asset id="15480356623442316131" />
+				<asset id="15105991775425590411" />
+				<asset id="15736950743222167179" />
+				<asset id="3309908687221078120" />
+				<asset id="478637570008385148" />
+				<asset id="13926615633586525356" />
+				<asset id="3354284133871997233" />
+				<asset id="3743486052521502237" />
+				<asset id="424447668476012241" />
+				<asset id="2043167321661012219" />
+				<asset id="15123235231787382326" />
+				<asset id="4238974430990906166" />
+				<asset id="15656013182911590714" />
+				<asset id="6129564072962963395" />
+				<asset id="6530222108014763712" />
+				<asset id="2911134701275487738" />
+				<asset id="7422990079585673348" />
+				<asset id="15614272661704708246" />
+				<asset id="9557344177915405648" />
+				<asset id="8762138403626983777" />
+				<asset id="14734670575704946128" />
+				<asset id="4472597104761905740" />
+				<asset id="4061686575005622426" />
+				<asset id="12193126832684816324" />
+				<asset id="10942215348825794297" />
+				<asset id="3598299635295503879" />
+				<asset id="3428093424867074468" />
+				<asset id="16800658491279134617" />
+				<asset id="1634218532384888456" />
+				<asset id="2238323739019051610" />
+				<asset id="10539863702026016304" />
+				<asset id="14982852026181347953" />
+				<asset id="15087591946672183488" />
+				<asset id="12885844448707208576" />
+				<asset id="7533895646110018095" />
+				<asset id="12452779925359023967" />
+				<asset id="8223522733131654426" />
+				<asset id="7587915834281663615" />
+				<asset id="946955834701380047" />
+				<asset id="10616646186511786117" />
+				<asset id="8603442196216598827" />
+				<asset id="300095207089220923" />
+				<asset id="1878162871665795725" />
+				<asset id="7390662791510443022" />
+				<asset id="15488290601503610988" />
+				<asset id="11796750715093001051" />
+				<asset id="1149394709758921794" />
+				<asset id="816345457027329498" />
+				<asset id="11939499065793533634" />
+				<asset id="4777577311454686282" />
+				<asset id="15905751116201647528" />
+				<asset id="5279199355986321753" />
+				<asset id="1492943122134396057" />
+				<asset id="3875825513342427284" />
+				<asset id="1202235795030096119" />
+				<asset id="17412273748554536738" />
+				<asset id="4340533115004499580" />
+				<asset id="15756316532386484444" />
+				<asset id="877953592482601967" />
+				<asset id="1564948156726689372" />
+				<asset id="18196806215101170758" />
+				<asset id="16649688490782950711" />
+				<asset id="5763467433787611144" />
+				<asset id="13324132057652921848" />
+				<asset id="5464228002094266693" />
+				<asset id="6211665367008605761" />
+				<asset id="11951251311932860960" />
+				<asset id="12025088993850379131" />
+				<asset id="12048633284663545151" />
+				<asset id="12852256200422343373" />
+				<asset id="6989632297606705879" />
+				<asset id="3345886961631904067" />
+				<asset id="11334225855161162768" />
+				<asset id="13426370212052489245" />
+				<asset id="9639728184675267699" />
+				<asset id="7268436206606386945" />
+				<asset id="15139339556210378670" />
+				<asset id="5329420925859405225" />
+				<asset id="16137751152504758528" />
+				<asset id="16041766311173267564" />
+				<asset id="6329727678927033192" />
+				<asset id="17777274143322227044" />
+				<asset id="4944789593636629743" />
+				<asset id="11317890540364522127" />
+				<asset id="13905896198562195326" />
+				<asset id="17586613946027266896" />
+				<asset id="4946007362793024490" />
+				<asset id="678499842915750937" />
+				<asset id="15217202098710740502" />
+				<asset id="2885148508309554709" />
+				<asset id="14221560509029613657" />
+				<asset id="2438549247595676852" />
+				<asset id="1777559597648611261" />
+				<asset id="1065929472871541884" />
+				<asset id="13662382306470196995" />
+				<asset id="15708926936814169236" />
+				<asset id="3664236334890312803" />
+				<asset id="9038780740806438598" />
+				<asset id="8159196784100291954" />
+				<asset id="18229859036382935608" />
+				<asset id="4006578466370939734" />
+				<asset id="6799020370560439919" />
+				<asset id="17685501711970563915" />
+				<asset id="15738859340948404847" />
+				<asset id="10550991563318102171" />
+				<asset id="14378911529074221710" />
+				<asset id="2113291220419743203" />
+				<asset id="13276586351729745810" />
+				<asset id="4409711521313801727" />
+				<asset id="11278928855447817216" />
+				<asset id="2737505010536878191" />
+				<asset id="14339428353332954227" />
+				<asset id="15554755375909878522" />
+				<asset id="6356139228568509938" />
+				<asset id="11269733127813466460" />
+				<asset id="6013052154793223709" />
+				<asset id="11212913862343232150" />
+				<asset id="1138413461345156869" />
+				<asset id="1151699283495899994" />
+				<asset id="17773144561080017389" />
+				<asset id="2722535068856402990" />
+				<asset id="12527032742398994715" />
+				<asset id="5225671756782759828" />
+				<asset id="9998438861026723196" />
+				<asset id="13065660926957744251" />
+				<asset id="10539595627146914201" />
+				<asset id="9323117576334305747" />
+				<asset id="5947883419478449143" />
+				<asset id="1809594345173219201" />
+				<asset id="11513812413706120886" />
+				<asset id="254351250918281727" />
+				<asset id="10089318542326740854" />
+				<asset id="10779988123781981608" />
+				<asset id="17667685749646719919" />
+				<asset id="4436960314600194995" />
+				<asset id="17557519783577609135" />
+				<asset id="564498680071209997" />
+				<asset id="9933069643703724944" />
+				<asset id="3243835868968365753" />
+				<asset id="16017813410404172908" />
+				<asset id="16647733503494839853" />
+				<asset id="16117279983734171331" />
+				<asset id="7731703402212178135" />
+				<asset id="10314384134102876577" />
+				<asset id="11463315271433583671" />
+				<asset id="9621119413198340941" />
+				<asset id="9156660422646766573" />
+				<asset id="18295792623904180799" />
+				<asset id="13234721020632064474" />
+				<asset id="17891079397140374381" />
+				<asset id="5094123188717062785" />
+				<asset id="1427427009888421038" />
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="8038663488343640909">
+	<entity id="13664878832482731424">
 		<name>floor</name>
 		<components>
 			<transform>
@@ -1463,7 +1373,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="1329497289746763011">
+	<entity id="116178453441803352">
 		<name>Hotel Text</name>
 		<components>
 			<transform>
@@ -1494,7 +1404,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="13177734415341135142">
+	<entity id="3541120923865621144">
 		<name>Hotel Globe</name>
 		<components>
 			<transform>
@@ -1553,7 +1463,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="12445901793620748721">
+	<entity id="5600970839758798136">
 		<name>Maria2</name>
 		<components>
 			<transform>
@@ -1580,83 +1490,83 @@
 				<asset id="15489544064304679966" />
 				<asset id="973994704895234125" />
 				<asset id="9119260863851803470" />
-				<asset id="7647570438755011243" />
+				<asset id="11347424744075207176" />
 				<asset id="13448807737582255194" />
 				<asset id="1775887801633620992" />
 				<asset id="17507503211570519290" />
-				<asset id="2253846376972762032" />
+				<asset id="6008852997596855514" />
 				<asset id="15738829482254591582" />
 				<asset id="11320124524096252609" />
 				<asset id="15852761581089009655" />
-				<asset id="8045739521635595901" />
+				<asset id="16560614625474274785" />
 				<asset id="14889063849814013339" />
 				<asset id="6872858846407735403" />
 				<asset id="9950852681091147573" />
 				<asset id="15331874295259408168" />
 				<asset id="14589283039267500247" />
 				<asset id="17341370474489989891" />
-				<asset id="2767233008459693244" />
+				<asset id="8902889490202807219" />
 				<asset id="11407911957120041376" />
 				<asset id="144249318080946527" />
 				<asset id="6992895004641082821" />
-				<asset id="13538267673081261622" />
+				<asset id="4590540483085026378" />
 				<asset id="11638172514161405102" />
 				<asset id="12581489339348930553" />
 				<asset id="5456104371670350545" />
 				<asset id="6899114122432929765" />
 				<asset id="9148886968628633230" />
-				<asset id="11642928356674734499" />
+				<asset id="1677626161950967980" />
 				<asset id="6674580960001017622" />
 				<asset id="18096303205330382260" />
 				<asset id="14130250290308491709" />
 				<asset id="13211235978194572296" />
 				<asset id="9155218134654482415" />
-				<asset id="14432737900283851938" />
+				<asset id="12057710431474837767" />
 				<asset id="4061028545029344690" />
 				<asset id="3632705004952533842" />
-				<asset id="15388505124489714341" />
+				<asset id="14509872967894640034" />
 				<asset id="4864041671742912436" />
 				<asset id="9437182474397131829" />
-				<asset id="13948880775511495405" />
+				<asset id="5582256697428011189" />
 				<asset id="8789314357282718822" />
 				<asset id="11090342705187135376" />
 				<asset id="10003990409688187926" />
-				<asset id="12953936200904951585" />
+				<asset id="14563222725557895848" />
 				<asset id="17553231281515936482" />
 				<asset id="3928111698729327944" />
-				<asset id="7886382959379260374" />
+				<asset id="7514694152606304326" />
 				<asset id="3738543799811351848" />
 				<asset id="3699727975337508830" />
-				<asset id="11102368939904496098" />
+				<asset id="17480128979166759177" />
 				<asset id="12592441784088677572" />
 				<asset id="5302792628426739960" />
 				<asset id="6096730832695978630" />
-				<asset id="685781090090431333" />
+				<asset id="7664716974976211681" />
 				<asset id="1292255940940196463" />
 				<asset id="16213954229325546758" />
-				<asset id="15996392229441836527" />
+				<asset id="3999946386983275874" />
 				<asset id="3754675717596058791" />
 				<asset id="3544818015470181365" />
-				<asset id="13170600350105191780" />
+				<asset id="11204208664634157691" />
 				<asset id="14054929793206324484" />
 				<asset id="2525894130466251946" />
 				<asset id="9972777669287200465" />
-				<asset id="1059023954601126587" />
+				<asset id="13790448133024065490" />
 				<asset id="9519212390223179871" />
 				<asset id="1142595776340762586" />
-				<asset id="17877894644631752855" />
+				<asset id="1997800593753760052" />
 				<asset id="9741521593493258725" />
 				<asset id="15595534176273886854" />
-				<asset id="17414211796263160815" />
+				<asset id="3055510432968193205" />
 				<asset id="5297204094267386446" />
 				<asset id="16199699239858164488" />
 				<asset id="2968355345609696929" />
 				<asset id="17812125151441680189" />
-				<asset id="15158299011211673475" />
+				<asset id="392433858313556035" />
 				<asset id="4039759619394143783" />
 				<asset id="777890481523871416" />
 				<asset id="418192256056270180" />
-				<asset id="7002982395919190205" />
+				<asset id="15350965269831659085" />
 				<asset id="1759039100575268191" />
 				<asset id="5389327024248110343" />
 				<asset id="7980209425309067467" />
@@ -1664,101 +1574,107 @@
 				<asset id="8112436747432812943" />
 				<asset id="5548648320205130700" />
 				<asset id="7945027311352785320" />
-				<asset id="84943660127537061" />
+				<asset id="6223281672192031953" />
 				<asset id="11442572170504568969" />
 				<asset id="17299551083000617005" />
-				<asset id="1282392375257246865" />
+				<asset id="8394857481821996610" />
 				<asset id="14214965330683872102" />
 				<asset id="5372777990198681828" />
-				<asset id="17083138000373882329" />
+				<asset id="8995563028590762386" />
 				<asset id="6254575053946316043" />
 				<asset id="12466874559383438679" />
 				<asset id="13895257813555553633" />
-				<asset id="11905815522764016006" />
+				<asset id="9694702226394715456" />
 				<asset id="9158805442600741502" />
 				<asset id="6213672022454755874" />
-				<asset id="17464006841147772466" />
+				<asset id="12937317884244358219" />
 				<asset id="2152342267317918824" />
 				<asset id="2673539511837125155" />
-				<asset id="11706170576719962566" />
+				<asset id="6825140570053975748" />
 				<asset id="4867842926812273160" />
 				<asset id="17941004622338861940" />
 				<asset id="13192561824988724284" />
-				<asset id="4818679694452610896" />
+				<asset id="498125076760771388" />
 				<asset id="7993269989231792412" />
 				<asset id="8837521696750290422" />
-				<asset id="18172890869742990365" />
+				<asset id="16361820057368151686" />
 				<asset id="3186326114176438675" />
 				<asset id="7229287939227112421" />
-				<asset id="61652365878261026" />
+				<asset id="12098742629609239585" />
 				<asset id="4511896085041186738" />
 				<asset id="18386148252792591213" />
 				<asset id="1651333293938867163" />
-				<asset id="18395758676882198602" />
+				<asset id="3146539843263370902" />
 				<asset id="12360296137235553991" />
 				<asset id="1434277848762868834" />
-				<asset id="14432005843487345681" />
+				<asset id="4410400159740413808" />
 				<asset id="2892743385255656264" />
 				<asset id="5291974072293686612" />
-				<asset id="14242235285098621103" />
+				<asset id="5969202431584422109" />
 				<asset id="1261006175989208182" />
 				<asset id="7409123379162248311" />
 				<asset id="17391847544533065543" />
-				<asset id="14594782217061961306" />
+				<asset id="13132426405575869251" />
 				<asset id="9902351204200938508" />
 				<asset id="13442730691489439079" />
-				<asset id="9065915556968952649" />
+				<asset id="13774269530259090298" />
 				<asset id="4228967827621302618" />
 				<asset id="4528470222332665372" />
-				<asset id="18104624875189751837" />
+				<asset id="1778128624934901654" />
 				<asset id="7580682886439445364" />
 				<asset id="344819083965775089" />
 				<asset id="789160374816391686" />
 				<asset id="9119577392088133313" />
-				<asset id="6875922257539644080" />
+				<asset id="12743902824997490842" />
 				<asset id="5708289871327191583" />
 				<asset id="9401226105962259101" />
 				<asset id="14034654794613596153" />
-				<asset id="9934676392368339138" />
+				<asset id="8394666923854642784" />
 				<asset id="5497393932319151362" />
 				<asset id="14396790484865853874" />
 				<asset id="14607741349357961776" />
-				<asset id="18371285329637847492" />
+				<asset id="634736370808582076" />
 				<asset id="14122359019164789477" />
 				<asset id="4352647986905558114" />
 				<asset id="8919462002429820270" />
-				<asset id="3791945015162588253" />
+				<asset id="10169278386237488385" />
 				<asset id="6395115187556021557" />
 				<asset id="17440779138237318897" />
 				<asset id="650609923721621981" />
 				<asset id="16298347935178724727" />
-				<asset id="3767920123275435682" />
+				<asset id="9814157536999380070" />
 				<asset id="17513198380071590706" />
 				<asset id="9066253543542261539" />
 				<asset id="15890619834578177130" />
-				<asset id="9816069607258468909" />
+				<asset id="1658903959951294971" />
 				<asset id="16750825541189147795" />
 				<asset id="4771076382909457415" />
 				<asset id="13253303486297224115" />
-				<asset id="16640936372283043102" />
+				<asset id="704167057177193001" />
 				<asset id="3233077002567996855" />
 				<asset id="2518149677965362738" />
 				<asset id="17960086667129656689" />
-				<asset id="2799728141807431702" />
+				<asset id="14564479607315997246" />
 				<asset id="4455604911513964123" />
 				<asset id="6594838329322470530" />
-				<asset id="4652310213923300068" />
-				<asset id="2945552769737978712">
+				<asset id="12019577797180154873" />
+				<asset id="6913868964508405612">
 					<material_path>assets/models/maria/mat_maria.xml</material_path>
+					<animation>assets/models/maria/Great Sword Idle_1_7.fbx</animation>
+					<animation>assets/models/maria/Great Sword Idle7.fbx</animation>
+					<animation>assets/models/maria/Great Sword Slash7.fbx</animation>
 				</asset>
-				<asset id="10336681979515237852" />
-				<asset id="7381200324943063847">
+				<asset id="4352826466422773122" />
+				<asset id="8796253262013182196">
 					<material_path>assets/materials/cyan_mat.xml</material_path>
+					<animation>assets/models/maria/Great Sword Idle_1_7.fbx</animation>
+					<animation>assets/models/maria/Great Sword Idle7.fbx</animation>
+					<animation>assets/models/maria/Great Sword Slash7.fbx</animation>
 				</asset>
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="6722628525910997845">
+	<entity id="15556201976577319855">
 		<name>Hotel Upper duplicate 21</name>
 		<components>
 			<transform>
@@ -1766,6 +1682,96 @@
 				<position>
 					<x>100.000000</x>
 					<y>218.000000</y>
+					<z>150.000000</z>
+				</position>
+				<rotation>
+					<x>-90.000000</x>
+					<y>90.000000</y>
+					<z>0.000000</z>
+				</rotation>
+				<scale>
+					<x>15.000000</x>
+					<y>15.000000</y>
+					<z>15.000000</z>
+				</scale>
+			</transform>
+			<asset_component>
+				<file_location>assets//models/hotel/hotelupper.fbx.vasset</file_location>
+				<asset id="13892452436661511033" />
+				<asset id="16030070613010530148" />
+				<asset id="3401543588729655467">
+					<material_path>assets//models/hotel/hotel_upper_mat.xml</material_path>
+				</asset>
+			</asset_component>
+		</components>
+	</entity>
+	<entity id="1773997230311067071">
+		<name>floor duplicate 22</name>
+		<components>
+			<transform>
+				<enabled>1</enabled>
+				<position>
+					<x>230.000000</x>
+					<y>218.000000</y>
+					<z>150.000000</z>
+				</position>
+				<rotation>
+					<x>90.000000</x>
+					<y>0.000000</y>
+					<z>0.000000</z>
+				</rotation>
+				<scale>
+					<x>130.000000</x>
+					<y>20.000000</y>
+					<z>1.000000</z>
+				</scale>
+			</transform>
+			<light>
+				<enabled>1</enabled>
+				<intensity>1.000000</intensity>
+				<diffuse>
+					<r>1.000000</r>
+					<g>1.000000</g>
+					<b>1.000000</b>
+					<w>1.000000</w>
+				</diffuse>
+				<specular>
+					<r>1.000000</r>
+					<g>1.000000</g>
+					<b>1.000000</b>
+					<w>1.000000</w>
+				</specular>
+				<attenuation>
+					<x>0.010000</x>
+					<y>0.010000</y>
+					<z>0.000000</z>
+					<w>1.000000</w>
+				</attenuation>
+				<lightparams>
+					<x>2.000000</x>
+					<y>0.000000</y>
+					<z>0.000000</z>
+					<w>0.000000</w>
+				</lightparams>
+			</light>
+			<asset_component>
+				<file_location>assets/models/plane.fbx.vasset</file_location>
+				<asset id="16733578272278694185" />
+				<asset id="4698752832796492098" />
+				<asset id="4006000822398687977">
+					<material_path>assets/models/hotel/hotel_floor_base_mat.xml</material_path>
+				</asset>
+			</asset_component>
+		</components>
+	</entity>
+	<entity id="6291854846669246897">
+		<name>Hotel Upper duplicate 23</name>
+		<components>
+			<transform>
+				<enabled>1</enabled>
+				<position>
+					<x>100.000000</x>
+					<y>327.000000</y>
 					<z>150.000000</z>
 				</position>
 				<rotation>

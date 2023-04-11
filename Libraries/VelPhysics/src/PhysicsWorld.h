@@ -21,7 +21,10 @@ namespace physics
 			virtual void AddBody(iCollisionBody* body) override;
 			virtual void RemoveBody(iCollisionBody* body) override;
 
+			virtual iCharacterController* CreateCharacterController(CharacterControllerDesc desc) override;
+
 			virtual void TimeStep(float dt) override;
+
 
 			virtual void RegisterCollisionListener(iCollisionListener* listener) override
 			{

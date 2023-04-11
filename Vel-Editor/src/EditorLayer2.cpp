@@ -4,6 +4,7 @@
 #include <imgui/imgui.h>
 #include <imgui/misc/cpp/imgui_stdlib.h>
 #include <glm/gtc/type_ptr.hpp>
+#include <CharacterControllerDesc.h>
 
 namespace vel
 {
@@ -91,7 +92,11 @@ namespace vel
 			if (m_ViewportFocused)
 				m_EditorCamera.OnUpdate(ts);
 		}
-
+		if (controller)
+		{
+			if (Input::IsKeyPressed(KeyCode::W))
+				controller->AddForce({ 0.f, 0.f, 5.f });
+		}
 		{
 			VEL_PROFILE_SCOPE("Renderer Prep");
 			m_RenderBuffer->Bind();
@@ -418,6 +423,7 @@ namespace vel
 		bool hasAnimator = false;
 		bool hasAsset = false;
 		bool hasLight = false;
+		bool hasCC = false;
 		ImGui::Begin("Inspector");
 		if (m_SelectedEntity != entt::null)
 		{
@@ -441,6 +447,7 @@ namespace vel
 			ImGui::Text(std::to_string(entity.GetGUID()).c_str());
 			ImGui::Separator();
 
+			// Transform
 			{
 				ImGui::BulletText("Transform");
 				{
@@ -462,6 +469,7 @@ namespace vel
 			}
 			ImGui::EndGroup();
 
+			// Light
 			ImGui::BeginGroup();
 			{
 				if (entity.HasComponent< LightComponent>())
@@ -497,6 +505,7 @@ namespace vel
 			}
 			ImGui::EndGroup();
 
+			// Asset
 			ImGui::BeginGroup();
 
 			{
@@ -528,6 +537,7 @@ namespace vel
 
 			ImGui::EndGroup();
 
+			// Animator
 			ImGui::BeginGroup();
 
 			{
@@ -539,13 +549,34 @@ namespace vel
 					if (ImGui::Button("Load Animation##btnLoadAnim"))
 					{
 						MeshComponent& mesh = entity.GetComponent<MeshComponent>();
-						if (!animator.animator)
-						{
-							animator.animator = CreateRef<Animator>(nullptr);
-						}
 						animator.LoadAnimation(mesh.MeshDrawData);
 						//m_ActiveScene->LoadAnimation(animator.animation);
 					}
+					for (Animation* animation : animator.List_Animations)
+					{
+						ImGui::TextColored({0.8f, 0.8f, 0.2f, 1.f}, animation->name.c_str());
+						ImGui::SameLine();
+						std::string label = "Play##" + animation->name + "Playbtn";
+						if (ImGui::Button(label.c_str()))
+						{
+							animator.animator->PlayAnimation(animation);
+						}
+					}
+				}
+			}
+
+			ImGui::EndGroup();
+
+			// Character Controller
+			ImGui::BeginGroup();
+
+			{
+				if (entity.HasComponent<CharacterControllerComponent>())
+				{
+					hasCC = true;
+					CharacterControllerComponent characterController = entity.GetComponent<CharacterControllerComponent>();
+					ImGui::InputFloat("Radius##ccRadius", &characterController.radius);
+					ImGui::InputFloat("Height##ccHeight", &characterController.height);
 				}
 			}
 
@@ -561,16 +592,6 @@ namespace vel
 
 					ImGui::Separator();
 					ImGui::BulletText("Mesh Renderer");
-					ImGui::SameLine();
-					ImGui::Checkbox("##EnableRenderert", &mesh->Enabled);
-					ImGui::InputText("Mesh Path", &mesh->Path);
-					ImGui::Checkbox("Use FBX Textures", &mesh->UseFBXTextures);
-					ImGui::SameLine();
-					if (ImGui::Button("Load Mesh"))
-					{
-						mesh->ModelIns = MeshRenderer::LoadMesh(mesh->Path, mesh->UseFBXTextures, false, m_ActiveScene.get());
-					}
-					ImGui::Separator();
 					ImGui::BulletText("Material");
 					Ref<Material> material = MaterialSystem::GetMaterial(mesh->MaterialPath);
 					if (!material)
@@ -745,6 +766,7 @@ namespace vel
 			}
 			ImGui::EndGroup();
 
+			// Add Component
 			{
 				if (ImGui::Button("Add Component"))
 				{
@@ -788,6 +810,23 @@ namespace vel
 									entity.AddComponent<AnimatorComponent>(AnimatorComponent());
 									ImGui::CloseCurrentPopup();
 								}
+							}
+						}
+						if (!hasCC)
+						{
+							if (ImGui::MenuItem("Character Controller"))
+							{
+								addComponentCalled = false;
+								CharacterControllerComponent characterController;
+								physics::CharacterControllerDesc desc;
+								desc.height = 2.f;
+								desc.radius = 2.f;
+								desc.position = entity.Transform().Translation;
+								desc.rotation = entity.Transform().GetRotation();
+								characterController.characterController = m_ActiveScene->GetPhysicsWorld()->CreateCharacterController(desc);
+								controller = characterController.characterController;
+								entity.AddComponent<CharacterControllerComponent>();
+								ImGui::CloseCurrentPopup();
 							}
 						}
 						/*if (!hasMesh)

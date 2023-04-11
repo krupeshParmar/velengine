@@ -21,6 +21,7 @@ namespace vel
 		VEL_CORE_ERROR(importer->GetErrorString());
 		VEL_CORE_ASSERT(scene && scene->mRootNode, "");
 		auto animation = scene->mAnimations[0];
+		name = animationPath;
 		m_Duration = animation->mDuration;
 		m_TicksPerSecond = animation->mTicksPerSecond;
 		ReadHeirarchyData(m_RootNode, scene->mRootNode);
@@ -64,7 +65,6 @@ namespace vel
 	void Animation::ReadHeirarchyData(AssimpNodeData& dest, const aiNode* src)
 	{
 		VEL_CORE_ASSERT(src, "");
-		VEL_CORE_TRACE("Adding Node: {0}", src->mName.data);
 		dest.name = src->mName.data;
 		dest.transformation = AssimpGLMHelpers::ConvertMatrixToGLMFormat(src->mTransformation);
 		dest.childrenCount = src->mNumChildren;

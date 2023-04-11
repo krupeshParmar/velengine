@@ -199,7 +199,6 @@ namespace vel
         m_BoneCounter = 0;
         meshData->m_BoneInfoMap = new std::unordered_map<std::string, BoneInfo>();
         meshData->m_BoneInfoMap->reserve(mesh->mNumBones);
-        VEL_CORE_INFO("{0} has {1} bones", mesh->mName.data, mesh->mNumBones);
         for (int boneIndex = 0; boneIndex < mesh->mNumBones; boneIndex++)
         {
             int boneID = -1;
@@ -219,7 +218,6 @@ namespace vel
                 boneID = meshData->m_BoneInfoMap->at(boneName).id;
             }
             VEL_CORE_ASSERT(boneID != -1, "Bone is invalid");
-            VEL_CORE_WARN("{0} Adding {1}, index: {2}",m_Name,boneName, boneID);
             auto weights = mesh->mBones[boneIndex]->mWeights;
             int numWeights = mesh->mBones[boneIndex]->mNumWeights;
 
@@ -246,7 +244,6 @@ namespace vel
         Ref<MeshData> newMeshData = CreateRef<MeshData>();
         int numVer = 0;
         // Get all the vertex data
-        VEL_CORE_TRACE("{0}: Total vertices: {1}", m_Name, aimesh->mNumVertices);
         for (unsigned int i = 0; i < aimesh->mNumVertices; i++)
         {
             Vertices vertex;
@@ -289,7 +286,6 @@ namespace vel
 
             newMeshData->m_Vertices.push_back(vertex);
         }
-        VEL_CORE_TRACE("{0}: Total vertices transformed: {1}", m_Name, numVer);
 
         // Get all the indices
         for (unsigned int i = 0; i < aimesh->mNumFaces; i++)
@@ -421,11 +417,22 @@ namespace vel
                 std::string materialLocation = modelLoadData.materialPath;
                 if (modelLoadData.assetData.find(entity->GetAssetID()) != modelLoadData.assetData.end())
                 {
-                    materialLocation = modelLoadData.assetData[entity->GetAssetID()].MaterialLocation;
+                    Asset asset = modelLoadData.assetData[entity->GetAssetID()];
+                    materialLocation = asset.MaterialLocation;
                     Ref<Material> material = MaterialSystem::GetMaterial(materialLocation);
                     if (material)
                         meshcomp->MaterialIns = material;
                     meshcomp->MaterialPath = materialLocation;
+                    if (!asset.AnimationsList.empty())
+                    {
+                        AnimatorComponent animatorComponent;
+                        for (std::string animationName : asset.AnimationsList)
+                        {
+                            Animation* animation = new Animation(animationName, data);
+                            animatorComponent.List_Animations.push_back(animation);
+                        }
+                        entity->AddComponent<AnimatorComponent>(animatorComponent);
+                    }
                 }
                 m_AssetHandle.push_back({ entity->Name(),entity->GetGUID(),entity->GetAssetID(), materialLocation});
                 //MeshRenderer::AddMeshData(entity->GetAssetID(), data);

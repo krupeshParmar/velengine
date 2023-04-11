@@ -6,6 +6,8 @@
 #include "vel/Core/Timestep.h"
 #include <glm/glm.hpp>
 #include "Component.h"
+#include <iPhysicsFactory.h>
+#include <iPhysicsWorld.h>
 
 namespace vel
 {
@@ -76,6 +78,7 @@ namespace vel
 		void DrawSkyBox(glm::mat4 viewProjection);
 		void BindLightData(Ref<Shader> shader, glm::vec4 eyepos);
 		void LoadAnimation(Animation* animation);
+		physics::iPhysicsWorld* GetPhysicsWorld() { return m_PhysicsWorld; }
 
 		std::string ScenePath;
 		Ref<Shader> m_Shader;
@@ -109,6 +112,8 @@ namespace vel
 		float step = 0;
 
 		Animator* mainAnimator;
+		physics::iPhysicsFactory* m_PhysicsFactory;
+		physics::iPhysicsWorld* m_PhysicsWorld;
 
 		friend class Entity;
 	};

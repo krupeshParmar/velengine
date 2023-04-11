@@ -92,7 +92,8 @@
       <AdditionalDependencies>..\VelEngine\vendor\assimp3.2\bin\Debug\assimp-vc130-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Debug\assimp-vc130-mtd.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Debug\assimp-vc130-mtd.dll" "..\bin\Debug-windows-x86_64\Vel-Editor" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Debug\assimp-vc130-mtd.dll" "..\bin\Debug-windows-x86_64\Vel-Editor" &gt; nul)</Command>
+      <Command>IF EXIST "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug"\ (xcopy /Q /E /Y /I "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug" "..\bin\Debug-windows-x86_64\Vel-Editor" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug" "..\bin\Debug-windows-x86_64\Vel-Editor" &gt; nul)
+IF EXIST "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Debug\assimp-vc130-mtd.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Debug\assimp-vc130-mtd.dll" "..\bin\Debug-windows-x86_64\Vel-Editor" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Debug\assimp-vc130-mtd.dll" "..\bin\Debug-windows-x86_64\Vel-Editor" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -117,7 +118,8 @@
       <AdditionalDependencies>..\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.dll" "..\bin\Release-windows-x86_64\Vel-Editor" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.dll" "..\bin\Release-windows-x86_64\Vel-Editor" &gt; nul)</Command>
+      <Command>IF EXIST "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release"\ (xcopy /Q /E /Y /I "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release" "..\bin\Release-windows-x86_64\Vel-Editor" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release" "..\bin\Release-windows-x86_64\Vel-Editor" &gt; nul)
+IF EXIST "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.dll" "..\bin\Release-windows-x86_64\Vel-Editor" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.dll" "..\bin\Release-windows-x86_64\Vel-Editor" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
@@ -142,7 +144,8 @@
       <AdditionalDependencies>..\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.dll" "..\bin\Dist-windows-x86_64\Vel-Editor" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.dll" "..\bin\Dist-windows-x86_64\Vel-Editor" &gt; nul)</Command>
+      <Command>IF EXIST "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release"\ (xcopy /Q /E /Y /I "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release" "..\bin\Dist-windows-x86_64\Vel-Editor" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release" "..\bin\Dist-windows-x86_64\Vel-Editor" &gt; nul)
+IF EXIST "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.dll" "..\bin\Dist-windows-x86_64\Vel-Editor" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.dll" "..\bin\Dist-windows-x86_64\Vel-Editor" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -150,16 +153,12 @@
     <ClInclude Include="src\EditorLayer2.h" />
     <ClInclude Include="src\Example.h" />
     <ClInclude Include="src\SceneManager.h" />
-    <ClInclude Include="src\temp\AIProject2.h" />
-    <ClInclude Include="src\temp\PhysicsProject1.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\EditorLayer2.cpp" />
     <ClCompile Include="src\SceneManager.cpp" />
     <ClCompile Include="src\VelEngineApp.cpp" />
-    <ClCompile Include="src\temp\AIProject2.cpp" />
-    <ClCompile Include="src\temp\PhysicsProject1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VelEngine\VelEngine.vcxproj">

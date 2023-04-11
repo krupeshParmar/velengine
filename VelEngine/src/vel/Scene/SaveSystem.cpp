@@ -623,6 +623,20 @@ namespace vel
 						}
 					}
 
+					if (assetEntity.HasComponent<AnimatorComponent>())
+					{
+						AnimatorComponent& animator = assetEntity.GetComponent<AnimatorComponent>();
+
+						if (!animator.List_Animations.empty())
+						{
+							for (Animation* animation : animator.List_Animations)
+							{
+								pugi::xml_node assetAnimation = assetNode.append_child("animation");
+								assetAnimation.append_child(pugi::node_pcdata).set_value(animation->name.c_str());
+							}
+						}
+					}
+
 					for (GUID id : assetEntity.Children())
 					{
 						Entity childEntity = scene->GetEntityWithGUID(id);
@@ -991,6 +1005,14 @@ namespace vel
 										{
 											pugi::xml_node assetDataNode = *assetNodeIterator;
 											std::string assetDataNodeName = assetDataNode.name();
+											if (assetDataNodeName == "animation")
+											{
+												std::map<GUID, Asset>::iterator assMapIT = assetsData.find(GUID(id));
+												if (assMapIT != assetsData.end())
+												{
+													assMapIT->second.AnimationsList.push_back(assetDataNode.child_value());
+												}
+											}
 											if (assetDataNodeName == "material_path")
 											{
 												std::map<GUID, Asset>::iterator assMapIT = assetsData.find(GUID(id));

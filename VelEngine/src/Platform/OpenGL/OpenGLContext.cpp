@@ -30,10 +30,14 @@ namespace vel
 		ssversion << glGetString(GL_VERSION);
 		version = ssversion.str();
 
+		GLint maxText = 0;
+		glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &maxText);
+
 		VEL_CORE_INFO("OpenGLInfo: ");
 		VEL_CORE_INFO("  Vendor: {0}", vendor);
 		VEL_CORE_INFO("  Renderer: {0}", renderer);
 		VEL_CORE_INFO("  Version: {0}", version);
+		VEL_CORE_INFO("  Max Combie Texture Units: {0}", maxText);
 
 	}
 	void OpenGLContext::SwapBuffers()

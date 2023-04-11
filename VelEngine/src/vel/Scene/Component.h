@@ -9,6 +9,8 @@
 #include "vel/Renderer/Texture.h"
 #include "vel/Core/GUID.h"
 #include "vel/Math/Math.h"
+#include <RigidBodyDesc.h>
+#include <iCharacterController.h>
 
 namespace vel
 {
@@ -43,6 +45,7 @@ namespace vel
 		GUID ID = 0;
 		GUID AssetID = 0;
 		std::string MaterialLocation;
+		std::vector<std::string> AnimationsList;
 	};
 
 	struct TagComponent
@@ -138,6 +141,24 @@ namespace vel
 		}
 	};
 
+	struct RigidbogyComponent
+	{
+		physics::RigidBodyDesc desc;
+		physics::iRigidBody* rigidBody;
+	};
+
+	struct CharacterControllerComponent
+	{
+		CharacterControllerComponent()
+			:radius(1.f),height(2.f)
+		{
+			
+		}
+		float radius;
+		float height;
+		physics::iCharacterController* characterController;
+	};
+
 	struct BoneInfo
 	{
 		int id;
@@ -195,20 +216,20 @@ namespace vel
 	{
 		AnimatorComponent()
 		{
-
+			animator = CreateRef<Animator>(nullptr);
 		}
 		Ref<Animator> animator;
-		std::string AnimationPath;
-		Animation* animation;
+		std::string AnimationPath = "";
+		std::vector< Animation*> List_Animations;
 
 		void LoadAnimation(Ref<MeshData> meshData)
 		{
 			if (!AnimationPath.empty())
 			{
-				animation = new Animation(AnimationPath, meshData);
-				animator->PlayAnimation(animation);
+				Animation* animation = new Animation(AnimationPath, meshData);
+				List_Animations.push_back(animation);
+				AnimationPath.clear();
 			}
-			else animation = nullptr;
 		}
 	};
 
