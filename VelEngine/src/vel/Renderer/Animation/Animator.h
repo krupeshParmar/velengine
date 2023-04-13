@@ -15,7 +15,9 @@ namespace vel
 	private:
 		std::vector<glm::mat4> m_FinalBoneMatrices;
 		Animation* m_CurrentAnimation;
+		Animation* m_PreviousAnimation;
 		float m_CurrentTime;
 		float m_DeltaTime;
+		float m_TransitionTime = 1.f;
 	};
 }

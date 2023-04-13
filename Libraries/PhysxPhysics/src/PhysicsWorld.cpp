@@ -3,6 +3,7 @@
 #include <BoxShape.h>
 #include <CylinderShape.h>
 #include "CharacterController.h"
+#include <characterkinematic/PxController.h>
 namespace physics
 {
 	namespace physxim
@@ -46,15 +47,22 @@ namespace physics
 			}
 			m_CollisionHandler = new CollisionHandler();
 			mMaterial = mPhysics->createMaterial(0.5f, 0.5f, 0.6f);
+
+			mControllerManager = PxCreateControllerManager(*mScene);
+
 			physx::PxRigidActor* groundPlane = physx::PxCreatePlane(
 				*mPhysics, physx::PxPlane(
-					0,
-					1,
-					0,
+					0.f,
+					1.f,
+					0.f,
 					0.f
 				), *mMaterial);
-			mScene->addActor(*groundPlane);
-			m_RigidBodies.push_back(groundPlane);
+			if (groundPlane)
+			{
+				mScene->addActor(*groundPlane);
+				groundPlane->userData = nullptr;
+				m_RigidBodies.push_back(groundPlane);
+			}
 		}
 
 		PhysicsWorld::~PhysicsWorld()
@@ -89,23 +97,31 @@ namespace physics
 		}
 		iCharacterController* PhysicsWorld::CreateCharacterController(CharacterControllerDesc desc)
 		{
+			/*physx::PxShape* actorShape = mPhysics->createShape(
+				physx::PxBoxGeometry(
+					30.f,
+					30.f,
+					30.f
+				), *mMaterial);*/
 			physx::PxShape* actorShape = mPhysics->createShape(
 				physx::PxCapsuleGeometry(
 					physx::PxReal(desc.radius), physx::PxReal(desc.height)), *mPhysics->createMaterial(0.5, 0.8, 0));
 			physx::PxTransform transform(
-				physx::PxVec3(desc.position.x, desc.position.y, desc.position.z), 
-				{ desc.rotation.x, desc.rotation.y, desc.rotation.z, desc.rotation.w }
+				physx::PxVec3(desc.position.x, desc.position.y, desc.position.z),
+				physx::PxQuat(physx::PxHalfPi, physx::PxVec3(0, 0, 1))
 			);
 			CharacterController* characterController = new CharacterController();
-			physx::PxRigidDynamic* pseudoBody = mPhysics->createRigidDynamic(transform);
-			pseudoBody->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z, true);
-			pseudoBody->setRigidDynamicLockFlag(physx::PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, true);
-			characterController->SetController(pseudoBody);
-			characterController->SetMaxLinearVelocity(100.f);
-			characterController->SetMass(60.f);
-			characterController->AddForce({ 0, -1, 0 });
-			m_RigidBodies.push_back(pseudoBody);
-			mScene->addActor(*pseudoBody);
+			physx::PxCapsuleControllerDesc controllerDesc;
+			controllerDesc.height = 1.8f;
+			controllerDesc.climbingMode = physx::PxCapsuleClimbingMode::eCONSTRAINED;
+			controllerDesc.contactOffset = 0.05f;
+			controllerDesc.stepOffset = 0.1f;
+			controllerDesc.radius = 0.25f;
+			controllerDesc.position = physx::PxExtendedVec3(desc.position.x, desc.position.y, desc.position.z);
+			controllerDesc.upDirection = physx::PxVec3(0.0f, 1.0f, 0.0f);
+			controllerDesc.material = mPhysics->createMaterial(1.0f, 1.0f, 0.05);
+			physx::PxController* controller = mControllerManager->createController(controllerDesc);
+			characterController->SetController(controller);
 			return characterController;
 		}
 		void PhysicsWorld::TimeStep(float dt)

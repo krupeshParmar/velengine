@@ -11,6 +11,9 @@
 #include "vel/Math/Math.h"
 #include <RigidBodyDesc.h>
 #include <iCharacterController.h>
+#include <iShape.h>
+#include <iPhysicsWorld.h>
+#include <iPhysicsFactory.h>
 
 namespace vel
 {
@@ -33,19 +36,13 @@ namespace vel
 		{
 
 		}
+		AssetComponent(const AssetComponent& other)
+			:FileLocation(other.FileLocation), ModelInstance(other.ModelInstance)
+		{
+
+		}
 		std::string FileLocation;
 		Ref<Model> ModelInstance;
-	};
-
-	struct Asset
-	{
-		Asset() {};
-		Asset(std::string name, GUID id, GUID assetID, std::string materialLocation) : Name(name), ID(id), AssetID(assetID), MaterialLocation(materialLocation){}
-		std::string Name;
-		GUID ID = 0;
-		GUID AssetID = 0;
-		std::string MaterialLocation;
-		std::vector<std::string> AnimationsList;
 	};
 
 	struct TagComponent
@@ -88,7 +85,7 @@ namespace vel
 		glm::vec3 RotationEuler = { 0.0f, 0.0f, 0.0f };
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent& other) 
-			:Translation(other.Translation), Rotation(other.Rotation), RotationEuler(other.RotationEuler), Scale(other.Scale)
+			:Translation(other.Translation), Rotation(other.Rotation), RotationEuler(other.RotationEuler), Scale(other.Scale), enabled(other.enabled)
 		{}
 		TransformComponent(const glm::vec3& translation)
 			: Translation(translation){}
@@ -141,10 +138,37 @@ namespace vel
 		}
 	};
 
-	struct RigidbogyComponent
+	struct Asset
 	{
+		Asset() {};
+		Asset(std::string name, GUID id, GUID assetID, std::string materialLocation) : Name(name), ID(id), AssetID(assetID), MaterialLocation(materialLocation) {}
+		std::string Name;
+		GUID ID = 0;
+		GUID AssetID = 0;
+		std::string MaterialLocation;
+		TransformComponent transform;
+		std::vector<std::string> AnimationsList;
+	};
+
+	struct AABB
+	{
+		glm::vec3 Min;
+		glm::vec3 Max;
+	};
+
+	struct RigidbodyComponent
+	{
+		RigidbodyComponent() = default;
+		RigidbodyComponent(const RigidbodyComponent& other)
+			:desc(other.desc), shape(other.shape), physicsFactory(other.physicsFactory), physicsWorld(other.physicsWorld)
+		{
+			rigidBody = physicsFactory->CreateRigidBody(desc, shape);
+		}
 		physics::RigidBodyDesc desc;
+		physics::iShape* shape;
 		physics::iRigidBody* rigidBody;
+		physics::iPhysicsFactory* physicsFactory;
+		physics::iPhysicsWorld* physicsWorld;
 	};
 
 	struct CharacterControllerComponent
@@ -154,6 +178,7 @@ namespace vel
 		{
 			
 		}
+		CharacterControllerComponent(const CharacterControllerComponent& other) = default;
 		float radius;
 		float height;
 		physics::iCharacterController* characterController;
@@ -178,6 +203,7 @@ namespace vel
 		int m_BoneCounter = 0;
 		std::unordered_map<std::string, BoneInfo>* GetBoneInfoMap() { return m_BoneInfoMap; }
 		int& GetBoneCount() { return m_BoneCounter; }
+		AABB aabb;
 	};
 
 	struct MeshComponent
@@ -207,7 +233,11 @@ namespace vel
 			ModelIns = CreateRef<Model>(Path, useFBXTextures, false);
 		}
 		MeshComponent(const MeshComponent& other)
-			: Mesh(other.Mesh),Path(other.Path), SubmeshIndex(other.SubmeshIndex), MaterialIns(other.MaterialIns), ModelIns(other.ModelIns), UseFBXTextures(other.UseFBXTextures), MaterialPath(other.MaterialPath)
+			: Mesh(other.Mesh),Path(other.Path), 
+			SubmeshIndex(other.SubmeshIndex), MaterialIns(other.MaterialIns), 
+			ModelIns(other.ModelIns), UseFBXTextures(other.UseFBXTextures), 
+			shader(other.shader), Enabled(other.Enabled),
+			MaterialPath(other.MaterialPath), MeshDrawData(other.MeshDrawData)
 		{
 		}
 	};
@@ -215,6 +245,11 @@ namespace vel
 	struct AnimatorComponent
 	{
 		AnimatorComponent()
+		{
+			animator = CreateRef<Animator>(nullptr);
+		}
+		AnimatorComponent(const AnimatorComponent& other)
+			: List_Animations(other.List_Animations)
 		{
 			animator = CreateRef<Animator>(nullptr);
 		}
@@ -243,7 +278,8 @@ namespace vel
 	struct LightComponent
 	{
 		LightComponent(const LightComponent& other)
-			: Position(other.Position),
+			: Enabled(other.Enabled),
+			Position(other.Position),
 			Diffuse(other.Diffuse),
 			Specular(other.Specular),
 			Ambient(other.Ambient),

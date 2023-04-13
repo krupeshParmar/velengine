@@ -46,6 +46,7 @@ namespace physics
 			physx::PxScene* mScene = NULL;
 			physx::PxMaterial* mMaterial = NULL;
 			physx::PxPvd* mPVD = NULL;
+			physx::PxControllerManager* mControllerManager = NULL;
 			Vector3 m_Gravity;
 
 			std::vector<iCollisionBody*> m_Bodies;

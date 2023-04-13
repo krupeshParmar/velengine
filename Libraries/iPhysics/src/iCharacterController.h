@@ -10,6 +10,7 @@ namespace physics
 	public:
 		virtual ~iCharacterController() {}
 		virtual void AddForce(glm::vec3 force) = 0;
+		virtual void Move(glm::vec3 displacement, float dt) = 0;
 		virtual void SetMass(float mass) = 0;
 		virtual void SetMaxLinearVelocity(float velocity) = 0;
 		virtual void SetPosition(glm::vec3 pos) = 0;

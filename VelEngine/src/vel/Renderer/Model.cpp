@@ -240,15 +240,13 @@ namespace vel
 
         bool m_UseFBXTextures = fileInfo->m_UseFBXTextures;
         std::vector<MeshData>* m_Meshes = fileInfo->m_Meshes;*/
-
+        
         Ref<MeshData> newMeshData = CreateRef<MeshData>();
-        int numVer = 0;
         // Get all the vertex data
         for (unsigned int i = 0; i < aimesh->mNumVertices; i++)
         {
             Vertices vertex;
             SetVertexBoneDataToDefault(&vertex);
-            numVer++;
             vertex.x = aimesh->mVertices[i].x;
             vertex.y = aimesh->mVertices[i].y;
             vertex.z = aimesh->mVertices[i].z;
@@ -381,8 +379,7 @@ namespace vel
                     0,
                     lpThreadId
                 );*/
-
-            Ref<MeshData> data = ProcessMesh(mesh, scene);
+            Ref<MeshData> data;
 
             Entity* entity = nullptr;
 
@@ -394,6 +391,15 @@ namespace vel
                 {
                     if (val.Name == std::string(mesh->mName.C_Str()) + "_Mesh")
                     {
+                        if (MeshRenderer::HasMeshData(key))
+                        {
+                            data = MeshRenderer::GetMeshData(key);
+                        }
+                        else
+                        {
+                            data = ProcessMesh(mesh, scene);
+                            MeshRenderer::AddMeshData(key, data);
+                        }
                         entity = &m_GameScene->CreateAssetEntityWithID(key, *parentEntity, std::string(mesh->mName.C_Str()) + "_Mesh", true, IsAsset);
                         entitycreated = true;
                         break;
@@ -403,26 +409,39 @@ namespace vel
                 if(!entitycreated)
                     entity = &m_GameScene->CreateChildEntity(*parentEntity, std::string(mesh->mName.C_Str()) + "_Mesh", IsAsset);
             }
+            else
+            {
+                data = ProcessMesh(mesh, scene);
+            }
             if (entity)
             {
                 entity->AddComponent<MeshComponent>(MeshComponent());
                 MeshComponent* meshcomp = &entity->GetComponent<MeshComponent>();
+                if (!data)
+                {
+                    data = ProcessMesh(mesh, scene);
+                }
                 meshcomp->MeshDrawData = data;
-                meshcomp->MaterialIns = m_MaterialIns;
-                meshcomp->MaterialPath = modelLoadData.materialPath;
                 meshcomp->ID = CreateRef<GUID>(entity->GetGUID());
                 //VEL_CORE_INFO("Parent ID: {0}, Child ID: {1}", entity->GetGUID(), parentEntity->GetGUID());
                 //VEL_CORE_INFO("ID: {0}, Mesh Name: {1}", *meshcomp->ID, mesh->mName.C_Str());
                // m_IDToMeshData.emplace(entity->GetGUID(), data);
-                std::string materialLocation = modelLoadData.materialPath;
+                std::string materialLocation;
                 if (modelLoadData.assetData.find(entity->GetAssetID()) != modelLoadData.assetData.end())
                 {
+                    if (entity->GetAssetID() == 12341335058520449056)
+                        int breakme = 0;
                     Asset asset = modelLoadData.assetData[entity->GetAssetID()];
                     materialLocation = asset.MaterialLocation;
                     Ref<Material> material = MaterialSystem::GetMaterial(materialLocation);
                     if (material)
                         meshcomp->MaterialIns = material;
-                    meshcomp->MaterialPath = materialLocation;
+                    meshcomp->MaterialPath = materialLocation;                        
+                    TransformComponent* transform = &entity->Transform();
+                    transform->RotationEuler = asset.transform.RotationEuler;
+                    transform->Translation = asset.transform.Translation;
+                    transform->Scale = asset.transform.Scale;
+                    transform->enabled = asset.transform.enabled;
                     if (!asset.AnimationsList.empty())
                     {
                         AnimatorComponent animatorComponent;
@@ -435,7 +454,6 @@ namespace vel
                     }
                 }
                 m_AssetHandle.push_back({ entity->Name(),entity->GetGUID(),entity->GetAssetID(), materialLocation});
-                //MeshRenderer::AddMeshData(entity->GetAssetID(), data);
             }
             m_Meshes.push_back(data);
         }
@@ -465,6 +483,16 @@ namespace vel
                 }
                 else entity = &m_GameScene->CreateEntity(node->mChildren[i]->mParent->mName.C_Str(), IsAsset);
                 entity->SetScene(m_GameScene);
+                std::string materialLocation = modelLoadData.materialPath;
+                if (modelLoadData.assetData.find(entity->GetAssetID()) != modelLoadData.assetData.end())
+                {
+                    Asset asset = modelLoadData.assetData[entity->GetAssetID()];
+                    TransformComponent* transform = &entity->Transform();
+                    transform->RotationEuler = asset.transform.RotationEuler;
+                    transform->Translation = asset.transform.Translation;
+                    transform->Scale = asset.transform.Scale;
+                    transform->enabled = asset.transform.enabled;
+                }
                 m_AssetHandle.push_back({ entity->Name(),entity->GetGUID(), entity->GetAssetID(), ""});
             }
             ProcessNode(node->mChildren[i], scene, entity);

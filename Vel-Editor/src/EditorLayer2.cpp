@@ -95,7 +95,13 @@ namespace vel
 		if (controller)
 		{
 			if (Input::IsKeyPressed(KeyCode::W))
-				controller->AddForce({ 0.f, 0.f, 5.f });
+				controller->Move({ 0.f, 0.f, 10.f }, ts);
+			if (Input::IsKeyPressed(KeyCode::S))
+				controller->Move({ 0.f, 0.f, -10.f }, ts);
+			if (Input::IsKeyPressed(KeyCode::A))
+				controller->Move({ 10.f, 0.f, 0.f }, ts);
+			if (Input::IsKeyPressed(KeyCode::D))
+				controller->Move({ -10.f, 0.f, 0.f }, ts);
 		}
 		{
 			VEL_PROFILE_SCOPE("Renderer Prep");
@@ -443,7 +449,10 @@ namespace vel
 			ImGui::SameLine();
 			ImGui::Checkbox("##enabled", &entity.Transform().enabled);
 			ImGui::SameLine();
-			ImGui::Button("Duplicate");
+			if (ImGui::Button("Duplicate"))
+			{
+				m_ActiveScene->DuplicateEntity(entity, entity.GetParent());
+			}
 			ImGui::Text(std::to_string(entity.GetGUID()).c_str());
 			ImGui::Separator();
 
@@ -554,13 +563,16 @@ namespace vel
 					}
 					for (Animation* animation : animator.List_Animations)
 					{
+						std::string label1 = "Transition Time##" + animation->name + "ifTT";
 						ImGui::TextColored({0.8f, 0.8f, 0.2f, 1.f}, animation->name.c_str());
 						ImGui::SameLine();
-						std::string label = "Play##" + animation->name + "Playbtn";
-						if (ImGui::Button(label.c_str()))
+						std::string label2 = "Play##" + animation->name + "Playbtn";
+						if (ImGui::Button(label2.c_str()))
 						{
 							animator.animator->PlayAnimation(animation);
 						}
+						ImGui::SameLine();
+						ImGui::InputFloat(label1.c_str(), &animation->TransitionTime);
 					}
 				}
 			}
@@ -582,6 +594,7 @@ namespace vel
 
 			ImGui::EndGroup();
 
+			// Mesh Component
 			ImGui::BeginGroup();
 			{
 				if (entity.HasComponent< MeshComponent>())
@@ -597,6 +610,11 @@ namespace vel
 					if (!material)
 					{
 						material = mesh->MaterialIns;
+						if (!material)
+						{
+							mesh->MaterialIns = CreateRef<Material>();
+							material = mesh->MaterialIns;
+						}
 						ImGui::InputText("Name", &material->Name);
 						ImGui::InputText("Path", &mesh->MaterialPath);
 						if (ImGui::Button("Load Material##matLoadBtn"))
@@ -605,11 +623,12 @@ namespace vel
 							if (mat)
 								mesh->MaterialIns = mat;
 						}
-						if (ImGui::Button("Create Material##matCreateBtn"))
+						if (ImGui::Button("Save Material##matSaveBtn1"))
 						{
 							if (!mesh->MaterialPath.empty())
 							{
-								mesh->MaterialIns = MaterialSystem::LoadMaterial(mesh->MaterialPath, CreateRef<Material>());
+								if(SaveMaterial(mesh->MaterialPath, mesh->MaterialIns))
+									MaterialSystem::LoadMaterial(mesh->MaterialPath, mesh->MaterialIns);
 							}
 						}
 					}
@@ -825,7 +844,7 @@ namespace vel
 								desc.rotation = entity.Transform().GetRotation();
 								characterController.characterController = m_ActiveScene->GetPhysicsWorld()->CreateCharacterController(desc);
 								controller = characterController.characterController;
-								entity.AddComponent<CharacterControllerComponent>();
+								entity.AddComponent<CharacterControllerComponent>(characterController);
 								ImGui::CloseCurrentPopup();
 							}
 						}

@@ -88,6 +88,7 @@ namespace vel
 
 		m_PhysicsFactory = new physics::physxim::PhysicsFactory();
 		m_PhysicsWorld = m_PhysicsFactory->CreateWorld();
+		m_PhysicsFactory->CreateRigidBody(physics::RigidBodyDesc(), new physics::SphereShape(2.f));
 		m_Shader = m_ShaderLibrary.Load("assets/shaders/gBuffer.glsl");
 		m_Shader->Bind();
 		m_Shader->SetInt("u_TextureDiffuse", 0);
@@ -141,23 +142,28 @@ namespace vel
 			}
 		}
 		{
+			auto ccView = m_Registry.group<CharacterControllerComponent>(entt::get<TransformComponent>);
+			for (auto ent : ccView)
+			{
+				auto [transform, characterController] = ccView.get<TransformComponent, CharacterControllerComponent>(ent);
+				
+				transform.Translation = characterController.characterController->GetPosition();
+			}
+		}
+		{
 			auto view = m_Registry.group<MeshComponent>(entt::get<TransformComponent>);
 			int l = view.size();
 			std::vector<entt::entity> transparentEntities;
 			for (auto e : view)
 			{
 				Entity entity = Entity(e, this);
-				if (entity.HasComponent<CharacterControllerComponent>())
-				{
-					CharacterControllerComponent characterController = entity.GetComponent<CharacterControllerComponent>();
-
-					entity.Transform().Translation = characterController.characterController->GetPosition();
-				}
 				auto [transformComponent, meshComponent] = view.get<TransformComponent, MeshComponent>(e);
 				glm::mat4 transform = GetWorldSpaceTransformMatrix(entity);
 				if (IsEnabled(entity))
 				{
 					Ref<Material> MaterialIns = MaterialSystem::GetMaterial(meshComponent.MaterialPath);
+					if(!MaterialIns)
+						MaterialIns = meshComponent.MaterialIns;
 
 					if (MaterialIns && !MaterialIns->IsCompiled)
 					{
@@ -197,7 +203,6 @@ namespace vel
 					}
 					if (MaterialIns)
 					{
-						meshComponent.MaterialIns = MaterialIns;
 						if (MaterialIns->IsTransparent)
 						{
 							AddTransparentEntiy(&transparentEntities, e);
@@ -391,6 +396,75 @@ namespace vel
 			SortEntities();
 
 		return entity;
+	}
+	Entity Scene::DuplicateEntity(Entity& entity, Entity& parentEntity)
+	{
+		IDComponent& idComponent = entity.GetComponent<IDComponent>();
+		TransformComponent& transformComponent = entity.GetComponent<TransformComponent>();
+		Entity newEntity;
+		if (parentEntity)
+		{
+			newEntity = CreateChildEntity(parentEntity, entity.Name(), idComponent.Type);
+		}
+		else
+		{
+			newEntity = CreateEntity(entity.Name() + "_Duplicate", idComponent.Type);
+		}
+		// Asset Component
+		{
+			if (entity.HasComponent<AssetComponent>())
+			{
+				AssetComponent& assetComponent = entity.GetComponent<AssetComponent>();
+				newEntity.AddComponent<AssetComponent>(AssetComponent(assetComponent));
+			}
+		}
+
+		// Transform Component
+		{
+			newEntity.Transform() = TransformComponent(transformComponent);
+		}
+
+		// Rigidbody Component
+		{
+			if (entity.HasComponent<RigidbodyComponent>())
+			{
+				RigidbodyComponent& rigidBody = entity.GetComponent<RigidbodyComponent>();
+				newEntity.AddComponent<RigidbodyComponent>(RigidbodyComponent(rigidBody));
+			}
+		}
+
+		// Mesh Component
+		{
+			if (entity.HasComponent<MeshComponent>())
+			{
+				MeshComponent& meshComponent = entity.GetComponent<MeshComponent>();
+				newEntity.AddComponent<MeshComponent>(MeshComponent(meshComponent));
+			}
+		}
+
+		// Animator Component
+		{
+			if (entity.HasComponent<AnimatorComponent>())
+			{
+				AnimatorComponent& animatorComponent = entity.GetComponent<AnimatorComponent>();
+				newEntity.AddComponent<AnimatorComponent>(AnimatorComponent(animatorComponent));
+			}
+		}
+
+		// Light Component
+		{
+			if (entity.HasComponent<LightComponent>())
+			{
+				LightComponent& lightComponent = entity.GetComponent<LightComponent>();
+				newEntity.AddComponent<LightComponent>(LightComponent(lightComponent));
+			}
+		}
+
+		for (GUID childEntityGUID : entity.Children())
+		{
+			DuplicateEntity(GetEntityWithGUID(childEntityGUID), newEntity);
+		}
+		return newEntity;
 	}
 	Entity Scene::GetEntityWithGUID(GUID id) const
 	{

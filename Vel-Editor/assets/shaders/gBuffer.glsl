@@ -22,7 +22,7 @@ uniform mat4 u_Projection;
 uniform mat4 u_Transform;
 uniform mat4 u_InverseTransform;
 uniform bool u_UseBone;
-const int MAX_BONES = 100;
+const int MAX_BONES = 200;
 const int MAX_BONE_INFLUENCE = 4;
 uniform mat4 finalBonesMatrices[MAX_BONES];
 uniform mat4 u_RotationMatrix[MAX_BONES];

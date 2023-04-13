@@ -612,6 +612,58 @@ namespace vel
 					pugi::xml_attribute idAttr = assetNode.append_attribute("id");
 					idAttr.set_value(asset.AssetID);
 
+					pugi::xml_node assetSComponentNode = assetNode.append_child("components");
+					pugi::xml_node assetTransformNode = assetSComponentNode.append_child("transform");
+
+					TransformComponent& assettransform = assetEntity.Transform();
+					
+					{
+						pugi::xml_node transformEnabledNode = assetTransformNode.append_child("enabled");
+
+						if (assettransform.enabled)
+							transformEnabledNode.append_child(pugi::node_pcdata).set_value("1");
+						else
+							transformEnabledNode.append_child(pugi::node_pcdata).set_value("0");
+						pugi::xml_node positionNode = assetTransformNode.append_child("position");
+						{
+							pugi::xml_node xNode = positionNode.append_child("x");
+							xNode.append_child(pugi::node_pcdata).set_value(
+								std::to_string(assettransform.Translation.x).c_str());
+							pugi::xml_node yNode = positionNode.append_child("y");
+							yNode.append_child(pugi::node_pcdata).set_value(
+								std::to_string(assettransform.Translation.y).c_str());
+							pugi::xml_node zNode = positionNode.append_child("z");
+							zNode.append_child(pugi::node_pcdata).set_value(
+								std::to_string(assettransform.Translation.z).c_str());
+						}
+
+						pugi::xml_node rotationNode = assetTransformNode.append_child("rotation");
+						{
+							pugi::xml_node xNode = rotationNode.append_child("x");
+							xNode.append_child(pugi::node_pcdata).set_value(
+								std::to_string(assettransform.RotationEuler.x).c_str());
+							pugi::xml_node yNode = rotationNode.append_child("y");
+							yNode.append_child(pugi::node_pcdata).set_value(
+								std::to_string(assettransform.RotationEuler.y).c_str());
+							pugi::xml_node zNode = rotationNode.append_child("z");
+							zNode.append_child(pugi::node_pcdata).set_value(
+								std::to_string(assettransform.RotationEuler.z).c_str());
+						}
+
+						pugi::xml_node scaleNode = assetTransformNode.append_child("scale");
+						{
+							pugi::xml_node xNode = scaleNode.append_child("x");
+							xNode.append_child(pugi::node_pcdata).set_value(
+								std::to_string(assettransform.Scale.x).c_str());
+							pugi::xml_node yNode = scaleNode.append_child("y");
+							yNode.append_child(pugi::node_pcdata).set_value(
+								std::to_string(assettransform.Scale.y).c_str());
+							pugi::xml_node zNode = scaleNode.append_child("z");
+							zNode.append_child(pugi::node_pcdata).set_value(
+								std::to_string(assettransform.Scale.z).c_str());
+						}
+					}
+
 					if (assetEntity.HasComponent<MeshComponent>())
 					{
 						std::string materialPath = assetEntity.GetComponent<MeshComponent>().MaterialPath;
@@ -1005,6 +1057,114 @@ namespace vel
 										{
 											pugi::xml_node assetDataNode = *assetNodeIterator;
 											std::string assetDataNodeName = assetDataNode.name();
+
+											if (assetDataNodeName == "components")
+											{
+												for (pugi::xml_node_iterator assetCompoentIterator = assetDataNode.children().begin();
+													assetCompoentIterator != assetDataNode.children().end();
+													assetCompoentIterator++)
+												{
+													pugi::xml_node assetCompoentNode = *assetCompoentIterator;
+													std::string assetCompoentNodeName = assetCompoentNode.name();
+													if(assetCompoentNodeName == "transform")
+													{ 
+														TransformComponent* transform = new TransformComponent();
+														glm::vec3 rotation = glm::vec3(0.f);
+														pugi::xml_object_range<pugi::xml_node_iterator>
+															transformNodeChildren = assetCompoentNode.children();
+														for (pugi::xml_node_iterator transformNodeIterator = transformNodeChildren.begin();
+															transformNodeIterator != transformNodeChildren.end();
+															transformNodeIterator++)
+														{
+															pugi::xml_node transformNode = *transformNodeIterator;
+															std::string transformNodeName = transformNode.name();
+															if (transformNodeName == "enabled")
+															{
+																std::string isEnabled = transformNode.child_value();
+																if (isEnabled == "1")
+																	transform->enabled = true;
+																else transform->enabled = false;
+															}
+															if (transformNodeName == "position")
+															{
+																pugi::xml_object_range<pugi::xml_node_iterator>
+																	positionNodeChildren = transformNode.children();
+																for (pugi::xml_node_iterator positionNodeIterator = positionNodeChildren.begin();
+																	positionNodeIterator != positionNodeChildren.end();
+																	positionNodeIterator++)
+																{
+																	pugi::xml_node positionNode = *positionNodeIterator;
+																	std::string positionNodeName = positionNode.name();
+																	if (positionNodeName == "x")
+																		transform->Translation.x =
+																		std::stof(positionNode.child_value());
+																	if (positionNodeName == "y")
+																		transform->Translation.y =
+																		std::stof(positionNode.child_value());
+																	if (positionNodeName == "z")
+																		transform->Translation.z =
+																		std::stof(positionNode.child_value());
+																}
+															}
+
+															if (transformNodeName == "rotation")
+															{
+																pugi::xml_object_range<pugi::xml_node_iterator>
+																	rotationNodeChildren = transformNode.children();
+																for (pugi::xml_node_iterator rotationNodeIterator =
+																	rotationNodeChildren.begin();
+																	rotationNodeIterator != rotationNodeChildren.end();
+																	rotationNodeIterator++)
+																{
+																	pugi::xml_node rotationNode = *rotationNodeIterator;
+																	std::string rotationNodeName = rotationNode.name();
+
+																	if (rotationNodeName == "x")
+																		rotation.x =
+																		std::stof(rotationNode.child_value());
+																	if (rotationNodeName == "y")
+																		rotation.y =
+																		std::stof(rotationNode.child_value());
+																	if (rotationNodeName == "z")
+																		rotation.z =
+																		std::stof(rotationNode.child_value());
+																}
+															}
+															if (transformNodeName == "scale")
+															{
+																pugi::xml_object_range<pugi::xml_node_iterator>
+																	scaleNodeChildren = transformNode.children();
+																for (pugi::xml_node_iterator scaleNodeIterator = scaleNodeChildren.begin();
+																	scaleNodeIterator != scaleNodeChildren.end();
+																	scaleNodeIterator++)
+																{
+																	pugi::xml_node scaleNode = *scaleNodeIterator;
+																	std::string scaleNodeName = scaleNode.name();
+																	if (scaleNodeName == "x")
+																		transform->Scale.x =
+																		std::stof(scaleNode.child_value());
+																	if (scaleNodeName == "y")
+																		transform->Scale.y =
+																		std::stof(scaleNode.child_value());
+																	if (scaleNodeName == "z")
+																		transform->Scale.z =
+																		std::stof(scaleNode.child_value());
+																}
+															}
+														}
+
+														transform->SetRotationEuler(rotation);
+														if (transform->Translation.y == -2.f)
+															int breakme = 0;
+														std::map<GUID, Asset>::iterator assMapIT = assetsData.find(GUID(id));
+														if (assMapIT != assetsData.end())
+															assMapIT->second.transform = *transform;
+
+														delete transform;
+													}
+												}
+											}
+
 											if (assetDataNodeName == "animation")
 											{
 												std::map<GUID, Asset>::iterator assMapIT = assetsData.find(GUID(id));

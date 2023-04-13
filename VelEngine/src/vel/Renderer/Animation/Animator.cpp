@@ -1,6 +1,7 @@
 #include "velpch.h"
 #include "Animator.h"
 #include "vel/Scene/Component.h"
+#include <glm/gtx/quaternion.hpp>
 
 namespace vel
 {
@@ -8,15 +9,24 @@ namespace vel
 	{
 		m_CurrentTime = 0.0;
 		m_CurrentAnimation = currentAnimation;
+		m_PreviousAnimation = nullptr;
+		unsigned int size = 300;
+		m_FinalBoneMatrices.reserve(size);
 
-		m_FinalBoneMatrices.reserve(200);
-
-		for (int i = 0; i < 200; i++)
+		for (int i = 0; i < size; i++)
 			m_FinalBoneMatrices.push_back(glm::mat4(1.0f));
 	}
 	void Animator::UpdateAnimation(float dt)
 	{
-		m_DeltaTime = dt;
+		m_DeltaTime = dt; 
+		if (m_TransitionTime > 0.0f)
+		{
+			m_TransitionTime -= dt;
+			if (m_TransitionTime < 0.0f)
+			{
+				m_TransitionTime = 0.0f;
+			}
+		}
 		if (m_CurrentAnimation)
 		{
 			m_CurrentTime += m_CurrentAnimation->GetTicksPerSecond() * dt;
@@ -26,6 +36,8 @@ namespace vel
 	}
 	void Animator::PlayAnimation(Animation* pAnimation)
 	{
+		m_PreviousAnimation = m_CurrentAnimation;
+		m_TransitionTime = pAnimation->TransitionTime;
 		m_CurrentAnimation = pAnimation;
 		m_CurrentTime = 0.0f;
 	}
@@ -35,10 +47,32 @@ namespace vel
 		glm::mat4 nodeTransform = node->transformation;
 
 		BoneAnim* Bone = m_CurrentAnimation->FindBone(nodeName);
+		BoneAnim* bone2 = nullptr;
+		if(m_PreviousAnimation)
+			bone2 = m_PreviousAnimation->FindBone(nodeName);
 		if (Bone)
 		{
 			Bone->Update(m_CurrentTime);
 			nodeTransform = Bone->GetLocalTransform();
+			if (bone2 && m_TransitionTime > 0.f)
+			{
+				glm::vec3 translation, scale;
+				glm::quat rotation;
+				Math::DecomposeTransform(nodeTransform, translation, rotation, scale);
+				glm::mat4 prevTransform = bone2->GetLocalTransform();
+				glm::vec3 translation2, scale2;
+				glm::quat rotation2;
+				Math::DecomposeTransform(prevTransform, translation2, rotation2, scale2);
+
+				float curRatio = 1.f - m_TransitionTime;
+				float prevRatio = m_TransitionTime;
+				translation = translation * curRatio + translation2 * prevRatio;
+				scale = scale * curRatio + scale2 * prevRatio;
+				rotation = glm::slerp(rotation2, rotation, curRatio);
+				nodeTransform = glm::translate(glm::mat4(1.f), translation)
+					* glm::toMat4(rotation)
+					* glm::scale(glm::mat4(1.f), scale);
+			}
 		}
 		glm::mat4 globalTransformation = parentTransform * nodeTransform;
 

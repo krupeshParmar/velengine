@@ -21,6 +21,7 @@ namespace vel
 		VEL_CORE_ERROR(importer->GetErrorString());
 		VEL_CORE_ASSERT(scene && scene->mRootNode, "");
 		auto animation = scene->mAnimations[0];
+		animation->mNumChannels;
 		name = animationPath;
 		m_Duration = animation->mDuration;
 		m_TicksPerSecond = animation->mTicksPerSecond;
@@ -41,6 +42,7 @@ namespace vel
 	void Animation::ReadMissingBones(const aiAnimation* animation, MeshData& mesh)
 	{
 		int size = animation->mNumChannels;
+		VEL_CORE_INFO("Animation {0} has {1} channels", animation->mName.C_Str(), size);
 
 		std::unordered_map<std::string, BoneInfo> boneInfoMap = *mesh.GetBoneInfoMap();//getting m_BoneInfoMap from Model class
 		int& boneCount = mesh.GetBoneCount(); //getting the m_BoneCounter from Model class

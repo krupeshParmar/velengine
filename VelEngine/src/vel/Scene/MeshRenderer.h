@@ -22,6 +22,8 @@ namespace vel
 		static Ref<Model> GetMesh(std::string& path);
 		static void DrawMesh(MeshComponent& meshComponent, glm::mat4& transform);
 		static void AddMeshData(GUID id, Ref<MeshData> meshData);
+		static bool HasMeshData(GUID id);
+		static Ref<MeshData> GetMeshData(GUID id);
 
 	private:
 		static std::map<std::string, Ref<Model>> m_PathToModel;

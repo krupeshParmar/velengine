@@ -174,4 +174,15 @@ namespace vel
 	{
 		m_IdToMeshData.emplace(id, meshData);
 	}
+	bool MeshRenderer::HasMeshData(GUID id)
+	{
+		return m_IdToMeshData.find(id) != m_IdToMeshData.end();
+	}
+	Ref<MeshData> MeshRenderer::GetMeshData(GUID id)
+	{
+		std::map<GUID, Ref<MeshData>>::iterator meshDataIT = m_IdToMeshData.find(id);
+		if (meshDataIT != m_IdToMeshData.end())
+			return meshDataIT->second;
+		return nullptr;
+	}
 }

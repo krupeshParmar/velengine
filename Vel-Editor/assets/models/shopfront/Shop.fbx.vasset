@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<assets_list id="13226347321040824594">
+<assets_list id="5273622136716639060">
 	<asset>
 		<name>Shop.fbx</name>
 		<id>10838312110386143998</id>
@@ -110,130 +110,130 @@
 	</asset>
 	<asset>
 		<name>SignV3 Neon</name>
-		<id>5769893692896017493</id>
+		<id>18255797778120590535</id>
 	</asset>
 	<asset>
 		<name>Cube.012_Mesh</name>
-		<id>2033694143173605854</id>
+		<id>1371825286565290290</id>
 	</asset>
 	<asset>
 		<name>CyberLife</name>
-		<id>12341335058520449056</id>
+		<id>6232497130625699611</id>
 	</asset>
 	<asset>
 		<name>Text.001_Mesh</name>
-		<id>4879250175413233303</id>
+		<id>5824589158418110376</id>
 	</asset>
 	<asset>
 		<name>Cafe@060</name>
-		<id>1962219097794637172</id>
+		<id>5658326247830087012</id>
 	</asset>
 	<asset>
 		<name>Text.004_Mesh</name>
-		<id>12788700281231430405</id>
+		<id>1760285440037619298</id>
 	</asset>
 	<asset>
 		<name>TechWear</name>
-		<id>14850990159275599187</id>
+		<id>8609820700045259982</id>
 	</asset>
 	<asset>
 		<name>Text.003_Mesh</name>
-		<id>2279070924343860602</id>
+		<id>10083274920073694389</id>
 	</asset>
 	<asset>
 		<name>VirtualMe</name>
-		<id>16493965588468974976</id>
+		<id>17562686572944807563</id>
 	</asset>
 	<asset>
 		<name>Text.002_Mesh</name>
-		<id>3274646735025634965</id>
+		<id>17926121092750138820</id>
 	</asset>
 	<asset>
 		<name>TopWall V1</name>
-		<id>15405865833364847355</id>
+		<id>7947816195195925796</id>
 	</asset>
 	<asset>
 		<name>Cube.009_Mesh</name>
-		<id>13695522589410146754</id>
+		<id>7595167336934900416</id>
 	</asset>
 	<asset>
 		<name>SmallPipe</name>
-		<id>6291039622478471920</id>
+		<id>17963932374757593171</id>
 	</asset>
 	<asset>
 		<name>Cylinder.004_Mesh</name>
-		<id>14434423978243049907</id>
+		<id>555333517955812391</id>
 	</asset>
 	<asset>
 		<name>BigPipe</name>
-		<id>8194603165153661484</id>
+		<id>14891504735601798440</id>
 	</asset>
 	<asset>
 		<name>Cylinder.005_Mesh</name>
-		<id>18399626436442617625</id>
+		<id>14622043212328623189</id>
 	</asset>
 	<asset>
 		<name>Top Wall V2</name>
-		<id>10172673770505387523</id>
+		<id>9493616946750188501</id>
 	</asset>
 	<asset>
 		<name>Cube.015_Mesh</name>
-		<id>10611581795691252484</id>
+		<id>7160354791368551134</id>
 	</asset>
 	<asset>
 		<name>NeonBars</name>
-		<id>825153736828152108</id>
+		<id>14958994050587605305</id>
 	</asset>
 	<asset>
 		<name>BezierCurve.006_Mesh</name>
-		<id>8073348468498674633</id>
+		<id>16406819721383464047</id>
 	</asset>
 	<asset>
 		<name>Upper Floor</name>
-		<id>12803385630641181408</id>
+		<id>9942191507864170151</id>
 	</asset>
 	<asset>
 		<name>Cube.016_Mesh</name>
-		<id>11621172853512789032</id>
+		<id>7558562485246048800</id>
 	</asset>
 	<asset>
 		<name>WindowPlane</name>
-		<id>1596424968496979706</id>
+		<id>4914964357092662394</id>
 	</asset>
 	<asset>
 		<name>Plane.002_Mesh</name>
-		<id>7358177900245598939</id>
+		<id>15129755178869670946</id>
 	</asset>
 	<asset>
 		<name>ShopFront V2</name>
-		<id>16316989607922239204</id>
+		<id>7584272219657552830</id>
 	</asset>
 	<asset>
 		<name>Cube.013_Mesh</name>
-		<id>11720936302350612907</id>
+		<id>10188995643188399338</id>
 	</asset>
 	<asset>
 		<name>ElectricBox</name>
-		<id>5497761131946095538</id>
+		<id>17709787113330865885</id>
 	</asset>
 	<asset>
 		<name>Cube.014_Mesh</name>
-		<id>752220518867119522</id>
+		<id>15465241565242442642</id>
 	</asset>
 	<asset>
 		<name>GenBottomPipe</name>
-		<id>4509533809303356740</id>
+		<id>16258560069529242694</id>
 	</asset>
 	<asset>
 		<name>Cylinder.007_Mesh</name>
-		<id>13872592106562760894</id>
+		<id>10371517328432020391</id>
 	</asset>
 	<asset>
 		<name>GenSidePipe</name>
-		<id>17488449891063602627</id>
+		<id>17535787010032201349</id>
 	</asset>
 	<asset>
 		<name>BezierCurve.001_Mesh</name>
-		<id>4806595848854606626</id>
+		<id>9933066169668296421</id>
 	</asset>
 </assets_list>

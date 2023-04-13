@@ -37,8 +37,6 @@ namespace vel
 		VEL_CORE_INFO("  Vendor: {0}", vendor);
 		VEL_CORE_INFO("  Renderer: {0}", renderer);
 		VEL_CORE_INFO("  Version: {0}", version);
-		VEL_CORE_INFO("  Max Combie Texture Units: {0}", maxText);
-
 	}
 	void OpenGLContext::SwapBuffers()
 	{

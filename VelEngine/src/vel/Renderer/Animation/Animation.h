@@ -43,6 +43,7 @@ namespace vel
 		}
 
 		std::string name;
+		float TransitionTime = 1.f;
 	private:
 		void ReadMissingBones(const aiAnimation* animation, MeshData& mesh);
 		void ReadHeirarchyData(AssimpNodeData& dest, const aiNode* src);

@@ -7,6 +7,7 @@ namespace physics
 		CharacterController::CharacterController()
 			:m_Controller(nullptr)
 		{
+			filters = physx::PxControllerFilters();
 		}
 		CharacterController::~CharacterController()
 		{
@@ -14,21 +15,25 @@ namespace physics
 		}
 		void CharacterController::AddForce(glm::vec3 force)
 		{
-			m_Controller->addForce(physx::PxVec3(force.x, force.y, force.z), physx::PxForceMode::eIMPULSE);
+		}
+		void CharacterController::Move(glm::vec3 displacement, float dt)
+		{
+			physx::PxVec3 disp = physx::PxVec3(displacement.x, displacement.y, displacement.z) * dt;
+			m_Controller->move(
+				disp,
+				0.01f,
+				dt, filters);
 		}
 		void CharacterController::SetMass(float mass)
 		{
-			m_Controller->setMass(physx::PxReal(mass));
 		}
 		void CharacterController::SetMaxLinearVelocity(float vel)
 		{
-			m_Controller->setMaxLinearVelocity(physx::PxReal(vel));
 		}
 		void CharacterController::SetPosition(glm::vec3 pos)
 		{
-			m_Controller->setGlobalPose(physx::PxTransform(physx::PxVec3(pos.x,pos.y,pos.z)));
 		}
-		void CharacterController::SetController(physx::PxRigidDynamic* cont)
+		void CharacterController::SetController(physx::PxController* cont)
 		{
 			m_Controller = cont;
 		}

@@ -34,6 +34,6 @@ namespace vel
 		std::map<std::string, Ref<Material>>::iterator matIT = m_PathToMaterial.find(path);
 		if (matIT != m_PathToMaterial.end())
 			return matIT->second;
-		return defaultMaterial;
+		return nullptr;
 	}
 }
