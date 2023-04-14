@@ -5,6 +5,7 @@
 #include <imgui/misc/cpp/imgui_stdlib.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <CharacterControllerDesc.h>
+#include "Scripts/CameraController.h"
 
 namespace vel
 {
@@ -113,11 +114,12 @@ namespace vel
 
 		{
 			VEL_PROFILE_SCOPE("Renderer Draw");
-			Renderer::BeginScene(m_EditorCamera.GetViewMatrix(), m_EditorCamera.GetUnReversedProjectionMatrix());
+			
 
-			m_ActiveScene->OnUpdateEditor(ts, glm::vec4(m_EditorCamera.GetPosition(), 1.f));
-
-			Renderer::EndScene();
+			if(m_GamePlay)
+				m_ActiveScene->OnUpdateRuntime(ts);
+			else 
+				m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera);
 
 			m_RenderBuffer->Unbind();
 
@@ -132,12 +134,24 @@ namespace vel
 				SetFloat2("screen_width_height", {
 				Application::Get().GetWindow().GetWidth(),Application::Get().GetWindow().GetHeight()
 					});
-			m_RenderBuffer->BindColorTexture();
-			m_RenderBuffer->BindWorldPositionTexture();
-			m_RenderBuffer->BindNormalTexture();
-			m_RenderBuffer->BindSpecularTexture();
-			m_RenderBuffer->BindEmissiveTexture();
-			m_RenderBuffer->BindBloomTexture();
+			/*if (m_GameFocused)
+			{
+				m_ActiveScene->GetRuntimeBuffer()->BindColorTexture();
+				m_ActiveScene->GetRuntimeBuffer()->BindWorldPositionTexture();
+				m_ActiveScene->GetRuntimeBuffer()->BindNormalTexture();
+				m_ActiveScene->GetRuntimeBuffer()->BindSpecularTexture();
+				m_ActiveScene->GetRuntimeBuffer()->BindEmissiveTexture();
+				m_ActiveScene->GetRuntimeBuffer()->BindBloomTexture();
+			}
+			else*/
+			{
+				m_RenderBuffer->BindColorTexture();
+				m_RenderBuffer->BindWorldPositionTexture();
+				m_RenderBuffer->BindNormalTexture();
+				m_RenderBuffer->BindSpecularTexture();
+				m_RenderBuffer->BindEmissiveTexture();
+				m_RenderBuffer->BindBloomTexture();
+			}
 			m_ShaderLibrary.Get("DeferredShader")->SetFloat("Exposure", m_ActiveScene->Exposure);
 			m_ShaderLibrary.Get("DeferredShader")->SetFloat("BloomThreshold", m_ActiveScene->BloomThreshold);
 			m_ActiveScene->BindLightData(m_ShaderLibrary.Get("DeferredShader"), glm::vec4(m_EditorCamera.GetPosition(), 1.0));
@@ -180,7 +194,9 @@ namespace vel
 			m_ShaderLibrary.Get("PostProcessing")->SetBool("rippleEffect", m_ActiveScene->useRippleEffect);
 			m_ShaderLibrary.Get("PostProcessing")->SetBool("grayscale", m_ActiveScene->useGrayscale);
 
-			m_ShaderLibrary.Get("PostProcessing")->SetFloat2("screen_width_height", { m_ViewPortSize.x, m_ViewPortSize.y });
+			if(m_GamePlay)
+				m_ShaderLibrary.Get("PostProcessing")->SetFloat2("screen_width_height", { m_GamePortSize.x, m_GamePortSize.y });
+			else m_ShaderLibrary.Get("PostProcessing")->SetFloat2("screen_width_height", { m_ViewPortSize.x, m_ViewPortSize.y });
 
 			Renderer::DrawFullscreenQuad(
 				m_ShaderLibrary.Get("PostProcessing"));
@@ -295,19 +311,46 @@ namespace vel
 		{
 			m_RenderBuffer->Resize(viewportPanelSize.x, viewportPanelSize.y);
 			m_FullScreenFrameBuffer->Resize(viewportPanelSize.x, viewportPanelSize.y);
+			//m_PostProcessFrameBuffer->Resize(viewportPanelSize.x, viewportPanelSize.y);
 			m_EditorCamera.SetViewportSize(viewportPanelSize.x, viewportPanelSize.y);
+			m_ActiveScene->SetViewportSize(viewportPanelSize.x, viewportPanelSize.y);
 			m_ViewPortSize = { viewportPanelSize.x, viewportPanelSize.y };
 		}
 
 		uint32_t textureID = m_PostProcessFrameBuffer->GetColorAttachmenRendererID();
 		ImGui::Image((void*)textureID, ImVec2{ m_ViewPortSize.x, m_ViewPortSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 		ImGui::End();
+
+
+		ImGui::Begin("Game");
+		m_GameFocused = ImGui::IsWindowFocused();
+		m_GameHovered = ImGui::IsWindowHovered();
+		Application::Get().GetImGuiLayer()->SetBlockEvents(!m_GameFocused || !m_GameHovered);
+
+		if (m_GamePlay)
+		{
+			ImVec2 gameViewportPanelSize = ImGui::GetContentRegionAvail();
+			if (m_GamePortSize != *(glm::vec2*)&gameViewportPanelSize)
+			{
+				m_FullScreenFrameBuffer->Resize(gameViewportPanelSize.x, gameViewportPanelSize.y);
+				m_PostProcessFrameBuffer->Resize(gameViewportPanelSize.x, gameViewportPanelSize.y);
+				m_ActiveScene->SetViewportSize(gameViewportPanelSize.x, gameViewportPanelSize.y);
+				m_GamePortSize = { viewportPanelSize.x, viewportPanelSize.y };
+			}
+		}
+
+		uint32_t gameTextureID = m_PostProcessFrameBuffer->GetColorAttachmenRendererID();
+		ImGui::Image((void*)gameTextureID, ImVec2{ m_GamePortSize.x, m_GamePortSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
+		ImGui::End();
+
+
 		ImGui::PopStyleVar();
 		SceneHierarchy();
 		Inspector();
 
 		{
-			ImGui::Begin("Post Processing and Shader");
+			ImGui::Begin("Settings");
+			ImGui::Checkbox("Gameplay", &m_GamePlay);
 			if (ImGui::Button("Reload Shader##reloadShaderbtn"))
 			{
 				m_ActiveScene->ReloadShader();
@@ -430,6 +473,7 @@ namespace vel
 		bool hasAsset = false;
 		bool hasLight = false;
 		bool hasCC = false;
+		bool hasCamera = false;
 		ImGui::Begin("Inspector");
 		if (m_SelectedEntity != entt::null)
 		{
@@ -483,6 +527,20 @@ namespace vel
 					ImGui::Text("Scale");
 					ImGui::SameLine();
 					ImGui::InputFloat3("##sca", glm::value_ptr(transform->Scale));
+				}
+			}
+			ImGui::EndGroup();
+
+			// Camera
+			ImGui::BeginGroup();
+			{
+				if (entity.HasComponent<CameraComponent>())
+				{
+					hasCamera = true;
+					CameraComponent& camera = entity.GetComponent<CameraComponent>();
+					ImGui::Checkbox("Primary##isCameraPrimary", &camera.Primary);
+					ImGui::InputFloat3("Camera Position##sceneCamPos", glm::value_ptr(camera.Camera.Position));
+					ImGui::InputFloat3("Camera Target##sceneCamTar", glm::value_ptr(camera.Camera.Target));
 				}
 			}
 			ImGui::EndGroup();
@@ -808,6 +866,17 @@ namespace vel
 				{
 					if (ImGui::BeginPopup("Add Component"))
 					{
+						if (!hasCamera)
+						{
+							if (ImGui::MenuItem("Camera Component"))
+							{
+								addComponentCalled = false;
+								CameraComponent cameraComponent;
+								entity.AddComponent<CameraComponent>(cameraComponent);
+								entity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+								ImGui::CloseCurrentPopup();
+							}
+						}
 						if (!hasLight)
 						{
 							if (ImGui::MenuItem("Light Component"))

@@ -4,6 +4,7 @@
 #include "FrameBuffer.h"
 #include "vel/Editor/EditorCamera.h"
 #include "Texture.h"
+#include "vel/Scene/SceneCamera.h"
 
 namespace vel
 {
@@ -15,6 +16,7 @@ namespace vel
 		static void ShutDown();
 
 		static void BeginScene();
+		static void BeginScene(const SceneCamera& camera,const glm::mat4& transform);
 		static void BeginScene(glm::mat4& viewProjectionMatrix);
 		static void BeginScene(const glm::mat4& viewMatrix,const glm::mat4& projectionMatrix);
 		static void EndScene();

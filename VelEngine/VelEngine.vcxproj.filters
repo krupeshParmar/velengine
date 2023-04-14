@@ -1488,6 +1488,8 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\vel\Scene\SceneCamera.h" />
+    <ClInclude Include="src\vel\Scene\ScriptableEntity.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
@@ -1613,5 +1615,6 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\vel\Scene\SceneCamera.cpp" />
   </ItemGroup>
 </Project>

@@ -41,6 +41,7 @@
 // --------Scene----------
 #include "vel/Scene/Scene.h"
 #include "vel/Scene/Entity.h"
+#include "vel/Scene/ScriptableEntity.h"
 #include "vel/Scene/Component.h"
 #include "vel/Scene/EntityManager.h"
 #include "vel/Scene/LightManager.h"

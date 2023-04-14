@@ -153,6 +153,7 @@ IF EXIST "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.
     <ClInclude Include="src\EditorLayer2.h" />
     <ClInclude Include="src\Example.h" />
     <ClInclude Include="src\SceneManager.h" />
+    <ClInclude Include="src\Scripts\CameraController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorLayer.cpp" />

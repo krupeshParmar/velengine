@@ -8,6 +8,8 @@
 #include "SaveSystem.h"
 #include "LightManager.h"
 #include <PhysxPhysicsFactory.h>
+#include "vel/Core/Application.h"
+#include "vel/Renderer/Renderer.h"
 CRITICAL_SECTION cs_EntityMapLock;
 
 namespace vel
@@ -17,6 +19,11 @@ namespace vel
 	{
 		entt::entity entity = m_Registry.create();
 		InitializeCriticalSection(&cs_EntityMapLock);
+		FrameBufferSpecification fbSpec;
+		fbSpec.Width = Application::Get().GetWindow().GetWidth();
+		fbSpec.Height = Application::Get().GetWindow().GetHeight();
+		m_RuntimeBuffer = FrameBuffer::Create(fbSpec);
+
 		MeshRenderer();
 		MaterialSystem();
 		LightManager();
@@ -118,11 +125,197 @@ namespace vel
 		m_Shader->SetInt("u_TextureEmissive", 3);
 		m_Shader->SetInt("skyBox", 4);
 	}
+
 	void Scene::OnUpdateRuntime(Timestep ts)
 	{
+		// Update Scripts
+		{
+			m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
+				{
+					if (!nsc.Instance)
+					{
+						nsc.Instance = nsc.InstantiateFunction();
+						nsc.Instance->m_Entity = Entity{ entity, this };
+						nsc.Instance->OnCreate();
+					}
+					nsc.Instance->OnUpdate(ts);
+				});
+		}
+
+		m_PhysicsWorld->TimeStep(1 / 60.f);
+		glm::vec4 eyeLocation = glm::vec4(1.f);
+		SceneCamera* mainCamera = nullptr;
+		TransformComponent* transform = nullptr;
+		{
+			auto view = m_Registry.view<TransformComponent, CameraComponent>();
+			for (auto cameraEntity : view)
+			{
+				auto [transformcomp, camera] = view.get<TransformComponent, CameraComponent>(cameraEntity);
+				if (camera.Primary)
+				{
+					transform = &transformcomp;
+					mainCamera = &camera.Camera;
+					break;
+				}
+			}
+		}
+		if (mainCamera && transform)
+		{
+			/*m_RuntimeBuffer->Bind();
+			RenderCommand::SetClearColor(glm::vec4(0.f, 0.f, 0.f, 1));
+			RenderCommand::Clear();
+			RenderCommand::EnableDepth();*/
+			eyeLocation = glm::vec4(mainCamera->Position.x,mainCamera->Position.y, mainCamera->Position.z, 1.f);
+			Renderer::BeginScene(*mainCamera, transform->GetTransform());
+			{
+				auto lightView = m_Registry.group<LightComponent>(entt::get<TransformComponent>);
+				for (auto lights : lightView)
+				{
+					auto [transform, light] = lightView.get<TransformComponent, LightComponent>(lights);
+					Entity entity = Entity(lights, this);
+					if (entity.enabled)
+					{
+						glm::vec3 pos, sca;
+						glm::quat rot;
+						Math::DecomposeTransform(GetWorldSpaceTransformMatrix(entity), pos, rot, sca);
+						light.Position = glm::vec4(pos, 1.0);
+						light.Direction = glm::vec4(glm::eulerAngles(rot), 1.0);
+					}
+				}
+			}
+			{
+				auto ccView = m_Registry.group<CharacterControllerComponent>(entt::get<TransformComponent>);
+				for (auto ent : ccView)
+				{
+					auto [transform, characterController] = ccView.get<TransformComponent, CharacterControllerComponent>(ent);
+					// TODO Check out the cc offset
+					transform.Translation = characterController.characterController->GetPosition() - glm::vec3(0.f, 1.15f, 0.f);
+				}
+			}
+			{
+				auto view = m_Registry.group<MeshComponent>(entt::get<TransformComponent>);
+				int l = view.size();
+				std::vector<entt::entity> transparentEntities;
+				for (auto e : view)
+				{
+					Entity entity = Entity(e, this);
+					auto [transformComponent, meshComponent] = view.get<TransformComponent, MeshComponent>(e);
+					glm::mat4 transform = GetWorldSpaceTransformMatrix(entity);
+					if (IsEnabled(entity))
+					{
+						Ref<Material> MaterialIns = MaterialSystem::GetMaterial(meshComponent.MaterialPath);
+						if (!MaterialIns)
+							MaterialIns = meshComponent.MaterialIns;
+
+						if (MaterialIns && !MaterialIns->IsCompiled)
+						{
+							if (MaterialIns && !MaterialIns->DiffuseTexturePath.empty())
+							{
+								Ref<Texture2D> diffTex = Texture2D::Create(MaterialIns->DiffuseTexturePath);
+								if (diffTex != nullptr)
+								{
+									MaterialIns->DiffuseTexture = diffTex;
+								}
+							}
+							if (MaterialIns && !MaterialIns->NormalTexturePath.empty())
+							{
+								Ref<Texture2D> normTex = Texture2D::Create(MaterialIns->NormalTexturePath);
+								if (normTex != nullptr)
+								{
+									MaterialIns->NormalTexture = normTex;
+								}
+							}
+							if (MaterialIns && !MaterialIns->SpecularTexturePath.empty())
+							{
+								Ref<Texture2D> specTex = Texture2D::Create(MaterialIns->SpecularTexturePath);
+								if (specTex != nullptr)
+								{
+									MaterialIns->SpecularTexture = specTex;
+								}
+							}
+							if (MaterialIns && !MaterialIns->EmissiveTexturePath.empty())
+							{
+								Ref<Texture2D> emisTex = Texture2D::Create(MaterialIns->EmissiveTexturePath);
+								if (emisTex != nullptr)
+								{
+									MaterialIns->EmissiveTexture = emisTex;
+								}
+							}
+							MaterialIns->IsCompiled = true;
+						}
+						if (MaterialIns)
+						{
+							if (MaterialIns->IsTransparent)
+							{
+								AddTransparentEntiy(&transparentEntities, e);
+								continue;
+							}
+							m_Shader->Bind();
+							BindSkyBox(4);
+							m_Shader->SetFloat4("eyeLocation", eyeLocation);
+							m_Shader->SetFloat("u_texsize", MaterialIns->TextureSize);
+							meshComponent.shader = m_Shader;
+							if (meshComponent.MeshDrawData && meshComponent.MeshDrawData->m_UseBones)
+							{
+								if (entity.HasComponent<AnimatorComponent>())
+								{
+									AnimatorComponent& animator = entity.GetComponent<AnimatorComponent>();
+									if (animator.animator)
+									{
+										animator.animator->UpdateAnimation(ts);
+										std::vector<glm::mat4>& transforms = animator.animator->GetFinalBoneMatrices();
+										//m_Shader->SetMat4("u_RotationMatrix", glm::mat4(1.f) * glm::toMat4(transformComponent.GetRotation()));
+										for (int i = 0; i < transforms.size(); ++i)
+										{
+											m_Shader->SetMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
+
+											glm::vec3 pos, sca;
+											glm::quat rotation;
+											Math::DecomposeTransform(transform, pos, rotation, sca);
+											m_Shader->SetMat4("u_RotationMatrix[" + std::to_string(i) + "]", glm::mat4(1.f) * glm::toMat4(rotation));
+										}
+									}
+								}
+								else
+								{
+									for (int i = 0; i < 100; ++i)
+									{
+										m_Shader->SetMat4("finalBonesMatrices[" + std::to_string(i) + "]", glm::mat4(1.f));
+
+										glm::vec3 pos, sca;
+										glm::quat rotation;
+										Math::DecomposeTransform(transform, pos, rotation, sca);
+										m_Shader->SetMat4("u_RotationMatrix[" + std::to_string(i) + "]", glm::mat4(1.f) * glm::toMat4(rotation));
+									}
+								}
+							}
+							MeshRenderer::DrawMesh(meshComponent, transform);
+						}
+					}
+				}
+
+				for (entt::entity handle : transparentEntities)
+				{
+					Entity entity = Entity(handle, this);
+					MeshComponent& meshComponent = entity.GetComponent<MeshComponent>();
+					Ref<Material> MaterialIns = MaterialSystem::GetMaterial(meshComponent.MaterialPath);
+					glm::mat4 transform = GetWorldSpaceTransformMatrix(entity);
+					m_Shader->Bind();
+					BindSkyBox(4);
+					m_Shader->SetFloat4("eyeLocation", eyeLocation);
+					m_Shader->SetFloat("u_texsize", MaterialIns->TextureSize);
+					meshComponent.shader = m_Shader;
+					MeshRenderer::DrawMesh(meshComponent, transform);
+				}
+			}
+			/*Renderer::EndScene();
+			m_RuntimeBuffer->Unbind();*/
+		}
 	}
-	void Scene::OnUpdateEditor(Timestep ts, glm::vec4 eyeLocation)
-	{	// Lights
+	void Scene::OnUpdateEditor(Timestep ts, EditorCamera& camera)
+	{	
+		Renderer::BeginScene(camera.GetViewMatrix(), camera.GetUnReversedProjectionMatrix());
+		// Lights
 		mainAnimator->UpdateAnimation(ts);
 		m_PhysicsWorld->TimeStep(1 / 60.f);
 		{
@@ -210,7 +403,7 @@ namespace vel
 						}
 						m_Shader->Bind();
 						BindSkyBox(4);
-						m_Shader->SetFloat4("eyeLocation", eyeLocation);
+						m_Shader->SetFloat4("eyeLocation", { camera.GetPosition().x,camera.GetPosition().y, camera.GetPosition().z, 1.f });
 						m_Shader->SetFloat("u_texsize", MaterialIns->TextureSize);
 						meshComponent.shader = m_Shader;
 						if (meshComponent.MeshDrawData && meshComponent.MeshDrawData->m_UseBones)
@@ -260,18 +453,17 @@ namespace vel
 				glm::mat4 transform = GetWorldSpaceTransformMatrix(entity);
 				m_Shader->Bind();
 				BindSkyBox(4);
-				m_Shader->SetFloat4("eyeLocation", eyeLocation);
+				m_Shader->SetFloat4("eyeLocation", {camera.GetPosition().x,camera.GetPosition().y, camera.GetPosition().z, 1.f});
 				m_Shader->SetFloat("u_texsize", MaterialIns->TextureSize);
 				meshComponent.shader = m_Shader;
 				MeshRenderer::DrawMesh(meshComponent, transform);
 			}
 		}
-		
+
+
+		Renderer::EndScene();
 	}
 	void Scene::OnEvent(Event& e)
-	{
-	}
-	void Scene::SetViewportSize(uint32_t width, uint32_t height)
 	{
 	}
 	Entity Scene::CreateEntity(const std::string& name, EntityType type)
@@ -709,5 +901,15 @@ namespace vel
 			enabled = IsEnabled(parent);
 		}
 		return enabled;
+	}
+	void  Scene::SetViewportSize(uint32_t width, uint32_t height)
+	{
+		m_ViewPortSize = { width, height };
+		auto view = m_Registry.view<TransformComponent, CameraComponent>();
+		for (auto cameraEntity : view)
+		{
+			auto& [transformcomp, camera] = view.get<TransformComponent, CameraComponent>(cameraEntity);
+			camera.Camera.SetViewportSize(width, height);
+		}
 	}
 }

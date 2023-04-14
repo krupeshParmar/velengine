@@ -14,6 +14,7 @@
 #include <iShape.h>
 #include <iPhysicsWorld.h>
 #include <iPhysicsFactory.h>
+#include "SceneCamera.h"
 
 namespace vel
 {
@@ -137,6 +138,25 @@ namespace vel
 			Rotation = quat;
 			RotationEuler = glm::eulerAngles(Rotation);
 		}
+	};
+
+
+	struct CameraComponent
+	{
+		enum class Type { None = -1, Perspective, Orthographic };
+		Type ProjectionType;
+
+		SceneCamera Camera;
+		bool Primary = true;
+
+		CameraComponent()
+		{
+			Camera.SetPerspective();
+		}
+		CameraComponent(const CameraComponent& other) = default;
+
+		operator SceneCamera& () { return Camera; }
+		operator const SceneCamera& () const { return Camera; }
 	};
 
 	struct Asset

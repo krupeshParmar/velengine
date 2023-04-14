@@ -44,10 +44,14 @@ namespace vel
 		Ref<VertexArray> m_TestVertexArray;
 
 		glm::vec2 m_ViewPortSize = { 0, 0 };
+		glm::vec2 m_GamePortSize = { 0, 0 };
 
 		EditorCamera m_EditorCamera;
 		bool m_ViewportFocused = false;
 		bool m_ViewportHovered = false;
+		bool m_GameFocused = false;
+		bool m_GameHovered = false;
+		bool m_GamePlay = false;
 
 		entt::entity m_SelectedEntity = entt::null;
 		bool openProjectCalled = false;

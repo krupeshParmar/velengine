@@ -197,8 +197,10 @@
     <ClInclude Include="src\vel\Scene\MeshRenderer.h" />
     <ClInclude Include="src\vel\Scene\SaveSystem.h" />
     <ClInclude Include="src\vel\Scene\Scene.h" />
+    <ClInclude Include="src\vel\Scene\SceneCamera.h" />
     <ClInclude Include="src\vel\Scene\SceneEnvironment.h" />
     <ClInclude Include="src\velpch.h" />
+    <ClInclude Include="src\vel\Scene\ScriptableEntity.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_fixes.hpp" />
@@ -660,6 +662,7 @@
     <ClCompile Include="src\velpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\vel\Scene\SceneCamera.cpp" />
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -4,6 +4,7 @@
 #include <glad/glad.h>
 #include "vel/Math/Math.h"
 #include <glm/gtx/quaternion.hpp>
+#include <glm/ext/matrix_projection.hpp>
 
 namespace vel
 {
@@ -67,6 +68,16 @@ namespace vel
 
 	void Renderer::BeginScene()
 	{
+	}
+
+	void Renderer::BeginScene(const SceneCamera& camera, const glm::mat4& transform)
+	{
+		//glm::mat4 viewProj = camera.GetProjectionMatrix() * glm::inverse(transform);
+		glm::mat4 view = glm::lookAt(
+			camera.Position, camera.Target, { 0.f, 1.f,0.f });
+		s_Data.ViewMatrix = view;
+		s_Data.ProjectionMatrix = camera.GetUnReversedProjectionMatrix();
+		s_Data.vertexDataBufferptr = s_Data.vertexDataBufferBase;
 	}
 
 	void Renderer::BeginScene(glm::mat4& viewProjectionMatrix)

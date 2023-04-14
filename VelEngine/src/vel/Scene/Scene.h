@@ -8,6 +8,7 @@
 #include "Component.h"
 #include <iPhysicsFactory.h>
 #include <iPhysicsWorld.h>
+#include "vel/Editor/EditorCamera.h"
 
 namespace vel
 {
@@ -23,11 +24,9 @@ namespace vel
 		~Scene();
 		void ReloadShader();
 		void OnUpdateRuntime(Timestep ts);
-		void OnUpdateEditor(Timestep ts, glm::vec4 eyeLocation);
+		void OnUpdateEditor(Timestep ts, EditorCamera& camera);
 
 		void OnEvent(Event& e);
-
-		void SetViewportSize(uint32_t width, uint32_t height);
 
 
 		Entity CreateEntity(const std::string& name = "", EntityType type = EntityType::NotAsset);
@@ -71,6 +70,7 @@ namespace vel
 
 		EntityMap& GetEntityMap() { return m_EntityIDMap; }
 
+		Ref<FrameBuffer> GetRuntimeBuffer() { return m_RuntimeBuffer; }
 
 		// TEMP
 		void BindSkyBox(int);
@@ -80,6 +80,7 @@ namespace vel
 		void BindLightData(Ref<Shader> shader, glm::vec4 eyepos);
 		void LoadAnimation(Animation* animation);
 		physics::iPhysicsWorld* GetPhysicsWorld() { return m_PhysicsWorld; }
+		void SetViewportSize(uint32_t width, uint32_t height);
 
 		std::string ScenePath;
 		Ref<Shader> m_Shader;
@@ -105,6 +106,8 @@ namespace vel
 		GUID m_SceneID;
 		EntityMap m_EntityIDMap;
 		entt::registry m_Registry;
+		Ref<FrameBuffer> m_RuntimeBuffer;
+		glm::vec2 m_ViewPortSize = { 0, 0 };
 
 		SkyBox* skybox;
 		ShaderLibrary m_ShaderLibrary;

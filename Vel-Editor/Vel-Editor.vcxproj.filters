@@ -10,6 +10,7 @@
     <ClInclude Include="src\EditorLayer2.h" />
     <ClInclude Include="src\Example.h" />
     <ClInclude Include="src\SceneManager.h" />
+    <ClInclude Include="src\Scripts\CameraController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorLayer.cpp" />
