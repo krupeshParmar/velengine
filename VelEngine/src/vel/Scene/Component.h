@@ -37,12 +37,13 @@ namespace vel
 
 		}
 		AssetComponent(const AssetComponent& other)
-			:FileLocation(other.FileLocation), ModelInstance(other.ModelInstance)
+			:FileLocation(other.FileLocation), ModelInstance(other.ModelInstance), AssetHandle(other.AssetHandle)
 		{
 
 		}
 		std::string FileLocation;
 		Ref<Model> ModelInstance;
+		std::vector<Asset> AssetHandle;
 	};
 
 	struct TagComponent
@@ -235,10 +236,11 @@ namespace vel
 		MeshComponent(const MeshComponent& other)
 			: Mesh(other.Mesh),Path(other.Path), 
 			SubmeshIndex(other.SubmeshIndex), MaterialIns(other.MaterialIns), 
-			ModelIns(other.ModelIns), UseFBXTextures(other.UseFBXTextures), 
+			UseFBXTextures(other.UseFBXTextures), 
 			shader(other.shader), Enabled(other.Enabled),
 			MaterialPath(other.MaterialPath), MeshDrawData(other.MeshDrawData)
 		{
+			//ModelIns = CreateRef<Model>();
 		}
 	};
 

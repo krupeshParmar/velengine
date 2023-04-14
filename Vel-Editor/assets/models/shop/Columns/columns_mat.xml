@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<material>
+	<name>Columns</name>
+	<transparent>0</transparent>
+	<texture_size>1.000000</texture_size>
+	<diffuse>
+		<r>0.750000</r>
+		<g>0.750000</g>
+		<b>0.750000</b>
+		<a>1.000000</a>
+	</diffuse>
+	<specular>
+		<r>0.750000</r>
+		<g>0.750000</g>
+		<b>0.750000</b>
+		<a>1.000000</a>
+	</specular>
+	<emissive>
+		<r>0.000000</r>
+		<g>0.000000</g>
+		<b>0.000000</b>
+		<a>1.000000</a>
+	</emissive>
+	<ambient>1.000000</ambient>
+	<shininess>1.337000</shininess>
+	<emissive_intensity>3.398000</emissive_intensity>
+	<diffuse_texture>assets/models/shop/columns/Columns_Low_Columns_BaseMap.png</diffuse_texture>
+	<specular_texture>assets/models/shop/columns/Columns_Low_Columns_Specular.png</specular_texture>
+	<normal_texture>assets/models/shop/columns/Columns_Low_Columns_Normal.png</normal_texture>
+	<emissive_texture>assets/models/shop/columns/Columns_Low_Columns_Emissive.png</emissive_texture>
+</material>

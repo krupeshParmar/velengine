@@ -1,19 +1,19 @@
 <?xml version="1.0"?>
 <material>
-	<name>asphalt</name>
+	<name>Big pipe</name>
 	<transparent>0</transparent>
-	<texture_size>100.000000</texture_size>
+	<texture_size>1.003000</texture_size>
 	<diffuse>
-		<r>0.750000</r>
-		<g>0.750000</g>
-		<b>0.750000</b>
-		<a>0.750000</a>
+		<r>0.181373</r>
+		<g>0.181373</g>
+		<b>0.181373</b>
+		<a>1.000000</a>
 	</diffuse>
 	<specular>
-		<r>0.750000</r>
-		<g>0.750000</g>
-		<b>0.750000</b>
-		<a>0.750000</a>
+		<r>0.352941</r>
+		<g>0.352941</g>
+		<b>0.352941</b>
+		<a>1.000000</a>
 	</specular>
 	<emissive>
 		<r>0.000000</r>
@@ -23,8 +23,8 @@
 	</emissive>
 	<ambient>1.000000</ambient>
 	<shininess>0.000000</shininess>
-	<emissive_intensity>1.000000</emissive_intensity>
-	<diffuse_texture>assets/textures/asphalt.png</diffuse_texture>
+	<emissive_intensity>4.373000</emissive_intensity>
+	<diffuse_texture></diffuse_texture>
 	<specular_texture></specular_texture>
 	<normal_texture></normal_texture>
 	<emissive_texture></emissive_texture>

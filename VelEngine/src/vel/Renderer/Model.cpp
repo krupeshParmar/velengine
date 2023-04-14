@@ -150,6 +150,11 @@ namespace vel
         return wholeMeshData;
     }
 
+    void Model::AddAsset(Asset asset)
+    {
+        m_AssetHandle.push_back(asset);
+    }
+
     struct MeshLoadingInfo
     {
         aiMesh* aimesh;
@@ -438,7 +443,7 @@ namespace vel
                         meshcomp->MaterialIns = material;
                     meshcomp->MaterialPath = materialLocation;                        
                     TransformComponent* transform = &entity->Transform();
-                    transform->RotationEuler = asset.transform.RotationEuler;
+                    transform->SetRotationEuler(asset.transform.RotationEuler);
                     transform->Translation = asset.transform.Translation;
                     transform->Scale = asset.transform.Scale;
                     transform->enabled = asset.transform.enabled;
@@ -488,7 +493,7 @@ namespace vel
                 {
                     Asset asset = modelLoadData.assetData[entity->GetAssetID()];
                     TransformComponent* transform = &entity->Transform();
-                    transform->RotationEuler = asset.transform.RotationEuler;
+                    transform->SetRotationEuler(asset.transform.RotationEuler);
                     transform->Translation = asset.transform.Translation;
                     transform->Scale = asset.transform.Scale;
                     transform->enabled = asset.transform.enabled;
@@ -497,7 +502,8 @@ namespace vel
             }
             ProcessNode(node->mChildren[i], scene, entity);
         }
-        SaveAssetFile(GUID(), m_Path + "/" + m_Name + ".vasset", m_AssetHandle);
+        if(modelLoadData.assetData.empty())
+            SaveAssetFile(GUID(), m_Path + "/" + m_Name + ".vasset", m_AssetHandle);
     }
 
     std::vector<Ref<Texture2D>>  Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typesname)

@@ -29,7 +29,7 @@ namespace vel
 		}
 		if (m_CurrentAnimation)
 		{
-			m_CurrentTime += m_CurrentAnimation->GetTicksPerSecond() * dt;
+			m_CurrentTime += m_CurrentAnimation->GetTicksPerSecond() * m_CurrentAnimation->GetSpeed() * dt;
 			m_CurrentTime = fmod(m_CurrentTime, m_CurrentAnimation->GetDuration());
 			CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
 		}
@@ -37,7 +37,7 @@ namespace vel
 	void Animator::PlayAnimation(Animation* pAnimation)
 	{
 		m_PreviousAnimation = m_CurrentAnimation;
-		m_TransitionTime = pAnimation->TransitionTime;
+		m_TransitionTime = pAnimation->SpeedAndTransitionTime.y;
 		m_CurrentAnimation = pAnimation;
 		m_CurrentTime = 0.0f;
 	}

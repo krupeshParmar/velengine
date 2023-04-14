@@ -597,14 +597,13 @@ namespace vel
 				pugi::xml_node assetComponentPathNode = assetComponentNode.append_child("file_location");
 				assetComponentPathNode.append_child(pugi::node_pcdata).set_value(assetComponent.FileLocation.c_str());
 				
-				Ref<Model> model = assetComponent.ModelInstance;
+				/*Ref<Model> model = assetComponent.ModelInstance;
 				if (model)
 				{
 					int break_me = 0;
-				}
-				Entity* parentAssetEntity = model->m_ModelPrefab;
+				}*/
 
-				for (Asset asset : model->GetAssets())
+				for (Asset& asset : assetComponent.AssetHandle)
 				{
 					Entity assetEntity = scene->GetEntityWithGUID(asset.ID);
 
@@ -1154,12 +1153,9 @@ namespace vel
 														}
 
 														transform->SetRotationEuler(rotation);
-														if (transform->Translation.y == -2.f)
-															int breakme = 0;
 														std::map<GUID, Asset>::iterator assMapIT = assetsData.find(GUID(id));
 														if (assMapIT != assetsData.end())
 															assMapIT->second.transform = *transform;
-
 														delete transform;
 													}
 												}

@@ -34,8 +34,11 @@ namespace vel
 		Ref<Model> model = CreateRef<Model>(data);
 		if (!data.parentEntity->HasComponent<AssetComponent>())
 		{
+			AssetComponent* assetComponent = new AssetComponent(model->GetFullPath(), model);
+			assetComponent->AssetHandle = model->GetAssets();
 			data.parentEntity->AddComponent
-				<AssetComponent>(AssetComponent(model->GetFullPath(), model));
+				<AssetComponent>(*assetComponent);
+			delete assetComponent;
 		}
 		else
 		{

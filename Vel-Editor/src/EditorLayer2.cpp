@@ -451,7 +451,16 @@ namespace vel
 			ImGui::SameLine();
 			if (ImGui::Button("Duplicate"))
 			{
-				m_ActiveScene->DuplicateEntity(entity, entity.GetParent());
+				Entity dupEntity = m_ActiveScene->DuplicateEntity(entity, entity.GetParent());
+				m_SelectedEntity = dupEntity;
+			}
+			if (ImGui::Button("Delete"))
+			{
+				m_ActiveScene->DeleteEntity(entity);
+				m_SelectedEntity = entt::null;
+				ImGui::EndGroup();
+				ImGui::End();
+				return;
 			}
 			ImGui::Text(std::to_string(entity.GetGUID()).c_str());
 			ImGui::Separator();
@@ -516,12 +525,12 @@ namespace vel
 
 			// Asset
 			ImGui::BeginGroup();
-
 			{
 				if (entity.HasComponent<AssetComponent>())
 				{
 					hasAsset = true;
 					AssetComponent* asset = &entity.GetComponent<AssetComponent>();
+					ImGui::Text("Total assets: %d", asset->AssetHandle.size());
 					ImGui::InputText("Asset Location##assetLoc", &asset->FileLocation);
 					if (ImGui::Button("Load Asset"))
 					{
@@ -543,12 +552,10 @@ namespace vel
 					}
 				}
 			}
-
 			ImGui::EndGroup();
 
 			// Animator
 			ImGui::BeginGroup();
-
 			{
 				if (entity.HasComponent<AnimatorComponent>())
 				{
@@ -563,7 +570,8 @@ namespace vel
 					}
 					for (Animation* animation : animator.List_Animations)
 					{
-						std::string label1 = "Transition Time##" + animation->name + "ifTT";
+						std::string label1 = "Speed and Transition##" + animation->name + "ifTT";
+						ImGui::InputFloat2(label1.c_str(), glm::value_ptr(animation->SpeedAndTransitionTime));
 						ImGui::TextColored({0.8f, 0.8f, 0.2f, 1.f}, animation->name.c_str());
 						ImGui::SameLine();
 						std::string label2 = "Play##" + animation->name + "Playbtn";
@@ -571,17 +579,13 @@ namespace vel
 						{
 							animator.animator->PlayAnimation(animation);
 						}
-						ImGui::SameLine();
-						ImGui::InputFloat(label1.c_str(), &animation->TransitionTime);
 					}
 				}
 			}
-
 			ImGui::EndGroup();
 
 			// Character Controller
 			ImGui::BeginGroup();
-
 			{
 				if (entity.HasComponent<CharacterControllerComponent>())
 				{
@@ -591,7 +595,6 @@ namespace vel
 					ImGui::InputFloat("Height##ccHeight", &characterController.height);
 				}
 			}
-
 			ImGui::EndGroup();
 
 			// Mesh Component
@@ -622,6 +625,12 @@ namespace vel
 							Ref<Material> mat = MaterialSystem::GetMaterial(mesh->MaterialPath);
 							if (mat)
 								mesh->MaterialIns = mat;
+							else
+							{
+								Ref<Material> mat = MaterialSystem::LoadMaterial(mesh->MaterialPath,GetMaterialFromSaveFile(mesh->MaterialPath));
+								if (mat)
+									mesh->MaterialIns = mat;
+							}
 						}
 						if (ImGui::Button("Save Material##matSaveBtn1"))
 						{
@@ -648,7 +657,7 @@ namespace vel
 								SaveMaterial(mesh->MaterialPath, mesh->MaterialIns);
 							}
 						}
-						ImGui::SliderFloat("Texture Size##textSizeMaterial", &mesh->MaterialIns->TextureSize, 0.5f, 10.f);
+						ImGui::SliderFloat("Texture Size##textSizeMaterial", &mesh->MaterialIns->TextureSize, 0.5f, 100.f);
 						ImGui::Checkbox("Transparent##transMaterial", &mesh->MaterialIns->IsTransparent);
 						ImGui::ColorEdit4("Diffuse##difmaterial", glm::value_ptr(mesh->MaterialIns->Diffuse));
 						ImGui::ColorEdit4("Specular##specmaterial", glm::value_ptr(mesh->MaterialIns->Specular));

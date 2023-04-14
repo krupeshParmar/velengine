@@ -33,6 +33,8 @@ namespace vel
 
 		inline float GetTicksPerSecond() { return m_TicksPerSecond; }
 
+		inline float GetSpeed() { return SpeedAndTransitionTime.x; }
+
 		inline float GetDuration() { return m_Duration; }
 
 		inline const AssimpNodeData& GetRootNode() { return m_RootNode; }
@@ -43,7 +45,7 @@ namespace vel
 		}
 
 		std::string name;
-		float TransitionTime = 1.f;
+		glm::vec2 SpeedAndTransitionTime = glm::vec2(1.f);
 	private:
 		void ReadMissingBones(const aiAnimation* animation, MeshData& mesh);
 		void ReadHeirarchyData(AssimpNodeData& dest, const aiNode* src);

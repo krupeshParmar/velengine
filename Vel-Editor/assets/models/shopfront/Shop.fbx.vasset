@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<assets_list id="5273622136716639060">
+<assets_list id="11679517039293624153">
 	<asset>
 		<name>Shop.fbx</name>
 		<id>10838312110386143998</id>
@@ -190,50 +190,50 @@
 	</asset>
 	<asset>
 		<name>Upper Floor</name>
-		<id>9942191507864170151</id>
+		<id>983038305066770938</id>
 	</asset>
 	<asset>
 		<name>Cube.016_Mesh</name>
-		<id>7558562485246048800</id>
+		<id>18347688781896131524</id>
 	</asset>
 	<asset>
 		<name>WindowPlane</name>
-		<id>4914964357092662394</id>
+		<id>5191196698071754227</id>
 	</asset>
 	<asset>
 		<name>Plane.002_Mesh</name>
-		<id>15129755178869670946</id>
+		<id>4780372578840254609</id>
 	</asset>
 	<asset>
 		<name>ShopFront V2</name>
-		<id>7584272219657552830</id>
+		<id>10196431949039880582</id>
 	</asset>
 	<asset>
 		<name>Cube.013_Mesh</name>
-		<id>10188995643188399338</id>
+		<id>12391335448999735263</id>
 	</asset>
 	<asset>
 		<name>ElectricBox</name>
-		<id>17709787113330865885</id>
+		<id>8083411184435193589</id>
 	</asset>
 	<asset>
 		<name>Cube.014_Mesh</name>
-		<id>15465241565242442642</id>
+		<id>14373989428140810201</id>
 	</asset>
 	<asset>
 		<name>GenBottomPipe</name>
-		<id>16258560069529242694</id>
+		<id>6931352868389528077</id>
 	</asset>
 	<asset>
 		<name>Cylinder.007_Mesh</name>
-		<id>10371517328432020391</id>
+		<id>4114628216996987429</id>
 	</asset>
 	<asset>
 		<name>GenSidePipe</name>
-		<id>17535787010032201349</id>
+		<id>4792967443676679841</id>
 	</asset>
 	<asset>
 		<name>BezierCurve.001_Mesh</name>
-		<id>9933066169668296421</id>
+		<id>8110978230459782809</id>
 	</asset>
 </assets_list>

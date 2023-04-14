@@ -36,6 +36,7 @@ namespace vel
 		Entity CreateChildEntityWithID(GUID guid, Entity parent, const std::string& name = "", bool shouldSort = true, EntityType type = EntityType::NotAsset);
 		Entity CreateAssetEntityWithID(GUID guid, Entity parent, const std::string& name = "", bool shouldSort = true, EntityType type = EntityType::NotAsset);
 		Entity DuplicateEntity(Entity& entity, Entity& parentEntity);
+		void DeleteEntity(Entity& entity);
 		template<typename... Components>
 		auto GetAllEntitiesWith()
 		{

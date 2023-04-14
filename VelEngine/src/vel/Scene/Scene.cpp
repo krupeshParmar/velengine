@@ -101,7 +101,7 @@ namespace vel
 		m_SkyBoxShader->Bind();
 		m_SkyBoxShader->SetInt("skybox", 0);
 		//-1.7939719, 28.011202, -68.473145
-		ScenePath = "MariaTest3";
+		ScenePath = "BattleScene";
 		LoadScene();
 	}
 	Scene::~Scene()
@@ -146,8 +146,8 @@ namespace vel
 			for (auto ent : ccView)
 			{
 				auto [transform, characterController] = ccView.get<TransformComponent, CharacterControllerComponent>(ent);
-				
-				transform.Translation = characterController.characterController->GetPosition();
+				// TODO Check out the cc offset
+				transform.Translation = characterController.characterController->GetPosition() - glm::vec3(0.f, 1.15f, 0.f);
 			}
 		}
 		{
@@ -299,7 +299,7 @@ namespace vel
 		EnterCriticalSection(&cs_EntityMapLock);
 		m_EntityIDMap.emplace(idComponent.ID,entity);
 		LeaveCriticalSection(&cs_EntityMapLock);
-		SortEntities();
+		//SortEntities();
 
 		return entity;
 	}
@@ -402,26 +402,33 @@ namespace vel
 		IDComponent& idComponent = entity.GetComponent<IDComponent>();
 		TransformComponent& transformComponent = entity.GetComponent<TransformComponent>();
 		Entity newEntity;
+		std::string materialLocation = "";
 		if (parentEntity)
 		{
-			newEntity = CreateChildEntity(parentEntity, entity.Name(), idComponent.Type);
+			newEntity = CreateChildEntity(parentEntity, entity.Name() + "_Duplicate", idComponent.Type);
 		}
 		else
 		{
 			newEntity = CreateEntity(entity.Name() + "_Duplicate", idComponent.Type);
 		}
+
 		// Asset Component
 		{
 			if (entity.HasComponent<AssetComponent>())
 			{
 				AssetComponent& assetComponent = entity.GetComponent<AssetComponent>();
-				newEntity.AddComponent<AssetComponent>(AssetComponent(assetComponent));
+				newEntity.AddComponent<AssetComponent>(AssetComponent(assetComponent.FileLocation, assetComponent.ModelInstance));
 			}
 		}
 
 		// Transform Component
 		{
-			newEntity.Transform() = TransformComponent(transformComponent);
+			TransformComponent* newTransform = &newEntity.Transform();
+			TransformComponent* transform = &entity.Transform();
+			newTransform->RotationEuler = transform->RotationEuler;
+			newTransform->Translation = transform->Translation;
+			newTransform->Scale = transform->Scale;
+			newTransform->enabled = transform->enabled;
 		}
 
 		// Rigidbody Component
@@ -438,6 +445,7 @@ namespace vel
 			if (entity.HasComponent<MeshComponent>())
 			{
 				MeshComponent& meshComponent = entity.GetComponent<MeshComponent>();
+				materialLocation = meshComponent.MaterialPath;
 				newEntity.AddComponent<MeshComponent>(MeshComponent(meshComponent));
 			}
 		}
@@ -460,11 +468,50 @@ namespace vel
 			}
 		}
 
+		if (idComponent.Type == EntityType::IsAsset)
+		{
+			IDComponent& newIdComponent = newEntity.GetComponent<IDComponent>();
+			newIdComponent.AssetID = idComponent.AssetID;
+			newIdComponent.Type = EntityType::IsAsset;
+			bool loop = true;
+			Entity parentWithAsset;
+			Entity currentEntity = newEntity;
+			while (loop)
+			{
+				parentWithAsset = currentEntity.GetParent();
+				if (!parentWithAsset)
+					loop = false;
+				parentWithAsset.SetScene(this);
+				if (parentWithAsset.HasComponent<AssetComponent>())
+					loop = false;
+				currentEntity = parentWithAsset;
+			}
+			if (parentWithAsset && parentWithAsset.HasComponent<AssetComponent>())
+			{
+				VEL_CORE_INFO("Adding new asset");
+				AssetComponent& asset = parentWithAsset.GetComponent<AssetComponent>();
+				asset.AssetHandle.push_back({ newEntity.Name(),newEntity.GetGUID(),newEntity.GetAssetID(), materialLocation });
+			}
+		}
+
 		for (GUID childEntityGUID : entity.Children())
 		{
 			DuplicateEntity(GetEntityWithGUID(childEntityGUID), newEntity);
 		}
 		return newEntity;
+	}
+	void Scene::DeleteEntity(Entity& entity)
+	{
+		if (entity.Children().size() > 0)
+		{
+			for (GUID child : entity.Children())
+			{
+				Entity childEntity = TryGetEntityWithGUID(child);
+				if(childEntity)
+					DeleteEntity(childEntity);
+			}
+		}
+		m_Registry.destroy(entity.m_EntityHandle);
 	}
 	Entity Scene::GetEntityWithGUID(GUID id) const
 	{

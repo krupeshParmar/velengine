@@ -56,6 +56,7 @@ namespace vel
 		Model(std::string source, bool useTextures, bool loadAsync, Scene* gameScene);
 		~Model();
 		MeshData GetMeshData();
+		void AddAsset(Asset asset);
 		std::vector<Asset> GetAssets() { return m_AssetHandle; }
 		std::string GetFullPath() { return m_Path + "/" + m_Name + ".vasset"; }
 
