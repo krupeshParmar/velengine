@@ -1,5 +1,5 @@
 #pragma once
-
+#include "CharacterControllerDesc.h"
 #include "iRigidBody.h"
 #include <glm/glm.hpp>
 
@@ -13,6 +13,7 @@ namespace physics
 		virtual void Move(glm::vec3 displacement, float dt) = 0;
 		virtual void SetMass(float mass) = 0;
 		virtual void SetMaxLinearVelocity(float velocity) = 0;
+		virtual void Reset(CharacterControllerDesc desc) = 0;
 		virtual void SetPosition(glm::vec3 pos) = 0;
 		virtual glm::vec3 GetPosition() = 0;
 

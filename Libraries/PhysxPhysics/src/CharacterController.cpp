@@ -1,4 +1,5 @@
 #include "CharacterController.h"
+#include <characterkinematic/PxCapsuleController.h>
 
 namespace physics
 {
@@ -15,6 +16,8 @@ namespace physics
 		}
 		void CharacterController::AddForce(glm::vec3 force)
 		{
+			physx::PxControllerState state;
+			m_Controller->getState(state);
 		}
 		void CharacterController::Move(glm::vec3 displacement, float dt)
 		{
@@ -29,6 +32,12 @@ namespace physics
 		}
 		void CharacterController::SetMaxLinearVelocity(float vel)
 		{
+		}
+		void CharacterController::Reset(CharacterControllerDesc desc)
+		{
+			physx::PxCapsuleController* capCont = (physx::PxCapsuleController*)(m_Controller);
+			capCont->setRadius(desc.radius);
+			capCont->setHeight(desc.height);
 		}
 		void CharacterController::SetPosition(glm::vec3 pos)
 		{

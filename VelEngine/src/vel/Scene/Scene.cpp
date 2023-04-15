@@ -188,8 +188,9 @@ namespace vel
 				for (auto ent : ccView)
 				{
 					auto [transform, characterController] = ccView.get<TransformComponent, CharacterControllerComponent>(ent);
+
 					// TODO Check out the cc offset
-					transform.Translation = characterController.characterController->GetPosition() - glm::vec3(0.f, 1.15f, 0.f);
+					transform.Translation = characterController.characterController->GetPosition() + glm::vec3(0.f, 1.0f, 0.f);
 				}
 			}
 			{
@@ -340,7 +341,8 @@ namespace vel
 			{
 				auto [transform, characterController] = ccView.get<TransformComponent, CharacterControllerComponent>(ent);
 				// TODO Check out the cc offset
-				transform.Translation = characterController.characterController->GetPosition() - glm::vec3(0.f, 1.15f, 0.f);
+				if(characterController.characterController)
+					transform.Translation = characterController.characterController->GetPosition() - glm::vec3(0.f, 1.15f, 0.f);
 			}
 		}
 		{

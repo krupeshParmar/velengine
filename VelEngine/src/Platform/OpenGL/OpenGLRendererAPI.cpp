@@ -127,5 +127,4 @@ namespace vel
 		glActiveTexture(GL_TEXTURE0 + slot);
 		glBindTexture(GL_TEXTURE_2D, renderID);
 	}
-
 }

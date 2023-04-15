@@ -11,6 +11,7 @@
     <ClInclude Include="src\Example.h" />
     <ClInclude Include="src\SceneManager.h" />
     <ClInclude Include="src\Scripts\CameraController.h" />
+    <ClInclude Include="src\Scripts\PlayerController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorLayer.cpp" />

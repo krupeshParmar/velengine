@@ -34,7 +34,5 @@ namespace vel
 		virtual void SetStencilFunc() override;
 
 		virtual void BindTextureUnit(uint32_t slot, uint32_t renderID) override;
-
-
 	};
 }

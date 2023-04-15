@@ -18,12 +18,13 @@ namespace physics
 			virtual void Move(glm::vec3 displacement, float dt) override;
 			virtual void SetMass(float mass) override;
 			virtual void SetMaxLinearVelocity(float vel) override;
+			virtual void Reset(CharacterControllerDesc desc) override;
 			virtual void SetPosition(glm::vec3 pos) override;
 			virtual glm::vec3 GetPosition() override {
 				return {
-					m_Controller->getPosition().x,
-					m_Controller->getPosition().y,
-					m_Controller->getPosition().z
+					m_Controller->getFootPosition().x,
+					m_Controller->getFootPosition().y,
+					m_Controller->getFootPosition().z
 				};
 			}
 

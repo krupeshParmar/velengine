@@ -63,6 +63,19 @@ namespace physics
 				groundPlane->userData = nullptr;
 				m_RigidBodies.push_back(groundPlane);
 			}
+			/*physx::PxRigidActor* sidePlane = physx::PxCreatePlane(
+				*mPhysics, physx::PxPlane(
+					1.f,
+					0.f,
+					0.f,
+					-30.f
+				), *mMaterial);
+			if (sidePlane)
+			{
+				mScene->addActor(*sidePlane);
+				sidePlane->userData = nullptr;
+				m_RigidBodies.push_back(sidePlane);
+			}*/
 		}
 
 		PhysicsWorld::~PhysicsWorld()
@@ -107,16 +120,16 @@ namespace physics
 				physx::PxCapsuleGeometry(
 					physx::PxReal(desc.radius), physx::PxReal(desc.height)), *mPhysics->createMaterial(0.5, 0.8, 0));
 			physx::PxTransform transform(
-				physx::PxVec3(desc.position.x, desc.position.y, desc.position.z),
+				physx::PxVec3(desc.position.x, desc.position.y + 1, desc.position.z),
 				physx::PxQuat(physx::PxHalfPi, physx::PxVec3(0, 0, 1))
 			);
 			CharacterController* characterController = new CharacterController();
 			physx::PxCapsuleControllerDesc controllerDesc;
-			controllerDesc.height = 1.8f;
+			controllerDesc.height = desc.height;
 			controllerDesc.climbingMode = physx::PxCapsuleClimbingMode::eCONSTRAINED;
-			controllerDesc.contactOffset = 0.05f;
+			controllerDesc.contactOffset = 0.01f;
 			controllerDesc.stepOffset = 0.1f;
-			controllerDesc.radius = 0.25f;
+			controllerDesc.radius = desc.radius;
 			controllerDesc.position = physx::PxExtendedVec3(desc.position.x, desc.position.y, desc.position.z);
 			controllerDesc.upDirection = physx::PxVec3(0.0f, 1.0f, 0.0f);
 			controllerDesc.material = mPhysics->createMaterial(1.0f, 1.0f, 0.05);

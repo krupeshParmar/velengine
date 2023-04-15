@@ -161,6 +161,16 @@ namespace vel
 		m_Context->SwapBuffers();
 	}
 
+	void WindowsWindow::DisableMouse() const
+	{
+		glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	}
+
+	void WindowsWindow::EnableMouse() const
+	{
+		glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
+
 	void WindowsWindow::SetVSync(bool enabled)
 	{
 		VEL_PROFILE_FUNCTION();

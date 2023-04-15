@@ -515,6 +515,21 @@ namespace vel
 				}
 			}
 
+			if (entity.HasComponent<CameraComponent>())
+			{
+				CameraComponent camera = entity.GetComponent<CameraComponent>();
+				pugi::xml_node cameraNode = componentNode.append_child("camera");
+				pugi::xml_node cameraPrimary = cameraNode.append_child("primary");
+				if (camera.Primary)
+				{
+					cameraPrimary.append_child(pugi::node_pcdata).set_value("1");
+				}
+				else
+				{
+					cameraPrimary.append_child(pugi::node_pcdata).set_value("0");
+				}
+			}
+
 			if (entity.HasComponent<LightComponent>())
 			{
 				LightComponent lightComponent = entity.GetComponent<LightComponent>();
@@ -683,7 +698,19 @@ namespace vel
 							for (Animation* animation : animator.List_Animations)
 							{
 								pugi::xml_node assetAnimation = assetNode.append_child("animation");
-								assetAnimation.append_child(pugi::node_pcdata).set_value(animation->name.c_str());
+								{
+									pugi::xml_node animationName = assetAnimation.append_child("name");
+									animationName.append_child(pugi::node_pcdata).set_value(animation->name.c_str());
+
+									pugi::xml_node animationID = assetAnimation.append_child("id");
+									animationID.append_child(pugi::node_pcdata).set_value(std::to_string(animation->ID).c_str());
+
+									pugi::xml_node animationLoop = assetAnimation.append_child("loop");
+									if(animation->Loop)
+										animationLoop.append_child(pugi::node_pcdata).set_value("1");
+									else
+										animationLoop.append_child(pugi::node_pcdata).set_value("0");
+								}
 							}
 						}
 					}
@@ -702,6 +729,16 @@ namespace vel
 						}
 					}
 				}
+			}
+
+			if (entity.HasComponent<CharacterControllerComponent>())
+			{
+				CharacterControllerComponent characterController = entity.GetComponent<CharacterControllerComponent>();
+				pugi::xml_node characterControllerNode = componentNode.append_child("characterController");
+				pugi::xml_node characterRadius = characterControllerNode.append_child("radius");
+				characterRadius.append_child(pugi::node_pcdata).set_value(std::to_string(characterController.radius).c_str());
+				pugi::xml_node characterHeight = characterControllerNode.append_child("height");
+				characterHeight.append_child(pugi::node_pcdata).set_value(std::to_string(characterController.height).c_str());
 			}
 
 			if (entity.HasComponent<MeshComponent>())
@@ -801,6 +838,34 @@ namespace vel
 						{
 							pugi::xml_node componentNode = *componentsNodeIterator;
 							std::string componentNodeName = componentNode.name();
+							if (componentNodeName == "camera")
+							{
+								CameraComponent* camera = new CameraComponent();
+								pugi::xml_object_range<pugi::xml_node_iterator>
+									cameraNodeChildren = componentNode.children();
+								for (pugi::xml_node_iterator cameraNodeIterator = cameraNodeChildren.begin();
+									cameraNodeIterator != cameraNodeChildren.end();
+									cameraNodeIterator++)
+								{
+									pugi::xml_node cameraComponentNode = *cameraNodeIterator;
+									std::string cameraComponentNodeName = cameraComponentNode.name();
+									if (cameraComponentNodeName == "primary")
+									{
+										std::string isPrimary = cameraComponentNode.child_value();
+										if (isPrimary == "1")
+										{
+											camera->Primary = true;
+										}
+										else
+										{
+											camera->Primary = false;
+										}
+									}
+								}
+								entity->AddComponent<CameraComponent>(*camera);
+								delete camera;
+							}
+
 							if (componentNodeName == "transform")
 							{
 								TransformComponent* transform = new TransformComponent();
@@ -1164,10 +1229,38 @@ namespace vel
 											if (assetDataNodeName == "animation")
 											{
 												std::map<GUID, Asset>::iterator assMapIT = assetsData.find(GUID(id));
+												AnimationLoadData animLoadData;
 												if (assMapIT != assetsData.end())
 												{
-													assMapIT->second.AnimationsList.push_back(assetDataNode.child_value());
+													pugi::xml_object_range<pugi::xml_node_iterator>
+														animationNodeChildren = assetDataNode.children();
+													for (pugi::xml_node_iterator animDataIterator = animationNodeChildren.begin();
+														animDataIterator != animationNodeChildren.end();
+														animDataIterator++)
+													{
+														pugi::xml_node animDataNode = *animDataIterator;
+														std::string animDataNodeName = animDataNode.name();
+
+														if (animDataNodeName == "name")
+														{
+															animLoadData.path = animDataNode.child_value();
+														}
+
+														if (animDataNodeName == "id")
+														{
+															animLoadData.id = std::stoi(animDataNode.child_value());
+														}
+
+														if (animDataNodeName == "loop")
+														{
+															if(std::stoi(animDataNode.child_value()) == 1)
+																animLoadData.loop = true;
+															else
+																animLoadData.loop = false;
+														}
+													}
 												}
+												assMapIT->second.AnimationsList.push_back(animLoadData);
 											}
 											if (assetDataNodeName == "material_path")
 											{
@@ -1190,6 +1283,33 @@ namespace vel
 								data.parentEntity = entity;
 								data.assetData = assetsData;
 								MeshRenderer::LoadMesh(data);
+							}
+
+							if (componentNodeName == "characterController")
+							{
+								CharacterControllerComponent* characterController = new CharacterControllerComponent();
+								physics::CharacterControllerDesc desc;
+								pugi::xml_object_range<pugi::xml_node_iterator>
+									characterControllerNodeChildren = componentNode.children();
+								for (pugi::xml_node_iterator characterControllerNodeIterator = characterControllerNodeChildren.begin();
+									characterControllerNodeIterator != characterControllerNodeChildren.end();
+									characterControllerNodeIterator++)
+								{
+									pugi::xml_node characterComponentNode = *characterControllerNodeIterator;
+									std::string characterComponentNodeName = characterComponentNode.name();
+									if (characterComponentNodeName == "height")
+									{
+										desc.height = std::stof(characterComponentNode.child_value());
+									}
+									if (characterComponentNodeName == "radius")
+									{
+										desc.radius = std::stof(characterComponentNode.child_value());
+									}
+								}
+								desc.position = entity->Transform().Translation;
+								desc.rotation = entity->Transform().RotationEuler;
+								characterController->characterController = scene->GetPhysicsWorld()->CreateCharacterController(desc);
+								entity->AddComponent<CharacterControllerComponent>(*characterController);							
 							}
 
 							if (componentNodeName == "meshobject")

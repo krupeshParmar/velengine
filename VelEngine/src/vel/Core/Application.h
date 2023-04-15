@@ -27,6 +27,17 @@ namespace vel {
 
 		inline Window& GetWindow() { return *m_Window; }
 		inline static Application& Get() { return *s_Instance; }
+
+		inline void DisableMouse()
+		{
+			m_Window->DisableMouse();
+		}
+
+		inline void EnableMouse()
+		{
+			m_Window->EnableMouse();
+		}
+
 	private:
 		bool OnWindowClosed(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);

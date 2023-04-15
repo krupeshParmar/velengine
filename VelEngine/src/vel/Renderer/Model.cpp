@@ -450,9 +450,11 @@ namespace vel
                     if (!asset.AnimationsList.empty())
                     {
                         AnimatorComponent animatorComponent;
-                        for (std::string animationName : asset.AnimationsList)
+                        for (AnimationLoadData animationData : asset.AnimationsList)
                         {
-                            Animation* animation = new Animation(animationName, data);
+                            Animation* animation = new Animation(animationData.path, data);
+                            animation->Loop = animationData.loop;
+                            animation->ID = animationData.id;
                             animatorComponent.List_Animations.push_back(animation);
                         }
                         entity->AddComponent<AnimatorComponent>(animatorComponent);

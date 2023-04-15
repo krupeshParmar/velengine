@@ -160,6 +160,9 @@ namespace vel
 
 		void SetScene(Scene* scene) { m_Scene = scene; }
 
+		// TODO Remove later
+		Scene* GetScene() { return m_Scene; }
+
 	private:
 		entt::entity m_EntityHandle{ entt::null };
 
@@ -178,6 +181,10 @@ namespace vel
 		{
 			return m_Entity.GetComponent<T>();
 		}
+
+		std::vector<GUID>& Children() { return m_Entity.Children(); }
+
+		Scene* GetScene() { return m_Entity.GetScene(); }
 
 	protected:
 		virtual void OnCreate()

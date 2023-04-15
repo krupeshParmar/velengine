@@ -6,6 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <CharacterControllerDesc.h>
 #include "Scripts/CameraController.h"
+#include "Scripts/PlayerController.h"
 
 namespace vel
 {
@@ -92,17 +93,6 @@ namespace vel
 			VEL_PROFILE_SCOPE("EditorCamera::OnUpdate");
 			if (m_ViewportFocused)
 				m_EditorCamera.OnUpdate(ts);
-		}
-		if (controller)
-		{
-			if (Input::IsKeyPressed(KeyCode::W))
-				controller->Move({ 0.f, 0.f, 10.f }, ts);
-			if (Input::IsKeyPressed(KeyCode::S))
-				controller->Move({ 0.f, 0.f, -10.f }, ts);
-			if (Input::IsKeyPressed(KeyCode::A))
-				controller->Move({ 10.f, 0.f, 0.f }, ts);
-			if (Input::IsKeyPressed(KeyCode::D))
-				controller->Move({ -10.f, 0.f, 0.f }, ts);
 		}
 		{
 			VEL_PROFILE_SCOPE("Renderer Prep");
@@ -428,7 +418,23 @@ namespace vel
 		for (auto entityHandle : entities)
 		{
 			Entity entity = Entity(entityHandle, m_ActiveScene.get());
-
+			if (entity.HasComponent<CameraComponent>())
+			{
+				if (entity.GetComponent<CameraComponent>().Primary)
+				{
+					if (!entity.HasComponent<NativeScriptComponent>())
+					{
+						entity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+					}
+				}
+			}
+			if (entity.HasComponent<CharacterControllerComponent>())
+			{
+				if (!entity.HasComponent<NativeScriptComponent>())
+				{
+					entity.AddComponent<NativeScriptComponent>().Bind<PlayerController>();
+				}
+			}
 			if (entity.GetParentGUID() != 0)
 				continue;
 
@@ -626,17 +632,31 @@ namespace vel
 						animator.LoadAnimation(mesh.MeshDrawData);
 						//m_ActiveScene->LoadAnimation(animator.animation);
 					}
+					int count = 0;
 					for (Animation* animation : animator.List_Animations)
 					{
+						ImGui::BeginGroup();
+						std::string label0 = "ID##" + animation->name + "idAnim" + std::to_string(count);
+						ImGui::InputInt(label0.c_str(), &animation->ID);
+						
+
+						std::string label01 = "Loop##" + animation->name + "loopAnim" + std::to_string(count);
+						ImGui::Checkbox(label01.c_str(), &animation->Loop);
+
 						std::string label1 = "Speed and Transition##" + animation->name + "ifTT";
 						ImGui::InputFloat2(label1.c_str(), glm::value_ptr(animation->SpeedAndTransitionTime));
+						
 						ImGui::TextColored({0.8f, 0.8f, 0.2f, 1.f}, animation->name.c_str());
 						ImGui::SameLine();
 						std::string label2 = "Play##" + animation->name + "Playbtn";
 						if (ImGui::Button(label2.c_str()))
 						{
+							animator.runningAnimation = animation;
 							animator.animator->PlayAnimation(animation);
 						}
+						count++;
+						ImGui::EndGroup();
+						ImGui::Separator();
 					}
 				}
 			}
@@ -648,9 +668,13 @@ namespace vel
 				if (entity.HasComponent<CharacterControllerComponent>())
 				{
 					hasCC = true;
-					CharacterControllerComponent characterController = entity.GetComponent<CharacterControllerComponent>();
-					ImGui::InputFloat("Radius##ccRadius", &characterController.radius);
-					ImGui::InputFloat("Height##ccHeight", &characterController.height);
+					CharacterControllerComponent* characterController = &entity.GetComponent<CharacterControllerComponent>();
+					ImGui::InputFloat("Radius##ccRadius", &characterController->radius);
+					ImGui::InputFloat("Height##ccHeight", &characterController->height);
+					if (ImGui::Button("Reset##resetCC"))
+					{
+						characterController->characterController->Reset(physics::CharacterControllerDesc());
+					}
 				}
 			}
 			ImGui::EndGroup();
@@ -921,8 +945,8 @@ namespace vel
 								desc.position = entity.Transform().Translation;
 								desc.rotation = entity.Transform().GetRotation();
 								characterController.characterController = m_ActiveScene->GetPhysicsWorld()->CreateCharacterController(desc);
-								controller = characterController.characterController;
 								entity.AddComponent<CharacterControllerComponent>(characterController);
+								entity.AddComponent<NativeScriptComponent>().Bind<PlayerController>();
 								ImGui::CloseCurrentPopup();
 							}
 						}

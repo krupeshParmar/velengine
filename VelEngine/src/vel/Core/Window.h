@@ -39,6 +39,10 @@ namespace vel
 
 		virtual void* GetNativeWindow() const = 0;
 
+		virtual void EnableMouse()  const = 0;
+
+		virtual void DisableMouse()  const = 0;
+
 		static Scope<Window> Create(const WindowProps& props = WindowProps());
 	};
 }

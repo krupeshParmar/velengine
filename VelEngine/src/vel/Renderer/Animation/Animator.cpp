@@ -30,6 +30,15 @@ namespace vel
 		if (m_CurrentAnimation)
 		{
 			m_CurrentTime += m_CurrentAnimation->GetTicksPerSecond() * m_CurrentAnimation->GetSpeed() * dt;
+			if (m_CurrentTime >= m_CurrentAnimation->GetDuration())
+			{
+				if (!m_CurrentAnimation->Loop)
+				{
+					m_CurrentAnimation->Finished = true;
+					return;
+				}
+			}
+
 			m_CurrentTime = fmod(m_CurrentTime, m_CurrentAnimation->GetDuration());
 			CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
 		}

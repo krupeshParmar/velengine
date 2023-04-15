@@ -46,6 +46,9 @@ namespace vel
 
 		std::string name;
 		glm::vec2 SpeedAndTransitionTime = glm::vec2(1.f);
+		int ID = -1;
+		bool Loop = true;
+		bool Finished = false;
 	private:
 		void ReadMissingBones(const aiAnimation* animation, MeshData& mesh);
 		void ReadHeirarchyData(AssimpNodeData& dest, const aiNode* src);

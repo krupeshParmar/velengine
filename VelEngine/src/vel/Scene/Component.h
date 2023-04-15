@@ -159,6 +159,13 @@ namespace vel
 		operator const SceneCamera& () const { return Camera; }
 	};
 
+	struct AnimationLoadData
+	{
+		std::string path;
+		int id = -1;
+		bool loop = true;
+	};
+
 	struct Asset
 	{
 		Asset() {};
@@ -168,7 +175,7 @@ namespace vel
 		GUID AssetID = 0;
 		std::string MaterialLocation;
 		TransformComponent transform;
-		std::vector<std::string> AnimationsList;
+		std::vector<AnimationLoadData> AnimationsList;
 	};
 
 	struct AABB
@@ -202,7 +209,7 @@ namespace vel
 		CharacterControllerComponent(const CharacterControllerComponent& other) = default;
 		float radius;
 		float height;
-		physics::iCharacterController* characterController;
+		physics::iCharacterController* characterController = nullptr;
 	};
 
 	struct BoneInfo
@@ -278,6 +285,21 @@ namespace vel
 		Ref<Animator> animator;
 		std::string AnimationPath = "";
 		std::vector< Animation*> List_Animations;
+		Animation* runningAnimation = nullptr;
+
+		void PlayAnimation(int id)
+		{
+			for (Animation* animation : List_Animations)
+			{
+				if (animation->ID == id)
+				{
+					runningAnimation = animation;
+					animation->Finished = false;
+					animator->PlayAnimation(animation);
+					break;
+				}
+			}
+		}
 
 		void LoadAnimation(Ref<MeshData> meshData)
 		{
