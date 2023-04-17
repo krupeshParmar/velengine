@@ -75,7 +75,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>src;vendor\PhysX\physx\include;..\..\VelEngine\vendor\glm;..\iPhysics\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\PhysX\physx\include;vendor\PhysX\blast\_build\windows-x86_64\debug\blast-sdk\include;..\..\VelEngine\vendor\glm;..\iPhysics\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -86,7 +86,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\LowLevel_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\LowLevelAABB_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\LowLevelDynamics_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\PhysX_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\PhysXCharacterKinematic_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\PhysXCommon_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\PhysXCooking_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\PhysXExtensions_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\PhysXFoundation_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\PhysXPvdSDK_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\PhysXTask_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\PhysXVehicle_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\PhysXVehicle2_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\PVDRuntime_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\SceneQuery_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\SimulationController_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\SnippetRender_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\SnippetUtils_static_64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\LowLevel_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\LowLevelAABB_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\LowLevelDynamics_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\PhysX_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\PhysXCharacterKinematic_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\PhysXCommon_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\PhysXCooking_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\PhysXExtensions_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\PhysXFoundation_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\PhysXPvdSDK_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\PhysXTask_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\PhysXVehicle_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\PhysXVehicle2_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\PVDRuntime_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\SceneQuery_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\SimulationController_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\SnippetRender_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug\SnippetUtils_static_64.lib;vendor\PhysX\blast\_build\windows-x86_64\debug\blast-sdk\bin\*.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -94,7 +94,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\PhysX\physx\include;..\..\VelEngine\vendor\glm;..\iPhysics\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\PhysX\physx\include;vendor\PhysX\blast\_build\windows-x86_64\debug\blast-sdk\include;..\..\VelEngine\vendor\glm;..\iPhysics\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -109,7 +109,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\LowLevel_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\LowLevelAABB_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\LowLevelDynamics_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysX_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXCharacterKinematic_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXCommon_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXCooking_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXExtensions_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXFoundation_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXPvdSDK_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXTask_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXVehicle_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXVehicle2_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PVDRuntime_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\SceneQuery_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\SimulationController_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\SnippetRender_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\SnippetUtils_static_64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\LowLevel_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\LowLevelAABB_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\LowLevelDynamics_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysX_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXCharacterKinematic_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXCommon_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXCooking_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXExtensions_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXFoundation_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXPvdSDK_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXTask_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXVehicle_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXVehicle2_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PVDRuntime_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\SceneQuery_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\SimulationController_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\SnippetRender_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\SnippetUtils_static_64.lib;vendor\PhysX\blast\_build\windows-x86_64\release\blast-sdk\bin\*.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
@@ -117,7 +117,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\PhysX\physx\include;..\..\VelEngine\vendor\glm;..\iPhysics\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\PhysX\physx\include;vendor\PhysX\blast\_build\windows-x86_64\debug\blast-sdk\include;..\..\VelEngine\vendor\glm;..\iPhysics\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>None</DebugInformationFormat>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -134,7 +134,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\LowLevel_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\LowLevelAABB_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\LowLevelDynamics_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysX_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXCharacterKinematic_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXCommon_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXCooking_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXExtensions_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXFoundation_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXPvdSDK_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXTask_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXVehicle_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PhysXVehicle2_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\PVDRuntime_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\SceneQuery_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\SimulationController_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\SnippetRender_static_64.lib;vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release\SnippetUtils_static_64.lib;vendor\PhysX\blast\_build\windows-x86_64\release\blast-sdk\bin\*.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>

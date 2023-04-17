@@ -73,6 +73,8 @@ namespace vel
 		Ref<FrameBuffer> GetRuntimeBuffer() { return m_RuntimeBuffer; }
 
 		// TEMP
+		glm::vec3 GetParentScale(Entity entity);
+
 		void BindSkyBox(int);
 		void LoadScene();
 		void SaveScene();
@@ -80,6 +82,7 @@ namespace vel
 		void BindLightData(Ref<Shader> shader, glm::vec4 eyepos);
 		void LoadAnimation(Animation* animation);
 		physics::iPhysicsWorld* GetPhysicsWorld() { return m_PhysicsWorld; }
+		physics::iPhysicsFactory* GetPhysicsFactory() { return m_PhysicsFactory; }
 		void SetViewportSize(uint32_t width, uint32_t height);
 
 		std::string ScenePath;
@@ -96,6 +99,8 @@ namespace vel
 		bool useNightVision = false;
 		bool useRippleEffect = false;
 		bool useGrayscale = false;
+		bool CreateBlastAssetCalled = false;
+		bool DestroyBlastAssetCalled = false;
 
 	private:
 		void SortEntities();

@@ -93,6 +93,7 @@
     </Link>
     <PostBuildEvent>
       <Command>IF EXIST "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug"\ (xcopy /Q /E /Y /I "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug" "..\bin\Debug-windows-x86_64\Vel-Editor" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\physx\bin\win.x86_64.vc143.mt\debug" "..\bin\Debug-windows-x86_64\Vel-Editor" &gt; nul)
+IF EXIST "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\blast\_build\windows-x86_64\debug\blast-sdk\bin\*.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\blast\_build\windows-x86_64\debug\blast-sdk\bin\*.dll" "..\bin\Debug-windows-x86_64\Vel-Editor" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\blast\_build\windows-x86_64\debug\blast-sdk\bin\*.dll" "..\bin\Debug-windows-x86_64\Vel-Editor" &gt; nul)
 IF EXIST "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Debug\assimp-vc130-mtd.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Debug\assimp-vc130-mtd.dll" "..\bin\Debug-windows-x86_64\Vel-Editor" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Debug\assimp-vc130-mtd.dll" "..\bin\Debug-windows-x86_64\Vel-Editor" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -119,6 +120,7 @@ IF EXIST "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Debug\assimp-vc130-mtd.d
     </Link>
     <PostBuildEvent>
       <Command>IF EXIST "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release"\ (xcopy /Q /E /Y /I "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release" "..\bin\Release-windows-x86_64\Vel-Editor" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release" "..\bin\Release-windows-x86_64\Vel-Editor" &gt; nul)
+IF EXIST "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\blast\_build\windows-x86_64\release\blast-sdk\bin\*.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\blast\_build\windows-x86_64\release\blast-sdk\bin\*.dll" "..\bin\Release-windows-x86_64\Vel-Editor" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\blast\_build\windows-x86_64\release\blast-sdk\bin\*.dll" "..\bin\Release-windows-x86_64\Vel-Editor" &gt; nul)
 IF EXIST "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.dll" "..\bin\Release-windows-x86_64\Vel-Editor" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.dll" "..\bin\Release-windows-x86_64\Vel-Editor" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -145,6 +147,7 @@ IF EXIST "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.
     </Link>
     <PostBuildEvent>
       <Command>IF EXIST "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release"\ (xcopy /Q /E /Y /I "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release" "..\bin\Dist-windows-x86_64\Vel-Editor" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\physx\bin\win.x86_64.vc143.mt\release" "..\bin\Dist-windows-x86_64\Vel-Editor" &gt; nul)
+IF EXIST "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\blast\_build\windows-x86_64\release\blast-sdk\bin\*.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\blast\_build\windows-x86_64\release\blast-sdk\bin\*.dll" "..\bin\Dist-windows-x86_64\Vel-Editor" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\Libraries\PhysxPhysics\vendor\PhysX\blast\_build\windows-x86_64\release\blast-sdk\bin\*.dll" "..\bin\Dist-windows-x86_64\Vel-Editor" &gt; nul)
 IF EXIST "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.dll"\ (xcopy /Q /E /Y /I "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.dll" "..\bin\Dist-windows-x86_64\Vel-Editor" &gt; nul) ELSE (xcopy /Q /Y /I "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.dll" "..\bin\Dist-windows-x86_64\Vel-Editor" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -154,12 +157,19 @@ IF EXIST "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.
     <ClInclude Include="src\Example.h" />
     <ClInclude Include="src\SceneManager.h" />
     <ClInclude Include="src\Scripts\CameraController.h" />
+    <ClInclude Include="src\Scripts\MutantController.h" />
     <ClInclude Include="src\Scripts\PlayerController.h" />
+    <ClInclude Include="src\Scripts\States\MutantAttackState.h" />
+    <ClInclude Include="src\Scripts\States\MutantBaseState.h" />
+    <ClInclude Include="src\Scripts\States\MutantIdleState.h" />
+    <ClInclude Include="src\Scripts\States\MutantRunState.h" />
+    <ClInclude Include="src\Scripts\States\MutantWalkState.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\EditorLayer2.cpp" />
     <ClCompile Include="src\SceneManager.cpp" />
+    <ClCompile Include="src\Scripts\MutantController.cpp" />
     <ClCompile Include="src\VelEngineApp.cpp" />
   </ItemGroup>
   <ItemGroup>

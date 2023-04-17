@@ -20,6 +20,7 @@ namespace physics
 			, friction(0.4f)
 			, linearDamping(0.01f)
 			, angularDamping(0.05f)
+			, volume (1.f)
 		{
 			if (mass == 0)
 				isStatic = true;
@@ -42,5 +43,6 @@ namespace physics
 
 		float linearDamping;
 		float angularDamping;
+		bool IsKinematic = false;
 	};
 }

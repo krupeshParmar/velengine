@@ -10,6 +10,7 @@
 #include <PhysxPhysicsFactory.h>
 #include "vel/Core/Application.h"
 #include "vel/Renderer/Renderer.h"
+#include "vel/Core/Input.h"
 CRITICAL_SECTION cs_EntityMapLock;
 
 namespace vel
@@ -95,7 +96,6 @@ namespace vel
 
 		m_PhysicsFactory = new physics::physxim::PhysicsFactory();
 		m_PhysicsWorld = m_PhysicsFactory->CreateWorld();
-		m_PhysicsFactory->CreateRigidBody(physics::RigidBodyDesc(), new physics::SphereShape(2.f));
 		m_Shader = m_ShaderLibrary.Load("assets/shaders/gBuffer.glsl");
 		m_Shader->Bind();
 		m_Shader->SetInt("u_TextureDiffuse", 0);
@@ -190,7 +190,29 @@ namespace vel
 					auto [transform, characterController] = ccView.get<TransformComponent, CharacterControllerComponent>(ent);
 
 					// TODO Check out the cc offset
-					transform.Translation = characterController.characterController->GetPosition() + glm::vec3(0.f, 1.0f, 0.f);
+					transform.Translation = characterController.characterController->GetPosition() + glm::vec3(0.f, 1.f, 0.f);
+				}
+			}
+			{
+				auto rigidView = m_Registry.group<RigidbodyComponent>(entt::get<TransformComponent>);
+				for (auto ent : rigidView)
+				{
+					auto [transform, rigidComp] = rigidView.get<TransformComponent, RigidbodyComponent>(ent);
+					if (rigidComp.desc.IsKinematic)
+					{
+						if(rigidComp.rigidBody)
+							rigidComp.rigidBody->SetPosition(transform.Translation);
+					}
+					else
+					{
+						if (rigidComp.rigidBody)
+						{
+							float y = transform.Translation.y;
+							if (rigidComp.rigidBody)
+								rigidComp.rigidBody->GetPosition(transform.Translation);
+							transform.Translation.y = y;
+						}
+					}
 				}
 			}
 			{
@@ -258,7 +280,7 @@ namespace vel
 							meshComponent.shader = m_Shader;
 							if (meshComponent.MeshDrawData && meshComponent.MeshDrawData->m_UseBones)
 							{
-								if (entity.HasComponent<AnimatorComponent>())
+								if (entity.HasComponent<AnimatorComponent>() && entity.GetComponent<AnimatorComponent>().UseAnimation)
 								{
 									AnimatorComponent& animator = entity.GetComponent<AnimatorComponent>();
 									if (animator.animator)
@@ -314,7 +336,7 @@ namespace vel
 		}
 	}
 	void Scene::OnUpdateEditor(Timestep ts, EditorCamera& camera)
-	{	
+	{
 		Renderer::BeginScene(camera.GetViewMatrix(), camera.GetUnReversedProjectionMatrix());
 		// Lights
 		mainAnimator->UpdateAnimation(ts);
@@ -342,7 +364,26 @@ namespace vel
 				auto [transform, characterController] = ccView.get<TransformComponent, CharacterControllerComponent>(ent);
 				// TODO Check out the cc offset
 				if(characterController.characterController)
-					transform.Translation = characterController.characterController->GetPosition() - glm::vec3(0.f, 1.15f, 0.f);
+					transform.Translation = characterController.characterController->GetPosition() + glm::vec3(0.f, 1.f, 0.f);
+			}
+		}
+		{
+			auto rigidView = m_Registry.group<RigidbodyComponent>(entt::get<TransformComponent>);
+			for (auto ent : rigidView)
+			{
+				auto [transform, rigidComp] = rigidView.get<TransformComponent, RigidbodyComponent>(ent);
+				if (rigidComp.desc.IsKinematic)
+				{
+					if (rigidComp.rigidBody)
+						rigidComp.rigidBody->SetPosition(transform.Translation);
+				}
+				else
+				{
+					float y = transform.Translation.y;
+					if (rigidComp.rigidBody)
+						rigidComp.rigidBody->GetPosition(transform.Translation);
+					transform.Translation.y = y;
+				}
 			}
 		}
 		{
@@ -410,7 +451,7 @@ namespace vel
 						meshComponent.shader = m_Shader;
 						if (meshComponent.MeshDrawData && meshComponent.MeshDrawData->m_UseBones)
 						{
-							if (entity.HasComponent<AnimatorComponent>())
+							if (entity.HasComponent<AnimatorComponent>() && entity.GetComponent<AnimatorComponent>().UseAnimation)
 							{
 								AnimatorComponent& animator = entity.GetComponent<AnimatorComponent>();
 								if (animator.animator)
@@ -431,7 +472,7 @@ namespace vel
 							}
 							else
 							{
-								for (int i = 0; i < 100; ++i)
+								for (int i = 0; i < 200; ++i)
 								{
 									m_Shader->SetMat4("finalBonesMatrices[" + std::to_string(i) + "]", glm::mat4(1.f));
 
@@ -835,6 +876,16 @@ namespace vel
 		TransformComponent transformComponent;
 		transformComponent.SetTransform(transform);
 		return transformComponent;
+	}
+
+	glm::vec3 Scene::GetParentScale(Entity entity)
+	{
+		glm::vec3 scale = entity.Transform().Scale;
+		if (entity.GetParent())
+		{
+			scale = GetParentScale(entity.GetParent());
+		}
+		return scale;
 	}
 
 	void Scene::BindSkyBox(int i)

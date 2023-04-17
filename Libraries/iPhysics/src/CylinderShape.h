@@ -11,7 +11,10 @@ namespace physics
 		CylinderShape(float radius, float height);
 		virtual ~CylinderShape();
 
-		const Vector3& GetHalfExtents() const;
+		const Vector3& GetHalfExtents() const
+		{
+			return Vector3(mRadius);
+		};
 
 		float GetRadius() { return mRadius; }
 		float GetHeight() { return mHeight; }

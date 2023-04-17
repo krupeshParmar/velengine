@@ -35,6 +35,16 @@ namespace physics
 			virtual void ApplyTorque(const Vector3& torque) override;
 			virtual void ApplyTorqueImpulse(const Vector3& torqueImpulse) override;
 
+			virtual void GetWorldSpaceTransform(glm::mat4& transform) override
+			{
+
+			}
+
+			virtual void ReleaseJoints() override
+			{
+
+			}
+
 			void SetGravityAcceleration(const Vector3& gravity);
 			void UpdateAcceleration();
 

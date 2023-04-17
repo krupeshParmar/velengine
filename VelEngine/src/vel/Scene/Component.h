@@ -136,7 +136,7 @@ namespace vel
 		void SetRotation(const glm::quat& quat)
 		{
 			Rotation = quat;
-			RotationEuler = glm::eulerAngles(Rotation);
+			RotationEuler = glm::degrees(glm::eulerAngles(Rotation));
 		}
 	};
 
@@ -164,6 +164,8 @@ namespace vel
 		std::string path;
 		int id = -1;
 		bool loop = true;
+		float speed = 1.f;
+		float transitionTime = 1.f;
 	};
 
 	struct Asset
@@ -182,34 +184,45 @@ namespace vel
 	{
 		glm::vec3 Min;
 		glm::vec3 Max;
+		glm::vec3 Centre;
+		glm::vec3 HalfExtent;
+	};
+
+	struct BoxColliderComponent
+	{
+		physics::iShape* shape;
+		AABB aabb;
 	};
 
 	struct RigidbodyComponent
 	{
 		RigidbodyComponent() = default;
 		RigidbodyComponent(const RigidbodyComponent& other)
-			:desc(other.desc), shape(other.shape), physicsFactory(other.physicsFactory), physicsWorld(other.physicsWorld)
+			:desc(other.desc)
 		{
-			rigidBody = physicsFactory->CreateRigidBody(desc, shape);
+
 		}
 		physics::RigidBodyDesc desc;
-		physics::iShape* shape;
-		physics::iRigidBody* rigidBody;
-		physics::iPhysicsFactory* physicsFactory;
-		physics::iPhysicsWorld* physicsWorld;
+		physics::iRigidBody* rigidBody = nullptr;
 	};
 
 	struct CharacterControllerComponent
 	{
 		CharacterControllerComponent()
-			:radius(1.f),height(2.f)
+			:radius(1.f),height(2.f), position(glm::vec3(0.f))
 		{
 			
 		}
 		CharacterControllerComponent(const CharacterControllerComponent& other) = default;
 		float radius;
 		float height;
+		glm::vec3 position;
 		physics::iCharacterController* characterController = nullptr;
+	};
+
+	struct AIComponent
+	{
+		int AI_ID = -1;
 	};
 
 	struct BoneInfo
@@ -271,6 +284,13 @@ namespace vel
 		}
 	};
 
+	struct RagdollComponent
+	{
+		Ref<MeshData> meshData;
+		void* ragdoll = nullptr;
+		float mass, scale;
+	};
+
 	struct AnimatorComponent
 	{
 		AnimatorComponent()
@@ -286,6 +306,7 @@ namespace vel
 		std::string AnimationPath = "";
 		std::vector< Animation*> List_Animations;
 		Animation* runningAnimation = nullptr;
+		bool UseAnimation = true;
 
 		void PlayAnimation(int id)
 		{
@@ -293,8 +314,8 @@ namespace vel
 			{
 				if (animation->ID == id)
 				{
-					runningAnimation = animation;
 					animation->Finished = false;
+					runningAnimation = animation;
 					animator->PlayAnimation(animation);
 					break;
 				}

@@ -35,6 +35,8 @@ Library["Assimp_Release"] = "%{wks.location}/VelEngine/vendor/assimp3.2/bin/Rele
 PhysicsLibs = {}
 PhysicsLibs["PHYSX_DEBUG"] = "%{wks.location}/Libraries/PhysxPhysics/vendor/PhysX/physx/bin/win.x86_64.vc143.mt/debug"
 PhysicsLibs["PHYSX_RELEASE"] = "%{wks.location}/Libraries/PhysxPhysics/vendor/PhysX/physx/bin/win.x86_64.vc143.mt/release"
+PhysicsLibs["BLAST_DEBUG"] = "%{wks.location}/Libraries/PhysxPhysics/vendor/PhysX/blast/_build/windows-x86_64/debug/blast-sdk/bin/*.lib"
+PhysicsLibs["BLAST_RELEASE"] = "%{wks.location}/Libraries/PhysxPhysics/vendor/PhysX/blast/_build/windows-x86_64/release/blast-sdk/bin/*.lib"
 
 
 Binaries = {}
@@ -46,6 +48,8 @@ Binaries["Assimp_Release"] = "%{wks.location}/VelEngine/vendor/assimp3.2/bin/Rel
 PhysicsBins = {}
 PhysicsBins["PHYSX_DEBUG"] = "%{wks.location}/Libraries/PhysxPhysics/vendor/PhysX/physx/bin/win.x86_64.vc143.mt/debug/*.dll"
 PhysicsBins["PHYSX_RELEASE"] = "%{wks.location}/Libraries/PhysxPhysics/vendor/PhysX/physx/bin/win.x86_64.vc143.mt/release/*.dll"
+PhysicsBins["BLAST_DEBUG"] = "%{wks.location}/Libraries/PhysxPhysics/vendor/PhysX/blast/_build/windows-x86_64/debug/blast-sdk/bin/*.dll"
+PhysicsBins["BLAST_RELEASE"] = "%{wks.location}/Libraries/PhysxPhysics/vendor/PhysX/blast/_build/windows-x86_64/release/blast-sdk/bin/*.dll"
 
 group "Dependencies"
 include "VelEngine/vendor/GLFW"
@@ -106,6 +110,7 @@ project "VelEngine"
 		"%{IncludeDir.VelPhysics}",
 		"%{IncludeDir.PhysxPhysics}",
 		"Libraries/PhysxPhysics/vendor/PhysX/physx/include",
+		"Libraries/PhysxPhysics/vendor/PhysX/blast/_build/windows-x86_64/debug/blast-sdk/include",
 		"%{IncludeDir.entt}",
 	}
 
@@ -156,6 +161,7 @@ project "VelEngine"
 			"%{PhysicsLibs.PHYSX_DEBUG}/SimulationController_static_64.lib",
 			"%{PhysicsLibs.PHYSX_DEBUG}/SnippetRender_static_64.lib",
 			"%{PhysicsLibs.PHYSX_DEBUG}/SnippetUtils_static_64.lib",
+			"%{PhysicsLibs.BLAST_DEBUG}",
 		}
 		
 
@@ -184,6 +190,7 @@ project "VelEngine"
 			"%{PhysicsLibs.PHYSX_RELEASE}/SimulationController_static_64.lib",
 			"%{PhysicsLibs.PHYSX_RELEASE}/SnippetRender_static_64.lib",
 			"%{PhysicsLibs.PHYSX_RELEASE}/SnippetUtils_static_64.lib",
+			"%{PhysicsLibs.BLAST_RELEASE}",
 		}
 
 		defines
@@ -216,6 +223,7 @@ project "VelEngine"
 			"%{PhysicsLibs.PHYSX_RELEASE}/SimulationController_static_64.lib",
 			"%{PhysicsLibs.PHYSX_RELEASE}/SnippetRender_static_64.lib",
 			"%{PhysicsLibs.PHYSX_RELEASE}/SnippetUtils_static_64.lib",
+			"%{PhysicsLibs.BLAST_RELEASE}",
 		}
 
 		defines
@@ -338,6 +346,7 @@ project "Vel-Editor"
 		postbuildcommands 
 		{
 			'{COPY} "%{PhysicsBins.PHYSX_DEBUG}" "%{cfg.targetdir}"',
+			'{COPY} "%{PhysicsBins.BLAST_DEBUG}" "%{cfg.targetdir}"',
 			'{COPY} "%{Binaries.Assimp_Debug}" "%{cfg.targetdir}"'
 		}
 
@@ -354,6 +363,7 @@ project "Vel-Editor"
 		postbuildcommands 
 		{
 			'{COPY} "%{PhysicsBins.PHYSX_RELEASE}" "%{cfg.targetdir}"',
+			'{COPY} "%{PhysicsBins.BLAST_RELEASE}" "%{cfg.targetdir}"',
 			'{COPY} "%{Binaries.Assimp_Release}" "%{cfg.targetdir}"'
 		}
 
@@ -370,5 +380,6 @@ project "Vel-Editor"
 		postbuildcommands 
 		{
 			'{COPY} "%{PhysicsBins.PHYSX_RELEASE}" "%{cfg.targetdir}"',
+			'{COPY} "%{PhysicsBins.BLAST_RELEASE}" "%{cfg.targetdir}"',
 			'{COPY} "%{Binaries.Assimp_Release}" "%{cfg.targetdir}"'
 		}

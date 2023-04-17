@@ -4,6 +4,7 @@
 #include "iCollisionBody.h"
 #include <CharacterControllerDesc.h>
 #include <iCharacterController.h>
+#include <iConstraint.h>
 
 namespace physics
 {
@@ -31,8 +32,15 @@ namespace physics
 
 		virtual void TimeStep(float dt) = 0;
 
+
+		virtual void CreateBlastFrameWork() = 0;
+		virtual void CreateBlastAsset() = 0;
+		virtual void DamageAsset() = 0;
+
 		virtual void DebugDraw() { }
 		virtual void RegisterCollisionListener(iCollisionListener* listener) = 0;
+
+		virtual void AddConstraint(iConstraint* constraint) = 0;
 
 	protected:
 		iPhysicsWorld() {}

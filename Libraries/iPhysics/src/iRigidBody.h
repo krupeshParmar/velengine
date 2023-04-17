@@ -26,6 +26,9 @@ namespace physics
 		virtual void ApplyTorque(const Vector3& torque) = 0;
 		virtual void ApplyTorqueImpulse(const Vector3& torqueImpulse) = 0;
 		virtual void SetRenderPosition(Vector3* position) = 0;
+		virtual void GetWorldSpaceTransform(glm::mat4& transform) = 0;
+
+		virtual void ReleaseJoints() = 0;
 
 	protected:
 		iRigidBody() : iCollisionBody(BodyType::RigidBody) {}

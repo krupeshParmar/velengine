@@ -549,7 +549,10 @@
     <ClInclude Include="src\BodyType.h" />
     <ClInclude Include="src\BoxShape.h" />
     <ClInclude Include="src\CharacterControllerDesc.h" />
+    <ClInclude Include="src\ConeTwistConstraint.h" />
     <ClInclude Include="src\CylinderShape.h" />
+    <ClInclude Include="src\DistanceConstraint.h" />
+    <ClInclude Include="src\iConstraint.h" />
     <ClInclude Include="src\PhyMath.h" />
     <ClInclude Include="src\PlaneShape.h" />
     <ClInclude Include="src\RigidBodyDesc.h" />
@@ -566,7 +569,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BoxShape.cpp" />
+    <ClCompile Include="src\ConeTwistContraint.cpp" />
     <ClCompile Include="src\CylinderShape.cpp" />
+    <ClCompile Include="src\DistanceConstraint.cpp" />
     <ClCompile Include="src\PlaneShape.cpp" />
     <ClCompile Include="src\SphereShape.cpp" />
   </ItemGroup>

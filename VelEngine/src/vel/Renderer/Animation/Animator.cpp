@@ -10,7 +10,7 @@ namespace vel
 		m_CurrentTime = 0.0;
 		m_CurrentAnimation = currentAnimation;
 		m_PreviousAnimation = nullptr;
-		unsigned int size = 300;
+		unsigned int size = 400;
 		m_FinalBoneMatrices.reserve(size);
 
 		for (int i = 0; i < size; i++)
@@ -59,8 +59,10 @@ namespace vel
 		BoneAnim* bone2 = nullptr;
 		if(m_PreviousAnimation)
 			bone2 = m_PreviousAnimation->FindBone(nodeName);
+		bool isBone = false;
 		if (Bone)
 		{
+			isBone = true;
 			Bone->Update(m_CurrentTime);
 			nodeTransform = Bone->GetLocalTransform();
 			if (bone2 && m_TransitionTime > 0.f)

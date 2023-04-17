@@ -1329,6 +1329,9 @@
     <ClInclude Include="src\iSoftBody.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\iConstraint.h" />
+    <ClInclude Include="src\ConeTwistConstraint.h" />
+    <ClInclude Include="src\DistanceConstraint.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BoxShape.cpp">
@@ -1343,5 +1346,7 @@
     <ClCompile Include="src\SphereShape.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\ConeTwistContraint.cpp" />
+    <ClCompile Include="src\DistanceConstraint.cpp" />
   </ItemGroup>
 </Project>

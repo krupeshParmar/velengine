@@ -6,11 +6,25 @@
 #include "SoftBody.h"
 #include "CollisionHandler.h"
 #include <map>
+#include <toolkit/NvBlastTk.h>
+#include <extensions/shaders/NvBlastExtDamageShaders.h>
 
 namespace physics
 {
 	namespace physxim
 	{
+		struct NvBlastProgramParams
+		{
+			NvBlastProgramParams(NvBlastExtRadialDamageDesc* desc, int count, NvBlastExtMaterial* mat)
+				: damageDesc(desc), damageCount(count), material(mat)
+			{
+
+			}
+			NvBlastExtRadialDamageDesc* damageDesc;
+			int damageCount;
+			NvBlastExtMaterial* material;
+
+		};
 
 		class PhysicsWorld : public iPhysicsWorld
 		{
@@ -30,8 +44,13 @@ namespace physics
 			{
 				m_CollisionListener = listener;
 			}
+			virtual void AddConstraint(iConstraint* constraint) override;
+			virtual void CreateBlastFrameWork() override;
+			virtual void CreateBlastAsset() override;
+			virtual void DamageAsset() override;
 
 			RigidBody* AddActor(const RigidBodyDesc& desc, iShape* shape);
+
 
 			physx::PxScene* GetScene() { return mScene; }
 			physx::PxPhysics* GetPhysics() { return mPhysics; }
@@ -47,11 +66,22 @@ namespace physics
 			physx::PxMaterial* mMaterial = NULL;
 			physx::PxPvd* mPVD = NULL;
 			physx::PxControllerManager* mControllerManager = NULL;
+			Nv::Blast::TkFramework* blastFramework = nullptr;
+			Nv::Blast::TkAsset* blastAsset = nullptr; 
+			Nv::Blast::TkActor* blastActor = nullptr;
+			Nv::Blast::TkGroup* group = nullptr;
+			NvBlastProgramParams* blastParams = nullptr;
+
+
+			Nv::Blast::TkAssetDesc* desc;
+			Nv::Blast::TkActorDesc* actorDesc; 
+
 			Vector3 m_Gravity;
 
 			std::vector<iCollisionBody*> m_Bodies;
 			std::vector<physx::PxRigidActor*> m_RigidBodies;
 			std::vector<SoftBody*> m_SoftBodies;
+			std::vector<physx::PxJoint*> m_Joints;
 
 			CollisionHandler* m_CollisionHandler;
 

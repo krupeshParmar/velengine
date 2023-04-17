@@ -25,6 +25,17 @@ namespace physics
 
 			virtual void TimeStep(float dt) override;
 
+			virtual void AddConstraint(iConstraint* constraint) override
+			{
+
+			}
+			virtual void CreateBlastFrameWork()
+			{}
+			virtual void CreateBlastAsset()
+			{}
+			virtual void DamageAsset()
+			{}
+
 
 			virtual void RegisterCollisionListener(iCollisionListener* listener) override
 			{

@@ -32,7 +32,6 @@ namespace vel
         :modelLoadData(data), m_GameScene(data.gameScene)
         ,m_UseFBXTextures(data.useTextures), m_LoadAsync(data.loadAsync), m_MaterialPath(data.materialPath)
     {
-        m_InitCriticalSections();
         m_Meshes = std::vector<Ref<MeshData>>();
         m_Importer = CreateScope<Assimp::Importer>();
         const aiScene* scene = m_Importer->ReadFile(data.source, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
@@ -121,7 +120,9 @@ namespace vel
         VEL_CORE_TRACE("{0} Model loaded", m_Name);
     }
 
-    Model::~Model() { m_DeleteCriticalSections(); }
+    Model::~Model() {
+        m_Importer.release();
+    }
 
     MeshData Model::GetMeshData()
     {
@@ -206,6 +207,7 @@ namespace vel
         meshData->m_BoneInfoMap->reserve(mesh->mNumBones);
         for (int boneIndex = 0; boneIndex < mesh->mNumBones; boneIndex++)
         {
+            VEL_CORE_INFO("{0}: {1}", boneIndex, mesh->mBones[boneIndex]->mName.C_Str());
             int boneID = -1;
             std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();
             if (meshData->m_BoneInfoMap->find(boneName) == meshData->m_BoneInfoMap->end())
@@ -245,6 +247,10 @@ namespace vel
 
         bool m_UseFBXTextures = fileInfo->m_UseFBXTextures;
         std::vector<MeshData>* m_Meshes = fileInfo->m_Meshes;*/
+
+        AABB aabb;
+        aabb.Min = glm::vec3(FLT_MAX, FLT_MAX, FLT_MAX);
+        aabb.Max = glm::vec3(FLT_MIN, FLT_MIN, FLT_MIN);
         
         Ref<MeshData> newMeshData = CreateRef<MeshData>();
         // Get all the vertex data
@@ -255,6 +261,24 @@ namespace vel
             vertex.x = aimesh->mVertices[i].x;
             vertex.y = aimesh->mVertices[i].y;
             vertex.z = aimesh->mVertices[i].z;
+
+            if (vertex.x > aabb.Max.x)
+                aabb.Max.x = vertex.x;
+
+            if (vertex.y > aabb.Max.y)
+                aabb.Max.y = vertex.y;
+
+            if (vertex.z > aabb.Max.z)
+                aabb.Max.z = vertex.z;
+
+            if (vertex.x < aabb.Min.x)
+                aabb.Min.x = vertex.x;
+
+            if (vertex.y < aabb.Min.y)
+                aabb.Min.y = vertex.y;
+
+            if (vertex.z < aabb.Min.z)
+                aabb.Min.z = vertex.z;
             
             if (aimesh->HasNormals())
             {
@@ -289,6 +313,10 @@ namespace vel
 
             newMeshData->m_Vertices.push_back(vertex);
         }
+
+        aabb.HalfExtent = (aabb.Max - aabb.Min) / 2.f;
+        aabb.Centre = aabb.Min + aabb.HalfExtent;
+        newMeshData->aabb = aabb;
 
         // Get all the indices
         for (unsigned int i = 0; i < aimesh->mNumFaces; i++)
@@ -455,6 +483,7 @@ namespace vel
                             Animation* animation = new Animation(animationData.path, data);
                             animation->Loop = animationData.loop;
                             animation->ID = animationData.id;
+                            animation->SpeedAndTransitionTime = glm::vec2(animationData.speed, animationData.transitionTime);
                             animatorComponent.List_Animations.push_back(animation);
                         }
                         entity->AddComponent<AnimatorComponent>(animatorComponent);

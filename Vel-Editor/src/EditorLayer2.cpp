@@ -7,6 +7,8 @@
 #include <CharacterControllerDesc.h>
 #include "Scripts/CameraController.h"
 #include "Scripts/PlayerController.h"
+#include "Scripts/MutantController.h"
+#include <BoxShape.cpp>
 
 namespace vel
 {
@@ -124,16 +126,7 @@ namespace vel
 				SetFloat2("screen_width_height", {
 				Application::Get().GetWindow().GetWidth(),Application::Get().GetWindow().GetHeight()
 					});
-			/*if (m_GameFocused)
-			{
-				m_ActiveScene->GetRuntimeBuffer()->BindColorTexture();
-				m_ActiveScene->GetRuntimeBuffer()->BindWorldPositionTexture();
-				m_ActiveScene->GetRuntimeBuffer()->BindNormalTexture();
-				m_ActiveScene->GetRuntimeBuffer()->BindSpecularTexture();
-				m_ActiveScene->GetRuntimeBuffer()->BindEmissiveTexture();
-				m_ActiveScene->GetRuntimeBuffer()->BindBloomTexture();
-			}
-			else*/
+			
 			{
 				m_RenderBuffer->BindColorTexture();
 				m_RenderBuffer->BindWorldPositionTexture();
@@ -412,6 +405,8 @@ namespace vel
 	void EditorLayer2::SceneHierarchy()
 	{
 		ImGui::Begin("Scene Hierachy");
+
+		bool focused = ImGui::IsWindowFocused();
 		auto entities = m_ActiveScene->GetAllEntitiesWith<TransformComponent>();
 		int l = entities.size();
 		std::map<GUID, Entity> shownEntities;
@@ -426,6 +421,13 @@ namespace vel
 					{
 						entity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 					}
+				}
+			}
+			if (entity.HasComponent<AIComponent>())
+			{
+				if (!entity.HasComponent<NativeScriptComponent>())
+				{
+					entity.AddComponent<NativeScriptComponent>().Bind<MutantController>();
 				}
 			}
 			if (entity.HasComponent<CharacterControllerComponent>())
@@ -467,7 +469,16 @@ namespace vel
 		}
 		if (ImGui::Button("Add Entity"))
 		{
-			m_ActiveScene->CreateEntity();
+			if (m_SelectedEntity != entt::null)
+			{
+				Entity parent = Entity{ m_SelectedEntity, m_ActiveScene.get() };
+				m_ActiveScene->CreateChildEntity(parent);
+			}
+			else m_ActiveScene->CreateEntity();
+		}
+		if(ImGui::Button("Deselect##sceneHDeselect"))
+		{
+			m_SelectedEntity = entt::null;
 		}
 		ImGui::End();
 	}
@@ -480,6 +491,10 @@ namespace vel
 		bool hasLight = false;
 		bool hasCC = false;
 		bool hasCamera = false;
+		bool hasAI = false;
+		bool hasBoxCollider = false;
+		bool hasSphereCollider = false;
+		bool hasRigidbody = false;
 		ImGui::Begin("Inspector");
 		if (m_SelectedEntity != entt::null)
 		{
@@ -635,6 +650,7 @@ namespace vel
 					int count = 0;
 					for (Animation* animation : animator.List_Animations)
 					{
+						ImGui::Checkbox("Use Animation##animUseIt", &animator.UseAnimation);
 						ImGui::BeginGroup();
 						std::string label0 = "ID##" + animation->name + "idAnim" + std::to_string(count);
 						ImGui::InputInt(label0.c_str(), &animation->ID);
@@ -671,9 +687,15 @@ namespace vel
 					CharacterControllerComponent* characterController = &entity.GetComponent<CharacterControllerComponent>();
 					ImGui::InputFloat("Radius##ccRadius", &characterController->radius);
 					ImGui::InputFloat("Height##ccHeight", &characterController->height);
+					ImGui::InputFloat3("Position##ccHeight", glm::value_ptr(characterController->position));
 					if (ImGui::Button("Reset##resetCC"))
 					{
-						characterController->characterController->Reset(physics::CharacterControllerDesc());
+						physics::CharacterControllerDesc desc;
+						desc.radius = characterController->radius;
+						desc.height = characterController->height;
+						desc.position = characterController->position;
+						desc.rotation = entity.Transform().RotationEuler;
+						characterController->characterController->Reset(desc);
 					}
 				}
 			}
@@ -876,6 +898,66 @@ namespace vel
 			}
 			ImGui::EndGroup();
 
+			// Box Collider
+			ImGui::BeginGroup();
+			{
+				if (entity.HasComponent<BoxColliderComponent>())
+				{
+					hasBoxCollider = true;
+					BoxColliderComponent* box = &entity.GetComponent<BoxColliderComponent>();
+					ImGui::InputFloat3("Half Extents##bcHalf", glm::value_ptr(box->aabb.HalfExtent));
+					if (ImGui::Button("Reset##bcHalfExReset"))
+					{
+						delete box->shape;
+						glm::vec3 parentScale = m_ActiveScene->GetParentScale(entity);
+						box->shape = new physics::BoxShape(box->aabb.HalfExtent);
+					}
+				}
+			}
+			ImGui::EndGroup();
+
+			// RigidBody Component
+			ImGui::BeginGroup();
+			{
+				if (entity.HasComponent<RigidbodyComponent>())
+				{
+					hasRigidbody = true;
+					RigidbodyComponent* rigidbodyComp = &entity.GetComponent<RigidbodyComponent>();
+					ImGui::InputFloat("Mass##RigidMass", &rigidbodyComp->desc.mass);
+					ImGui::Checkbox("Static##rigidStatic", &rigidbodyComp->desc.isStatic);
+					ImGui::Checkbox("Kinematic##rigidKinematic", &rigidbodyComp->desc.IsKinematic);
+					if (ImGui::Button("Reset##rigidbodyReset"))
+					{
+						BoxColliderComponent& boxCollider = entity.GetComponent<BoxColliderComponent>();
+						rigidbodyComp->desc.position = entity.Transform().Translation 
+							+ glm::vec3(0.f,
+							boxCollider.aabb.HalfExtent.y * 2.f,
+								0.f);
+						if (rigidbodyComp->rigidBody)
+							m_ActiveScene->GetPhysicsWorld()->RemoveBody(rigidbodyComp->rigidBody);
+						if (entity.HasComponent<BoxColliderComponent>())
+						{
+							rigidbodyComp->rigidBody = m_ActiveScene->GetPhysicsFactory()
+								->CreateRigidBody(rigidbodyComp->desc, 
+									boxCollider.shape);
+						}						
+					}
+				}
+			}
+			ImGui::EndGroup();
+
+			// AI Component
+			ImGui::BeginGroup();
+			{
+				if (entity.HasComponent<AIComponent>())
+				{
+					hasAI = true;
+					AIComponent& aicomp = entity.GetComponent<AIComponent>();
+					ImGui::InputInt("AI ID##aiID", &aicomp.AI_ID);
+				}
+			}
+			ImGui::EndGroup();
+
 			// Add Component
 			{
 				if (ImGui::Button("Add Component"))
@@ -897,7 +979,6 @@ namespace vel
 								addComponentCalled = false;
 								CameraComponent cameraComponent;
 								entity.AddComponent<CameraComponent>(cameraComponent);
-								entity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 								ImGui::CloseCurrentPopup();
 							}
 						}
@@ -946,10 +1027,60 @@ namespace vel
 								desc.rotation = entity.Transform().GetRotation();
 								characterController.characterController = m_ActiveScene->GetPhysicsWorld()->CreateCharacterController(desc);
 								entity.AddComponent<CharacterControllerComponent>(characterController);
-								entity.AddComponent<NativeScriptComponent>().Bind<PlayerController>();
 								ImGui::CloseCurrentPopup();
 							}
 						}
+						if (!hasBoxCollider)
+						{
+							if (ImGui::MenuItem("Box Collider"))
+							{
+								addComponentCalled = false;
+
+								BoxColliderComponent boxColliderComponent;
+
+								if (entity.HasComponent<MeshComponent>())
+								{
+									boxColliderComponent.aabb = entity.GetComponent<MeshComponent>().MeshDrawData->aabb;
+									boxColliderComponent.shape = new physics::BoxShape(boxColliderComponent.aabb.HalfExtent);
+								}
+								if (!entity.HasComponent<MeshComponent>())
+								{
+									MeshComponent comp;
+									if (entity.GetComponentInChild<MeshComponent>(comp))
+									{
+										boxColliderComponent.aabb = comp.MeshDrawData->aabb;
+										boxColliderComponent.aabb.HalfExtent = boxColliderComponent.aabb.HalfExtent * entity.Transform().Scale.x;
+										boxColliderComponent.shape = new physics::BoxShape(boxColliderComponent.aabb.HalfExtent);
+									}
+								}
+								entity.AddComponent<BoxColliderComponent>(boxColliderComponent);
+
+								ImGui::CloseCurrentPopup();
+							}
+						}
+						if (!hasRigidbody)
+						{
+							if (hasBoxCollider || hasSphereCollider)
+							{
+								if (ImGui::MenuItem("Rigidbody Component"))
+								{
+									addComponentCalled = false;
+									entity.AddComponent<RigidbodyComponent>(RigidbodyComponent());
+
+									ImGui::CloseCurrentPopup();
+								}
+							}
+						}
+						if (!hasAI)
+						{
+							if (ImGui::MenuItem("AI Component"))
+							{
+								addComponentCalled = false;
+								entity.AddComponent<AIComponent>(AIComponent());
+								ImGui::CloseCurrentPopup();
+							}
+						}
+
 						/*if (!hasMesh)
 						{
 							if (ImGui::MenuItem("Mesh Component"))

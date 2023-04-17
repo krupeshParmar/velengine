@@ -4,6 +4,7 @@
 #include <iRigidBody.h>
 #include <RigidBodyDesc.h>
 #include <PxActor.h>
+#include <extensions/PxJoint.h>
 
 namespace physics
 {
@@ -40,7 +41,12 @@ namespace physics
 			virtual void ApplyTorqueImpulse(const glm::vec3& torqueImpulse) override;
 			virtual void SetRenderPosition(Vector3* position) override;
 
+			virtual void GetWorldSpaceTransform(glm::mat4& transform) override;
+
+			virtual void ReleaseJoints() override;
+
 			physx::PxRigidActor* physxRigidbody;
+			physx::PxJoint* joints = nullptr;
 		protected:
 			glm::vec3 mPosition;
 			glm::quat mRotation;

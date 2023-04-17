@@ -530,6 +530,14 @@ namespace vel
 				}
 			}
 
+			if (entity.HasComponent<AIComponent>())
+			{
+				AIComponent& aiComp = entity.GetComponent<AIComponent>();
+				pugi::xml_node aiCompNode = componentNode.append_child("ai");
+				pugi::xml_node aiID = aiCompNode.append_child("id");
+				aiID.append_child(pugi::node_pcdata).set_value(std::to_string(aiComp.AI_ID).c_str());
+			}
+
 			if (entity.HasComponent<LightComponent>())
 			{
 				LightComponent lightComponent = entity.GetComponent<LightComponent>();
@@ -704,6 +712,12 @@ namespace vel
 
 									pugi::xml_node animationID = assetAnimation.append_child("id");
 									animationID.append_child(pugi::node_pcdata).set_value(std::to_string(animation->ID).c_str());
+									
+									pugi::xml_node animationTT = assetAnimation.append_child("transition_time");
+									animationTT.append_child(pugi::node_pcdata).set_value(std::to_string(animation->SpeedAndTransitionTime.y).c_str());
+									
+									pugi::xml_node animationSpeed = assetAnimation.append_child("speed");
+									animationSpeed.append_child(pugi::node_pcdata).set_value(std::to_string(animation->SpeedAndTransitionTime.x).c_str());
 
 									pugi::xml_node animationLoop = assetAnimation.append_child("loop");
 									if(animation->Loop)
@@ -739,6 +753,19 @@ namespace vel
 				characterRadius.append_child(pugi::node_pcdata).set_value(std::to_string(characterController.radius).c_str());
 				pugi::xml_node characterHeight = characterControllerNode.append_child("height");
 				characterHeight.append_child(pugi::node_pcdata).set_value(std::to_string(characterController.height).c_str());
+				
+				pugi::xml_node characterPosition = characterControllerNode.append_child("position");
+				{
+					pugi::xml_node positionX = characterPosition.append_child("x");
+					positionX.append_child(pugi::node_pcdata).set_value(std::to_string(characterController.position.x).c_str());
+
+					pugi::xml_node positionY = characterPosition.append_child("y");
+					positionY.append_child(pugi::node_pcdata).set_value(std::to_string(characterController.position.y).c_str());
+
+					pugi::xml_node positionZ = characterPosition.append_child("z");
+					positionZ.append_child(pugi::node_pcdata).set_value(std::to_string(characterController.position.z).c_str());
+				}
+
 			}
 
 			if (entity.HasComponent<MeshComponent>())
@@ -956,6 +983,26 @@ namespace vel
 								transform->SetRotationEuler(rotation);
 								entity->Transform() = *transform;
 								delete transform;
+							}
+
+							if (componentNodeName == "ai")
+							{
+								AIComponent* aiComponent = new AIComponent();
+								pugi::xml_object_range<pugi::xml_node_iterator>
+									aiNodeChildren = componentNode.children();
+								for (pugi::xml_node_iterator aiNodeIterator = aiNodeChildren.begin();
+									aiNodeIterator != aiNodeChildren.end();
+									aiNodeIterator++)
+								{
+									pugi::xml_node aiComponentNode = *aiNodeIterator;
+									std::string aiComponentNodeName = aiComponentNode.name();
+									if (aiComponentNodeName == "id")
+									{
+										aiComponent->AI_ID = std::stoi(aiComponentNode.child_value());
+									}
+								}
+								entity->AddComponent<AIComponent>();
+								delete aiComponent;
 							}
 
 							if (componentNodeName == "light")
@@ -1251,6 +1298,16 @@ namespace vel
 															animLoadData.id = std::stoi(animDataNode.child_value());
 														}
 
+														if (animDataNodeName == "transition_time")
+														{
+															animLoadData.transitionTime = std::stof(animDataNode.child_value());
+														}
+
+														if (animDataNodeName == "speed")
+														{
+															animLoadData.speed = std::stof(animDataNode.child_value());
+														}
+
 														if (animDataNodeName == "loop")
 														{
 															if(std::stoi(animDataNode.child_value()) == 1)
@@ -1305,9 +1362,35 @@ namespace vel
 									{
 										desc.radius = std::stof(characterComponentNode.child_value());
 									}
+									if (characterComponentNodeName == "position")
+									{
+										glm::vec3 position = glm::vec3(0.f);
+										pugi::xml_object_range<pugi::xml_node_iterator>
+											characterControllerPositionChildren = characterComponentNode.children();
+										for (pugi::xml_node_iterator ccPositionNodeIterator = characterControllerPositionChildren.begin();
+											ccPositionNodeIterator != characterControllerPositionChildren.end();
+											ccPositionNodeIterator++)
+										{
+											pugi::xml_node characterPositionNode = *ccPositionNodeIterator;
+											std::string characterPositionNodeName = characterPositionNode.name();
+											if (characterPositionNodeName == "x")
+											{
+												position.x = std::stof(characterPositionNode.child_value());
+											}
+											if (characterPositionNodeName == "y")
+											{
+												position.y = std::stof(characterPositionNode.child_value());
+											}
+											if (characterPositionNodeName == "z")
+											{
+												position.z = std::stof(characterPositionNode.child_value());
+											}
+										}
+										desc.position = position;
+									}
 								}
-								desc.position = entity->Transform().Translation;
 								desc.rotation = entity->Transform().RotationEuler;
+								characterController->position = desc.position;
 								characterController->characterController = scene->GetPhysicsWorld()->CreateCharacterController(desc);
 								entity->AddComponent<CharacterControllerComponent>(*characterController);							
 							}

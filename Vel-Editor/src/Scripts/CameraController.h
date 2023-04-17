@@ -57,11 +57,29 @@ public:
 		if (targetTransform && self)
 		{
 			CalculateCameraPosition(horizontalDistance, verticalDistance);
-			yaw = 180.f - (targetTransform->RotationEuler.y + angleAroundPlayer);
+			yaw = 180.f - (/*targetTransform->RotationEuler.y + */angleAroundPlayer);
+			glm::vec3 direction;
+			direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+			direction.y = sin(glm::radians(pitch));
+			direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+			cameraFront = glm::normalize(direction);
+			cameraRight = glm::normalize(glm::cross(cameraFront, glm::vec3(0.f, 1.f, 0.f)));
+			cameraUp = glm::normalize(glm::cross(cameraRight, cameraFront));
+
 			self->Translation = targetTransform->Translation + glm::vec3(0.f, yOffset, -distance);
 			//camera->Camera.Position = self->Translation;
 			camera->Camera.Target = targetTransform->Translation + glm::vec3(0.f, yOffset, 0.f);
 		}
+	}
+
+	const glm::vec3& GetCameraFront() {
+		return cameraFront;
+	}
+	const glm::vec3& GetCameraRight() {
+		return cameraRight;
+	}
+	const glm::vec3& GetCameraUp() {
+		return cameraUp;
 	}
 
 private:
@@ -97,7 +115,7 @@ private:
 
 	void CalculateCameraPosition(float hor, float ver)
 	{
-		float theta = targetTransform->RotationEuler.y + angleAroundPlayer;
+		float theta = /*targetTransform->RotationEuler.y + */angleAroundPlayer;
 		float offsetX = (float) hor * sin(glm::radians(theta));
 		float offsetZ = (float) hor * cos(glm::radians(theta));
 		glm::vec3 position;
@@ -124,4 +142,7 @@ private:
 	float speedX = 3.f;
 	float speedY = 3.f;
 	bool showMouse = false;
+	glm::vec3 cameraFront = glm::vec3(0.f);
+	glm::vec3 cameraRight = glm::vec3(0.f);
+	glm::vec3 cameraUp = glm::vec3(0.f);
 };

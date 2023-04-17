@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="temp">
-      <UniqueIdentifier>{9B679E7C-879E-9F0D-308B-85101CA11B0F}</UniqueIdentifier>
+    <Filter Include="Scripts">
+      <UniqueIdentifier>{4D6F1AE8-B94E-9983-C266-245A2EC5FFE4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\States">
+      <UniqueIdentifier>{7030EC0D-5CFE-DF13-4592-503A31FFBB78}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -10,13 +13,38 @@
     <ClInclude Include="src\EditorLayer2.h" />
     <ClInclude Include="src\Example.h" />
     <ClInclude Include="src\SceneManager.h" />
-    <ClInclude Include="src\Scripts\CameraController.h" />
-    <ClInclude Include="src\Scripts\PlayerController.h" />
+    <ClInclude Include="src\Scripts\CameraController.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scripts\MutantController.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scripts\PlayerController.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scripts\States\MutantAttackState.h">
+      <Filter>Scripts\States</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scripts\States\MutantBaseState.h">
+      <Filter>Scripts\States</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scripts\States\MutantIdleState.h">
+      <Filter>Scripts\States</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scripts\States\MutantRunState.h">
+      <Filter>Scripts\States</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scripts\States\MutantWalkState.h">
+      <Filter>Scripts\States</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\EditorLayer2.cpp" />
     <ClCompile Include="src\SceneManager.cpp" />
+    <ClCompile Include="src\Scripts\MutantController.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
     <ClCompile Include="src\VelEngineApp.cpp" />
   </ItemGroup>
 </Project>

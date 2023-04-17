@@ -59,6 +59,41 @@ namespace vel
 			m_Scene->m_Registry.remove_if_exists<T>(m_EntityHandle);
 		}
 
+		template<typename T>
+		bool GetComponentInChild(T& comp)
+		{
+			bool found = false;
+			if (HasComponent<T>())
+			{
+				found = true;
+				comp = GetComponent<T>();
+				return found;
+			}
+			for (GUID child : Children())
+			{
+				Entity childEntity = m_Scene->GetEntityWithGUID(child);
+				if (!childEntity)
+					continue;
+				if (childEntity.HasComponent<T>())
+				{
+					VEL_CORE_INFO("Name: {0}", childEntity.Name().c_str());
+					found = true;
+					comp = childEntity.GetComponent<T>();
+					return found;
+				}
+			}
+			for (GUID child : Children())
+			{
+				Entity childEntity = m_Scene->GetEntityWithGUID(child);
+				if (childEntity.GetComponentInChild<T>(comp))
+				{
+					found = true;
+					break;
+				}
+			}
+			return found;
+		}
+
 		operator uint32_t () const { return (uint32_t)m_EntityHandle; }
 		operator entt::entity() const { return m_EntityHandle; }
 		operator bool() const { return (m_EntityHandle != entt::null) && m_Scene && m_Scene->m_Registry.valid(m_EntityHandle); }
@@ -107,6 +142,8 @@ namespace vel
 		std::vector<GUID>& Children() { return GetComponent<RelationshipComponent>().Children; }
 
 		const std::vector<GUID>& Children() const { return GetComponent<RelationshipComponent>().Children; }
+
+
 
 		bool RemoveChild(Entity child)
 		{

@@ -231,7 +231,13 @@
     <ClInclude Include="src\vel\Scene\Scene.h">
       <Filter>src\vel\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\vel\Scene\SceneCamera.h">
+      <Filter>src\vel\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\vel\Scene\SceneEnvironment.h">
+      <Filter>src\vel\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vel\Scene\ScriptableEntity.h">
       <Filter>src\vel\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\velpch.h">
@@ -1488,8 +1494,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\vel\Scene\SceneCamera.h" />
-    <ClInclude Include="src\vel\Scene\ScriptableEntity.h" />
+    <ClInclude Include="src\vel\Physics\Ragdoll.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
@@ -1609,12 +1614,15 @@
     <ClCompile Include="src\vel\Scene\Scene.cpp">
       <Filter>src\vel\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\vel\Scene\SceneCamera.cpp">
+      <Filter>src\vel\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\velpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\vel\Scene\SceneCamera.cpp" />
+    <ClCompile Include="src\vel\Physics\Ragdoll.cpp" />
   </ItemGroup>
 </Project>

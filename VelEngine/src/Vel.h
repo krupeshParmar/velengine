@@ -37,6 +37,10 @@
 #include "vel/Editor/EditorCamera.h"
 // -----------------------------
 
+// ----------Physics------------
+#include "vel/Physics/Ragdoll.h"
+// -----------------------------
+
 
 // --------Scene----------
 #include "vel/Scene/Scene.h"

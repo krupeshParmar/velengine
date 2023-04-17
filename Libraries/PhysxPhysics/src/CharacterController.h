@@ -3,6 +3,7 @@
 #include <PxRigidDynamic.h>
 #include <glm/glm.hpp>
 #include <characterkinematic/PxController.h>
+#include "RigidBody.h"
 
 namespace physics
 {
@@ -27,10 +28,14 @@ namespace physics
 					m_Controller->getFootPosition().z
 				};
 			}
+			virtual iRigidBody* GetRigidbody() override
+			{
+				return m_Rigidbody;
+			}
 
 			void SetController(physx::PxController* cont);
 		private:
-			//physx::PxRigidDynamic* m_Controller;
+			RigidBody* m_Rigidbody = nullptr;
 			physx::PxController* m_Controller;
 			physx::PxControllerFilters filters;
 		};

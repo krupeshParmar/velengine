@@ -16,6 +16,7 @@ namespace physics
 		virtual void Reset(CharacterControllerDesc desc) = 0;
 		virtual void SetPosition(glm::vec3 pos) = 0;
 		virtual glm::vec3 GetPosition() = 0;
+		virtual iRigidBody* GetRigidbody() = 0;
 
 	protected:
 		iCharacterController(){}

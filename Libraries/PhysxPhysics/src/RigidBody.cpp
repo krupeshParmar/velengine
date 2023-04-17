@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "RigidBody.h"
 #include <PxRigidDynamic.h>
+#include <PxRigidActor.h>
 
 namespace physics
 {
@@ -18,6 +19,7 @@ namespace physics
 
 		RigidBody::~RigidBody(void)
 		{
+
 		}
 
 		bool RigidBody::IsStatic(void) const
@@ -42,6 +44,8 @@ namespace physics
 		void RigidBody::SetPosition(const glm::vec3& positionIn)
 		{
 			mPosition = positionIn;
+			physxRigidbody->setGlobalPose(physx::PxTransform(
+				physx::PxVec3(positionIn.x, positionIn.y, positionIn.z)));
 		}
 
 		void RigidBody::GetRotation(glm::quat& orientationOut)
@@ -62,6 +66,20 @@ namespace physics
 
 		void RigidBody::ApplyForceAtPoint(const glm::vec3& force, const glm::vec3& relativePoint)
 		{
+		}
+
+		void RigidBody::GetWorldSpaceTransform(glm::mat4& transform)
+		{
+			physx::PxRigidDynamic* rigidbody = (physx::PxRigidDynamic*)physxRigidbody;
+			physx::PxTransform rgtransform = rigidbody->getGlobalPose();
+			transform = glm::translate(glm::mat4(1.f), glm::vec3(
+				rgtransform.p.x, rgtransform.p.y, rgtransform.p.z)
+			) * glm::toMat4(glm::quat(
+				rgtransform.q.x,
+				rgtransform.q.y,
+				rgtransform.q.z,
+				rgtransform.q.w
+			));
 		}
 
 		void RigidBody::ApplyImpulse(const glm::vec3& impulse)
@@ -85,6 +103,12 @@ namespace physics
 		void RigidBody::SetRenderPosition(Vector3* position)
 		{
 
+		}
+
+		void RigidBody::ReleaseJoints()
+		{
+			joints->release();
+			joints = nullptr;
 		}
 
 	}
