@@ -190,7 +190,8 @@ namespace vel
 					auto [transform, characterController] = ccView.get<TransformComponent, CharacterControllerComponent>(ent);
 
 					// TODO Check out the cc offset
-					transform.Translation = characterController.characterController->GetPosition() + glm::vec3(0.f, 1.f, 0.f);
+					if(characterController.characterController)
+						transform.Translation = characterController.characterController->GetPosition() + glm::vec3(0.f, 1.f, 0.f);
 				}
 			}
 			{

@@ -3,6 +3,7 @@
 #pragma once
 #include <Vel.h>
 #include <entt.hpp>
+#include "Scripts/HealthComponent.h"
 
 namespace vel
 {
@@ -59,5 +60,7 @@ namespace vel
 		bool addComponentCalled = false;
 		std::chrono::time_point<std::chrono::steady_clock> starttime = std::chrono::steady_clock::now();
 		glm::vec3* rotation = new glm::vec3(0.f);
+		HealthComponent* playerHealth = nullptr;
+		HealthComponent* enemyHealth = nullptr;
 	};
 }

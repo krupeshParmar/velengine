@@ -157,6 +157,7 @@ IF EXIST "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.
     <ClInclude Include="src\Example.h" />
     <ClInclude Include="src\SceneManager.h" />
     <ClInclude Include="src\Scripts\CameraController.h" />
+    <ClInclude Include="src\Scripts\HealthComponent.h" />
     <ClInclude Include="src\Scripts\MutantController.h" />
     <ClInclude Include="src\Scripts\PlayerController.h" />
     <ClInclude Include="src\Scripts\States\MutantAttackState.h" />
@@ -170,6 +171,7 @@ IF EXIST "$(SolutionDir)\VelEngine\vendor\assimp3.2\bin\Release\assimp-vc130-mt.
     <ClCompile Include="src\EditorLayer2.cpp" />
     <ClCompile Include="src\SceneManager.cpp" />
     <ClCompile Include="src\Scripts\MutantController.cpp" />
+    <ClCompile Include="src\Scripts\PlayerController.cpp" />
     <ClCompile Include="src\VelEngineApp.cpp" />
   </ItemGroup>
   <ItemGroup>

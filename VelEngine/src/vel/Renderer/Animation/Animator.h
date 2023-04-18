@@ -11,6 +11,7 @@ namespace vel
 		void Animator::PlayAnimation(Animation* pAnimation);
 		void Animator::CalculateBoneTransform(const AssimpNodeData* node,const glm::mat4& parentTransform);
 		std::vector<glm::mat4>& GetFinalBoneMatrices();
+		const float& GetTimeStamp() { return m_CurrentTime; }
 
 	private:
 		std::vector<glm::mat4> m_FinalBoneMatrices;

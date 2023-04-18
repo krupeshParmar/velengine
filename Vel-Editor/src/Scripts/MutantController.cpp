@@ -4,6 +4,7 @@
 #include "States/MutantWalkState.h"
 #include "States/MutantAttackState.h"
 #include "States/MutantIdleState.h"
+#include "PlayerController.h"
 
 void MutantController::OnCreate()
 {
@@ -21,6 +22,7 @@ void MutantController::OnCreate()
 		targetTransform = &ccEntity.Transform();
 		break;
 	}
+	selfHealth = &GetComponent<HealthComponent>();
 	walkState = new MutantWalkState();
 	runState = new MutantRunState();
 	attackState = new MutantAttackState();
@@ -34,13 +36,34 @@ void MutantController::OnDestroy()
 
 void MutantController::OnUpdate(vel::Timestep ts)
 {
+	if (dead)
+		return;
+	if (selfHealth)
+	{
+		if (selfHealth->health <= 0.f)
+		{
+			animatorComponent->PlayAnimation(5);
+			dead = true;
+			return;
+		}
+	}
 	if (targetTransform && selfTransform)
 	{
+		if (!targetController)
+		{
+			vel::Entity mariaEntity = GetScene()->TryGetEntityWithTag("Maria2");
+			if (mariaEntity)
+			{
+				ScriptableEntity* script = mariaEntity.GetComponent<vel::NativeScriptComponent>().Instance;
+				targetController = (PlayerController*)script;
+			}
+		}
+
 		currentState->Update(this, ts);
 		float distance = glm::distance(selfTransform->Translation, targetTransform->Translation);
 
 		// Within Range
-		if (distance <= 2.f)
+		if (distance <= 1.5f)
 		{
 			if (currentState != attackState)
 			{
@@ -49,7 +72,7 @@ void MutantController::OnUpdate(vel::Timestep ts)
 		}
 
 		// Outside Range but close
-		else if (distance > 2.f && distance < 5.f)
+		else if (distance > 1.5f && distance < 7.f)
 		{
 			if (currentState != walkState)
 			{

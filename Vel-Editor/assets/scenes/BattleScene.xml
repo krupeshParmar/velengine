@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <scene>
 	<name>assets/scenes/BattleScene.xml</name>
-	<entity id="12696223323208898115">
-		<name>Window duplicate 30</name>
+	<entity id="12811122541135412755">
+		<name>MainCamera</name>
 		<components>
 			<transform>
 				<enabled>1</enabled>
 				<position>
-					<x>-60.000000</x>
-					<y>150.000000</y>
-					<z>-130.000000</z>
+					<x>0.000000</x>
+					<y>0.000000</y>
+					<z>0.000000</z>
 				</position>
 				<rotation>
 					<x>0.000000</x>
@@ -17,84 +17,17 @@
 					<z>0.000000</z>
 				</rotation>
 				<scale>
-					<x>40.000000</x>
-					<y>30.000000</y>
-					<z>2.000000</z>
+					<x>1.000000</x>
+					<y>1.000000</y>
+					<z>1.000000</z>
 				</scale>
 			</transform>
-			<asset_component>
-				<file_location>assets/models/plane.fbx.vasset</file_location>
-				<asset id="16733578272278694185">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="4698752832796492098">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="4006000822398687977">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-					<material_path>assets/materials/window_mat.xml</material_path>
-				</asset>
-			</asset_component>
+			<camera>
+				<primary>1</primary>
+			</camera>
 		</components>
 	</entity>
-	<entity id="8904961833371449442">
+	<entity id="11528609927966285902">
 		<name>Maria</name>
 		<components>
 			<transform>
@@ -1970,7 +1903,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="4254842328915716439">
+	<entity id="15202492227608600089">
 		<name>puddle</name>
 		<components>
 			<transform>
@@ -2063,7 +1996,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="12531507158102172380">
+	<entity id="9305121847728783159">
 		<name>BedroomQuad</name>
 		<components>
 			<transform>
@@ -2155,7 +2088,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="14629232408850715261">
+	<entity id="15655998803888034535">
 		<name>spotlight</name>
 		<components>
 			<transform>
@@ -2275,7 +2208,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="1469624395229193962">
+	<entity id="891487049237646086">
 		<name>Bench</name>
 		<components>
 			<transform>
@@ -2301,7 +2234,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="17755773716518463064">
+	<entity id="16381083727170973420">
 		<name>Plane</name>
 		<components>
 			<transform>
@@ -2394,7 +2327,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="721986615223853731">
+	<entity id="2117383179006055544">
 		<name>directional light</name>
 		<components>
 			<transform>
@@ -2445,7 +2378,7 @@
 			</light>
 		</components>
 	</entity>
-	<entity id="8360094476326170903">
+	<entity id="15884526228641480142">
 		<name>Shop</name>
 		<components>
 			<transform>
@@ -3787,7 +3720,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="1310573839116094578">
+	<entity id="4015463231501330883">
 		<name>Theatre</name>
 		<components>
 			<transform>
@@ -3989,7 +3922,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="8835090451882870829">
+	<entity id="6973967649763560055">
 		<name>Hotel</name>
 		<components>
 			<transform>
@@ -4191,7 +4124,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="6869860091535357552">
+	<entity id="16834009174773371620">
 		<name>Low Rise building</name>
 		<components>
 			<transform>
@@ -4214,7 +4147,7 @@
 			</transform>
 		</components>
 	</entity>
-	<entity id="17060857093268937264">
+	<entity id="2011367159634846609">
 		<name>Shop2</name>
 		<components>
 			<transform>
@@ -5558,7 +5491,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="16746804755981534323">
+	<entity id="10459312955873250886">
 		<name>streetlamp</name>
 		<components>
 			<transform>
@@ -5584,7 +5517,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="13233699234862891948">
+	<entity id="542035215985221838">
 		<name>streetlamp_light</name>
 		<components>
 			<transform>
@@ -5704,7 +5637,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="17140023001617615712">
+	<entity id="15233151368625032250">
 		<name>bed</name>
 		<components>
 			<transform>
@@ -5797,7 +5730,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="16566705218530700322">
+	<entity id="839241036816476367">
 		<name>RFA_Cloth</name>
 		<components>
 			<transform>
@@ -5890,7 +5823,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="11048178217706155262">
+	<entity id="11136806898432736959">
 		<name>Test Cube</name>
 		<components>
 			<transform>
@@ -5982,7 +5915,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="13000937007084412461">
+	<entity id="1369996476143644576">
 		<name>NeonWires</name>
 		<components>
 			<transform>
@@ -6120,7 +6053,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="9817183175800215218">
+	<entity id="17378818826428092920">
 		<name>Hotel Base</name>
 		<components>
 			<transform>
@@ -6213,7 +6146,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="10747056869006591769">
+	<entity id="17203008061935024547">
 		<name>floor</name>
 		<components>
 			<transform>
@@ -6334,7 +6267,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="8689224931249289341">
+	<entity id="7944667078453329832">
 		<name>Hotel Text</name>
 		<components>
 			<transform>
@@ -6427,7 +6360,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="5385184891288328851">
+	<entity id="9650080465851755618">
 		<name>Hotel Globe</name>
 		<components>
 			<transform>
@@ -6548,7 +6481,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="2435356275799425826">
+	<entity id="12593166128548862101">
 		<name>Maria2</name>
 		<components>
 			<transform>
@@ -10603,7 +10536,7 @@
 			</characterController>
 		</components>
 	</entity>
-	<entity id="7416216646425536622">
+	<entity id="13755471680585568433">
 		<name>Hotel Upper</name>
 		<components>
 			<transform>
@@ -10696,7 +10629,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="8946599473892199408">
+	<entity id="5977976752423105577">
 		<name>Aland</name>
 		<components>
 			<transform>
@@ -16420,7 +16353,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="12036382157400593101">
+	<entity id="17828817351043652288">
 		<name>Hotel Upper duplicate 21</name>
 		<components>
 			<transform>
@@ -16513,7 +16446,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="6301772912273374286">
+	<entity id="15813743935541460543">
 		<name>floor duplicate 22</name>
 		<components>
 			<transform>
@@ -16634,7 +16567,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="1409872158973681423">
+	<entity id="16252877068814575038">
 		<name>Hotel Upper duplicate 23</name>
 		<components>
 			<transform>
@@ -16727,7 +16660,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="1906994352207806523">
+	<entity id="14344758303775494442">
 		<name>floor duplicate 22 duplicate 24</name>
 		<components>
 			<transform>
@@ -16848,7 +16781,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="8385400843862128666">
+	<entity id="629872752524904175">
 		<name>Shop1Base</name>
 		<components>
 			<transform>
@@ -16941,7 +16874,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="1027229207948283352">
+	<entity id="4019022327748472383">
 		<name>spotlight duplicate 26</name>
 		<components>
 			<transform>
@@ -17061,7 +16994,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="125098318426578231">
+	<entity id="14666860080334677177">
 		<name>Shop2_Duplicate</name>
 		<components>
 			<transform>
@@ -18405,7 +18338,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="13369132545832475054">
+	<entity id="13479418341026723857">
 		<name>ShopUpperFloor</name>
 		<components>
 			<transform>
@@ -18498,7 +18431,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="2956114915731633689">
+	<entity id="13484220771449291758">
 		<name>TopWallV1</name>
 		<components>
 			<transform>
@@ -18591,7 +18524,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="9397411219844149495">
+	<entity id="14971619833047069609">
 		<name>Mutant</name>
 		<components>
 			<transform>
@@ -18686,35 +18619,42 @@
 					<animation>
 						<name>assets/models/Mutant/Mutant Breathing Idle.fbx</name>
 						<id>0</id>
-						<transition_time>1.000000</transition_time>
+						<transition_time>0.600000</transition_time>
 						<speed>1.000000</speed>
 						<loop>1</loop>
 					</animation>
 					<animation>
 						<name>assets/models/Mutant/Mutant Walking.fbx</name>
 						<id>1</id>
-						<transition_time>1.000000</transition_time>
+						<transition_time>0.200000</transition_time>
 						<speed>1.000000</speed>
 						<loop>1</loop>
 					</animation>
 					<animation>
 						<name>assets/models/Mutant/Mutant Run.fbx</name>
 						<id>2</id>
-						<transition_time>1.000000</transition_time>
+						<transition_time>0.400000</transition_time>
 						<speed>1.000000</speed>
 						<loop>1</loop>
 					</animation>
 					<animation>
 						<name>assets/models/Mutant/Mutant Punch.fbx</name>
 						<id>3</id>
-						<transition_time>1.000000</transition_time>
+						<transition_time>0.200000</transition_time>
 						<speed>1.000000</speed>
 						<loop>1</loop>
 					</animation>
 					<animation>
 						<name>assets/models/Mutant/Mutant Swiping.fbx</name>
 						<id>4</id>
-						<transition_time>1.000000</transition_time>
+						<transition_time>0.300000</transition_time>
+						<speed>1.000000</speed>
+						<loop>1</loop>
+					</animation>
+					<animation>
+						<name>assets/models/Mutant/Mutant Dying.fbx</name>
+						<id>5</id>
+						<transition_time>0.700000</transition_time>
 						<speed>1.000000</speed>
 						<loop>1</loop>
 					</animation>
@@ -20834,7 +20774,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="15182362055867199755">
+	<entity id="194470674636928713">
 		<name>Window</name>
 		<components>
 			<transform>
@@ -20927,15 +20867,15 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="7238840524963196275">
-		<name>MainCamera</name>
+	<entity id="7524140909091224952">
+		<name>Window duplicate 30</name>
 		<components>
 			<transform>
 				<enabled>1</enabled>
 				<position>
-					<x>0.000000</x>
-					<y>0.000000</y>
-					<z>0.000000</z>
+					<x>-60.000000</x>
+					<y>150.000000</y>
+					<z>-130.000000</z>
 				</position>
 				<rotation>
 					<x>0.000000</x>
@@ -20943,14 +20883,81 @@
 					<z>0.000000</z>
 				</rotation>
 				<scale>
-					<x>1.000000</x>
-					<y>1.000000</y>
-					<z>1.000000</z>
+					<x>40.000000</x>
+					<y>30.000000</y>
+					<z>2.000000</z>
 				</scale>
 			</transform>
-			<camera>
-				<primary>1</primary>
-			</camera>
+			<asset_component>
+				<file_location>assets/models/plane.fbx.vasset</file_location>
+				<asset id="16733578272278694185">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="4698752832796492098">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="4006000822398687977">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+					<material_path>assets/materials/window_mat.xml</material_path>
+				</asset>
+			</asset_component>
 		</components>
 	</entity>
 </scene>

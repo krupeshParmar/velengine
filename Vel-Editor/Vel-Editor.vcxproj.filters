@@ -37,6 +37,7 @@
     <ClInclude Include="src\Scripts\States\MutantWalkState.h">
       <Filter>Scripts\States</Filter>
     </ClInclude>
+    <ClInclude Include="src\Scripts\HealthComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorLayer.cpp" />
@@ -46,5 +47,6 @@
       <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="src\VelEngineApp.cpp" />
+    <ClCompile Include="src\Scripts\PlayerController.cpp" />
   </ItemGroup>
 </Project>

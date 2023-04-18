@@ -27,15 +27,14 @@ namespace physics
 		}
 		void CharacterController::Move(glm::vec3 displacement, float dt)
 		{
-			//EnterCriticalSection(&MoveLock);
 
 			physx::PxVec3 disp = physx::PxVec3(displacement.x, displacement.y, displacement.z) * dt;
+			EnterCriticalSection(&MoveLock);
 			m_Controller->move(
 				disp,
 				0.01f,
 				dt, filters);
-
-			//LeaveCriticalSection(&MoveLock);
+			LeaveCriticalSection(&MoveLock);
 		}
 		void CharacterController::SetMass(float mass)
 		{

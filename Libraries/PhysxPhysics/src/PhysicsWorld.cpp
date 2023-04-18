@@ -69,6 +69,11 @@ namespace physics
 				groundPlane->userData = nullptr;
 				m_RigidBodies.push_back(groundPlane);
 			}
+			mScene->setVisualizationParameter(physx::PxVisualizationParameter::eSCALE, 1.0f);
+			mScene->setVisualizationParameter(physx::PxVisualizationParameter::eACTOR_AXES, 2.0f);
+			mScene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_AABBS, 1.0f);
+			mScene->setVisualizationParameter(physx::PxVisualizationParameter::eWORLD_AXES, 1.0f);
+			
 			/*physx::PxRigidActor* sidePlane = physx::PxCreatePlane(
 				*mPhysics, physx::PxPlane(
 					1.f,
@@ -171,6 +176,13 @@ namespace physics
 		{
 			mScene->simulate(dt);
 			mScene->fetchResults(true);
+			//const physx::PxRenderBuffer& rb = mScene->getRenderBuffer();
+			//for (physx::PxU32 i = 0; i < rb.getNbLines(); i++)
+			//{
+			//	const physx::PxDebugLine& line = rb.getLines()[i];
+			//	
+			//	// render the line
+			//}
 			for (std::vector< physx::PxRigidActor*>::const_iterator rigidIt = m_RigidBodies.begin();
 				rigidIt != m_RigidBodies.end();
 				rigidIt++)

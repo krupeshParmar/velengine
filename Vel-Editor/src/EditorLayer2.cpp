@@ -361,6 +361,18 @@ namespace vel
 			ImGui::Image((void*)BloomID, ImVec2{ m_ViewPortSize.x, m_ViewPortSize.y }, ImVec2{ 0,1 }, ImVec2{ 1,0 });
 			ImGui::End();
 		}
+		if (playerHealth)
+		{
+			ImGui::Begin("Player Health");
+			ImGui::ProgressBar(playerHealth->health / 100.f);
+			ImGui::End();
+		}
+		if (enemyHealth)
+		{
+			ImGui::Begin("Enemy Health");
+			ImGui::ProgressBar(enemyHealth->health / 100.f);
+			ImGui::End();
+		}
 	}
 
 	void EditorLayer2::DrawChildren(Entity entity, std::map<GUID, Entity>& shownEntities)
@@ -427,14 +439,18 @@ namespace vel
 			{
 				if (!entity.HasComponent<NativeScriptComponent>())
 				{
+					entity.AddComponent<HealthComponent>(HealthComponent());
 					entity.AddComponent<NativeScriptComponent>().Bind<MutantController>();
+					enemyHealth = &entity.GetComponent<HealthComponent>();
 				}
 			}
 			if (entity.HasComponent<CharacterControllerComponent>())
 			{
 				if (!entity.HasComponent<NativeScriptComponent>())
 				{
+					entity.AddComponent<HealthComponent>(HealthComponent());
 					entity.AddComponent<NativeScriptComponent>().Bind<PlayerController>();
+					playerHealth = &entity.GetComponent<HealthComponent>();
 				}
 			}
 			if (entity.GetParentGUID() != 0)
@@ -495,6 +511,7 @@ namespace vel
 		bool hasBoxCollider = false;
 		bool hasSphereCollider = false;
 		bool hasRigidbody = false;
+		bool hasHealth = false;
 		ImGui::Begin("Inspector");
 		if (m_SelectedEntity != entt::null)
 		{
@@ -647,14 +664,13 @@ namespace vel
 						animator.LoadAnimation(mesh.MeshDrawData);
 						//m_ActiveScene->LoadAnimation(animator.animation);
 					}
+					ImGui::Checkbox("Use Animation##animUseIt", &animator.UseAnimation);
 					int count = 0;
 					for (Animation* animation : animator.List_Animations)
 					{
-						ImGui::Checkbox("Use Animation##animUseIt", &animator.UseAnimation);
 						ImGui::BeginGroup();
 						std::string label0 = "ID##" + animation->name + "idAnim" + std::to_string(count);
 						ImGui::InputInt(label0.c_str(), &animation->ID);
-						
 
 						std::string label01 = "Loop##" + animation->name + "loopAnim" + std::to_string(count);
 						ImGui::Checkbox(label01.c_str(), &animation->Loop);
@@ -958,6 +974,17 @@ namespace vel
 			}
 			ImGui::EndGroup();
 
+			// Health Component
+			ImGui::BeginGroup();
+			{
+				if (entity.HasComponent<HealthComponent>())
+				{
+					hasHealth = true;
+					ImGui::InputFloat("Heath##healthComp", &entity.GetComponent<HealthComponent>().health);
+				}
+			}
+			ImGui::EndGroup();
+
 			// Add Component
 			{
 				if (ImGui::Button("Add Component"))
@@ -1080,16 +1107,6 @@ namespace vel
 								ImGui::CloseCurrentPopup();
 							}
 						}
-
-						/*if (!hasMesh)
-						{
-							if (ImGui::MenuItem("Mesh Component"))
-							{
-								addComponentCalled = false;
-								entity.AddComponent<MeshComponent>(MeshComponent());
-								ImGui::CloseCurrentPopup();
-							}
-						}*/
 						if (ImGui::MenuItem("Close"))
 						{
 							addComponentCalled = false;
