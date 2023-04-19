@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<material>
+	<name>neon5</name>
+	<transparent>0</transparent>
+	<texture_size>1.000000</texture_size>
+	<diffuse>
+		<r>0.000000</r>
+		<g>0.852941</g>
+		<b>1.000000</b>
+		<a>1.000000</a>
+	</diffuse>
+	<specular>
+		<r>0.000000</r>
+		<g>0.854902</g>
+		<b>1.000000</b>
+		<a>1.000000</a>
+	</specular>
+	<emissive>
+		<r>0.000000</r>
+		<g>0.854902</g>
+		<b>1.000000</b>
+		<a>1.000000</a>
+	</emissive>
+	<ambient>1.000000</ambient>
+	<shininess>0.000000</shininess>
+	<emissive_intensity>2.389000</emissive_intensity>
+	<diffuse_texture></diffuse_texture>
+	<specular_texture></specular_texture>
+	<normal_texture></normal_texture>
+	<emissive_texture></emissive_texture>
+</material>

@@ -130,7 +130,7 @@ void PlayerController::OnUpdate(vel::Timestep ts)
 					float ratio = animator->animator->GetTimeStamp()
 						/ animator->runningAnimation->GetDuration();
 					float distance = glm::distance(enemyTransform->Translation, selfTransform->Translation);
-					if (ratio > 0.6f && distance < 2.f)
+					if (ratio > 0.4f && distance < 2.f)
 					{
 						enemyHealth->health -= 2.f;
 						attacked = true;
@@ -141,7 +141,7 @@ void PlayerController::OnUpdate(vel::Timestep ts)
 
 		if (vel::Input::IsMouseButtonPressed(MouseButton::Left))
 		{
-			if (state != Slash2)
+			if (state != Slash2 && state != Slash && state != Impact)
 			{
 				for (vel::AnimatorComponent* animator : animatorsList)
 				{
@@ -151,14 +151,14 @@ void PlayerController::OnUpdate(vel::Timestep ts)
 				state = Slash2;
 				input = true;
 			}
-			else if (state == Slash2)
+			else if (state == Slash2 && state != Impact)
 			{
 				if (animatorsList.size() > 0)
 				{
 					vel::AnimatorComponent* animator = animatorsList[0];
 					float ratio = animator->animator->GetTimeStamp()
 						/ animator->runningAnimation->GetDuration();
-					if (ratio > 0.7f)
+					if (ratio > 0.6f)
 					{
 						for (vel::AnimatorComponent* animator : animatorsList)
 						{
@@ -238,7 +238,12 @@ void PlayerController::OnUpdate(vel::Timestep ts)
 const void PlayerController::TakeDamage(float damage)
 {
 	if (state == Blocking)
-		return;
+	{
+		selfHealth->exp -= damage * 5.f;
+		if (selfHealth->exp < 0.f)
+			selfHealth->exp = 0.f;
+		else return;
+	}
 	if (state == Death)
 		return;
 	state = Impact;
@@ -253,7 +258,9 @@ const void PlayerController::TakeDamage(float damage)
 			{
 				for (vel::AnimatorComponent* animator : animatorsList)
 				{
-					animator->PlayAnimation(int(Death));
+					if (damage > 10.f)
+						animator->PlayAnimation(int(FlyingDeath));
+					else animator->PlayAnimation(int(Death));
 				}
 				state = Death;
 				return;
@@ -271,6 +278,13 @@ const void PlayerController::TakeDamage(float damage)
 const void PlayerController::IncrementXP()
 {
 	selfHealth->exp += 5.f;
+}
+
+const float PlayerController::GetXP()
+{
+	if (selfHealth)
+		return selfHealth->exp;
+	return 0.0f;
 }
 
 const glm::vec3& PlayerController::GetPosition()

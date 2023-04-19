@@ -18,6 +18,7 @@ enum AnimState
 	Spell,
 	Impact,
 	Death,
+	FlyingDeath,
 	None
 };
 struct HealthComponent;
@@ -45,6 +46,7 @@ public:
 	virtual void OnDestroy() override;
 	const void TakeDamage(float damage);
 	const void IncrementXP();
+	const float GetXP();
 	const glm::vec3& GetPosition();
 private:
 	glm::vec3 m_Position = glm::vec3(0.f);

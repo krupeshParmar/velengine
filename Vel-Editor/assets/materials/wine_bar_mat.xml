@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<material>
+	<name>Wine bar</name>
+	<transparent>0</transparent>
+	<texture_size>1.000000</texture_size>
+	<diffuse>
+		<r>0.362745</r>
+		<g>0.362745</g>
+		<b>0.362745</b>
+		<a>1.000000</a>
+	</diffuse>
+	<specular>
+		<r>0.750000</r>
+		<g>0.750000</g>
+		<b>0.750000</b>
+		<a>1.000000</a>
+	</specular>
+	<emissive>
+		<r>0.931373</r>
+		<g>0.931373</g>
+		<b>0.931373</b>
+		<a>1.000000</a>
+	</emissive>
+	<ambient>1.000000</ambient>
+	<shininess>0.000000</shininess>
+	<emissive_intensity>0.000000</emissive_intensity>
+	<diffuse_texture>assets/models/shop/Signs 1/Signs_Signs_BaseMap.png</diffuse_texture>
+	<specular_texture>assets/models/shop/Signs 1/Signs_Signs_Specular.png</specular_texture>
+	<normal_texture></normal_texture>
+	<emissive_texture></emissive_texture>
+</material>

@@ -29,14 +29,22 @@ public:
 			return;
 		}
 		float distance = glm::distance(controller->selfTransform->Translation, controller->targetTransform->Translation);
-		if (controller->animatorComponent->runningAnimation && controller->animatorComponent->runningAnimation->ID != 3)
+
+		int attackID = 3;
+
+		if (controller->targetController->GetXP() > 70.f)
 		{
-			controller->animatorComponent->PlayAnimation(3);
+			attackID = 4;
+		}
+
+		if (controller->animatorComponent->runningAnimation && controller->animatorComponent->runningAnimation->ID != attackID)
+		{
+			controller->animatorComponent->PlayAnimation(attackID);
 		}
 		if (!controller->targetController)
 			return;
 
-		if (controller->animatorComponent->runningAnimation && controller->animatorComponent->runningAnimation->ID == 3)
+		if (controller->animatorComponent->runningAnimation && controller->animatorComponent->runningAnimation->ID == attackID)
 		{
 			float ratio = controller->animatorComponent->animator->GetTimeStamp()
 				/ controller->animatorComponent->runningAnimation->GetDuration();
@@ -44,7 +52,10 @@ public:
 				attacked = false;
 			if (ratio > 0.25f && ratio < 0.35f && !attacked && distance <= 1.5f)
 			{
-				controller->targetController->TakeDamage(3.f);
+				if(attackID == 3)
+					controller->targetController->TakeDamage(5.f);
+				else
+					controller->targetController->TakeDamage(25.f);
 				start = std::chrono::steady_clock::now();
 				attacked = true;
 			}
