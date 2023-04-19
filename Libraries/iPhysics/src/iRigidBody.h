@@ -28,6 +28,7 @@ namespace physics
 		virtual void SetRenderPosition(Vector3* position) = 0;
 		virtual void GetWorldSpaceTransform(glm::mat4& transform) = 0;
 
+		virtual bool HasJoints() = 0;
 		virtual void ReleaseJoints() = 0;
 
 	protected:

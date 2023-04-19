@@ -144,8 +144,7 @@ namespace vel
 
 		m_PhysicsWorld->TimeStep(1 / 60.f);
 		glm::vec4 eyeLocation = glm::vec4(1.f);
-		SceneCamera* mainCamera = nullptr;
-		TransformComponent* transform = nullptr;
+		if(!mainCamera)
 		{
 			auto view = m_Registry.view<TransformComponent, CameraComponent>();
 			for (auto cameraEntity : view)
@@ -153,20 +152,19 @@ namespace vel
 				auto [transformcomp, camera] = view.get<TransformComponent, CameraComponent>(cameraEntity);
 				if (camera.Primary)
 				{
-					transform = &transformcomp;
 					mainCamera = &camera.Camera;
 					break;
 				}
 			}
 		}
-		if (mainCamera && transform)
+		if (mainCamera)
 		{
 			/*m_RuntimeBuffer->Bind();
 			RenderCommand::SetClearColor(glm::vec4(0.f, 0.f, 0.f, 1));
 			RenderCommand::Clear();
 			RenderCommand::EnableDepth();*/
 			eyeLocation = glm::vec4(mainCamera->Position.x,mainCamera->Position.y, mainCamera->Position.z, 1.f);
-			Renderer::BeginScene(*mainCamera, transform->GetTransform());
+			Renderer::BeginScene(*mainCamera, glm::mat4(1.f));
 			{
 				auto lightView = m_Registry.group<LightComponent>(entt::get<TransformComponent>);
 				for (auto lights : lightView)
@@ -211,7 +209,6 @@ namespace vel
 							float y = transform.Translation.y;
 							if (rigidComp.rigidBody)
 								rigidComp.rigidBody->GetPosition(transform.Translation);
-							transform.Translation.y = y;
 						}
 					}
 				}
@@ -383,7 +380,7 @@ namespace vel
 					float y = transform.Translation.y;
 					if (rigidComp.rigidBody)
 						rigidComp.rigidBody->GetPosition(transform.Translation);
-					transform.Translation.y = y;
+					//transform.Translation.y = y;
 				}
 			}
 		}

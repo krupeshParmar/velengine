@@ -39,7 +39,10 @@ namespace physics
 			{
 
 			}
-
+			virtual bool HasJoints() override
+			{
+				return false;
+			}
 			virtual void ReleaseJoints() override
 			{
 

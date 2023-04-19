@@ -1,6 +1,7 @@
 #pragma once
 #include "Vel.h"
 #include "HealthComponent.h"
+#include <chrono>
 
 class MutantBaseState;
 class MutantRunState;
@@ -15,6 +16,7 @@ public:
 	vel::TransformComponent* selfTransform = nullptr;
 	vel::TransformComponent* targetTransform = nullptr;
 	vel::AnimatorComponent* animatorComponent = nullptr;
+	vel::RigidbodyComponent* rigidBodyComponent = nullptr;
 	PlayerController* targetController = nullptr;
 
 	virtual void OnCreate() override;
@@ -35,5 +37,8 @@ private:
 	MutantWalkState* walkState = nullptr;
 	MutantAttackState* attackState = nullptr;
 	MutantIdleState* idleState = nullptr;
+	std::chrono::steady_clock::time_point jointsFoundTime;
 	bool dead = false;
+	bool jointsAdded = false;
+	float cachedY = 0.5f;
 };

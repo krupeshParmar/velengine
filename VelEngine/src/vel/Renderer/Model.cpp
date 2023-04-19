@@ -207,7 +207,6 @@ namespace vel
         meshData->m_BoneInfoMap->reserve(mesh->mNumBones);
         for (int boneIndex = 0; boneIndex < mesh->mNumBones; boneIndex++)
         {
-            VEL_CORE_INFO("{0}: {1}", boneIndex, mesh->mBones[boneIndex]->mName.C_Str());
             int boneID = -1;
             std::string boneName = mesh->mBones[boneIndex]->mName.C_Str();
             if (meshData->m_BoneInfoMap->find(boneName) == meshData->m_BoneInfoMap->end())

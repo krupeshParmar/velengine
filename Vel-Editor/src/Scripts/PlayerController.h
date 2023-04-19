@@ -17,7 +17,8 @@ enum AnimState
 	Cast,
 	Spell,
 	Impact,
-	Death
+	Death,
+	None
 };
 struct HealthComponent;
 class PlayerController : public vel::ScriptableEntity
@@ -43,16 +44,20 @@ public:
 	virtual void OnUpdate(vel::Timestep ts) override;
 	virtual void OnDestroy() override;
 	const void TakeDamage(float damage);
+	const void IncrementXP();
+	const glm::vec3& GetPosition();
 private:
+	glm::vec3 m_Position = glm::vec3(0.f);
 	std::vector<vel::AnimatorComponent*> animatorsList;
 	physics::iCharacterController* characterController;
 	std::vector < vel::RigidbodyComponent*> enemyRigidBodyList;
-	AnimState state = Idle;
+	AnimState state = None;
 	CameraController* cameraController = nullptr;
 	HealthComponent* enemyHealth = nullptr;
 	HealthComponent* selfHealth = nullptr;
 	vel::TransformComponent* enemyTransform = nullptr;
 	vel::TransformComponent* selfTransform = nullptr;
+	vel::RigidbodyComponent* globeBody = nullptr;
 	const float RUN_SPEED = 5.f;
 	const float WALK_SPEED = 2.5f;
 	const float ROTATION_SPEED = 0.5f;

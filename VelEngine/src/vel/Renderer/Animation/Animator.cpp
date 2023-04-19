@@ -3,18 +3,26 @@
 #include "vel/Scene/Component.h"
 #include <glm/gtx/quaternion.hpp>
 
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+CRITICAL_SECTION ANIM_UPDATE_LOCK;
+
 namespace vel
 {
 	Animator::Animator(Animation* currentAnimation)
 	{
+		InitializeCriticalSection(&ANIM_UPDATE_LOCK);
 		m_CurrentTime = 0.0;
 		m_CurrentAnimation = currentAnimation;
 		m_PreviousAnimation = nullptr;
-		unsigned int size = 400;
 		m_FinalBoneMatrices.reserve(size);
 
 		for (int i = 0; i < size; i++)
 			m_FinalBoneMatrices.push_back(glm::mat4(1.0f));
+	}
+	Animator::~Animator()
+	{
+		DeleteCriticalSection(&ANIM_UPDATE_LOCK);
 	}
 	void Animator::UpdateAnimation(float dt)
 	{
@@ -40,7 +48,9 @@ namespace vel
 			}
 
 			m_CurrentTime = fmod(m_CurrentTime, m_CurrentAnimation->GetDuration());
+			//EnterCriticalSection(&ANIM_UPDATE_LOCK);
 			CalculateBoneTransform(&m_CurrentAnimation->GetRootNode(), glm::mat4(1.0f));
+			//LeaveCriticalSection(&ANIM_UPDATE_LOCK);
 		}
 	}
 	void Animator::PlayAnimation(Animation* pAnimation)
@@ -92,7 +102,8 @@ namespace vel
 		{
 			int index = boneInfoMap->at(nodeName).id;
 			glm::mat4 offset = boneInfoMap->at(nodeName).offset;
-			m_FinalBoneMatrices[index] = globalTransformation * offset;
+			if(index < size)
+				m_FinalBoneMatrices[index] = globalTransformation * offset;
 		}
 
 		for (int i = 0; i < node->childrenCount; i++)

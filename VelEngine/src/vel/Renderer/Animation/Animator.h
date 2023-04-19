@@ -7,6 +7,7 @@ namespace vel
 	{
 	public:
 		Animator::Animator(Animation* Animation);
+		~Animator();
 		void Animator::UpdateAnimation(float dt);
 		void Animator::PlayAnimation(Animation* pAnimation);
 		void Animator::CalculateBoneTransform(const AssimpNodeData* node,const glm::mat4& parentTransform);
@@ -20,5 +21,6 @@ namespace vel
 		float m_CurrentTime;
 		float m_DeltaTime;
 		float m_TransitionTime = 1.f;
+		unsigned int size = 400;
 	};
 }

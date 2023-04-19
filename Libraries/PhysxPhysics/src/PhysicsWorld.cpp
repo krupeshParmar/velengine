@@ -9,6 +9,10 @@
 #include <ConeTwistConstraint.h>
 #include <glm/gtx/matrix_decompose.hpp>
 #include <DistanceConstraint.h>
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+CRITICAL_SECTION JOINTS_LOCK;
+CRITICAL_SECTION UPDATE_LOCK;
 
 namespace physics
 {
@@ -18,6 +22,8 @@ namespace physics
 			: iPhysicsWorld()
 			, m_CollisionHandler(nullptr)
 		{
+			InitializeCriticalSection(&JOINTS_LOCK);
+			InitializeCriticalSection(&UPDATE_LOCK);
 			static physx::PxDefaultErrorCallback gDefaultErrorCallback;
 			static physx::PxDefaultAllocator gDefaultAllocatorCallback;
 
@@ -69,10 +75,10 @@ namespace physics
 				groundPlane->userData = nullptr;
 				m_RigidBodies.push_back(groundPlane);
 			}
-			mScene->setVisualizationParameter(physx::PxVisualizationParameter::eSCALE, 1.0f);
+			/*mScene->setVisualizationParameter(physx::PxVisualizationParameter::eSCALE, 1.0f);
 			mScene->setVisualizationParameter(physx::PxVisualizationParameter::eACTOR_AXES, 2.0f);
 			mScene->setVisualizationParameter(physx::PxVisualizationParameter::eCOLLISION_AABBS, 1.0f);
-			mScene->setVisualizationParameter(physx::PxVisualizationParameter::eWORLD_AXES, 1.0f);
+			mScene->setVisualizationParameter(physx::PxVisualizationParameter::eWORLD_AXES, 1.0f);*/
 			
 			/*physx::PxRigidActor* sidePlane = physx::PxCreatePlane(
 				*mPhysics, physx::PxPlane(
@@ -91,6 +97,8 @@ namespace physics
 
 		PhysicsWorld::~PhysicsWorld()
 		{
+			DeleteCriticalSection(&JOINTS_LOCK);
+			DeleteCriticalSection(&UPDATE_LOCK);
 			for (physx::PxRigidActor* rigidActor : m_RigidBodies)
 				rigidActor->release();
 			m_RigidBodies.clear();
@@ -174,8 +182,10 @@ namespace physics
 		}
 		void PhysicsWorld::TimeStep(float dt)
 		{
+			EnterCriticalSection(&UPDATE_LOCK);
 			mScene->simulate(dt);
 			mScene->fetchResults(true);
+			LeaveCriticalSection(&UPDATE_LOCK);
 			//const physx::PxRenderBuffer& rb = mScene->getRenderBuffer();
 			//for (physx::PxU32 i = 0; i < rb.getNbLines(); i++)
 			//{
@@ -232,6 +242,7 @@ namespace physics
 				glm::vec3 translationA = distanceConstraint->GetPositionA();
 				glm::vec3 translationB = distanceConstraint->GetPositionB();
 
+				EnterCriticalSection(&JOINTS_LOCK);
 				PxInitExtensions(*mPhysics, mPVD);
 
 				physx::PxDistanceJoint* joint = physx::PxDistanceJointCreate(
@@ -252,6 +263,8 @@ namespace physics
 				joint->setConstraintFlag(physx::PxConstraintFlag::eALWAYS_UPDATE, true);
 				joint->setContactDistance(0);
 				rigidBodyB->joints = joint;
+				rigidBodyB->hasJoint = true;
+				LeaveCriticalSection(&JOINTS_LOCK);
 			}
 		}
 

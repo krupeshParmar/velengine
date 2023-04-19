@@ -18,7 +18,9 @@ namespace vel
 			| aiProcess_JoinIdenticalVertices;
 		Assimp::Importer* importer = new Assimp::Importer();
 		const aiScene* scene = importer->ReadFile(animationPath.c_str(), 0);
-		VEL_CORE_ERROR(importer->GetErrorString());
+		std::string error = importer->GetErrorString();
+		if(!error.empty())
+			VEL_CORE_ERROR(error);
 		VEL_CORE_ASSERT(scene && scene->mRootNode, "");
 		auto animation = scene->mAnimations[0];
 		animation->mNumChannels;
@@ -42,7 +44,6 @@ namespace vel
 	void Animation::ReadMissingBones(const aiAnimation* animation, MeshData& mesh)
 	{
 		int size = animation->mNumChannels;
-		VEL_CORE_INFO("Animation {0} has {1} channels", animation->mName.C_Str(), size);
 
 		std::unordered_map<std::string, BoneInfo> boneInfoMap = *mesh.GetBoneInfoMap();//getting m_BoneInfoMap from Model class
 		int& boneCount = mesh.GetBoneCount(); //getting the m_BoneCounter from Model class

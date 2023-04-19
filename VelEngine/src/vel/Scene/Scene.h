@@ -85,6 +85,7 @@ namespace vel
 		physics::iPhysicsFactory* GetPhysicsFactory() { return m_PhysicsFactory; }
 		void SetViewportSize(uint32_t width, uint32_t height);
 
+		SceneCamera* mainCamera = nullptr;
 		std::string ScenePath;
 		Ref<Shader> m_Shader;
 		bool DepthOfField = false;

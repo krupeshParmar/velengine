@@ -8,6 +8,8 @@
 #include "MaterialSystem.h"
 #include "Entity.h"
 #include "LightManager.h"
+#include <BoxShape.h>
+#include <iRigidBody.h>
 
 namespace vel
 {
@@ -768,6 +770,58 @@ namespace vel
 
 			}
 
+			if (entity.HasComponent < BoxColliderComponent>())
+			{
+				BoxColliderComponent& boxColliderComponent = entity.GetComponent<BoxColliderComponent>();
+				pugi::xml_node boxColliderNode = componentNode.append_child("box_collider");
+				{
+					pugi::xml_node minNode = boxColliderNode.append_child("min");
+					{
+						pugi::xml_node xNode = minNode.append_child("x");
+						xNode.append_child(pugi::node_pcdata).set_value(std::to_string(boxColliderComponent.aabb.Min.x).c_str());
+
+						pugi::xml_node yNode = minNode.append_child("y");
+						yNode.append_child(pugi::node_pcdata).set_value(std::to_string(boxColliderComponent.aabb.Min.y).c_str());
+
+						pugi::xml_node zNode = minNode.append_child("z");
+						zNode.append_child(pugi::node_pcdata).set_value(std::to_string(boxColliderComponent.aabb.Min.z).c_str());
+					}
+
+					pugi::xml_node maxNode = boxColliderNode.append_child("max");
+					{
+						pugi::xml_node xNode = maxNode.append_child("x");
+						xNode.append_child(pugi::node_pcdata).set_value(std::to_string(boxColliderComponent.aabb.Max.x).c_str());
+
+						pugi::xml_node yNode = maxNode.append_child("y");
+						yNode.append_child(pugi::node_pcdata).set_value(std::to_string(boxColliderComponent.aabb.Max.y).c_str());
+
+						pugi::xml_node zNode = maxNode.append_child("z");
+						zNode.append_child(pugi::node_pcdata).set_value(std::to_string(boxColliderComponent.aabb.Max.z).c_str());
+					}
+				}
+			}
+
+			if (entity.HasComponent<RigidbodyComponent>())
+			{
+				RigidbodyComponent& rigidbodyComponent = entity.GetComponent<RigidbodyComponent>();
+				pugi::xml_node rigidbodyNode = componentNode.append_child("rigidbody");
+				pugi::xml_node staticNode = rigidbodyNode.append_child("static");
+				if (rigidbodyComponent.desc.isStatic)
+					staticNode.append_child(pugi::node_pcdata).set_value("1");
+				else
+					staticNode.append_child(pugi::node_pcdata).set_value("0");
+
+				pugi::xml_node kinematicNode = rigidbodyNode.append_child("kinematic");
+				if (rigidbodyComponent.desc.IsKinematic)
+					kinematicNode.append_child(pugi::node_pcdata).set_value("1");
+				else
+					kinematicNode.append_child(pugi::node_pcdata).set_value("0");
+
+				pugi::xml_node massNode = rigidbodyNode.append_child("mass");
+				massNode.append_child(pugi::node_pcdata).set_value(std::to_string(rigidbodyComponent.desc.mass).c_str());
+
+			}
+
 			if (entity.HasComponent<MeshComponent>())
 			{
 				MeshComponent& meshComponent = entity.GetComponent<MeshComponent>();
@@ -1394,7 +1448,118 @@ namespace vel
 								characterController->characterController = scene->GetPhysicsWorld()->CreateCharacterController(desc);
 								entity->AddComponent<CharacterControllerComponent>(*characterController);							
 							}
+							if (componentNodeName == "box_collider")
+							{
+								BoxColliderComponent* boxCollider = new BoxColliderComponent();
+								pugi::xml_object_range<pugi::xml_node_iterator>
+									boxColliderNodeChildren = componentNode.children();
+								for (pugi::xml_node_iterator boxColliderIterator = boxColliderNodeChildren.begin();
+									boxColliderIterator != boxColliderNodeChildren.end();
+									boxColliderIterator++)
+								{
+									pugi::xml_node boxComponentNode = *boxColliderIterator;
+									std::string boxComponentNodeName = boxComponentNode.name();
+									if (boxComponentNodeName == "min")
+									{
+										pugi::xml_object_range<pugi::xml_node_iterator>
+											minNodeChildren = boxComponentNode.children();
+										glm::vec3 min = glm::vec3(0.f);
+										for (pugi::xml_node_iterator minNodeIterator = minNodeChildren.begin();
+											minNodeIterator != minNodeChildren.end();
+											minNodeIterator++)
+										{
+											pugi::xml_node minNode = *minNodeIterator;
+											std::string minNodeName = minNode.name();
+											if (minNodeName == "x")
+											{
+												min.x = std::stof(minNode.child_value());
+											}
+											if (minNodeName == "y")
+											{
+												min.y = std::stof(minNode.child_value());
+											}
+											if (minNodeName == "z")
+											{
+												min.z = std::stof(minNode.child_value());
+											}
+										}
+										boxCollider->aabb.Min = min * entity->Transform().Scale.x;
+									}
+									if (boxComponentNodeName == "max")
+									{
+										pugi::xml_object_range<pugi::xml_node_iterator>
+											maxNodeChildren = boxComponentNode.children();
+										glm::vec3 max = glm::vec3(0.f);
+										for (pugi::xml_node_iterator maxNodeIterator = maxNodeChildren.begin();
+											maxNodeIterator != maxNodeChildren.end();
+											maxNodeIterator++)
+										{
+											pugi::xml_node maxNode = *maxNodeIterator;
+											std::string maxNodeName = maxNode.name();
+											if (maxNodeName == "x")
+											{
+												max.x = std::stof(maxNode.child_value());
+											}
+											if (maxNodeName == "y")
+											{
+												max.y = std::stof(maxNode.child_value());
+											}
+											if (maxNodeName == "z")
+											{
+												max.z = std::stof(maxNode.child_value());
+											}
+										}
+										boxCollider->aabb.Max = max * entity->Transform().Scale.x;
+									}
+								}
 
+								boxCollider->aabb.HalfExtent = (boxCollider->aabb.Max - boxCollider->aabb.Min) / 2.f;
+								boxCollider->aabb.Centre = boxCollider->aabb.Min + boxCollider->aabb.HalfExtent;
+								boxCollider->shape = new physics::BoxShape(boxCollider->aabb.HalfExtent);
+								entity->AddComponent<BoxColliderComponent>(*boxCollider);
+							}
+							if (componentNodeName == "rigidbody")
+							{
+								entity->AddComponent<RigidbodyComponent>(RigidbodyComponent());
+								RigidbodyComponent* rigidbody =
+									&entity->GetComponent<RigidbodyComponent>();
+								pugi::xml_object_range<pugi::xml_node_iterator>
+									rigidbodyNodeChildren = componentNode.children();
+								for (pugi::xml_node_iterator rigidbodyIterator = rigidbodyNodeChildren.begin();
+									rigidbodyIterator != rigidbodyNodeChildren.end();
+									rigidbodyIterator++)
+								{
+									pugi::xml_node rigidbodyNode = *rigidbodyIterator;
+									std::string rigidbodyNodeName = rigidbodyNode.name();
+									if (rigidbodyNodeName == "static")
+									{
+										int isStatic = std::stoi(rigidbodyNode.child_value());
+										if (isStatic)
+										{
+											rigidbody->desc.isStatic = true;
+										}
+										else
+											rigidbody->desc.isStatic = false;
+									}
+									if (rigidbodyNodeName == "kinematic")
+									{
+										int isKinematic = std::stoi(rigidbodyNode.child_value());
+										if (isKinematic)
+										{
+											rigidbody->desc.IsKinematic = true;
+										}
+										else
+											rigidbody->desc.IsKinematic = false;
+									}
+									if (rigidbodyNodeName == "mass")
+									{
+										rigidbody->desc.mass = std::stof(rigidbodyNode.child_value());
+									}
+								}
+								rigidbody->desc.position = entity->Transform().Translation;
+								rigidbody->rigidBody = scene->GetPhysicsFactory()->CreateRigidBody(rigidbody->desc,
+									entity->GetComponent<BoxColliderComponent>().shape);
+							}
 							if (componentNodeName == "meshobject")
 							{
 								//continue;

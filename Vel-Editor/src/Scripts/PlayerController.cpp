@@ -11,7 +11,7 @@ void PlayerController::OnCreate()
 	selfHealth = &GetComponent<HealthComponent>();
 	enemyHealth = &GetScene()->TryGetEntityWithTag("Mutant").GetComponent<HealthComponent>();
 	enemyTransform = &GetScene()->TryGetEntityWithTag("Mutant").GetComponent<vel::TransformComponent>();
-
+	globeBody = &GetScene()->TryGetEntityWithTag("Hotel Globe").GetComponent<vel::RigidbodyComponent>();
 }
 void PlayerController::OnDestroy()
 {
@@ -81,31 +81,6 @@ void PlayerController::OnUpdate(vel::Timestep ts)
 
 		moveDir = hMove + vMove;
 
-		//
-		//if (vel::Input::IsKeyPressed(KeyCode::W))
-		//{
-		//	moveDir.z += speed;
-		//	input = true;
-		//}
-		//
-		//if (vel::Input::IsKeyPressed(KeyCode::S))
-		//{
-		//	moveDir.z -= speed;
-		//	input = true;
-		//}
-		//
-		//if (vel::Input::IsKeyPressed(KeyCode::A))
-		//{
-		//	moveDir.x += speed;
-		//	input = true;
-		//}
-		//
-		//if (vel::Input::IsKeyPressed(KeyCode::D))
-		//{
-		//	moveDir.x -= speed;
-		//	input = true;
-		//}
-
 		if (input)
 		{
 			{
@@ -116,8 +91,6 @@ void PlayerController::OnUpdate(vel::Timestep ts)
 				GetComponent<vel::TransformComponent>().SetRotation(
 					glm::slerp(lookRotation, GetComponent<vel::TransformComponent>().GetRotation(), ts * ROTATION_SPEED)
 				);
-				/*GetComponent<vel::TransformComponent>().RotationEuler.x = 0.f;
-				GetComponent<vel::TransformComponent>().RotationEuler.z = 0.f;*/
 			}
 			if (speed > WALK_SPEED)
 			{
@@ -145,8 +118,9 @@ void PlayerController::OnUpdate(vel::Timestep ts)
 
 		moveDir.y = -0.981f;	// Gravity
 		characterController->Move(moveDir, ts);
+		m_Position = characterController->GetPosition();
 
-		if (!attacked && state == Slash2 && enemyHealth && enemyTransform)
+		if (!attacked && (state == Slash2 || state == Slash) && enemyHealth && enemyTransform)
 		{
 			if (animatorsList.size() > 0)
 			{
@@ -155,7 +129,6 @@ void PlayerController::OnUpdate(vel::Timestep ts)
 				{
 					float ratio = animator->animator->GetTimeStamp()
 						/ animator->runningAnimation->GetDuration();
-					VEL_CORE_TRACE("ratio: {0}", ratio);
 					float distance = glm::distance(enemyTransform->Translation, selfTransform->Translation);
 					if (ratio > 0.6f && distance < 2.f)
 					{
@@ -180,43 +153,45 @@ void PlayerController::OnUpdate(vel::Timestep ts)
 			}
 			else if (state == Slash2)
 			{
-				for (vel::AnimatorComponent* animator : animatorsList)
+				if (animatorsList.size() > 0)
 				{
-					animator->PlayAnimation(int(Slash));
+					vel::AnimatorComponent* animator = animatorsList[0];
+					float ratio = animator->animator->GetTimeStamp()
+						/ animator->runningAnimation->GetDuration();
+					if (ratio > 0.7f)
+					{
+						for (vel::AnimatorComponent* animator : animatorsList)
+						{
+							animator->PlayAnimation(int(Slash));
+						}
+						state = Slash;
+						attacked = false;
+						input = true;
+					}
 				}
-				state = Slash;
-				attacked = false;
-				input = true;
 			}
 		}
-		if (vel::Input::IsKeyPressed(KeyCode::Space) && !input)
+		if (vel::Input::IsKeyPressed(KeyCode::Space) && selfHealth->exp > 30.f && !input)
 		{
-			if (state != Spell)
+			if (enemyRigidBodyList.size() > 0)
 			{
-				for (vel::AnimatorComponent* animator : animatorsList)
-				{
-					animator->PlayAnimation(int(Spell));
-				}
-				if (enemyRigidBodyList.size() > 0)
-				{
-					vel::RigidbodyComponent* enemy = enemyRigidBodyList[0];
-					glm::vec3 enemypos, charPos;
+				vel::RigidbodyComponent* enemy = enemyRigidBodyList[0];
+				glm::vec3 enemypos, globePos;
 
-					/*if(enemy->rigidBody)
-					{
-						enemy->rigidBody->GetPosition(enemypos);
-						physics::DistanceConstraint* distanceConst =
-							new physics::DistanceConstraint(
-								characterController->GetRigidbody(),
-								enemy->rigidBody,
-								enemypos,
-								characterController->GetPosition()
-								);
-						enemy->desc.IsKinematic = false;
-						GetScene()->GetPhysicsWorld()->AddConstraint(distanceConst);
-					}*/
+				if (enemy->rigidBody && globeBody && globeBody->rigidBody)
+				{
+					enemy->rigidBody->GetPosition(enemypos);
+					globeBody->rigidBody->GetPosition(globePos);
+					physics::DistanceConstraint* distanceConst =
+						new physics::DistanceConstraint(
+							globeBody->rigidBody,
+							enemy->rigidBody,
+							enemypos,
+							globePos);
+					enemy->desc.IsKinematic = false;
+					GetScene()->GetPhysicsWorld()->AddConstraint(distanceConst);
+					selfHealth->exp -= 30.f;
 				}
-				state = Spell;
 			}
 		}
 		if (vel::Input::IsMouseButtonPressed(MouseButton::Right))
@@ -262,6 +237,8 @@ void PlayerController::OnUpdate(vel::Timestep ts)
 
 const void PlayerController::TakeDamage(float damage)
 {
+	if (state == Blocking)
+		return;
 	if (state == Death)
 		return;
 	state = Impact;
@@ -289,4 +266,14 @@ const void PlayerController::TakeDamage(float damage)
 		state = Impact;
 	}
 	damageTaken = damage;
+}
+
+const void PlayerController::IncrementXP()
+{
+	selfHealth->exp += 5.f;
+}
+
+const glm::vec3& PlayerController::GetPosition()
+{
+	return m_Position;
 }

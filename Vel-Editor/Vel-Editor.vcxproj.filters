@@ -38,6 +38,8 @@
       <Filter>Scripts\States</Filter>
     </ClInclude>
     <ClInclude Include="src\Scripts\HealthComponent.h" />
+    <ClInclude Include="src\Scripts\Collectible.h" />
+    <ClInclude Include="src\Scripts\CollectibleManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorLayer.cpp" />

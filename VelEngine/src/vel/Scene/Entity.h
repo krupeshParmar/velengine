@@ -223,6 +223,8 @@ namespace vel
 
 		Scene* GetScene() { return m_Entity.GetScene(); }
 
+		Entity& GetEntity() { return m_Entity; }
+
 	protected:
 		virtual void OnCreate()
 		{

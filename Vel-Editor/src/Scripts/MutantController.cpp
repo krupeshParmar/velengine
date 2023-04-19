@@ -8,13 +8,11 @@
 
 void MutantController::OnCreate()
 {
+	jointsFoundTime = std::chrono::steady_clock::now();
 	FindAnimator(GetScene()->GetEntityWithGUID(GetComponent<vel::IDComponent>().ID));
-	auto aiView = GetScene()->GetAllEntitiesWith<vel::AIComponent>();
-	for (entt::entity entity : aiView)
-	{
-		vel::Entity aiEntity = vel::Entity{ entity, GetScene() };
-		selfTransform = &aiEntity.Transform();
-	}
+
+	selfTransform = &GetComponent<vel::TransformComponent>();
+	cachedY = selfTransform->Translation.y;
 	auto ccView = GetScene()->GetAllEntitiesWith<vel::CharacterControllerComponent>();
 	for (entt::entity entity : ccView)
 	{
@@ -23,6 +21,8 @@ void MutantController::OnCreate()
 		break;
 	}
 	selfHealth = &GetComponent<HealthComponent>();
+	rigidBodyComponent = &GetComponent<vel::RigidbodyComponent>();
+
 	walkState = new MutantWalkState();
 	runState = new MutantRunState();
 	attackState = new MutantAttackState();
@@ -45,6 +45,24 @@ void MutantController::OnUpdate(vel::Timestep ts)
 			animatorComponent->PlayAnimation(5);
 			dead = true;
 			return;
+		}
+	}
+	if (rigidBodyComponent && rigidBodyComponent->rigidBody)
+	{
+		if (rigidBodyComponent->rigidBody->HasJoints())
+		{
+			if (!jointsAdded)
+			{
+				jointsAdded = true;
+				jointsFoundTime = std::chrono::steady_clock::now();
+			}
+			if (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - jointsFoundTime).count() > std::chrono::seconds(10).count())
+			{
+				rigidBodyComponent->rigidBody->ReleaseJoints();
+				rigidBodyComponent->desc.IsKinematic = true;
+				selfTransform->Translation.y = cachedY;
+				jointsAdded = false;
+			}
 		}
 	}
 	if (targetTransform && selfTransform)

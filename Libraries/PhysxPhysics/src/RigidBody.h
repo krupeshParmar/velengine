@@ -42,18 +42,19 @@ namespace physics
 			virtual void SetRenderPosition(Vector3* position) override;
 
 			virtual void GetWorldSpaceTransform(glm::mat4& transform) override;
-
+			virtual bool HasJoints() override;
 			virtual void ReleaseJoints() override;
 
 			physx::PxRigidActor* physxRigidbody;
 			physx::PxJoint* joints = nullptr;
+			bool hasJoint = false;
 		protected:
 			glm::vec3 mPosition;
 			glm::quat mRotation;
 			RigidBodyDesc mDesc;
 
 		private:
-			RigidBody(const RigidBody& other) { ; }
+			RigidBody(const RigidBody& other) {  }
 			RigidBody& operator=(const RigidBody& other) { return *this; }
 
 		};

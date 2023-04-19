@@ -105,10 +105,19 @@ namespace physics
 
 		}
 
+		bool RigidBody::HasJoints()
+		{
+			return hasJoint;
+		}
+
 		void RigidBody::ReleaseJoints()
 		{
-			joints->release();
-			joints = nullptr;
+			if (joints != nullptr)
+			{
+				joints->release();
+				joints = nullptr;
+				hasJoint = false;
+			}
 		}
 
 	}

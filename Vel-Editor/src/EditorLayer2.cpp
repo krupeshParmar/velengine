@@ -9,6 +9,7 @@
 #include "Scripts/PlayerController.h"
 #include "Scripts/MutantController.h"
 #include <BoxShape.cpp>
+#include "Scripts/CollectibleManager.h"
 
 namespace vel
 {
@@ -144,8 +145,20 @@ namespace vel
 
 			m_FullScreenFrameBuffer->CopyDepthData(m_RenderBuffer);
 			m_FullScreenFrameBuffer->Bind();
+			if (m_GamePlay && m_ActiveScene->mainCamera)
+			{
+				glm::mat4 view = glm::lookAt(
+					m_ActiveScene->mainCamera->Position, 
+					m_ActiveScene->mainCamera->Target, 
+					{ 0.f, 1.f,0.f });
 
-			m_ActiveScene->DrawSkyBox(m_EditorCamera.GetUnReversedProjectionMatrix() * m_EditorCamera.GetViewMatrix() * glm::scale(glm::mat4(1.0), glm::vec3(9000.f)));
+				m_ActiveScene->DrawSkyBox(
+					m_ActiveScene->mainCamera->GetUnReversedProjectionMatrix() 
+					* view
+					* glm::scale(glm::mat4(1.0), 
+						glm::vec3(9000.f)));
+			}
+			else m_ActiveScene->DrawSkyBox(m_EditorCamera.GetUnReversedProjectionMatrix() * m_EditorCamera.GetViewMatrix() * glm::scale(glm::mat4(1.0), glm::vec3(9000.f)));
 
 			m_FullScreenFrameBuffer->Unbind();
 			//****************** POST PROCESSING ************************
@@ -163,7 +176,9 @@ namespace vel
 			m_FullScreenFrameBuffer->BindEmissiveTexture();
 			m_FullScreenFrameBuffer->BindBloomTexture();
 
-			m_ShaderLibrary.Get("PostProcessing")->SetFloat4("eyeLocation", glm::vec4(m_EditorCamera.GetPosition(), 1.f));
+			if(m_GamePlay && m_ActiveScene->mainCamera)
+				m_ShaderLibrary.Get("PostProcessing")->SetFloat4("eyeLocation", glm::vec4(m_ActiveScene->mainCamera->Position, 1.f));
+			else m_ShaderLibrary.Get("PostProcessing")->SetFloat4("eyeLocation", glm::vec4(m_EditorCamera.GetPosition(), 1.f));
 			m_ShaderLibrary.Get("PostProcessing")->SetBool("DepthOfField", m_ActiveScene->DepthOfField);
 			m_ShaderLibrary.Get("PostProcessing")->SetFloat("FocalDistance", m_ActiveScene->FocalDistance);
 
@@ -365,6 +380,7 @@ namespace vel
 		{
 			ImGui::Begin("Player Health");
 			ImGui::ProgressBar(playerHealth->health / 100.f);
+			ImGui::ProgressBar(playerHealth->exp / 100.f);
 			ImGui::End();
 		}
 		if (enemyHealth)
@@ -451,6 +467,14 @@ namespace vel
 					entity.AddComponent<HealthComponent>(HealthComponent());
 					entity.AddComponent<NativeScriptComponent>().Bind<PlayerController>();
 					playerHealth = &entity.GetComponent<HealthComponent>();
+				}
+			}
+			if (entity.Name() == "CollectibleManager")
+			{
+				if (!entity.HasComponent<NativeScriptComponent>())
+				{
+					entity.AddComponent<CollectibleManager>(CollectibleManager());
+					entity.AddComponent<NativeScriptComponent>().Bind<CollectibleManager>();
 				}
 			}
 			if (entity.GetParentGUID() != 0)
