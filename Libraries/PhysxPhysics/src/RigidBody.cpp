@@ -44,8 +44,9 @@ namespace physics
 		void RigidBody::SetPosition(const glm::vec3& positionIn)
 		{
 			mPosition = positionIn;
-			physxRigidbody->setGlobalPose(physx::PxTransform(
-				physx::PxVec3(positionIn.x, positionIn.y, positionIn.z)));
+			if(physxRigidbody)
+				physxRigidbody->setGlobalPose(physx::PxTransform(
+					physx::PxVec3(positionIn.x, positionIn.y, positionIn.z)));
 		}
 
 		void RigidBody::GetRotation(glm::quat& orientationOut)
@@ -70,6 +71,8 @@ namespace physics
 
 		void RigidBody::GetWorldSpaceTransform(glm::mat4& transform)
 		{
+			if (!physxRigidbody)
+				return;
 			physx::PxRigidDynamic* rigidbody = (physx::PxRigidDynamic*)physxRigidbody;
 			physx::PxTransform rgtransform = rigidbody->getGlobalPose();
 			transform = glm::translate(glm::mat4(1.f), glm::vec3(

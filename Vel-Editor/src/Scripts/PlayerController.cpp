@@ -240,7 +240,7 @@ const void PlayerController::TakeDamage(float damage)
 	if (state == Blocking)
 	{
 		selfHealth->exp -= damage * 5.f;
-		if (selfHealth->exp < 0.f)
+		if (selfHealth->exp <= 1.f)
 			selfHealth->exp = 0.f;
 		else return;
 	}

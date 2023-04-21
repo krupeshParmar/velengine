@@ -92,6 +92,10 @@ namespace vel
 	void EditorLayer2::OnUpdate(Timestep ts)
 	{
 		VEL_PROFILE_FUNCTION();
+		if (Input::IsKeyPressed(KeyCode::P))
+		{
+			m_GamePlay = !m_GamePlay;
+		}
 		{
 			VEL_PROFILE_SCOPE("EditorCamera::OnUpdate");
 			if (m_ViewportFocused)

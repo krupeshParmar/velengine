@@ -45,7 +45,7 @@ namespace physics
 			virtual bool HasJoints() override;
 			virtual void ReleaseJoints() override;
 
-			physx::PxRigidActor* physxRigidbody;
+			physx::PxRigidActor* physxRigidbody = nullptr;
 			physx::PxJoint* joints = nullptr;
 			bool hasJoint = false;
 		protected:

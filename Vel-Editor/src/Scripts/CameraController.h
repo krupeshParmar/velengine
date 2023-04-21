@@ -1,5 +1,6 @@
 #pragma once
 #include "Vel.h"
+#include <math.h>
 
 class CameraController : public vel::ScriptableEntity
 {
@@ -122,6 +123,10 @@ private:
 		position.x = targetTransform->Translation.x - offsetX;
 		position.y = targetTransform->Translation.y + ver;
 		position.z = targetTransform->Translation.z - offsetZ;
+		if (position.y < 0.5f)
+			position.y = 0.5f;
+		if (position.y > 5.f)
+			position.y = 5.f;
 		camera->Camera.Position = position;
 	}
 

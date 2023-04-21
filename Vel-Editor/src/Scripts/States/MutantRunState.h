@@ -5,7 +5,7 @@
 class MutantRunState : public MutantBaseState
 {
 public:
-	float speed = 3.f;
+	float speed = 4.f;
 	virtual void EnterState(MutantController* controller) override
 	{
 

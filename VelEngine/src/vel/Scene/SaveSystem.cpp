@@ -1559,6 +1559,8 @@ namespace vel
 								rigidbody->desc.position = entity->Transform().Translation;
 								rigidbody->rigidBody = scene->GetPhysicsFactory()->CreateRigidBody(rigidbody->desc,
 									entity->GetComponent<BoxColliderComponent>().shape);
+								if (rigidbody->rigidBody == nullptr)
+									int breakhere = 0;
 							}
 							if (componentNodeName == "meshobject")
 							{

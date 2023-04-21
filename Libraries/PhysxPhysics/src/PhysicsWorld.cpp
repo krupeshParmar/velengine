@@ -441,7 +441,7 @@ namespace physics
 			physx::PxTransform transform(
 				physx::PxVec3(desc.position.x, desc.position.y, desc.position.z), { rot.x, rot.y, rot.z, rot.w});
 			if (!actorShape)
-				return body;
+				return nullptr;
 
 			if (desc.isStatic)
 			{

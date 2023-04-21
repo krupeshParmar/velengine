@@ -90,7 +90,7 @@ void MutantController::OnUpdate(vel::Timestep ts)
 		}
 
 		// Outside Range but close
-		else if (distance > 1.5f && distance < 7.f)
+		else if (distance > 1.5f && distance < 5.f)
 		{
 			if (currentState != walkState)
 			{

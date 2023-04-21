@@ -20,7 +20,7 @@ public:
 	{
 		end = std::chrono::steady_clock::now();
 
-		if (std::chrono::duration_cast<std::chrono::seconds>(end - start).count() < std::chrono::seconds(3).count())
+		if (std::chrono::duration_cast<std::chrono::seconds>(end - start).count() < std::chrono::seconds(1).count())
 		{
 			if (controller->animatorComponent->runningAnimation && controller->animatorComponent->runningAnimation->ID != 0)
 			{
@@ -37,9 +37,11 @@ public:
 			attackID = 4;
 		}
 
-		if (controller->animatorComponent->runningAnimation && controller->animatorComponent->runningAnimation->ID != attackID)
+		if (controller->animatorComponent->runningAnimation && 
+			controller->animatorComponent->runningAnimation->ID != attackID)
 		{
-			controller->animatorComponent->PlayAnimation(attackID);
+			if(controller->animatorComponent->runningAnimation->ID != 4 || controller->animatorComponent->runningAnimation->Finished)
+				controller->animatorComponent->PlayAnimation(attackID);
 		}
 		if (!controller->targetController)
 			return;
