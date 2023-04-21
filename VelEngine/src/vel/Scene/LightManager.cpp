@@ -56,4 +56,18 @@ namespace vel
 		s_Lights.push_back(light);
 		LIGHT_INDEX++;
 	}
+	void LightManager::RemoveLight(LightComponent* light)
+	{
+		for (std::vector<LightComponent*>::iterator lightIT = s_Lights.begin();
+			lightIT != s_Lights.end();
+			lightIT++)
+		{
+			LightComponent* lightComponent = *lightIT;
+			if (lightComponent->ID == light->ID)
+			{
+				s_Lights.erase(lightIT);
+				break;
+			}
+		}
+	}
 }

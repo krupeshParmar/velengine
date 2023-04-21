@@ -13,6 +13,7 @@ namespace vel
 		virtual void Clear() override;
 
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) override;
+		virtual void DrawInstanced(const Ref<VertexArray>& vertexArray, unsigned int count) override;
 		virtual void SetViewport(int x, int y, int width, int height) override;
 
 		virtual void SetCullFace() override;

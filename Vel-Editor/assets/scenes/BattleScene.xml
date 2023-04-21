@@ -1,1375 +1,7 @@
 <?xml version="1.0"?>
 <scene>
 	<name>assets/scenes/BattleScene.xml</name>
-	<entity id="16179069659748133673">
-		<name>CollectibleManager</name>
-		<components>
-			<transform>
-				<enabled>1</enabled>
-				<position>
-					<x>0.000000</x>
-					<y>0.000000</y>
-					<z>0.000000</z>
-				</position>
-				<rotation>
-					<x>0.000000</x>
-					<y>0.000000</y>
-					<z>0.000000</z>
-				</rotation>
-				<scale>
-					<x>1.000000</x>
-					<y>1.000000</y>
-					<z>1.000000</z>
-				</scale>
-			</transform>
-		</components>
-	</entity>
-	<entity id="11023094258902950289">
-		<name>Shop3_5</name>
-		<components>
-			<transform>
-				<enabled>1</enabled>
-				<position>
-					<x>36.299999</x>
-					<y>0.500000</y>
-					<z>6.100000</z>
-				</position>
-				<rotation>
-					<x>-90.000000</x>
-					<y>180.000000</y>
-					<z>0.000000</z>
-				</rotation>
-				<scale>
-					<x>1.000000</x>
-					<y>1.000000</y>
-					<z>1.000000</z>
-				</scale>
-			</transform>
-			<asset_component>
-				<file_location>assets/models/shopfront/Shop.fbx.vasset</file_location>
-				<asset id="10838312110386143998">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="13273897821984755396">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="2052694105982141780">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.700000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-					<material_path>assets/models/shop/side pillars/sidepillars_mat.xml</material_path>
-				</asset>
-				<asset id="2982343815477716231">
-					<components>
-						<transform>
-							<enabled>0</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="6955586640409891622">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-					<material_path>assets/models/shop/shopfrontv1_mat.xml</material_path>
-				</asset>
-				<asset id="15306987242041101284">
-					<components>
-						<transform>
-							<enabled>0</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="6807407028417079389">
-					<components>
-						<transform>
-							<enabled>0</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>-3.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-					<material_path>assets/models/shop/columns/columns_mat.xml</material_path>
-				</asset>
-				<asset id="13666646829598373718">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="1856139727329340622">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>-3.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-					<material_path>assets/models/shop/columns/columns_mat.xml</material_path>
-				</asset>
-				<asset id="11896178547298741409">
-					<components>
-						<transform>
-							<enabled>0</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="1294747157610810510">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="3484080726571041497">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.100000</x>
-								<y>-2.100000</y>
-								<z>2.850000</z>
-							</position>
-							<rotation>
-								<x>90.000000</x>
-								<y>0.000000</y>
-								<z>90.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="17847007903856144258">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-					<material_path>assets/materials/neon2_mat.xml</material_path>
-				</asset>
-				<asset id="6238850342909755522">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>-2.000000</x>
-								<y>0.000000</y>
-								<z>0.100000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="13330287517558475005">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>2.000000</x>
-								<y>0.000000</y>
-								<z>3.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-					<material_path>assets/models/shop/roller shutter/roller_metal_mat.xml</material_path>
-				</asset>
-				<asset id="14236158821452925232">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.600000</x>
-								<y>-2.000000</y>
-								<z>0.500000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="534805054096900677">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-					<material_path>assets/models/shop/roller shutter/roller_metal_mat.xml</material_path>
-				</asset>
-				<asset id="4148628383821886613">
-					<components>
-						<transform>
-							<enabled>0</enabled>
-							<position>
-								<x>0.600000</x>
-								<y>-2.000000</y>
-								<z>0.500000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="13071658567207457350">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-					<material_path>assets/models/shop/roller shutter/roller_metal_mat.xml</material_path>
-				</asset>
-				<asset id="12030191798883273318">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>-0.300000</x>
-								<y>-2.000000</y>
-								<z>0.900000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="14487754034344818675">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-					<material_path>assets/models/shop/roller shutter/canop.xml</material_path>
-				</asset>
-				<asset id="6961964932376454209">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>2.100000</x>
-								<y>-0.200000</y>
-								<z>3.700000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="4682198890185143667">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-					<material_path>assets/materials/neon1_mat.xml</material_path>
-				</asset>
-				<asset id="6936860752830152191">
-					<components>
-						<transform>
-							<enabled>0</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>-0.400000</y>
-								<z>2.500000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="5634956145383811305">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="12534070912549937429">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>-1.500000</x>
-								<y>-1.900000</y>
-								<z>-3.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="8881169057073170290">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="18255797778120590535">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>-0.300000</y>
-								<z>4.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="1371825286565290290">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-					<material_path>assets/models/shop/signv3_mat.xml</material_path>
-				</asset>
-				<asset id="6232497130625699611">
-					<components>
-						<transform>
-							<enabled>0</enabled>
-							<position>
-								<x>0.200000</x>
-								<y>-4.000000</y>
-								<z>0.700000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="5824589158418110376">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-					<material_path>assets/models/shop/cyberlife_mat.xml</material_path>
-				</asset>
-				<asset id="5658326247830087012">
-					<components>
-						<transform>
-							<enabled>0</enabled>
-							<position>
-								<x>0.200000</x>
-								<y>-4.000000</y>
-								<z>0.700000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="1760285440037619298">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="8609820700045259982">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.200000</x>
-								<y>-4.000000</y>
-								<z>0.700000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="10083274920073694389">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-					<material_path>assets/models/shop/tech_wear_mat.xml</material_path>
-				</asset>
-				<asset id="17562686572944807563">
-					<components>
-						<transform>
-							<enabled>0</enabled>
-							<position>
-								<x>0.200000</x>
-								<y>-4.000000</y>
-								<z>0.700000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="17926121092750138820">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="7947816195195925796">
-					<components>
-						<transform>
-							<enabled>0</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>3.700000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="7595167336934900416">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-					<material_path>assets/models/shop/top wall/top_wall_mat.xml</material_path>
-				</asset>
-				<asset id="17963932374757593171">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>2.850000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="555333517955812391">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-					<material_path>assets/models/shop/top wall/small_pipe_mat.xml</material_path>
-				</asset>
-				<asset id="14891504735601798440">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>2.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="14622043212328623189">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-					<material_path>assets/models/shop/top wall/big_pipe_mat.xml</material_path>
-				</asset>
-				<asset id="9493616946750188501">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>3.700000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="7160354791368551134">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-					<material_path>assets/models/shop/top wall/top_wall_mat.xml</material_path>
-				</asset>
-				<asset id="14958994050587605305">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>-7.800000</y>
-								<z>3.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>-90.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="16406819721383464047">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-					<material_path>assets/materials/neon4_mat.xml</material_path>
-				</asset>
-				<asset id="983038305066770938">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>7.200000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="18347688781896131524">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-					<material_path>assets/models/shop/shopupper_floor_mat.xml</material_path>
-				</asset>
-				<asset id="5191196698071754227">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="4780372578840254609">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>-0.200000</x>
-								<y>-7.000000</y>
-								<z>1.000000</z>
-							</position>
-							<rotation>
-								<x>-90.000000</x>
-								<y>0.000000</y>
-								<z>-90.000000</z>
-							</rotation>
-							<scale>
-								<x>3.000000</x>
-								<y>2.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-					<material_path>assets/materials/lights_off__mat.xml</material_path>
-				</asset>
-				<asset id="10196431949039880582">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="12391335448999735263">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-					<material_path>assets/models/shop/shop front v2/shopfront2_mat.xml</material_path>
-				</asset>
-				<asset id="8083411184435193589">
-					<components>
-						<transform>
-							<enabled>0</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="14373989428140810201">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="6931352868389528077">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="4114628216996987429">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="4792967443676679841">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-				<asset id="8110978230459782809">
-					<components>
-						<transform>
-							<enabled>1</enabled>
-							<position>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</position>
-							<rotation>
-								<x>0.000000</x>
-								<y>0.000000</y>
-								<z>0.000000</z>
-							</rotation>
-							<scale>
-								<x>1.000000</x>
-								<y>1.000000</y>
-								<z>1.000000</z>
-							</scale>
-						</transform>
-					</components>
-				</asset>
-			</asset_component>
-		</components>
-	</entity>
-	<entity id="941262686240940123">
+	<entity id="14624972961483619439">
 		<name>Shop3_4</name>
 		<components>
 			<transform>
@@ -2713,7 +1345,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="14551198661384600912">
+	<entity id="13300006486272599545">
 		<name>Shop3_3</name>
 		<components>
 			<transform>
@@ -4058,7 +2690,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="4152221783849338232">
+	<entity id="5523374461113277921">
 		<name>Shop2_12</name>
 		<components>
 			<transform>
@@ -5403,7 +4035,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="2169568988759378709">
+	<entity id="13491233249599934241">
 		<name>Shop2_10</name>
 		<components>
 			<transform>
@@ -6748,7 +5380,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="15034196757659205483">
+	<entity id="15288367714375229602">
 		<name>Shop2_9</name>
 		<components>
 			<transform>
@@ -8093,7 +6725,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="8714191793550593183">
+	<entity id="11699288333780585559">
 		<name>Shop2_8</name>
 		<components>
 			<transform>
@@ -9438,7 +8070,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="12999862905391935355">
+	<entity id="4914682618942145751">
 		<name>Shop2_7</name>
 		<components>
 			<transform>
@@ -10783,7 +9415,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="17350667155508348428">
+	<entity id="10051365480792161775">
 		<name>Shop2_6</name>
 		<components>
 			<transform>
@@ -12128,7 +10760,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="17777894699670964652">
+	<entity id="9143877798042760101">
 		<name>Shop2_5</name>
 		<components>
 			<transform>
@@ -13474,7 +12106,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="3273099614010271432">
+	<entity id="11645269806956262879">
 		<name>Shop2_4</name>
 		<components>
 			<transform>
@@ -14818,7 +13450,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="8797128462715349121">
+	<entity id="18289682900909982263">
 		<name>Shop2_3</name>
 		<components>
 			<transform>
@@ -16162,7 +14794,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="1056665389674757015">
+	<entity id="4759099476473544242">
 		<name>Shop2_2</name>
 		<components>
 			<transform>
@@ -17507,7 +16139,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="2760391555359084975">
+	<entity id="13697839710606118408">
 		<name>Shop3</name>
 		<components>
 			<transform>
@@ -18852,7 +17484,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="18294442491830009571">
+	<entity id="515174451755348930">
 		<name>Shop_Duplicate</name>
 		<components>
 			<transform>
@@ -20197,7 +18829,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="3092586892529760622">
+	<entity id="2936121496674852330">
 		<name>MainCamera</name>
 		<components>
 			<transform>
@@ -20223,7 +18855,7 @@
 			</camera>
 		</components>
 	</entity>
-	<entity id="17125255770747301114">
+	<entity id="12920452236179375216">
 		<name>Hotel</name>
 		<components>
 			<transform>
@@ -20425,7 +19057,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="1959817063201156000">
+	<entity id="1460713891996292678">
 		<name>Plane</name>
 		<components>
 			<transform>
@@ -20518,7 +19150,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="2595881741526752307">
+	<entity id="12838601145691981624">
 		<name>puddle</name>
 		<components>
 			<transform>
@@ -20611,7 +19243,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="5004612159141467384">
+	<entity id="1707325831843441886">
 		<name>spotlight</name>
 		<components>
 			<transform>
@@ -20662,7 +19294,7 @@
 			</light>
 			<asset_component>
 				<file_location>assets/models/debug_sphere.fbx.vasset</file_location>
-				<asset id="823869813805969083">
+				<asset id="11409363249207205122">
 					<components>
 						<transform>
 							<enabled>1</enabled>
@@ -20684,7 +19316,7 @@
 						</transform>
 					</components>
 				</asset>
-				<asset id="11446170483241463320">
+				<asset id="10492904092076175001">
 					<components>
 						<transform>
 							<enabled>1</enabled>
@@ -20706,7 +19338,7 @@
 						</transform>
 					</components>
 				</asset>
-				<asset id="468293020376698779">
+				<asset id="10981227055612632350">
 					<components>
 						<transform>
 							<enabled>1</enabled>
@@ -20731,7 +19363,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="4461923810396462719">
+	<entity id="11459976320333778428">
 		<name>Shop2</name>
 		<components>
 			<transform>
@@ -22075,7 +20707,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="3485919518777408197">
+	<entity id="8706543277077727321">
 		<name>Low Rise building</name>
 		<components>
 			<transform>
@@ -22098,7 +20730,7 @@
 			</transform>
 		</components>
 	</entity>
-	<entity id="2954319005149832018">
+	<entity id="2984742571294483702">
 		<name>spotlight2</name>
 		<components>
 			<transform>
@@ -22149,7 +20781,7 @@
 			</light>
 			<asset_component>
 				<file_location>assets/models/debug_sphere.fbx.vasset</file_location>
-				<asset id="823869813805969083">
+				<asset id="11409363249207205122">
 					<components>
 						<transform>
 							<enabled>1</enabled>
@@ -22171,7 +20803,7 @@
 						</transform>
 					</components>
 				</asset>
-				<asset id="11446170483241463320">
+				<asset id="10492904092076175001">
 					<components>
 						<transform>
 							<enabled>1</enabled>
@@ -22193,7 +20825,7 @@
 						</transform>
 					</components>
 				</asset>
-				<asset id="468293020376698779">
+				<asset id="10981227055612632350">
 					<components>
 						<transform>
 							<enabled>1</enabled>
@@ -22218,7 +20850,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="1771718845815526429">
+	<entity id="1248306148496408975">
 		<name>Shop</name>
 		<components>
 			<transform>
@@ -23561,7 +22193,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="17128758063749533565">
+	<entity id="13349277189443255828">
 		<name>directional light</name>
 		<components>
 			<transform>
@@ -23612,7 +22244,7 @@
 			</light>
 		</components>
 	</entity>
-	<entity id="13612841017159193560">
+	<entity id="16137866832599397310">
 		<name>Test Cube</name>
 		<components>
 			<transform>
@@ -23704,7 +22336,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="10049495133461742362">
+	<entity id="6955309379539565563">
 		<name>NeonWires</name>
 		<components>
 			<transform>
@@ -23842,7 +22474,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="11136497394906611898">
+	<entity id="15191840255425913884">
 		<name>floor</name>
 		<components>
 			<transform>
@@ -23963,7 +22595,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="362801544158496029">
+	<entity id="6057037381918481606">
 		<name>Hotel Base</name>
 		<components>
 			<transform>
@@ -24056,7 +22688,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="9225957255685810215">
+	<entity id="11288508101043673127">
 		<name>Hotel Text</name>
 		<components>
 			<transform>
@@ -24149,7 +22781,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="14665289130772752519">
+	<entity id="12957324691507682567">
 		<name>Maria2</name>
 		<components>
 			<transform>
@@ -28211,7 +26843,7 @@
 			</characterController>
 		</components>
 	</entity>
-	<entity id="2227730566554509136">
+	<entity id="18163803386131390394">
 		<name>Hotel Globe</name>
 		<components>
 			<transform>
@@ -28330,26 +26962,9 @@
 					<material_path>assets/models/hotel/hotel_globe_mat.xml</material_path>
 				</asset>
 			</asset_component>
-			<box_collider>
-				<min>
-					<x>-1.020362</x>
-					<y>-1.020362</y>
-					<z>-1.020362</z>
-				</min>
-				<max>
-					<x>1.020361</x>
-					<y>1.020361</y>
-					<z>1.020362</z>
-				</max>
-			</box_collider>
-			<rigidbody>
-				<static>1</static>
-				<kinematic>0</kinematic>
-				<mass>1.000000</mass>
-			</rigidbody>
 		</components>
 	</entity>
-	<entity id="17624890247518760289">
+	<entity id="1937240524987389902">
 		<name>Hotel Upper duplicate 21</name>
 		<components>
 			<transform>
@@ -28442,7 +27057,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="15747471628171348596">
+	<entity id="5747562712404579707">
 		<name>floor duplicate 22</name>
 		<components>
 			<transform>
@@ -28563,7 +27178,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="3959849453519960973">
+	<entity id="7789339721675914548">
 		<name>Hotel Upper duplicate 23</name>
 		<components>
 			<transform>
@@ -28656,7 +27271,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="3416111680160971129">
+	<entity id="9336602044239537373">
 		<name>floor duplicate 22 duplicate 24</name>
 		<components>
 			<transform>
@@ -28777,7 +27392,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="2945688321589350568">
+	<entity id="1057258233616920467">
 		<name>Shop3_7</name>
 		<components>
 			<transform>
@@ -30120,7 +28735,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="9779933573317442975">
+	<entity id="2982433938535513613">
 		<name>Shop2_1</name>
 		<components>
 			<transform>
@@ -31465,7 +30080,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="12957900298721253926">
+	<entity id="1969007935176035356">
 		<name>Mutant</name>
 		<components>
 			<transform>
@@ -33713,26 +32328,9 @@
 					</components>
 				</asset>
 			</asset_component>
-			<box_collider>
-				<min>
-					<x>-0.000000</x>
-					<y>-0.000000</y>
-					<z>-0.000000</z>
-				</min>
-				<max>
-					<x>0.000000</x>
-					<y>0.000000</y>
-					<z>0.000000</z>
-				</max>
-			</box_collider>
-			<rigidbody>
-				<static>0</static>
-				<kinematic>1</kinematic>
-				<mass>1.000000</mass>
-			</rigidbody>
 		</components>
 	</entity>
-	<entity id="6605222769821558980">
+	<entity id="18378069431561904468">
 		<name>Hotel Upper</name>
 		<components>
 			<transform>
@@ -33825,7 +32423,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="16450447292101920695">
+	<entity id="13537838669713248691">
 		<name>Shop3_2</name>
 		<components>
 			<transform>
@@ -35168,7 +33766,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="1797439276762372041">
+	<entity id="9479559678540042366">
 		<name>Shop2_11</name>
 		<components>
 			<transform>
@@ -36513,7 +35111,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="11535309054582567256">
+	<entity id="16656778430748770730">
 		<name>Shop2_13</name>
 		<components>
 			<transform>
@@ -37858,7 +36456,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="17965678254914603355">
+	<entity id="15828740442153726726">
 		<name>Shop3_10_Duplicate</name>
 		<components>
 			<transform>
@@ -39201,7 +37799,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="2953123069907113828">
+	<entity id="2780425197152123550">
 		<name>Shop3_10</name>
 		<components>
 			<transform>
@@ -40545,7 +39143,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="13443849695708147900">
+	<entity id="14213838510828480236">
 		<name>Shop3_9</name>
 		<components>
 			<transform>
@@ -41889,7 +40487,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="8288324334732228875">
+	<entity id="13101637356773667113">
 		<name>collectible</name>
 		<components>
 			<transform>
@@ -41910,9 +40508,37 @@
 					<z>0.500000</z>
 				</scale>
 			</transform>
+			<light>
+				<enabled>0</enabled>
+				<intensity>5.166000</intensity>
+				<diffuse>
+					<r>1.000000</r>
+					<g>0.000000</g>
+					<b>0.882353</b>
+					<w>1.000000</w>
+				</diffuse>
+				<specular>
+					<r>0.000000</r>
+					<g>0.847751</g>
+					<b>0.960784</b>
+					<w>1.000000</w>
+				</specular>
+				<attenuation>
+					<x>0.358000</x>
+					<y>0.509000</y>
+					<z>0.300000</z>
+					<w>1.000000</w>
+				</attenuation>
+				<lightparams>
+					<x>0.000000</x>
+					<y>0.000000</y>
+					<z>0.000000</z>
+					<w>1.000000</w>
+				</lightparams>
+			</light>
 			<asset_component>
 				<file_location>assets/models/Sphere.fbx.vasset</file_location>
-				<asset id="7717280851769963923">
+				<asset id="8692003009003005985">
 					<components>
 						<transform>
 							<enabled>1</enabled>
@@ -41934,7 +40560,7 @@
 						</transform>
 					</components>
 				</asset>
-				<asset id="16831048410776056293">
+				<asset id="3579254781244476330">
 					<components>
 						<transform>
 							<enabled>1</enabled>
@@ -41956,7 +40582,7 @@
 						</transform>
 					</components>
 				</asset>
-				<asset id="7882895201186681321">
+				<asset id="8571123932280972756">
 					<components>
 						<transform>
 							<enabled>1</enabled>
@@ -41982,7 +40608,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="6453904665325760218">
+	<entity id="7306182989101597999">
 		<name>Shop3_8</name>
 		<components>
 			<transform>
@@ -43325,7 +41951,7 @@
 			</asset_component>
 		</components>
 	</entity>
-	<entity id="16328594871441115486">
+	<entity id="14845782968166942912">
 		<name>Shop3_6</name>
 		<components>
 			<transform>
@@ -44666,6 +43292,1374 @@
 					</components>
 				</asset>
 			</asset_component>
+		</components>
+	</entity>
+	<entity id="8184792285430713913">
+		<name>Shop3_5</name>
+		<components>
+			<transform>
+				<enabled>1</enabled>
+				<position>
+					<x>36.299999</x>
+					<y>0.500000</y>
+					<z>6.100000</z>
+				</position>
+				<rotation>
+					<x>-90.000000</x>
+					<y>180.000000</y>
+					<z>0.000000</z>
+				</rotation>
+				<scale>
+					<x>1.000000</x>
+					<y>1.000000</y>
+					<z>1.000000</z>
+				</scale>
+			</transform>
+			<asset_component>
+				<file_location>assets/models/shopfront/Shop.fbx.vasset</file_location>
+				<asset id="10838312110386143998">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="13273897821984755396">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="2052694105982141780">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.700000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+					<material_path>assets/models/shop/side pillars/sidepillars_mat.xml</material_path>
+				</asset>
+				<asset id="2982343815477716231">
+					<components>
+						<transform>
+							<enabled>0</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="6955586640409891622">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+					<material_path>assets/models/shop/shopfrontv1_mat.xml</material_path>
+				</asset>
+				<asset id="15306987242041101284">
+					<components>
+						<transform>
+							<enabled>0</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="6807407028417079389">
+					<components>
+						<transform>
+							<enabled>0</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>-3.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+					<material_path>assets/models/shop/columns/columns_mat.xml</material_path>
+				</asset>
+				<asset id="13666646829598373718">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="1856139727329340622">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>-3.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+					<material_path>assets/models/shop/columns/columns_mat.xml</material_path>
+				</asset>
+				<asset id="11896178547298741409">
+					<components>
+						<transform>
+							<enabled>0</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="1294747157610810510">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="3484080726571041497">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.100000</x>
+								<y>-2.100000</y>
+								<z>2.850000</z>
+							</position>
+							<rotation>
+								<x>90.000000</x>
+								<y>0.000000</y>
+								<z>90.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="17847007903856144258">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+					<material_path>assets/materials/neon2_mat.xml</material_path>
+				</asset>
+				<asset id="6238850342909755522">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>-2.000000</x>
+								<y>0.000000</y>
+								<z>0.100000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="13330287517558475005">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>2.000000</x>
+								<y>0.000000</y>
+								<z>3.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+					<material_path>assets/models/shop/roller shutter/roller_metal_mat.xml</material_path>
+				</asset>
+				<asset id="14236158821452925232">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.600000</x>
+								<y>-2.000000</y>
+								<z>0.500000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="534805054096900677">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+					<material_path>assets/models/shop/roller shutter/roller_metal_mat.xml</material_path>
+				</asset>
+				<asset id="4148628383821886613">
+					<components>
+						<transform>
+							<enabled>0</enabled>
+							<position>
+								<x>0.600000</x>
+								<y>-2.000000</y>
+								<z>0.500000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="13071658567207457350">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+					<material_path>assets/models/shop/roller shutter/roller_metal_mat.xml</material_path>
+				</asset>
+				<asset id="12030191798883273318">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>-0.300000</x>
+								<y>-2.000000</y>
+								<z>0.900000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="14487754034344818675">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+					<material_path>assets/models/shop/roller shutter/canop.xml</material_path>
+				</asset>
+				<asset id="6961964932376454209">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>2.100000</x>
+								<y>-0.200000</y>
+								<z>3.700000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="4682198890185143667">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+					<material_path>assets/materials/neon1_mat.xml</material_path>
+				</asset>
+				<asset id="6936860752830152191">
+					<components>
+						<transform>
+							<enabled>0</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>-0.400000</y>
+								<z>2.500000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="5634956145383811305">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="12534070912549937429">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>-1.500000</x>
+								<y>-1.900000</y>
+								<z>-3.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="8881169057073170290">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="18255797778120590535">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>-0.300000</y>
+								<z>4.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="1371825286565290290">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+					<material_path>assets/models/shop/signv3_mat.xml</material_path>
+				</asset>
+				<asset id="6232497130625699611">
+					<components>
+						<transform>
+							<enabled>0</enabled>
+							<position>
+								<x>0.200000</x>
+								<y>-4.000000</y>
+								<z>0.700000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="5824589158418110376">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+					<material_path>assets/models/shop/cyberlife_mat.xml</material_path>
+				</asset>
+				<asset id="5658326247830087012">
+					<components>
+						<transform>
+							<enabled>0</enabled>
+							<position>
+								<x>0.200000</x>
+								<y>-4.000000</y>
+								<z>0.700000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="1760285440037619298">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="8609820700045259982">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.200000</x>
+								<y>-4.000000</y>
+								<z>0.700000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="10083274920073694389">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+					<material_path>assets/models/shop/tech_wear_mat.xml</material_path>
+				</asset>
+				<asset id="17562686572944807563">
+					<components>
+						<transform>
+							<enabled>0</enabled>
+							<position>
+								<x>0.200000</x>
+								<y>-4.000000</y>
+								<z>0.700000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="17926121092750138820">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="7947816195195925796">
+					<components>
+						<transform>
+							<enabled>0</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>3.700000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="7595167336934900416">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+					<material_path>assets/models/shop/top wall/top_wall_mat.xml</material_path>
+				</asset>
+				<asset id="17963932374757593171">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>2.850000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="555333517955812391">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+					<material_path>assets/models/shop/top wall/small_pipe_mat.xml</material_path>
+				</asset>
+				<asset id="14891504735601798440">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>2.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="14622043212328623189">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+					<material_path>assets/models/shop/top wall/big_pipe_mat.xml</material_path>
+				</asset>
+				<asset id="9493616946750188501">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>3.700000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="7160354791368551134">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+					<material_path>assets/models/shop/top wall/top_wall_mat.xml</material_path>
+				</asset>
+				<asset id="14958994050587605305">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>-7.800000</y>
+								<z>3.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>-90.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="16406819721383464047">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+					<material_path>assets/materials/neon4_mat.xml</material_path>
+				</asset>
+				<asset id="983038305066770938">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>7.200000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="18347688781896131524">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+					<material_path>assets/models/shop/shopupper_floor_mat.xml</material_path>
+				</asset>
+				<asset id="5191196698071754227">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="4780372578840254609">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>-0.200000</x>
+								<y>-7.000000</y>
+								<z>1.000000</z>
+							</position>
+							<rotation>
+								<x>-90.000000</x>
+								<y>0.000000</y>
+								<z>-90.000000</z>
+							</rotation>
+							<scale>
+								<x>3.000000</x>
+								<y>2.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+					<material_path>assets/materials/lights_off__mat.xml</material_path>
+				</asset>
+				<asset id="10196431949039880582">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="12391335448999735263">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+					<material_path>assets/models/shop/shop front v2/shopfront2_mat.xml</material_path>
+				</asset>
+				<asset id="8083411184435193589">
+					<components>
+						<transform>
+							<enabled>0</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="14373989428140810201">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="6931352868389528077">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="4114628216996987429">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="4792967443676679841">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+				<asset id="8110978230459782809">
+					<components>
+						<transform>
+							<enabled>1</enabled>
+							<position>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</position>
+							<rotation>
+								<x>0.000000</x>
+								<y>0.000000</y>
+								<z>0.000000</z>
+							</rotation>
+							<scale>
+								<x>1.000000</x>
+								<y>1.000000</y>
+								<z>1.000000</z>
+							</scale>
+						</transform>
+					</components>
+				</asset>
+			</asset_component>
+		</components>
+	</entity>
+	<entity id="9521328942089535957">
+		<name>CollectibleManager</name>
+		<components>
+			<transform>
+				<enabled>1</enabled>
+				<position>
+					<x>0.000000</x>
+					<y>0.000000</y>
+					<z>0.000000</z>
+				</position>
+				<rotation>
+					<x>0.000000</x>
+					<y>0.000000</y>
+					<z>0.000000</z>
+				</rotation>
+				<scale>
+					<x>1.000000</x>
+					<y>1.000000</y>
+					<z>1.000000</z>
+				</scale>
+			</transform>
 		</components>
 	</entity>
 </scene>

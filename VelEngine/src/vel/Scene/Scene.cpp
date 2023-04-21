@@ -28,13 +28,6 @@ namespace vel
 		MeshRenderer();
 		MaterialSystem();
 		LightManager();
-		std::string maria = "assets/models/maria/Maria.fbx";
-		std::string rfa = "assets/models/rfa/rfa_separate_cloth.fbx";
-		std::string nightshade = "assets/models/nightshade/Nightshade J Friedrich@Idle.fbx";
-		std::string medea = "assets/models/medea/medea_m_arrebola.fbx";
-		std::string props = "assets/models/camp/props.fbx";
-		std::string bench = "assets/models/bench/bench.fbx";
-		
 		/*FrameBufferSpecification fbSpec;
 		fbSpec.Width = 800;
 		fbSpec.Height = 600;
@@ -88,14 +81,15 @@ namespace vel
 				"assets/textures/skyboxes/sunnyday/TropicalSunnyDayBack2048.bmp",
 			},*/
 			"assets/models/box.fbx"
-		);
-		
-		/*m_ShaderLibrary.Load("assets/shaders/FBOTexture.glsl");
-		m_ShaderLibrary.Get("FBOTexture")->SetInt("gAlbedoSpec", 0);*/
-		
+		);		
 
 		m_PhysicsFactory = new physics::physxim::PhysicsFactory();
 		m_PhysicsWorld = m_PhysicsFactory->CreateWorld();
+		m_ParticleSystem = CreateRef<ParticleSystem>();
+
+		Ref<Model> sphereModel = CreateRef<Model>("assets/models/debug_sphere.fbx", false, false, nullptr);
+
+		m_ParticleSystem->SetSphereVA(sphereModel->GetMeshData().m_VertexArray);
 		m_Shader = m_ShaderLibrary.Load("assets/shaders/gBuffer.glsl");
 		m_Shader->Bind();
 		m_Shader->SetInt("u_TextureDiffuse", 0);
@@ -159,10 +153,6 @@ namespace vel
 		}
 		if (mainCamera)
 		{
-			/*m_RuntimeBuffer->Bind();
-			RenderCommand::SetClearColor(glm::vec4(0.f, 0.f, 0.f, 1));
-			RenderCommand::Clear();
-			RenderCommand::EnableDepth();*/
 			eyeLocation = glm::vec4(mainCamera->Position.x,mainCamera->Position.y, mainCamera->Position.z, 1.f);
 			Renderer::BeginScene(*mainCamera, glm::mat4(1.f));
 			{
@@ -314,7 +304,8 @@ namespace vel
 						}
 					}
 				}
-
+				m_ParticleSystem->OnUpdate(ts);
+				m_ParticleSystem->OnRender(eyeLocation);
 				for (entt::entity handle : transparentEntities)
 				{
 					Entity entity = Entity(handle, this);
@@ -485,7 +476,8 @@ namespace vel
 					}
 				}
 			}
-
+			m_ParticleSystem->OnUpdate(ts);
+			m_ParticleSystem->OnRender({ camera.GetPosition().x,camera.GetPosition().y, camera.GetPosition().z, 1.f });
 			for (entt::entity handle : transparentEntities)
 			{
 				Entity entity = Entity(handle, this);
@@ -698,6 +690,8 @@ namespace vel
 			{
 				LightComponent& lightComponent = entity.GetComponent<LightComponent>();
 				newEntity.AddComponent<LightComponent>(LightComponent(lightComponent));
+				LightManager::AddNewLightInfo(
+					&newEntity.GetComponent<LightComponent>());
 			}
 		}
 
@@ -743,6 +737,10 @@ namespace vel
 				if(childEntity)
 					DeleteEntity(childEntity);
 			}
+		}
+		if (entity.HasComponent<LightComponent>())
+		{
+			LightManager::RemoveLight(&entity.GetComponent<LightComponent>());
 		}
 		m_Registry.destroy(entity.m_EntityHandle);
 	}

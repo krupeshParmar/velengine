@@ -23,6 +23,10 @@ namespace vel
 		{
 			s_RendererAPI->DrawIndexed(vertexArray);
 		}
+		inline static void DrawInstanced(const Ref<VertexArray>& vertexArray, unsigned int count)
+		{
+			s_RendererAPI->DrawInstanced(vertexArray, count);
+		}
 		inline static void SetViewport(int x, int y, int width, int height)
 		{
 			s_RendererAPI->SetViewport(x, y, width, height);

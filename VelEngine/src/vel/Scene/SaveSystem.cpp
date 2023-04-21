@@ -1450,7 +1450,8 @@ namespace vel
 							}
 							if (componentNodeName == "box_collider")
 							{
-								BoxColliderComponent* boxCollider = new BoxColliderComponent();
+								/*entity->AddComponent<BoxColliderComponent>(BoxColliderComponent());
+								BoxColliderComponent* boxCollider = &entity->GetComponent<BoxColliderComponent>();
 								pugi::xml_object_range<pugi::xml_node_iterator>
 									boxColliderNodeChildren = componentNode.children();
 								for (pugi::xml_node_iterator boxColliderIterator = boxColliderNodeChildren.begin();
@@ -1515,13 +1516,12 @@ namespace vel
 
 								boxCollider->aabb.HalfExtent = (boxCollider->aabb.Max - boxCollider->aabb.Min) / 2.f;
 								boxCollider->aabb.Centre = boxCollider->aabb.Min + boxCollider->aabb.HalfExtent;
-								boxCollider->shape = new physics::BoxShape(boxCollider->aabb.HalfExtent);
-								entity->AddComponent<BoxColliderComponent>(*boxCollider);
+								boxCollider->shape = new physics::BoxShape(boxCollider->aabb.HalfExtent);*/
 							}
 							if (componentNodeName == "rigidbody")
 							{
-								entity->AddComponent<RigidbodyComponent>(RigidbodyComponent());
-								RigidbodyComponent* rigidbody =
+								//entity->AddComponent<RigidbodyComponent>(RigidbodyComponent());
+								/*RigidbodyComponent* rigidbody =
 									&entity->GetComponent<RigidbodyComponent>();
 								pugi::xml_object_range<pugi::xml_node_iterator>
 									rigidbodyNodeChildren = componentNode.children();
@@ -1560,7 +1560,7 @@ namespace vel
 								rigidbody->rigidBody = scene->GetPhysicsFactory()->CreateRigidBody(rigidbody->desc,
 									entity->GetComponent<BoxColliderComponent>().shape);
 								if (rigidbody->rigidBody == nullptr)
-									int breakhere = 0;
+									int breakhere = 0;*/
 							}
 							if (componentNodeName == "meshobject")
 							{

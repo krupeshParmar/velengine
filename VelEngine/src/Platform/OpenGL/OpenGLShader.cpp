@@ -8,6 +8,27 @@
 
 namespace vel
 {
+	GLenum glCheckError()
+	{
+		GLenum errorCode;
+		while ((errorCode = glGetError()) != GL_NO_ERROR)
+		{
+			std::string error;
+			switch (errorCode)
+			{
+			case GL_INVALID_ENUM:                  error = "INVALID_ENUM"; break;
+			case GL_INVALID_VALUE:                 error = "INVALID_VALUE"; break;
+			case GL_INVALID_OPERATION:             error = "INVALID_OPERATION"; break;
+			case GL_STACK_OVERFLOW:                error = "STACK_OVERFLOW"; break;
+			case GL_STACK_UNDERFLOW:               error = "STACK_UNDERFLOW"; break;
+			case GL_OUT_OF_MEMORY:                 error = "OUT_OF_MEMORY"; break;
+			case GL_INVALID_FRAMEBUFFER_OPERATION: error = "INVALID_FRAMEBUFFER_OPERATION"; break;
+			}
+			VEL_ERROR(error);
+		}
+		return errorCode;
+	}
+
 	static GLenum ShaderTypeFromString(const std::string& type)
 	{
 		if (type == "vertex") return GL_VERTEX_SHADER;
@@ -237,51 +258,35 @@ namespace vel
 	{
 		GLint location = glGetUniformLocation(m_RendererID, uniformName.c_str());
 		glUniform1i(location, value);
+		glCheckError();
 	}
 
 	void OpenGLShader::UploadUniformBool(const std::string& uniformName, bool value)
 	{
 		GLint location = glGetUniformLocation(m_RendererID, uniformName.c_str());
 		glUniform1i(location, (GLfloat) value);
+		glCheckError();
 	}
 
 	void OpenGLShader::UploadUniformFloat(const std::string& uniformName, float value)
 	{
 		GLint location = glGetUniformLocation(m_RendererID, uniformName.c_str());
 		glUniform1f(location, value);
+		glCheckError();
 	}
 
 	void OpenGLShader::UploadUniformFloat2(const std::string& uniformName, const glm::vec2& values)
 	{
 		GLint location = glGetUniformLocation(m_RendererID, uniformName.c_str());
 		glUniform2f(location, values.x, values.y);
+		glCheckError();
 	}
 
 	void OpenGLShader::UploadUniformFloat3(const std::string& uniformName, const glm::vec3& values)
 	{
 		GLint location = glGetUniformLocation(m_RendererID, uniformName.c_str());
 		glUniform3f(location, values.x, values.y, values.z);
-	}
-
-	GLenum glCheckError()
-	{
-		GLenum errorCode;
-		while ((errorCode = glGetError()) != GL_NO_ERROR)
-		{
-			std::string error;
-			switch (errorCode)
-			{
-			case GL_INVALID_ENUM:                  error = "INVALID_ENUM"; break;
-			case GL_INVALID_VALUE:                 error = "INVALID_VALUE"; break;
-			case GL_INVALID_OPERATION:             error = "INVALID_OPERATION"; break;
-			case GL_STACK_OVERFLOW:                error = "STACK_OVERFLOW"; break;
-			case GL_STACK_UNDERFLOW:               error = "STACK_UNDERFLOW"; break;
-			case GL_OUT_OF_MEMORY:                 error = "OUT_OF_MEMORY"; break;
-			case GL_INVALID_FRAMEBUFFER_OPERATION: error = "INVALID_FRAMEBUFFER_OPERATION"; break;
-			}
-			VEL_ERROR(error);
-		}
-		return errorCode;
+		glCheckError();
 	}
 
 	void OpenGLShader::UploadUniformFloat4(const std::string& uniformName, const glm::vec4& values)
@@ -295,6 +300,7 @@ namespace vel
 	{
 		GLint location = glGetUniformLocation(m_RendererID, uniformName.c_str());
 		glUniformMatrix3fv(location, 1, false, glm::value_ptr(matrix));
+		glCheckError();
 	}
 
 	void OpenGLShader::UploadUniformMat4(const std::string& uniformName, const glm::mat4& matrix)
@@ -302,5 +308,6 @@ namespace vel
 		glUseProgram(m_RendererID);
 		GLint location = glGetUniformLocation(m_RendererID, uniformName.c_str());
 		glUniformMatrix4fv(location, 1, false, glm::value_ptr(matrix));
+		glCheckError();
 	}
 }

@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
-<assets_list id="9221959929610234827">
+<assets_list id="6885752280004914354">
 	<asset>
 		<name>Sphere.fbx</name>
-		<id>7717280851769963923</id>
+		<id>8692003009003005985</id>
 	</asset>
 	<asset>
 		<name>Sphere</name>
-		<id>16831048410776056293</id>
+		<id>3579254781244476330</id>
 	</asset>
 	<asset>
-		<name>Sphere_Mesh</name>
-		<id>7882895201186681321</id>
+		<name>Sphere.001_Mesh</name>
+		<id>8571123932280972756</id>
 	</asset>
 </assets_list>

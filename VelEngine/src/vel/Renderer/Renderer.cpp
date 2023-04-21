@@ -161,6 +161,18 @@ namespace vel
 		vertexArray->Unbind();
 	}
 
+	void Renderer::SubmitInstanced(unsigned int count, const Ref<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray)
+	{
+		shader->Bind();
+
+		shader->SetMat4("u_View", s_Data.ViewMatrix);
+		shader->SetMat4("u_Projection", s_Data.ProjectionMatrix);
+		shader->SetFloat("u_TilingFactor", s_Data.TilingFactor);
+		vertexArray->Bind();
+		RenderCommand::DrawInstanced(vertexArray, count);
+		vertexArray->Unbind();
+	}
+
 	void Renderer::Submit(const Ref<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, Ref<FrameBuffer> buffer, Ref<FrameBuffer> mainbuffer, const glm::mat4& transform)
 	{
 		//mainbuffer->Unbind();

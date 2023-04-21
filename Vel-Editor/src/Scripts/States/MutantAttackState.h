@@ -50,7 +50,31 @@ public:
 		{
 			float ratio = controller->animatorComponent->animator->GetTimeStamp()
 				/ controller->animatorComponent->runningAnimation->GetDuration();
-			if (ratio < 0.25f)
+
+			if (attackID == 3)
+			{
+				if (ratio < 0.25f)
+					attacked = false; 
+				if (ratio > 0.25f && ratio < 0.35f && !attacked && distance <= 1.5f)
+				{
+					controller->targetController->TakeDamage(5.f);
+					start = std::chrono::steady_clock::now();
+					attacked = true;
+				}
+			}
+			else
+			{
+				if (ratio < 0.55f)
+					attacked = false;
+				if (ratio > 0.55f && ratio < 0.65f && !attacked && distance <= 1.5f)
+				{
+					controller->targetController->TakeDamage(35.f);
+					start = std::chrono::steady_clock::now();
+					attacked = true;
+				}
+			}
+
+			/*if (ratio < 0.25f)
 				attacked = false;
 			if (ratio > 0.25f && ratio < 0.35f && !attacked && distance <= 1.5f)
 			{
@@ -60,7 +84,7 @@ public:
 					controller->targetController->TakeDamage(25.f);
 				start = std::chrono::steady_clock::now();
 				attacked = true;
-			}
+			}*/
 		}
 	}
 };

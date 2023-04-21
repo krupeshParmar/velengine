@@ -11,6 +11,12 @@ public:
 	{
 		collectibleEntityPrefab = GetScene()->TryGetEntityWithTag("collectible");
 		collectibleEntity = &GetScene()->DuplicateEntity(collectibleEntityPrefab, GetEntity());
+
+		if (collectibleEntity->HasComponent<vel::LightComponent>())
+		{
+			vel::LightComponent& light = collectibleEntity->GetComponent<vel::LightComponent>();
+			light.Enabled = true;
+		}
 		
 		vel::TransformComponent* transform = &collectibleEntity->Transform();
 		transform->enabled = true;

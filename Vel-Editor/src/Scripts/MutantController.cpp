@@ -5,6 +5,7 @@
 #include "States/MutantAttackState.h"
 #include "States/MutantIdleState.h"
 #include "PlayerController.h"
+#include <BoxShape.h>
 
 void MutantController::OnCreate()
 {
@@ -21,7 +22,77 @@ void MutantController::OnCreate()
 		break;
 	}
 	selfHealth = &GetComponent<HealthComponent>();
-	rigidBodyComponent = &GetComponent<vel::RigidbodyComponent>();
+
+	// Add ParticleSystem
+	{
+		particlesData.Position = { 0.f, 15.f, 0.f };
+		particlesData.VelocityVariation = { 1.f, 2.f, 1.f };
+		particlesData.ColorBegin = { 1.f, 1.f, 1.f, 1.f };
+		particlesData.ColorEnd = { 0.8f, 0.1f, 0.1f, 1.f };
+		particlesData.SizeBegin = 0.1f;
+		particlesData.SizeEnd = 0.15f;
+		particlesData.LifeTime = 0.5f;
+	}
+
+	{
+		vel::Entity& globeEntity = GetScene()->TryGetEntityWithTag("Hotel Globe");
+		if (globeEntity)
+		{
+			{
+				vel::BoxColliderComponent boxColliderComponent;
+				vel::MeshComponent comp;
+				if (globeEntity.GetComponentInChild<vel::MeshComponent>(comp))
+				{
+					boxColliderComponent.aabb = comp.MeshDrawData->aabb;
+					boxColliderComponent.aabb.HalfExtent = boxColliderComponent.aabb.HalfExtent * globeEntity.Transform().Scale.x;
+					boxColliderComponent.shape = new physics::BoxShape(boxColliderComponent.aabb.HalfExtent);
+				}
+				globeEntity.AddComponent<vel::BoxColliderComponent>(boxColliderComponent);
+			}
+			globeEntity.AddComponent<vel::RigidbodyComponent>(vel::RigidbodyComponent());
+			vel::RigidbodyComponent* rigidbodyComp = &globeEntity.GetComponent<vel::RigidbodyComponent>();
+			vel::BoxColliderComponent& boxCollider = globeEntity.GetComponent<vel::BoxColliderComponent>();
+			rigidbodyComp->desc.mass = 0.f;
+			rigidbodyComp->desc.isStatic = true;
+			rigidbodyComp->desc.IsKinematic = false;
+			rigidbodyComp->desc.position = globeEntity.Transform().Translation
+				+ glm::vec3(0.f,
+					boxCollider.aabb.HalfExtent.y * 2.f,
+					0.f);
+			rigidbodyComp->rigidBody = GetScene()->GetPhysicsFactory()
+				->CreateRigidBody(rigidbodyComp->desc,
+					boxCollider.shape);
+		}
+
+		// Self
+		{
+			vel::BoxColliderComponent boxColliderComponent;
+			vel::MeshComponent comp;
+			if (GetEntity().GetComponentInChild<vel::MeshComponent>(comp))
+			{
+				boxColliderComponent.aabb = comp.MeshDrawData->aabb;
+				boxColliderComponent.aabb.HalfExtent = boxColliderComponent.aabb.HalfExtent * GetEntity().Transform().Scale.x;
+				boxColliderComponent.shape = new physics::BoxShape(boxColliderComponent.aabb.HalfExtent);
+			}
+			GetEntity().AddComponent<vel::BoxColliderComponent>(boxColliderComponent);
+		}
+		GetEntity().AddComponent<vel::RigidbodyComponent>(vel::RigidbodyComponent());
+		vel::RigidbodyComponent* rigidbodyComp = &GetEntity().GetComponent<vel::RigidbodyComponent>();
+		vel::BoxColliderComponent& boxCollider = GetEntity().GetComponent<vel::BoxColliderComponent>();
+		rigidbodyComp->desc.mass = 300.f;
+		rigidbodyComp->desc.isStatic = false;
+		rigidbodyComp->desc.IsKinematic = true;
+		rigidbodyComp->desc.position = GetEntity().Transform().Translation
+			+ glm::vec3(0.f,
+				boxCollider.aabb.HalfExtent.y * 2.f,
+				0.f);
+		rigidbodyComp->rigidBody = GetScene()->GetPhysicsFactory()
+			->CreateRigidBody(rigidbodyComp->desc,
+				boxCollider.shape);
+	}
+
+	rigidBodyComponent = &GetEntity().GetComponent<vel::RigidbodyComponent>();
+
 
 	walkState = new MutantWalkState();
 	runState = new MutantRunState();
@@ -45,6 +116,15 @@ void MutantController::OnUpdate(vel::Timestep ts)
 			animatorComponent->PlayAnimation(5);
 			dead = true;
 			return;
+		}
+		if (lastSeenHealth > selfHealth->health)
+		{
+			lastSeenHealth = selfHealth->health;
+			for (int i = 0; i < 200; i++)
+			{
+				particlesData.Position = { selfTransform->Translation.x, 2.5f, selfTransform->Translation.z + 0.5f };
+				GetScene()->GetParticleSystem()->Emit(particlesData);
+			}
 		}
 	}
 	if (rigidBodyComponent && rigidBodyComponent->rigidBody)

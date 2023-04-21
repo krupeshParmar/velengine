@@ -55,32 +55,6 @@ namespace vel
 		m_ShaderLibrary.Get("PostProcessing")->SetInt("gBloom", 5);
 		m_ShaderLibrary.Get("PostProcessing")->SetInt("gNoise", 6);
 
-		//m_SquareVertexArray = VertexArray::Create();
-		//float sqVertices[6 * 4] = {
-		//	0.0f, 0.0f,	-1.f,	-1.f,	0.0f,	1.f,
-		//	1.0f, 0.0f, 1.f,	-1.f,	0.0f,	1.f,
-		//	1.0f, 1.0f, 1.f,	1.f,	0.0f,	1.f,
-		//	0.0f, 1.0f, -1.f,	1.f,	0.0f,	1.f
-		//};
-		//m_SquareVertexArray = VertexArray::Create();
-		//Ref<VertexBuffer> squareVB;
-		//squareVB = (VertexBuffer::Create(sqVertices, sizeof(sqVertices)));
-		//
-		//squareVB->SetLayout({
-		//		{ ShaderDataType::Float2, "a_TextureCoords"},
-		//		{ ShaderDataType::Float4, "a_Position"}
-		//	});
-		//m_SquareVertexArray->AddVertexBuffer(squareVB);
-		//
-		//uint32_t sq_indices[6] = {
-		//	0, 1, 2, 2, 3, 0
-		//};
-		//
-		//// index buffer
-		//Ref<IndexBuffer> squareIB;
-		//squareIB = (IndexBuffer::Create(sq_indices, sizeof(sq_indices) / sizeof(uint32_t)));
-		//m_SquareVertexArray->SetIndexBuffer(squareIB);
-
 		Renderer::Init();
 		RenderCommand::SetCullFace();
 	}
@@ -540,6 +514,7 @@ namespace vel
 		bool hasSphereCollider = false;
 		bool hasRigidbody = false;
 		bool hasHealth = false;
+		bool hasParticles = false;
 		ImGui::Begin("Inspector");
 		if (m_SelectedEntity != entt::null)
 		{
@@ -1013,6 +988,32 @@ namespace vel
 			}
 			ImGui::EndGroup();
 
+			// Particles Component
+			ImGui::BeginGroup();
+			{
+				if (entity.HasComponent<ParticlesComponent>())
+				{
+					hasParticles = true;
+					ParticlesComponent& particles = entity.GetComponent<ParticlesComponent>();
+
+					ImGui::InputFloat3("Position##parPos", glm::value_ptr(particles.Position));
+					ImGui::InputFloat3("Velocity Variation##parVV", glm::value_ptr(particles.VelocityVariation));
+					ImGui::ColorEdit3("Color Begin##parColorbe", glm::value_ptr(particles.ColorBegin));
+					ImGui::ColorEdit3("Color End##parColoren", glm::value_ptr(particles.ColorEnd));
+					ImGui::InputFloat("Size Begin##parsizeBe", &particles.SizeBegin);
+					ImGui::InputFloat("Size End##parsizeEn", &particles.SizeEnd);
+					ImGui::InputFloat("LifeTime##parlifetime", &particles.LifeTime);
+
+					if (ImGui::Button("Emit"))
+					{
+						for(int i = 0; i < 100; i++)
+							m_ActiveScene->GetParticleSystem()->Emit(particles);
+					}
+
+				}
+			}
+			ImGui::EndGroup();
+
 			// Add Component
 			{
 				if (ImGui::Button("Add Component"))
@@ -1132,6 +1133,15 @@ namespace vel
 							{
 								addComponentCalled = false;
 								entity.AddComponent<AIComponent>(AIComponent());
+								ImGui::CloseCurrentPopup();
+							}
+						}
+						if (!hasParticles)
+						{
+							if (ImGui::MenuItem("Particles Component"))
+							{
+								addComponentCalled = false;
+								entity.AddComponent<ParticlesComponent>(ParticlesComponent());
 								ImGui::CloseCurrentPopup();
 							}
 						}

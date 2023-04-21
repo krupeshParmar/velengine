@@ -140,7 +140,6 @@ namespace vel
 		}
 	};
 
-
 	struct CameraComponent
 	{
 		enum class Type { None = -1, Perspective, Orthographic };
@@ -157,6 +156,16 @@ namespace vel
 
 		operator SceneCamera& () { return Camera; }
 		operator const SceneCamera& () const { return Camera; }
+	};
+
+	struct ParticlesComponent 
+	{
+		glm::mat4 parentTransform = glm::mat4(1.f);
+		glm::vec3 Position;
+		glm::vec3 Velocity, VelocityVariation;
+		glm::vec4 ColorBegin, ColorEnd;
+		float SizeBegin, SizeEnd, SizeVariation;
+		float LifeTime = 1.0f;
 	};
 
 	struct AnimationLoadData

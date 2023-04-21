@@ -183,7 +183,6 @@
     <ClInclude Include="src\vel\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\vel\Renderer\Material.h" />
     <ClInclude Include="src\vel\Renderer\Model.h" />
-    <ClInclude Include="src\vel\Renderer\ParticleSystem.h" />
     <ClInclude Include="src\vel\Renderer\RenderCommand.h" />
     <ClInclude Include="src\vel\Renderer\Renderer.h" />
     <ClInclude Include="src\vel\Renderer\RendererAPI.h" />
@@ -196,6 +195,7 @@
     <ClInclude Include="src\vel\Scene\LightManager.h" />
     <ClInclude Include="src\vel\Scene\MaterialSystem.h" />
     <ClInclude Include="src\vel\Scene\MeshRenderer.h" />
+    <ClInclude Include="src\vel\Scene\ParticleSystem.h" />
     <ClInclude Include="src\vel\Scene\SaveSystem.h" />
     <ClInclude Include="src\vel\Scene\Scene.h" />
     <ClInclude Include="src\vel\Scene\SceneCamera.h" />
@@ -648,7 +648,6 @@
     <ClCompile Include="src\vel\Renderer\Camera.cpp" />
     <ClCompile Include="src\vel\Renderer\FrameBuffer.cpp" />
     <ClCompile Include="src\vel\Renderer\Model.cpp" />
-    <ClCompile Include="src\vel\Renderer\ParticleSystem.cpp" />
     <ClCompile Include="src\vel\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\vel\Renderer\Renderer.cpp" />
     <ClCompile Include="src\vel\Renderer\RendererAPI.cpp" />
@@ -659,6 +658,7 @@
     <ClCompile Include="src\vel\Scene\LightManager.cpp" />
     <ClCompile Include="src\vel\Scene\MaterialSystem.cpp" />
     <ClCompile Include="src\vel\Scene\MeshRenderer.cpp" />
+    <ClCompile Include="src\vel\Scene\ParticleSystem.cpp" />
     <ClCompile Include="src\vel\Scene\SaveSystem.cpp" />
     <ClCompile Include="src\vel\Scene\Scene.cpp" />
     <ClCompile Include="src\vel\Scene\SceneCamera.cpp" />

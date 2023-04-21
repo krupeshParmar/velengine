@@ -186,9 +186,6 @@
     <ClInclude Include="src\vel\Renderer\Model.h">
       <Filter>src\vel\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\vel\Renderer\ParticleSystem.h">
-      <Filter>src\vel\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="src\vel\Renderer\RenderCommand.h">
       <Filter>src\vel\Renderer</Filter>
     </ClInclude>
@@ -1495,6 +1492,7 @@
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="src\vel\Physics\Ragdoll.h" />
+    <ClInclude Include="src\vel\Scene\ParticleSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
@@ -1575,9 +1573,6 @@
     <ClCompile Include="src\vel\Renderer\Model.cpp">
       <Filter>src\vel\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\vel\Renderer\ParticleSystem.cpp">
-      <Filter>src\vel\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="src\vel\Renderer\RenderCommand.cpp">
       <Filter>src\vel\Renderer</Filter>
     </ClCompile>
@@ -1624,5 +1619,6 @@
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\vel\Physics\Ragdoll.cpp" />
+    <ClCompile Include="src\vel\Scene\ParticleSystem.cpp" />
   </ItemGroup>
 </Project>

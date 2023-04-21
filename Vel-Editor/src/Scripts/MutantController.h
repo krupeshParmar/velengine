@@ -18,6 +18,7 @@ public:
 	vel::AnimatorComponent* animatorComponent = nullptr;
 	vel::RigidbodyComponent* rigidBodyComponent = nullptr;
 	PlayerController* targetController = nullptr;
+	vel::ParticlesComponent particlesData;
 
 	virtual void OnCreate() override;
 
@@ -41,4 +42,5 @@ private:
 	bool dead = false;
 	bool jointsAdded = false;
 	float cachedY = 0.5f;
+	float lastSeenHealth = 100.f;
 };

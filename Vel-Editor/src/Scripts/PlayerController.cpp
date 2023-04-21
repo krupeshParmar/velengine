@@ -5,13 +5,11 @@
 void PlayerController::OnCreate()
 {
 	FindComponent<vel::AnimatorComponent>(GetScene()->GetEntityWithGUID(GetComponent<vel::IDComponent>().ID), animatorsList);
-	FindComponent<vel::RigidbodyComponent>(GetScene()->TryGetEntityWithTag("Mutant"), enemyRigidBodyList);
 	characterController = GetComponent<vel::CharacterControllerComponent>().characterController;
 	selfTransform = &GetComponent<vel::TransformComponent>();
 	selfHealth = &GetComponent<HealthComponent>();
 	enemyHealth = &GetScene()->TryGetEntityWithTag("Mutant").GetComponent<HealthComponent>();
 	enemyTransform = &GetScene()->TryGetEntityWithTag("Mutant").GetComponent<vel::TransformComponent>();
-	globeBody = &GetScene()->TryGetEntityWithTag("Hotel Globe").GetComponent<vel::RigidbodyComponent>();
 }
 void PlayerController::OnDestroy()
 {
@@ -21,6 +19,23 @@ void PlayerController::OnUpdate(vel::Timestep ts)
 {
 	if (state == Death)
 		return;
+
+	if (!globeBody)
+	{
+		vel::Entity& globeEntity = GetScene()->TryGetEntityWithTag("Hotel Globe");
+		if (globeEntity)
+		{
+			if (globeEntity.HasComponent<vel::RigidbodyComponent>())
+			{
+				globeBody = &globeEntity.GetComponent<vel::RigidbodyComponent>();
+			}
+		}
+	}
+	if (enemyRigidBodyList.size() == 0)
+	{
+		FindComponent<vel::RigidbodyComponent>(GetScene()->TryGetEntityWithTag("Mutant"), enemyRigidBodyList);
+	}
+
 	if (characterController)
 	{
 		if (vel::Input::IsKeyPressed(KeyCode::LeftShift))
@@ -256,11 +271,13 @@ const void PlayerController::TakeDamage(float damage)
 		
 			if (selfHealth->health <= 0.f)
 			{
+				int animID = 0;
+				if (damage > 10.f)
+					animID = int(FlyingDeath);
+				else animID = int(Death);
 				for (vel::AnimatorComponent* animator : animatorsList)
 				{
-					if (damage > 10.f)
-						animator->PlayAnimation(int(FlyingDeath));
-					else animator->PlayAnimation(int(Death));
+					animator->PlayAnimation(animID);
 				}
 				state = Death;
 				return;

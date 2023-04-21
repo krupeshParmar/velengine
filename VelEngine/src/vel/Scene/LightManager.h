@@ -17,6 +17,7 @@ namespace vel
 
 		static void CopyLightInformationToShader(Ref<Shader> shader);
 		static void AddNewLightInfo(LightComponent* light);
+		static void RemoveLight(LightComponent* light);
 
 	private:
 		static std::vector<LightComponent*> s_Lights;

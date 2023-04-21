@@ -23,6 +23,7 @@ namespace vel
 		virtual void Clear() = 0;
 
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) = 0;
+		virtual void DrawInstanced(const Ref<VertexArray>& vertexArray, unsigned int count) = 0;
 
 		virtual void SetViewport(int x, int y, int width, int height) = 0;
 

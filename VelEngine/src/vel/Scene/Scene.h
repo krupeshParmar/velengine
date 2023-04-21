@@ -9,6 +9,7 @@
 #include <iPhysicsFactory.h>
 #include <iPhysicsWorld.h>
 #include "vel/Editor/EditorCamera.h"
+#include "ParticleSystem.h"
 
 namespace vel
 {
@@ -75,6 +76,7 @@ namespace vel
 		// TEMP
 		glm::vec3 GetParentScale(Entity entity);
 
+		Ref<ParticleSystem> GetParticleSystem() { return m_ParticleSystem; }
 		void BindSkyBox(int);
 		void LoadScene();
 		void SaveScene();
@@ -88,6 +90,7 @@ namespace vel
 		SceneCamera* mainCamera = nullptr;
 		std::string ScenePath;
 		Ref<Shader> m_Shader;
+		Ref<ParticleSystem> m_ParticleSystem;
 		bool DepthOfField = false;
 		float FocalDistance = 1.f;
 

@@ -50,14 +50,11 @@ namespace vel
 	void OpenGLRendererAPI::DrawIndexed(const Ref<VertexArray>& vertexArray)
 	{
 		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
-		
-		/*GLenum error = glCheckError_();
+	}
 
-		if (error != GL_NO_ERROR)
-		{
-
-			VEL_ASSERT(false,"OpenGL error!!");
-		}*/
+	void OpenGLRendererAPI::DrawInstanced(const Ref<VertexArray>& vertexArray, unsigned int count)
+	{
+		glDrawArraysInstanced(GL_TRIANGLES,0, vertexArray->GetIndexBuffer()->GetCount(), count);
 	}
 
 	void OpenGLRendererAPI::SetViewport(int x, int y, int width, int height)
